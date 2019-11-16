@@ -6,11 +6,11 @@ namespace Arnible.MathModeling
   {
     public DerivativeValue(double first, double second)
     {
-      if (double.IsNaN(first) || double.IsInfinity(first))
+      if (!first.IsValidNumeric())
       {
         throw new ArgumentException(nameof(first));
       }
-      if (double.IsNaN(second) || double.IsInfinity(second))
+      if (!second.IsValidNumeric())
       {
         throw new ArgumentException(nameof(second));
       }

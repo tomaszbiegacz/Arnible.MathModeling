@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Collections.Generic;
+using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
@@ -60,6 +61,17 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
+    public void Value_Simple()
+    {
+      PolynomialTerm x = 'x';
+      var v = (x + 1) / (x - 3);
+      Assert.Equal(3, v.Value(new Dictionary<char, double>
+      {
+        { 'x', 5 }
+      }));
+    }
+
+    [Fact]
     public void Derivative_Simple()
     {
       PolynomialTerm x = 'x';
@@ -70,6 +82,18 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(1 / (2 * x + 1), expression.DerivativeBy('y'));
 
       Assert.True(expression.DerivativeBy('y').DerivativeBy('y').IsZero);
+    }
+
+    [Fact]
+    public void Derivative2_Simple()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+
+      var expression = (x * x * y) / (2 * x + 1);
+      Assert.Equal((2 * x * y * (x + 1)) / (4 * x * x + 4 * x + 1), expression.DerivativeBy('x'));
+      Assert.Equal((2 * y) / (8 * x * x * x + 12 * x * x + 6 * x + 1), expression.Derivative2By('x'));
+      Assert.True(expression.Derivative2By('y').IsZero);
     }
   }
 }

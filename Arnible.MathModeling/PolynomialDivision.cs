@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Arnible.MathModeling
 {
-  public struct PolynomialDivision : IEquatable<PolynomialDivision>
+  public struct PolynomialDivision : IEquatable<PolynomialDivision>, IFunction
   {
     public Polynomial Numerator { get; }
     public Polynomial Denominator { get; }
@@ -74,17 +75,61 @@ namespace Arnible.MathModeling
 
     public PolynomialDivision DerivativeBy(char name)
     {
-      var denominatorDerivative = Denominator.DerivativeBy(name);
-      var numeratorDerivative = Numerator.DerivativeBy(name);
+      Polynomial denominatorDerivative = Denominator.DerivativeBy(name);
+      Polynomial numeratorDerivative = Numerator.DerivativeBy(name);
       if (denominatorDerivative.IsZero)
       {
+        // this is necessary, since library doesn't support yet polynomials reduction/division
         return new PolynomialDivision(numeratorDerivative, Denominator);
       }
       else
       {
-        var numerator = numeratorDerivative * Denominator - Numerator * denominatorDerivative;
-        var denominator = Denominator * Denominator;
+        Polynomial numerator = numeratorDerivative * Denominator - Numerator * denominatorDerivative;
+        Polynomial denominator = Denominator * Denominator;
         return new PolynomialDivision(numerator, denominator);
+      }
+    }
+
+    public PolynomialDivision Derivative2By(char name)
+    {
+      Polynomial denominatorDerivative = Denominator.DerivativeBy(name);
+      Polynomial numeratorDerivative = Numerator.DerivativeBy(name);
+      if (denominatorDerivative.IsZero)
+      {
+        // this is necessary, since library doesn't support yet polynomials reduction/division
+        return new PolynomialDivision(numeratorDerivative, Denominator).DerivativeBy(name);
+      }
+      else
+      {
+        Polynomial numerator1 = numeratorDerivative * Denominator - Numerator * denominatorDerivative;
+        Polynomial denominator1 = Denominator * Denominator;
+
+        var p1 = numerator1.DerivativeBy(name) * Denominator;
+        var p2 = 2 * numerator1 * denominatorDerivative;
+        Polynomial numerator2 = p1 - p2;
+        Polynomial denominator2 = denominator1 * Denominator;
+        return new PolynomialDivision(numerator2, denominator2);
+      }
+    }
+
+    /*
+     * IFunction
+     */
+
+    public double Value(IReadOnlyDictionary<char, double> x)
+    {
+      if(IsNaN)
+      {
+        throw new InvalidOperationException("Cannot calculate value from NaN");
+      }
+
+      if (IsZero)
+      {
+        return 0;
+      }
+      else
+      {
+        return Numerator.Value(x) / Denominator.Value(x);
       }
     }
   }

@@ -40,3 +40,9 @@ Assert.Equal(1 / (2 * x + 1), expression.DerivativeBy('y'));
 
 Assert.True(expression.DerivativeBy('y').DerivativeBy('y').IsZero);
 ```
+
+### Roadmap
+
+Todo:
+* Polynomial Factorizer/Simplifier.
+* Substitution of polynomials division indeterminate with polynomial.

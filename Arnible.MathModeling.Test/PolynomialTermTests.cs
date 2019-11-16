@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Collections.Generic;
+using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
@@ -8,6 +9,7 @@ namespace Arnible.MathModeling.Test
     public void Constructor_Default()
     {
       PolynomialTerm v = default;
+
       Assert.True(v.IsZero);
       Assert.True(v.IsConstant);
       Assert.Equal("0", v.ToString());
@@ -20,12 +22,15 @@ namespace Arnible.MathModeling.Test
 
       Assert.Equal(0, 2 * v);
       Assert.Equal(0, v / 2);
+
+      Assert.Equal(0, v.Value(new Dictionary<char, double>()));
     }
 
     [Fact]
     public void Constructor_Constant()
     {
       PolynomialTerm v = 2;
+
       Assert.False(v.IsZero);
       Assert.True(v.IsConstant);
       Assert.Equal("2", v.ToString());
@@ -39,6 +44,8 @@ namespace Arnible.MathModeling.Test
 
       Assert.Equal(4, 2 * v);
       Assert.Equal(1, v / 2);
+
+      Assert.Equal(2, v.Value(new Dictionary<char, double>()));
     }
 
     [Fact]
@@ -55,12 +62,18 @@ namespace Arnible.MathModeling.Test
 
       Assert.Equal(2 * (PolynomialTerm)('a', 1), 2 * v);
       Assert.Equal(0.5 * (PolynomialTerm)('a', 1), v / 2);
+
+      Assert.Equal(5, v.Value(new Dictionary<char, double>
+      {
+        { 'a', 5 }
+      }));
     }
 
     [Fact]
     public void Constructor_PolynomialVariable()
     {
       PolynomialTerm v = 2.1 * (PolynomialTerm)('a', 1) * ('c', 3);
+
       Assert.False(v.IsZero);
       Assert.False(v.IsConstant);
       Assert.Equal("2.1*a*c3", v.ToString());
@@ -72,14 +85,22 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(v.DerivativeBy('a').DerivativeBy('c'), 6.3 * (PolynomialTerm)('c', 2));
 
       Assert.Equal(-4.2 * (PolynomialTerm)('a', 1) * ('c', 3), -2 * v);
+
+      Assert.Equal(2.1 * 5 * 8, v.Value(new Dictionary<char, double>
+      {
+        { 'a', 5 },
+        { 'c', 2 }
+      }));
     }
 
     [Fact]
     public void Multiply_Inline()
     {
       PolynomialTerm x = 'x';
-      Assert.Equal(4 * (PolynomialTerm)('x', 2), 4 * x * x);
+      Assert.Equal(4 * (PolynomialTerm)('x', 2), 4 * x * x);      
       Assert.Equal("4*x2", (4 * x * x).ToString());
+
+      Assert.Equal(16, (x * x).Value(new Dictionary<char, double> { { 'x', 4 } }));
     }
 
     [Fact]
@@ -109,8 +130,8 @@ namespace Arnible.MathModeling.Test
 
     [Fact]
     public void IsSimplified_Empty()
-    {      
-      Assert.True(PolynomialTerm.IsSimplified(new PolynomialTerm[] {}));
+    {
+      Assert.True(PolynomialTerm.IsSimplified(new PolynomialTerm[] { }));
     }
 
     [Fact]

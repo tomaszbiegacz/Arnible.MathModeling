@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Collections.Generic;
+using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
@@ -8,6 +9,7 @@ namespace Arnible.MathModeling.Test
     public void Constructor_Default()
     {
       Polynomial v = default;
+
       Assert.True(v.IsZero);
       Assert.True(v.HasOneTerm);
       Assert.True(v.IsConstant);
@@ -21,6 +23,8 @@ namespace Arnible.MathModeling.Test
 
       Assert.Equal(0, 2 * v);
       Assert.Equal(0, v / 2);
+
+      Assert.Equal(0, v.Value(new Dictionary<char, double>()));
     }
 
     [Fact]
@@ -41,6 +45,8 @@ namespace Arnible.MathModeling.Test
 
       Assert.Equal(4, 2 * v);
       Assert.Equal(1, v / 2);
+
+      Assert.Equal(2, v.Value(new Dictionary<char, double>()));
     }
 
     [Fact]
@@ -58,7 +64,12 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(0, v.DerivativeBy('b'));
 
       Assert.Equal(2 * (PolynomialTerm)('a', 1), 2 * v);
-      Assert.Equal(0.5 * (PolynomialTerm)('a', 1), v / 2);      
+      Assert.Equal(0.5 * (PolynomialTerm)('a', 1), v / 2);
+
+      Assert.Equal(5, v.Value(new Dictionary<char, double>
+      {
+        { 'a', 5 }
+      }));
     }
 
     [Fact]

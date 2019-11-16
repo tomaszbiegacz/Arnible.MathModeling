@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Arnible.MathModeling
 {
-  public struct Polynomial : IEquatable<Polynomial>
+  public struct Polynomial : IEquatable<Polynomial>, IFunction
   {
     private readonly IEnumerable<PolynomialTerm> _terms;
 
@@ -150,6 +150,22 @@ namespace Arnible.MathModeling
     public Polynomial DerivativeBy(char name)
     {
       return new Polynomial(Terms.Select(v => v.DerivativeBy(name)));
+    }
+
+    /*
+     * IFunction
+     */
+
+    public double Value(IReadOnlyDictionary<char, double> x)
+    {
+      if (IsZero)
+      {
+        return 0;
+      }
+      else
+      {
+        return _terms.Select(t => t.Value(x)).Sum();
+      }
     }
   }
 }
