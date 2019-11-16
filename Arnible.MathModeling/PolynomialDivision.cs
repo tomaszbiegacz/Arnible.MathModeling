@@ -7,7 +7,7 @@ namespace Arnible.MathModeling
     public Polynomial Numerator { get; }
     public Polynomial Denominator { get; }
 
-    public PolynomialDivision(Polynomial numerator, Polynomial denominator)
+    internal PolynomialDivision(Polynomial numerator, Polynomial denominator)
     {
       if (denominator.IsZero)
       {

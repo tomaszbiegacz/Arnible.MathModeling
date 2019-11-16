@@ -106,5 +106,23 @@ namespace Arnible.MathModeling.Test
         PolynomialTerm.Simplify(new PolynomialTerm[] { 1, 'a', 2, 'b', 'a' })
       );
     }
+
+    [Fact]
+    public void IsSimplified_Empty()
+    {      
+      Assert.True(PolynomialTerm.IsSimplified(new PolynomialTerm[] {}));
+    }
+
+    [Fact]
+    public void IsSimplified_True()
+    {
+      Assert.True(PolynomialTerm.IsSimplified(new PolynomialTerm[] { 'a', 'b', 1 }));
+    }
+
+    [Fact]
+    public void IsSimplified_False()
+    {
+      Assert.False(PolynomialTerm.IsSimplified(new PolynomialTerm[] { 1, 'a', 2, 'b', 'a' }));
+    }
   }
 }

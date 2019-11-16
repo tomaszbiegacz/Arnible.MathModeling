@@ -10,7 +10,9 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Constructor_Polynomial()
     {
-      PolynomialDivision pol = new PolynomialDivision('x', 1);
+      Polynomial x = 'x';
+      Polynomial constant = 1;
+      PolynomialDivision pol = x / constant;
       Assert.True(pol.IsPolynomial);
       Assert.Equal('x', (Polynomial)pol);
     }

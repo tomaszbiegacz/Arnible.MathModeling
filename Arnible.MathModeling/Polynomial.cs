@@ -9,7 +9,7 @@ namespace Arnible.MathModeling
   {
     private readonly IEnumerable<PolynomialTerm> _terms;
 
-    public Polynomial(params PolynomialTerm[] terms)
+    internal Polynomial(params PolynomialTerm[] terms)
       : this((IEnumerable<PolynomialTerm>)terms)
     {
       // intentionally empty
@@ -52,7 +52,7 @@ namespace Arnible.MathModeling
 
     public override string ToString()
     {
-      if(IsZero)
+      if (IsZero)
       {
         return "0";
       }
@@ -60,9 +60,9 @@ namespace Arnible.MathModeling
       {
         var result = new StringBuilder();
         bool printOperator = false;
-        foreach(var variable in Terms)
+        foreach (var variable in Terms)
         {
-          if(printOperator && variable.HasPositiveCoefficient)
+          if (printOperator && variable.HasPositiveCoefficient)
           {
             result.Append("+");
           }
@@ -71,7 +71,7 @@ namespace Arnible.MathModeling
           printOperator = true;
         }
         return result.ToString();
-      }      
+      }
     }
 
     public static bool operator ==(Polynomial a, Polynomial b) => a.Equals(b);
@@ -98,7 +98,7 @@ namespace Arnible.MathModeling
 
     /*
      * Operators
-     */    
+     */
 
     public static explicit operator PolynomialTerm(Polynomial v) => v.Terms.SingleOrDefault();
 
@@ -129,6 +129,13 @@ namespace Arnible.MathModeling
     {
       return new Polynomial(MultiplyVariables(a, b));
     }
+
+    public static Polynomial operator *(PolynomialTerm a, Polynomial b)
+    {
+      return new Polynomial(b.Terms.Select(t => a * t));
+    }
+
+    public static Polynomial operator *(Polynomial b, PolynomialTerm a) => a * b;
 
     public static PolynomialDivision operator /(Polynomial a, Polynomial b)
     {

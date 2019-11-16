@@ -240,6 +240,11 @@ namespace Arnible.MathModeling
       return variables.GroupBy(v => v.IndeterminatesSignature).Select(g => Add(g)).Where(v => !v.IsZero);
     }
 
+    public static bool IsSimplified(IEnumerable<PolynomialTerm> variables)
+    {
+      return variables.Select(v => v.IndeterminatesSignature).Distinct().Count() == variables.Count();
+    }
+
     private static PolynomialTerm Add(IEnumerable<PolynomialTerm> variables)
     {
       var coefficient = variables.Select(v => v._coefficient).OrderBy(k => k).Sum();
