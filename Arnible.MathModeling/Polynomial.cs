@@ -1,36 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Arnible.MathModeling
 {
-  public struct Polynomial
+  public struct Polynomial : IEquatable<Polynomial>
   {
-    private readonly IEnumerable<PolynomialVariable> _variables;
+    private readonly IEnumerable<PolynomialTerm> _terms;
 
-    public Polynomial(params PolynomialVariable[] variables)
-      : this((IEnumerable<PolynomialVariable>)variables)
+    public Polynomial(params PolynomialTerm[] terms)
+      : this((IEnumerable<PolynomialTerm>)terms)
     {
       // intentionally empty
     }
 
-    public Polynomial(IEnumerable<PolynomialVariable> variables)
+    public Polynomial(IEnumerable<PolynomialTerm> terms)
     {
-      _variables = PolynomialVariable.Simplify(variables).ToArray();
+      _terms = PolynomialTerm.Simplify(terms).ToArray();
     }
 
-    public static implicit operator Polynomial(PolynomialVariable v) => new Polynomial(v);
+    public static implicit operator Polynomial(PolynomialTerm v) => new Polynomial(v);
     public static implicit operator Polynomial(double value) => new Polynomial(value);
     public static implicit operator Polynomial(char name) => new Polynomial(name);
 
-    private IEnumerable<PolynomialVariable> Variables => _variables ?? Enumerable.Empty<PolynomialVariable>();
+    private IEnumerable<PolynomialTerm> Terms => _terms ?? Enumerable.Empty<PolynomialTerm>();
 
     public bool Equals(Polynomial other) => (other - this).IsZero;
 
     public override int GetHashCode()
     {
       int result = 1;
-      foreach (var v in Variables)
+      foreach (var v in Terms)
       {
         result *= v.GetHashCode();
       }
@@ -59,9 +60,9 @@ namespace Arnible.MathModeling
       {
         var result = new StringBuilder();
         bool printOperator = false;
-        foreach(var variable in Variables)
+        foreach(var variable in Terms)
         {
-          if(printOperator && variable.IsPositive)
+          if(printOperator && variable.HasPositiveCoefficient)
           {
             result.Append("+");
           }
@@ -80,17 +81,44 @@ namespace Arnible.MathModeling
      * Properties
      */
 
-    public bool IsZero => !Variables.Any();
+    public bool IsZero => !Terms.Any();
+
+    public bool HasOneTerm => Terms.Count() < 2;
+
+    public bool IsConstant
+    {
+      get
+      {
+        if (!HasOneTerm)
+          return false;
+        else
+          return Terms.SingleOrDefault().IsConstant;
+      }
+    }
 
     /*
      * Operators
-     */
+     */    
 
-    private static IEnumerable<PolynomialVariable> MultiplyVariables(Polynomial a, Polynomial b)
+    public static explicit operator PolynomialTerm(Polynomial v) => v.Terms.SingleOrDefault();
+
+    public static explicit operator double(Polynomial v) => (double)v.Terms.SingleOrDefault();
+
+    public static Polynomial operator +(Polynomial a, Polynomial b)
     {
-      foreach (var v1 in a.Variables)
+      return new Polynomial(a.Terms.Concat(b.Terms));
+    }
+
+    public static Polynomial operator -(Polynomial a, Polynomial b)
+    {
+      return new Polynomial(a.Terms.Concat(b.Terms.Select(v => -1 * v)));
+    }
+
+    private static IEnumerable<PolynomialTerm> MultiplyVariables(Polynomial a, Polynomial b)
+    {
+      foreach (var v1 in a.Terms)
       {
-        foreach (var v2 in b.Variables)
+        foreach (var v2 in b.Terms)
         {
           yield return v1 * v2;
         }
@@ -102,19 +130,19 @@ namespace Arnible.MathModeling
       return new Polynomial(MultiplyVariables(a, b));
     }
 
-    public static Polynomial operator +(Polynomial a, Polynomial b)
+    public static PolynomialDivision operator /(Polynomial a, Polynomial b)
     {
-      return new Polynomial(a.Variables.Concat(b.Variables));
+      return new PolynomialDivision(a, b);
     }
 
-    public static Polynomial operator -(Polynomial a, Polynomial b)
+    public static Polynomial operator /(Polynomial a, double denominator)
     {
-      return new Polynomial(a.Variables.Concat(b.Variables.Select(v => -1 * v)));
+      return new Polynomial(a.Terms.Select(t => t / denominator));
     }
 
     public Polynomial DerivativeBy(char name)
     {
-      return new Polynomial(Variables.Select(v => v.DerivativeBy(name)));
+      return new Polynomial(Terms.Select(v => v.DerivativeBy(name)));
     }
   }
 }

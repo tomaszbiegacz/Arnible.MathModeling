@@ -6,25 +6,25 @@ using System.Text;
 
 namespace Arnible.MathModeling
 {
-  public struct PolynomialVariable
+  public struct PolynomialTerm : IEquatable<PolynomialTerm>
   {
     private readonly double _coefficient;
     private readonly IEnumerable<KeyValuePair<char, uint>> _indeterminates;
-    private readonly string _indeterminatesSignature;    
+    private readonly string _indeterminatesSignature;
 
-    public PolynomialVariable(double coefficient, params (char, uint)[] indeterminates)
+    private PolynomialTerm(double coefficient, params (char, uint)[] indeterminates)
       : this(coefficient, Normalize(indeterminates.ToDictionary(i => i.Item1, i => i.Item2)))
     {
       // intentionally empty
     }
 
-    private PolynomialVariable(double coefficient, IEnumerable<KeyValuePair<char, uint>> indeterminates)
+    private PolynomialTerm(double coefficient, IEnumerable<KeyValuePair<char, uint>> indeterminates)
       : this(coefficient, indeterminates, GetIntermediateSignature(indeterminates))
     {
       // intentionally empty
     }
 
-    private PolynomialVariable(double coefficient, IEnumerable<KeyValuePair<char, uint>> indeterminates, string signature)
+    private PolynomialTerm(double coefficient, IEnumerable<KeyValuePair<char, uint>> indeterminates, string signature)
     {
       if (coefficient == 0)
       {
@@ -39,14 +39,14 @@ namespace Arnible.MathModeling
       _indeterminatesSignature = signature;
     }
 
-    public static implicit operator PolynomialVariable(char name) => new PolynomialVariable(1, (name, 1));
-    public static implicit operator PolynomialVariable(double value) => new PolynomialVariable(value);
-    public static implicit operator PolynomialVariable((char, uint) indeterminate) => new PolynomialVariable(1, indeterminate);
+    public static implicit operator PolynomialTerm(char name) => new PolynomialTerm(1, (name, 1));
+    public static implicit operator PolynomialTerm(double value) => new PolynomialTerm(value);
+    public static implicit operator PolynomialTerm((char, uint) indeterminate) => new PolynomialTerm(1, indeterminate);
 
     private IEnumerable<KeyValuePair<char, uint>> Indeterminates => _indeterminates ?? Enumerable.Empty<KeyValuePair<char, uint>>();
 
     private string IndeterminatesSignature => _indeterminatesSignature ?? String.Empty;
-    
+
     private static IEnumerable<KeyValuePair<char, uint>> Normalize(IEnumerable<KeyValuePair<char, uint>> source)
     {
       return source.Where(kv => kv.Value > 0).OrderBy(kv => kv.Key).ToArray();
@@ -74,7 +74,7 @@ namespace Arnible.MathModeling
         }
       }
       return builder.ToString();
-    }    
+    }
 
     public override string ToString()
     {
@@ -88,7 +88,7 @@ namespace Arnible.MathModeling
       return $"{_coefficient.ToString(CultureInfo.InvariantCulture)}*{IndeterminatesSignature}";
     }
 
-    public bool Equals(PolynomialVariable other)
+    public bool Equals(PolynomialTerm other)
     {
       return IndeterminatesSignature == other.IndeterminatesSignature && NumericOperator.Equals(_coefficient, other._coefficient);
     }
@@ -100,7 +100,7 @@ namespace Arnible.MathModeling
 
     public override bool Equals(object obj)
     {
-      if (obj is PolynomialVariable v)
+      if (obj is PolynomialTerm v)
       {
         return Equals(v);
       }
@@ -110,8 +110,8 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static bool operator ==(PolynomialVariable a, PolynomialVariable b) => a.Equals(b);
-    public static bool operator !=(PolynomialVariable a, PolynomialVariable b) => !a.Equals(b);
+    public static bool operator ==(PolynomialTerm a, PolynomialTerm b) => a.Equals(b);
+    public static bool operator !=(PolynomialTerm a, PolynomialTerm b) => !a.Equals(b);
 
     /*
      * Properties
@@ -119,11 +119,19 @@ namespace Arnible.MathModeling
 
     public bool IsZero => _coefficient == 0;
     public bool IsConstant => IndeterminatesSignature.Length == 0;
-    public bool IsPositive => _coefficient > 0;
+    public bool HasPositiveCoefficient => _coefficient > 0;
 
     /*
      * Operators
      */
+
+    public static explicit operator double(PolynomialTerm v)
+    {
+      if (v.IsConstant)
+        return v._coefficient;
+      else
+        throw new InvalidOperationException("Polynomial term is not constant");
+    }
 
     private static IEnumerable<KeyValuePair<char, uint>> Multiply(IEnumerable<KeyValuePair<char, uint>> i1, IEnumerable<KeyValuePair<char, uint>> i2)
     {
@@ -168,7 +176,7 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static PolynomialVariable operator *(PolynomialVariable a, PolynomialVariable b)
+    public static PolynomialTerm operator *(PolynomialTerm a, PolynomialTerm b)
     {
       double coefficient = a._coefficient * b._coefficient;
       if (coefficient == 0)
@@ -177,17 +185,27 @@ namespace Arnible.MathModeling
       }
       else
       {
-        return new PolynomialVariable(coefficient, Multiply(a.Indeterminates, b.Indeterminates));
+        return new PolynomialTerm(coefficient, Multiply(a.Indeterminates, b.Indeterminates));
       }
-    }    
+    }
 
-    public PolynomialVariable DerivativeBy(char name)
+    public static Polynomial operator +(PolynomialTerm a, PolynomialTerm b)
+    {
+      return new Polynomial(a, b);
+    }
+
+    public static Polynomial operator -(PolynomialTerm a, PolynomialTerm b)
+    {
+      return new Polynomial(a, -1 * b);
+    }
+
+    public PolynomialTerm DerivativeBy(char name)
     {
       uint power = Indeterminates.Where(kv => kv.Key == name).Select(kv => kv.Value).SingleOrDefault();
       if (power > 0)
       {
         var indeterminates = Indeterminates.Where(kv => kv.Key != name).Append(new KeyValuePair<char, uint>(name, power - 1));
-        return new PolynomialVariable(_coefficient * power, Normalize(indeterminates));
+        return new PolynomialTerm(_coefficient * power, Normalize(indeterminates));
       }
       else
       {
@@ -195,16 +213,34 @@ namespace Arnible.MathModeling
       }
     }
 
+    public static PolynomialDivision operator /(PolynomialTerm a, PolynomialTerm b)
+    {
+      return new PolynomialDivision(a, b);
+    }
+
+    public static PolynomialTerm operator /(PolynomialTerm a, double denominator)
+    {
+      if (!denominator.IsValidNumeric())
+      {
+        throw new ArgumentOutOfRangeException($"Denominator is not valid: {denominator}");
+      }
+      if (denominator == 0)
+      {
+        throw new DivideByZeroException();
+      }
+      return new PolynomialTerm(a._coefficient / denominator, a.Indeterminates, a.IndeterminatesSignature);
+    }
+
     /*
      * IEnumerable operators
      */
 
-    public static IEnumerable<PolynomialVariable> Simplify(IEnumerable<PolynomialVariable> variables)
+    public static IEnumerable<PolynomialTerm> Simplify(IEnumerable<PolynomialTerm> variables)
     {
       return variables.GroupBy(v => v.IndeterminatesSignature).Select(g => Add(g)).Where(v => !v.IsZero);
     }
 
-    private static PolynomialVariable Add(IEnumerable<PolynomialVariable> variables)
+    private static PolynomialTerm Add(IEnumerable<PolynomialTerm> variables)
     {
       var coefficient = variables.Select(v => v._coefficient).OrderBy(k => k).Sum();
 
@@ -215,8 +251,8 @@ namespace Arnible.MathModeling
       else
       {
         var result = variables.First();
-        return new PolynomialVariable(coefficient, result.Indeterminates, result.IndeterminatesSignature);
+        return new PolynomialTerm(coefficient, result.Indeterminates, result.IndeterminatesSignature);
       }
-    }        
+    }
   }
 }

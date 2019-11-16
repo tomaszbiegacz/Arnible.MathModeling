@@ -5,6 +5,20 @@ namespace Arnible.MathModeling.Test
   public class NumericOperatorTests
   {
     [Fact]
+    public void IsValidNumeric_Special()
+    {
+      Assert.False(double.NaN.IsValidNumeric());
+      Assert.False(double.PositiveInfinity.IsValidNumeric());
+      Assert.False(double.NegativeInfinity.IsValidNumeric());
+    }
+
+    [Fact]
+    public void IsValidNumeric_Valid()
+    {
+      Assert.True(0d.IsValidNumeric());
+    }
+
+    [Fact]
     public void Zero_Zero_Equals()
     {
       Assert.True(NumericOperator.Equals(0d, 0d));

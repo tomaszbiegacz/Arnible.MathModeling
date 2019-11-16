@@ -4,7 +4,7 @@ Beside math modelling tools, this library extends LINQ operators for various mat
 
 ## Lazy operations on derivatives
 
-Library can be helpful when calculating first and second derivative over combinations of functions with known derivatives.
+Library can be helpful when calculating first and second derivative over composition of functions with known derivatives.
 
 ```C#
 var d1 = new DerivativeValue(2, 3);
@@ -17,14 +17,26 @@ Assert.Equal(3 * 5 * 5 * 11 * 11 + 2 * 7 * 11 * 11 + 2 * 5 * 13, d.Second);
 
 ## Polynomials arithmetic
 
-Usage for operations over polynomials can be shown via example
+Usage for basic operations over polynomials can be shown via example
 
 ```C#
-var v1 = new Polynomial('x', +1);
-var v2 = new Polynomial('x', -1);
+PolynomialTerm x = 'x';
+var poly = (x + 1) * (x - 1);
 
-var v = v1 * v2;
-Assert.Equal(new Polynomial(('x', 2), -1), v);
-Assert.Equal(new PolynomialVariable(2) * 'x', v.DerivativeBy('x'));
-Assert.Equal(0, v.DerivativeBy('y'));
+Assert.Equal(x * x - 1, poly);
+Assert.Equal(2 * x, poly.DerivativeBy('x'));
+Assert.Equal(0, poly.DerivativeBy('y'));
+```
+
+the more interesting bit starts with derivatives of polynomials division
+
+```C#
+PolynomialTerm x = 'x';
+PolynomialTerm y = 'y';
+
+var expression = (y + x + 1) / (2 * x + 1);
+Assert.Equal(-1 * (2 * y + 1) / (4 * x * x + 4 * x + 1), expression.DerivativeBy('x'));
+Assert.Equal(1 / (2 * x + 1), expression.DerivativeBy('y'));
+
+Assert.True(expression.DerivativeBy('y').DerivativeBy('y').IsZero);
 ```

@@ -7,16 +7,20 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Constructor_Default()
     {
-      var v = new Polynomial();
-      Assert.True(v.IsZero);      
+      Polynomial v = default;
+      Assert.True(v.IsZero);
+      Assert.True(v.HasOneTerm);
+      Assert.True(v.IsConstant);
       Assert.Equal("0", v.ToString());
 
       Assert.Equal(0, v);
+      Assert.Equal(0, (double)v);
       Assert.NotEqual(1, v);
 
       Assert.Equal(0, v.DerivativeBy('a'));
 
       Assert.Equal(0, 2 * v);
+      Assert.Equal(0, v / 2);
     }
 
     [Fact]
@@ -24,15 +28,19 @@ namespace Arnible.MathModeling.Test
     {
       Polynomial v = 2;
       Assert.False(v.IsZero);
+      Assert.True(v.HasOneTerm);
+      Assert.True(v.IsConstant);
       Assert.Equal("2", v.ToString());
 
       Assert.Equal(2, v);
+      Assert.Equal(2, (double)v);
       Assert.NotEqual(1, v);
       Assert.NotEqual(0, v);
 
       Assert.Equal(0, v.DerivativeBy('a'));
 
       Assert.Equal(4, 2 * v);
+      Assert.Equal(1, v / 2);
     }
 
     [Fact]
@@ -40,24 +48,37 @@ namespace Arnible.MathModeling.Test
     {
       Polynomial v = 'a';
       Assert.False(v.IsZero);
+      Assert.True(v.HasOneTerm);
+      Assert.False(v.IsConstant);
       Assert.Equal("a", v.ToString());
+
+      Assert.Equal('a', (PolynomialTerm)v);
 
       Assert.Equal(1, v.DerivativeBy('a'));
       Assert.Equal(0, v.DerivativeBy('b'));
 
-      Assert.Equal(new PolynomialVariable(2, ('a', 1)), 2 * v);
+      Assert.Equal(2 * (PolynomialTerm)('a', 1), 2 * v);
+      Assert.Equal(0.5 * (PolynomialTerm)('a', 1), v / 2);      
     }
 
     [Fact]
     public void Multiply_xp1_xm1()
     {
-      var v1 = new Polynomial('x', +1);
-      var v2 = new Polynomial('x', -1);
+      PolynomialTerm x = 'x';
+      Polynomial poly = (x + 1) * (x - 1);
 
-      var v = v1 * v2;
-      Assert.Equal(new Polynomial(('x', 2), -1), v);
-      Assert.Equal(new PolynomialVariable(2) * 'x', v.DerivativeBy('x'));
-      Assert.Equal(0, v.DerivativeBy('y'));
+      Assert.Equal(x * x - 1, poly);
+      Assert.Equal(2 * x, poly.DerivativeBy('x'));
+      Assert.Equal(0, poly.DerivativeBy('y'));
+    }
+
+    [Fact]
+    public void Multiply_by0()
+    {
+      PolynomialTerm x = 'x';
+      Polynomial poly = (x + 1) * (x - 1);
+
+      Assert.Equal(0, 0 * poly);
     }
   }
 }
