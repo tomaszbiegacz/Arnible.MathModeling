@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Arnible.MathModeling
 {
-  public struct Polynomial : IEquatable<Polynomial>, IFunction
+  public struct Polynomial : IEquatable<Polynomial>, IPolynomialOperation
   {
     private readonly IEnumerable<PolynomialTerm> _terms;
 
@@ -152,9 +152,32 @@ namespace Arnible.MathModeling
       return new Polynomial(Terms.Select(v => v.DerivativeBy(name)));
     }
 
+    public Polynomial Composition(char variable, Polynomial replacement)
+    {
+      List<PolynomialTerm> remaining = new List<PolynomialTerm>();
+
+      Polynomial result = 0;
+      foreach(PolynomialTerm term in Terms)
+      {
+        if(term.Variables.Contains(variable))
+        {
+          result += term.Composition(variable, replacement);
+        }
+        else
+        {
+          remaining.Add(term);
+        }
+      }
+
+      result += new Polynomial(remaining);
+      return result;
+    }
+
     /*
-     * IFunction
+     * IPolynomialOperation
      */
+
+    public IEnumerable<char> Variables => Terms.SelectMany(kv => kv.Variables);
 
     public double Value(IReadOnlyDictionary<char, double> x)
     {

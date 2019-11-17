@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Arnible.MathModeling
 {
-  public struct PolynomialDivision : IEquatable<PolynomialDivision>, IFunction
+  public struct PolynomialDivision : IEquatable<PolynomialDivision>, IPolynomialOperation
   {
     public Polynomial Numerator { get; }
     public Polynomial Denominator { get; }
@@ -104,17 +105,21 @@ namespace Arnible.MathModeling
         Polynomial numerator1 = numeratorDerivative * Denominator - Numerator * denominatorDerivative;
         Polynomial denominator1 = Denominator * Denominator;
 
-        var p1 = numerator1.DerivativeBy(name) * Denominator;
-        var p2 = 2 * numerator1 * denominatorDerivative;
-        Polynomial numerator2 = p1 - p2;
+        Polynomial numerator2 = numerator1.DerivativeBy(name) * Denominator - 2 * numerator1 * denominatorDerivative;
         Polynomial denominator2 = denominator1 * Denominator;
         return new PolynomialDivision(numerator2, denominator2);
       }
     }
 
+    public PolynomialDivision Composition(char variable, Polynomial replacement) => new PolynomialDivision(
+        numerator: Numerator.Composition(variable, replacement),
+        denominator: Denominator.Composition(variable, replacement));
+
     /*
-     * IFunction
+     * IPolynomialOperation
      */
+
+    public IEnumerable<char> Variables => Numerator.Variables.Union(Denominator.Variables);
 
     public double Value(IReadOnlyDictionary<char, double> x)
     {

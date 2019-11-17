@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
@@ -23,7 +22,7 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(0, 2 * v);
       Assert.Equal(0, v / 2);
 
-      Assert.Equal(0, v.Value(new Dictionary<char, double>()));
+      Assert.Equal(0, v.GetOperation().Value());
     }
 
     [Fact]
@@ -45,7 +44,7 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(4, 2 * v);
       Assert.Equal(1, v / 2);
 
-      Assert.Equal(2, v.Value(new Dictionary<char, double>()));
+      Assert.Equal(2, v.GetOperation().Value());
     }
 
     [Fact]
@@ -63,10 +62,7 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(2 * (PolynomialTerm)('a', 1), 2 * v);
       Assert.Equal(0.5 * (PolynomialTerm)('a', 1), v / 2);
 
-      Assert.Equal(5, v.Value(new Dictionary<char, double>
-      {
-        { 'a', 5 }
-      }));
+      Assert.Equal(5, v.GetOperation('a').Value(5));
     }
 
     [Fact]
@@ -76,7 +72,7 @@ namespace Arnible.MathModeling.Test
 
       Assert.False(v.IsZero);
       Assert.False(v.IsConstant);
-      Assert.Equal("2.1*a*c3", v.ToString());
+      Assert.Equal("2.1*a*c^3", v.ToString());
 
       Assert.Equal(2.1 * (PolynomialTerm)('c', 3), v.DerivativeBy('a'));
       Assert.Equal(0, v.DerivativeBy('b'));
@@ -86,21 +82,17 @@ namespace Arnible.MathModeling.Test
 
       Assert.Equal(-4.2 * (PolynomialTerm)('a', 1) * ('c', 3), -2 * v);
 
-      Assert.Equal(2.1 * 5 * 8, v.Value(new Dictionary<char, double>
-      {
-        { 'a', 5 },
-        { 'c', 2 }
-      }));
+      Assert.Equal(2.1 * 5 * 8, v.GetOperation('a', 'c').Value(5, 2));
     }
 
     [Fact]
     public void Multiply_Inline()
     {
       PolynomialTerm x = 'x';
-      Assert.Equal(4 * (PolynomialTerm)('x', 2), 4 * x * x);      
-      Assert.Equal("4*x2", (4 * x * x).ToString());
+      Assert.Equal(4 * (PolynomialTerm)('x', 2), 4 * x * x);
+      Assert.Equal("4*x^2", (4 * x * x).ToString());
 
-      Assert.Equal(16, (x * x).Value(new Dictionary<char, double> { { 'x', 4 } }));
+      Assert.Equal(16, (x * x).GetOperation('x').Value(4));
     }
 
     [Fact]

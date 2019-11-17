@@ -2,8 +2,11 @@
 {
   public interface IUnaryOperation
   {
-    double Value(double x);
+    double Value(double x);    
+  }
 
+  public interface IUnaryOperationWithDerivative : IUnaryOperation
+  {
     IDerivative Derivative(double x);
   }
 }

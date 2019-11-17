@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
@@ -24,7 +23,7 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(0, 2 * v);
       Assert.Equal(0, v / 2);
 
-      Assert.Equal(0, v.Value(new Dictionary<char, double>()));
+      Assert.Equal(0, v.GetOperation().Value());
     }
 
     [Fact]
@@ -46,7 +45,7 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(4, 2 * v);
       Assert.Equal(1, v / 2);
 
-      Assert.Equal(2, v.Value(new Dictionary<char, double>()));
+      Assert.Equal(2, v.GetOperation().Value());
     }
 
     [Fact]
@@ -66,10 +65,7 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(2 * (PolynomialTerm)('a', 1), 2 * v);
       Assert.Equal(0.5 * (PolynomialTerm)('a', 1), v / 2);
 
-      Assert.Equal(5, v.Value(new Dictionary<char, double>
-      {
-        { 'a', 5 }
-      }));
+      Assert.Equal(5, v.GetOperation('a').Value(5));
     }
 
     [Fact]
@@ -90,6 +86,18 @@ namespace Arnible.MathModeling.Test
       Polynomial poly = (x + 1) * (x - 1);
 
       Assert.Equal(0, 0 * poly);
+    }
+
+    [Fact]
+    public void Composition_Square()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+
+      Polynomial entry = 1 + x * x - y * y;
+      Polynomial replacement = y + 1;
+
+      Assert.Equal(2 + 2 * y, entry.Composition('x', replacement));
     }
   }
 }

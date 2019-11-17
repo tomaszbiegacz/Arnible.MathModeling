@@ -95,5 +95,17 @@ namespace Arnible.MathModeling.Test
       Assert.Equal((2 * y) / (8 * x * x * x + 12 * x * x + 6 * x + 1), expression.Derivative2By('x'));
       Assert.True(expression.Derivative2By('y').IsZero);
     }
+
+    [Fact]
+    public void Composition_Square()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+
+      PolynomialDivision entry = (x + 1) / (x - 1);
+      Polynomial replacement = y + 1;
+
+      Assert.Equal((y + 2) / y, entry.Composition('x', replacement));
+    }
   }
 }

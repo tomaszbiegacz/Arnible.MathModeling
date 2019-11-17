@@ -28,7 +28,16 @@ Assert.Equal(2 * x, poly.DerivativeBy('x'));
 Assert.Equal(0, poly.DerivativeBy('y'));
 ```
 
-the more interesting bit starts with derivatives of polynomials division
+Linq operations are also supported
+
+```C#
+Polynomial x = 'x';
+Polynomial z = 'z';
+
+Assert.Equal(z * (x * x - 1), (new[] { x - 1, x + 1, z }).Product());
+```
+
+The more interesting bit starts with derivatives of polynomials division
 
 ```C#
 PolynomialTerm x = 'x';
@@ -41,8 +50,19 @@ Assert.Equal(1 / (2 * x + 1), expression.DerivativeBy('y'));
 Assert.True(expression.DerivativeBy('y').DerivativeBy('y').IsZero);
 ```
 
+or with polynomials composition
+
+```C#
+PolynomialTerm x = 'x';
+PolynomialTerm y = 'y';
+
+Polynomial entry = 1 + x * x - y * y;
+Polynomial replacement = y + 1;
+
+Assert.Equal(2 + 2 * y, entry.Composition('x', replacement));
+```
+
 ### Roadmap
 
 Todo:
 * Polynomial Factorizer/Simplifier.
-* Substitution of polynomials division indeterminate with polynomial.

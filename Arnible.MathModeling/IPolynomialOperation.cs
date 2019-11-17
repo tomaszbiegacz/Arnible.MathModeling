@@ -2,8 +2,12 @@
 
 namespace Arnible.MathModeling
 {
-  public interface IFunction
+  public interface IPolynomialOperation
   {
+    IEnumerable<char> Variables { get; }
+
+    bool IsZero { get; }
+
     double Value(IReadOnlyDictionary<char, double> x);
   }
 }

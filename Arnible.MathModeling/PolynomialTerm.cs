@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Arnible.MathModeling
 {
-  public struct PolynomialTerm : IEquatable<PolynomialTerm>, IFunction
+  public struct PolynomialTerm : IEquatable<PolynomialTerm>, IPolynomialOperation
   {
     private readonly double _coefficient;
     private readonly IEnumerable<KeyValuePair<char, uint>> _indeterminates;
@@ -70,6 +70,7 @@ namespace Arnible.MathModeling
         builder.Append(kv.Key);
         if (kv.Value > 1)
         {
+          builder.Append("^");
           builder.Append(kv.Value);
         }
       }
@@ -260,13 +261,29 @@ namespace Arnible.MathModeling
       }
     }
 
+    public Polynomial Composition(char variable, Polynomial replacement)
+    {
+      var remaining = new PolynomialTerm(_coefficient, _indeterminates.Where(kv => kv.Key != variable));
+
+      uint power = _indeterminates.Single(kv => kv.Key == variable).Value;
+      Polynomial inPlace = 1;
+      for (uint i = 0; i < power; ++i)
+      {
+        inPlace *= replacement;
+      }
+
+      return remaining * inPlace;
+    }
+
     /*
-     * IFunction
+     * IPolynomialOperation
      */
+
+    public IEnumerable<char> Variables => Indeterminates.Select(kv => kv.Key);
 
     public double Value(IReadOnlyDictionary<char, double> x)
     {
-      if(IsZero)
+      if (IsZero)
       {
         return 0;
       }
@@ -274,6 +291,6 @@ namespace Arnible.MathModeling
       {
         return _coefficient * _indeterminates.Select(kv => NumericOperator.Power(x[kv.Key], kv.Value)).Product();
       }
-    }
+    }    
   }
 }
