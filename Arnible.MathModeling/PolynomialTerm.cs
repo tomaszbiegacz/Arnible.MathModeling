@@ -85,6 +85,8 @@ namespace Arnible.MathModeling
         return _coefficient.ToString();
       if (_coefficient == 1)
         return IndeterminatesSignature;
+      if (_coefficient == -1)
+        return $"-{IndeterminatesSignature}";
 
       return $"{_coefficient.ToString(CultureInfo.InvariantCulture)}*{IndeterminatesSignature}";
     }
@@ -132,6 +134,20 @@ namespace Arnible.MathModeling
         return v._coefficient;
       else
         throw new InvalidOperationException("Polynomial term is not constant");
+    }
+
+    public static explicit operator char(PolynomialTerm v)
+    {
+      if (v._coefficient == 1 && v.Indeterminates.Count() == 1)
+      {
+        var kv = v.Indeterminates.Single();
+        if (kv.Value == 1)
+        {
+          return kv.Key;
+        }
+      }
+
+      throw new InvalidOperationException("Polynomial term is not a single variable");
     }
 
     private static IEnumerable<KeyValuePair<char, uint>> Multiply(IEnumerable<KeyValuePair<char, uint>> i1, IEnumerable<KeyValuePair<char, uint>> i2)
@@ -291,6 +307,6 @@ namespace Arnible.MathModeling
       {
         return _coefficient * _indeterminates.Select(kv => NumericOperator.Power(x[kv.Key], kv.Value)).Product();
       }
-    }    
+    }
   }
 }

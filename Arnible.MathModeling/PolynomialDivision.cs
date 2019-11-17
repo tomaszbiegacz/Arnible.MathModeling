@@ -91,6 +91,8 @@ namespace Arnible.MathModeling
       }
     }
 
+    public PolynomialDivision DerivativeBy(PolynomialTerm name) => DerivativeBy((char)name);
+
     public PolynomialDivision Derivative2By(char name)
     {
       Polynomial denominatorDerivative = Denominator.DerivativeBy(name);
@@ -111,9 +113,13 @@ namespace Arnible.MathModeling
       }
     }
 
+    public PolynomialDivision Derivative2By(PolynomialTerm name) => Derivative2By((char)name);
+
     public PolynomialDivision Composition(char variable, Polynomial replacement) => new PolynomialDivision(
         numerator: Numerator.Composition(variable, replacement),
         denominator: Denominator.Composition(variable, replacement));
+
+    public PolynomialDivision Composition(PolynomialTerm variable, Polynomial replacement) => Composition((char)variable, replacement);
 
     /*
      * IPolynomialOperation

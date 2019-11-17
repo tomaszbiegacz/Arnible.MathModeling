@@ -152,6 +152,8 @@ namespace Arnible.MathModeling
       return new Polynomial(Terms.Select(v => v.DerivativeBy(name)));
     }
 
+    public Polynomial DerivativeBy(PolynomialTerm name) => DerivativeBy((char)name);
+
     public Polynomial Composition(char variable, Polynomial replacement)
     {
       List<PolynomialTerm> remaining = new List<PolynomialTerm>();
@@ -172,6 +174,8 @@ namespace Arnible.MathModeling
       result += new Polynomial(remaining);
       return result;
     }
+
+    public Polynomial Composition(PolynomialTerm variable, Polynomial replacement) => Composition((char)variable, replacement);
 
     /*
      * IPolynomialOperation

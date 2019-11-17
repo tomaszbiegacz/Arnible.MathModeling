@@ -75,7 +75,7 @@ namespace Arnible.MathModeling.Test
       Polynomial poly = (x + 1) * (x - 1);
 
       Assert.Equal(x * x - 1, poly);
-      Assert.Equal(2 * x, poly.DerivativeBy('x'));
+      Assert.Equal(2 * x, poly.DerivativeBy(x));
       Assert.Equal(0, poly.DerivativeBy('y'));
     }
 
@@ -94,10 +94,8 @@ namespace Arnible.MathModeling.Test
       PolynomialTerm x = 'x';
       PolynomialTerm y = 'y';
 
-      Polynomial entry = 1 + x * x - y * y;
-      Polynomial replacement = y + 1;
-
-      Assert.Equal(2 + 2 * y, entry.Composition('x', replacement));
+      var entry = 1 + x * x - y * y;
+      Assert.Equal(2 + 2 * y, entry.Composition(x, y + 1));
     }
   }
 }

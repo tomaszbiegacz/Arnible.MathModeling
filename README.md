@@ -24,7 +24,7 @@ PolynomialTerm x = 'x';
 var poly = (x + 1) * (x - 1);
 
 Assert.Equal(x * x - 1, poly);
-Assert.Equal(2 * x, poly.DerivativeBy('x'));
+Assert.Equal(2 * x, poly.DerivativeBy(x));
 Assert.Equal(0, poly.DerivativeBy('y'));
 ```
 
@@ -44,10 +44,10 @@ PolynomialTerm x = 'x';
 PolynomialTerm y = 'y';
 
 var expression = (y + x + 1) / (2 * x + 1);
-Assert.Equal(-1 * (2 * y + 1) / (4 * x * x + 4 * x + 1), expression.DerivativeBy('x'));
-Assert.Equal(1 / (2 * x + 1), expression.DerivativeBy('y'));
+Assert.Equal(-1 * (2 * y + 1) / (4 * x * x + 4 * x + 1), expression.DerivativeBy(x));
+Assert.Equal(1 / (2 * x + 1), expression.DerivativeBy(y));
 
-Assert.True(expression.DerivativeBy('y').DerivativeBy('y').IsZero);
+Assert.True(expression.DerivativeBy(y).DerivativeBy(y).IsZero);
 ```
 
 or with polynomials composition
@@ -56,10 +56,8 @@ or with polynomials composition
 PolynomialTerm x = 'x';
 PolynomialTerm y = 'y';
 
-Polynomial entry = 1 + x * x - y * y;
-Polynomial replacement = y + 1;
-
-Assert.Equal(2 + 2 * y, entry.Composition('x', replacement));
+var entry = 1 + x * x - y * y;
+Assert.Equal(2 + 2 * y, entry.Composition(x, y + 1));
 ```
 
 ### Roadmap

@@ -78,10 +78,10 @@ namespace Arnible.MathModeling.Test
       PolynomialTerm y = 'y';
 
       var expression = (y + x + 1) / (2 * x + 1);
-      Assert.Equal(-1 * (2 * y + 1) / (4 * x * x + 4 * x + 1), expression.DerivativeBy('x'));
-      Assert.Equal(1 / (2 * x + 1), expression.DerivativeBy('y'));
+      Assert.Equal(-1 * (2 * y + 1) / (4 * x * x + 4 * x + 1), expression.DerivativeBy(x));
+      Assert.Equal(1 / (2 * x + 1), expression.DerivativeBy(y));
 
-      Assert.True(expression.DerivativeBy('y').DerivativeBy('y').IsZero);
+      Assert.True(expression.DerivativeBy(y).DerivativeBy(y).IsZero);
     }
 
     [Fact]
@@ -103,9 +103,7 @@ namespace Arnible.MathModeling.Test
       PolynomialTerm y = 'y';
 
       PolynomialDivision entry = (x + 1) / (x - 1);
-      Polynomial replacement = y + 1;
-
-      Assert.Equal((y + 2) / y, entry.Composition('x', replacement));
+      Assert.Equal((y + 2) / y, entry.Composition((char)x, y + 1));
     }
   }
 }
