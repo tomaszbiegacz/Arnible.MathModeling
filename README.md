@@ -37,7 +37,7 @@ Polynomial z = 'z';
 Assert.Equal(z * (x * x - 1), (new[] { x - 1, x + 1, z }).Product());
 ```
 
-The more interesting bit starts polynomials composition
+The more interesting bit starts with polynomials composition
 
 ```C#
 PolynomialTerm x = 'x';
