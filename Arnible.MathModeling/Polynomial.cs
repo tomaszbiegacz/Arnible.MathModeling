@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Arnible.MathModeling
 {
-  public struct Polynomial : IEquatable<Polynomial>, IPolynomialOperation
+  public struct Polynomial : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation
   {
     private readonly IEnumerable<PolynomialTerm> _terms;
 
@@ -28,6 +28,8 @@ namespace Arnible.MathModeling
 
     public bool Equals(Polynomial other) => (other - this).IsZero;
 
+    public bool Equals(PolynomialDivision other) => other.IsPolynomial ? Equals((Polynomial)other) : false;
+
     public override int GetHashCode()
     {
       int result = 1;
@@ -40,7 +42,11 @@ namespace Arnible.MathModeling
 
     public override bool Equals(object obj)
     {
-      if (obj is Polynomial v)
+      if (obj is PolynomialDivision pd)
+      {
+        return Equals(pd);
+      }
+      else if (obj is Polynomial v)
       {
         return Equals(v);
       }
@@ -137,6 +143,19 @@ namespace Arnible.MathModeling
 
     public static Polynomial operator *(Polynomial b, PolynomialTerm a) => a * b;
 
+    public Polynomial Power(uint power)
+    {
+      switch (power)
+      {
+        case 0:
+          return 1;
+        case 1:
+          return this;
+        default:
+          return this * this.Power(power - 1);
+      }
+    }
+
     public static PolynomialDivision operator /(Polynomial a, Polynomial b)
     {
       return new PolynomialDivision(a, b);
@@ -145,6 +164,72 @@ namespace Arnible.MathModeling
     public static Polynomial operator /(Polynomial a, double denominator)
     {
       return new Polynomial(a.Terms.Select(t => t / denominator));
+    }
+
+    private static bool TryReduce(
+      Polynomial a,
+      PolynomialTerm denominator,
+      Polynomial denominatorSuffix,
+      List<PolynomialTerm> result)
+    {
+      if (a == 0)
+      {
+        // we are done, there is nothing more to extract from
+        return true;
+      }
+
+      foreach (PolynomialTerm aTerm in a.Terms)
+      {
+        if (aTerm.TryDivide(denominator, out PolynomialTerm remainder))
+        {
+          result.Add(remainder);
+
+          // let's see what is left and continue reducing on it
+          Polynomial remaining = a - aTerm - denominatorSuffix * remainder;
+          return TryReduce(remaining, denominator, denominatorSuffix, result);
+        }
+      }
+
+      // we weren't able to reduce it
+      return false;
+    }
+
+    public bool TryDivide(Polynomial b, out Polynomial result)
+    {
+      if (b.IsConstant)
+      {
+        result = this / (double)b;
+        return true;
+      }
+      if(IsZero)
+      {
+        result = 0;
+        return true;
+      }
+
+      PolynomialTerm denominator = b.Terms.First();
+      Polynomial denominatorSuffix = new Polynomial(b.Terms.Skip(1));
+      var resultTerms = new List<PolynomialTerm>();
+      if (TryReduce(this, denominator, denominatorSuffix, resultTerms))
+      {
+        result = new Polynomial(resultTerms);
+        return true;
+      }
+
+      result = default;
+      return false;
+    }
+
+    public Polynomial ReduceBy(Polynomial b)
+    {
+      if(TryDivide(b, out Polynomial result))
+      {
+        return result;
+      }
+      else
+      {
+        throw new InvalidOperationException($"Cannot reduce [{this}] with [{b}].");
+      }
     }
 
     public Polynomial DerivativeBy(char name)
@@ -159,9 +244,9 @@ namespace Arnible.MathModeling
       List<PolynomialTerm> remaining = new List<PolynomialTerm>();
 
       Polynomial result = 0;
-      foreach(PolynomialTerm term in Terms)
+      foreach (PolynomialTerm term in Terms)
       {
-        if(term.Variables.Contains(variable))
+        if (term.Variables.Contains(variable))
         {
           result += term.Composition(variable, replacement);
         }
@@ -171,7 +256,11 @@ namespace Arnible.MathModeling
         }
       }
 
-      result += new Polynomial(remaining);
+      if (remaining.Count > 0)
+      {
+        result += new Polynomial(remaining);
+      }
+
       return result;
     }
 

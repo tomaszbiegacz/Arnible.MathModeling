@@ -19,13 +19,25 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
-    public void Zero_Zero_Equals()
+    public void Equals_Infinity_Infinity_Not()
+    {
+      Assert.False(NumericOperator.Equals(double.PositiveInfinity, double.PositiveInfinity));
+    }
+
+    [Fact]
+    public void Equals_NaN_NaN_Not()
+    {
+      Assert.False(NumericOperator.Equals(double.PositiveInfinity, double.PositiveInfinity));
+    }
+
+    [Fact]
+    public void Equals_Zero_Zero()
     {
       Assert.True(NumericOperator.Equals(0d, 0d));
     }
 
     [Fact]
-    public void Zero_Epsilon_Equals()
+    public void Equals_Zero_Epsilon()
     {
       Assert.True(NumericOperator.Equals(0d, double.Epsilon));
     }
@@ -37,25 +49,25 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
-    public void Zero_1E16_Equals()
+    public void Equals_Zero_1E16()
     {
       Assert.True(NumericOperator.Equals(0d, 1E-16));
     }
 
     [Fact]
-    public void Zero_2E16_NotEquals()
+    public void Equals_Zero_2E16_Not()
     {
       Assert.False(NumericOperator.Equals(0d, 2E-16));
     }
 
     [Fact]
-    public void One_1E16_Equals()
+    public void Equals_One_1E16()
     {
       Assert.True(NumericOperator.Equals(1d, 1.0000000000000001));
     }
 
     [Fact]
-    public void One_2E16_NotEquals()
+    public void Equals_One_2E16_Not()
     {
       Assert.False(NumericOperator.Equals(1d, 1.0000000000000002));
     }

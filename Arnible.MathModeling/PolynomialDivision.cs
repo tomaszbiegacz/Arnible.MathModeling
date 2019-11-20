@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Arnible.MathModeling
 {
-  public struct PolynomialDivision : IEquatable<PolynomialDivision>, IPolynomialOperation
+  public struct PolynomialDivision : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation
   {
     public Polynomial Numerator { get; }
     public Polynomial Denominator { get; }
@@ -16,19 +16,34 @@ namespace Arnible.MathModeling
         throw new DivideByZeroException();
       }
 
-      Numerator = numerator;
-      Denominator = denominator;
+      if(numerator.TryDivide(denominator, out Polynomial reducedNumerator))
+      {
+        // let's simplify it if we can
+        Numerator = reducedNumerator;
+        Denominator = 1;
+      }
+      else
+      {
+        Numerator = numerator;
+        Denominator = denominator;
+      }      
     }
 
     public bool Equals(PolynomialDivision other) => IsZero ? other.IsZero : other.Numerator == Numerator && other.Denominator == Denominator;
+
+    public bool Equals(Polynomial other) => IsPolynomial ? other.Equals((Polynomial)this) : false;
 
     public override int GetHashCode() => IsZero ? 0 : Numerator.GetHashCode() * Denominator.GetHashCode();
 
     public override bool Equals(object obj)
     {
-      if (obj is PolynomialDivision v)
+      if (obj is PolynomialDivision pd)
       {
-        return Equals(v);
+        return Equals(pd);
+      }
+      else if (obj is Polynomial p)
+      {
+        return Equals(p);
       }
       else
       {
@@ -51,6 +66,12 @@ namespace Arnible.MathModeling
     public static bool operator ==(PolynomialDivision a, PolynomialDivision b) => a.Equals(b);
     public static bool operator !=(PolynomialDivision a, PolynomialDivision b) => !a.Equals(b);
 
+    public static bool operator ==(PolynomialDivision a, Polynomial b) => a.Equals(b);
+    public static bool operator !=(PolynomialDivision a, Polynomial b) => !a.Equals(b);
+
+    public static bool operator ==(Polynomial a, PolynomialDivision b) => a.Equals(b);
+    public static bool operator !=(Polynomial a, PolynomialDivision b) => !a.Equals(b);
+
     /*
      * Properties
      */
@@ -59,7 +80,7 @@ namespace Arnible.MathModeling
 
     public bool IsZero => Numerator.IsZero && !Denominator.IsZero;
 
-    public bool IsPolynomial => Denominator.IsConstant && !Denominator.IsZero;
+    public bool IsPolynomial => Denominator == 1;
 
     /*
      * Operators
@@ -142,6 +163,6 @@ namespace Arnible.MathModeling
       {
         return Numerator.Value(x) / Denominator.Value(x);
       }
-    }
+    }    
   }
 }

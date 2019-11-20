@@ -105,5 +105,15 @@ namespace Arnible.MathModeling.Test
       PolynomialDivision entry = (x + 1) / (x - 1);
       Assert.Equal((y + 2) / y, entry.Composition((char)x, y + 1));
     }
+
+    [Fact]
+    public void Division_Simplification_x2_minus_1()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+
+      var expression = (x * x - y * y) / (x - y);
+      Assert.Equal(x + y, (Polynomial)expression);
+    }
   }
 }

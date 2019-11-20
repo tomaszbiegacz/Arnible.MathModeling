@@ -56,7 +56,7 @@ namespace Arnible.MathModeling
     private static string GetIntermediateSignature(IEnumerable<KeyValuePair<char, uint>> indeterminates)
     {
       var builder = new StringBuilder();
-      foreach (var kv in indeterminates)
+      foreach (var kv in indeterminates.OrderBy(i => i.Key).ThenBy(i => i.Value))
       {
         if (kv.Value == 0)
         {
@@ -150,6 +150,16 @@ namespace Arnible.MathModeling
       throw new InvalidOperationException("Polynomial term is not a single variable");
     }
 
+    public static Polynomial operator +(PolynomialTerm a, PolynomialTerm b)
+    {
+      return new Polynomial(a, b);
+    }
+
+    public static Polynomial operator -(PolynomialTerm a, PolynomialTerm b)
+    {
+      return new Polynomial(a, -1 * b);
+    }
+
     private static IEnumerable<KeyValuePair<char, uint>> Multiply(IEnumerable<KeyValuePair<char, uint>> i1, IEnumerable<KeyValuePair<char, uint>> i2)
     {
       var ei1 = i1.GetEnumerator();
@@ -206,14 +216,89 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static Polynomial operator +(PolynomialTerm a, PolynomialTerm b)
+    public PolynomialTerm Power(uint power)
     {
-      return new Polynomial(a, b);
+      switch (power)
+      {
+        case 0:
+          return 1;
+        case 1:
+          return this;
+        default:
+          return new PolynomialTerm(
+            coefficient: NumericOperator.Power(_coefficient, power),
+            indeterminates: Indeterminates.Select(kv => new KeyValuePair<char, uint>(kv.Key, kv.Value * power)));
+      }
     }
 
-    public static Polynomial operator -(PolynomialTerm a, PolynomialTerm b)
+    public static PolynomialTerm operator /(PolynomialTerm a, double denominator)
     {
-      return new Polynomial(a, -1 * b);
+      if (!denominator.IsValidNumeric())
+      {
+        throw new ArgumentOutOfRangeException($"Denominator is not valid: {denominator}");
+      }
+      if (denominator == 0)
+      {
+        throw new DivideByZeroException();
+      }
+      return new PolynomialTerm(a._coefficient / denominator, a.Indeterminates, a.IndeterminatesSignature);
+    }
+
+    public static PolynomialDivision operator /(PolynomialTerm a, PolynomialTerm b)
+    {
+      return new PolynomialDivision(a, b);
+    }
+
+    public bool TryDivide(PolynomialTerm b, out PolynomialTerm result)
+    {
+      if (b.IsZero)
+      {
+        // division by zero
+        result = default;
+        return false;
+      }
+      if (b.IsConstant)
+      {
+        result = this / (double)b;
+        return true;
+      }
+
+      var bIndeterminates = b.Indeterminates.ToDictionary(kv => kv.Key, kv => kv.Value);
+      var resultIndeterminates = new List<KeyValuePair<char, uint>>();
+      foreach (var kv in Indeterminates)
+      {
+        if (bIndeterminates.TryGetValue(kv.Key, out uint bPower))
+        {
+          if (kv.Value < bPower)
+          {
+            // result is not polynomial
+            result = default;
+            return false;
+          }
+          {
+            if (kv.Value > bPower)
+            {
+              resultIndeterminates.Add(new KeyValuePair<char, uint>(kv.Key, kv.Value - bPower));
+            }
+            bIndeterminates.Remove(kv.Key);
+          }          
+        }
+        else
+        {
+          resultIndeterminates.Add(kv);
+        }
+      }
+
+      if (bIndeterminates.Any())
+      {
+        // some indeterminates from b hasn't been removed
+        // result is not polynomial
+        result = default;
+        return false;
+      }
+
+      result = new PolynomialTerm(_coefficient / b._coefficient, resultIndeterminates);
+      return true;
     }
 
     public PolynomialTerm DerivativeBy(char name)
@@ -230,31 +315,13 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static PolynomialDivision operator /(PolynomialTerm a, PolynomialTerm b)
-    {
-      return new PolynomialDivision(a, b);
-    }
-
-    public static PolynomialTerm operator /(PolynomialTerm a, double denominator)
-    {
-      if (!denominator.IsValidNumeric())
-      {
-        throw new ArgumentOutOfRangeException($"Denominator is not valid: {denominator}");
-      }
-      if (denominator == 0)
-      {
-        throw new DivideByZeroException();
-      }
-      return new PolynomialTerm(a._coefficient / denominator, a.Indeterminates, a.IndeterminatesSignature);
-    }
-
     /*
      * IEnumerable operators
      */
 
     public static IEnumerable<PolynomialTerm> Simplify(IEnumerable<PolynomialTerm> variables)
     {
-      return variables.GroupBy(v => v.IndeterminatesSignature).Select(g => Add(g)).Where(v => !v.IsZero);
+      return variables.GroupBy(v => v.IndeterminatesSignature).Select(g => Add(g)).Where(v => !v.IsZero).OrderByDescending(v => v.IndeterminatesSignature);
     }
 
     public static bool IsSimplified(IEnumerable<PolynomialTerm> variables)

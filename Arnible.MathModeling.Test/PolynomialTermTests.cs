@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using FluentAssertions;
+using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
@@ -114,10 +115,9 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Simplify_To_Sum()
     {
-      Assert.Equal(
-        new PolynomialTerm[] { 3, 2 * (PolynomialTerm)('a', 1), 'b' },
-        PolynomialTerm.Simplify(new PolynomialTerm[] { 1, 'a', 2, 'b', 'a' })
-      );
+      var expected = new PolynomialTerm[] { 3, 2 * (PolynomialTerm)('a', 1), 'b' };
+      var actual = PolynomialTerm.Simplify(new PolynomialTerm[] { 1, 'a', 2, 'b', 'a' });
+      expected.Should().BeEquivalentTo(actual);
     }
 
     [Fact]
@@ -136,6 +136,74 @@ namespace Arnible.MathModeling.Test
     public void IsSimplified_False()
     {
       Assert.False(PolynomialTerm.IsSimplified(new PolynomialTerm[] { 1, 'a', 2, 'b', 'a' }));
+    }
+
+    [Fact]
+    public void Power_ByZero()
+    {
+      PolynomialTerm x = 'x';
+      Assert.Equal(1, x.Power(0));
+    }
+
+    [Fact]
+    public void Power_ByOne()
+    {
+      PolynomialTerm x = 'x';
+      Assert.Equal(x, x.Power(1));
+    }
+
+    [Fact]
+    public void Power_ByTwo()
+    {
+      PolynomialTerm x = 'x';
+      Assert.Equal(x * x, x.Power(2));
+    }
+
+    [Fact]
+    public void TryDivide_ByZero()
+    {
+      PolynomialTerm x = 'x';
+      Assert.False(x.TryDivide(0, out _));
+    }
+
+    [Fact]
+    public void TryDivide_ByConstant()
+    {
+      PolynomialTerm x = 'x';
+      Assert.True((2 * x).TryDivide(2, out PolynomialTerm r));
+      Assert.Equal(x, r);
+    }
+
+    [Fact]
+    public void TryDivide_ByTerm_BySupersetVariables_xy_y()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+      Assert.False(x.TryDivide(x * y, out _));
+    }
+
+    [Fact]
+    public void TryDivide_ByTerm_BySupersetVariables_9x_x()
+    {
+      PolynomialTerm x = 'x';      
+      Assert.True((9*x).TryDivide(x, out PolynomialTerm r));
+      Assert.Equal(9, r);
+    }
+
+    [Fact]
+    public void TryDivide_ByTerm_BySupersetPowers()
+    {
+      PolynomialTerm x = 'x';
+      Assert.False(x.TryDivide(x * x, out _));
+    }
+
+    [Fact]
+    public void TryDivide_BySubsetTerm()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+      Assert.True((2 * x * x * x * y * y).TryDivide(0.5 * x, out PolynomialTerm r));
+      Assert.Equal(4 * x * x * y * y, r);
     }
   }
 }

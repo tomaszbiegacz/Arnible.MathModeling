@@ -37,7 +37,19 @@ Polynomial z = 'z';
 Assert.Equal(z * (x * x - 1), (new[] { x - 1, x + 1, z }).Product());
 ```
 
-The more interesting bit starts with derivatives of polynomials division
+The more interesting bit starts polynomials composition
+
+```C#
+PolynomialTerm x = 'x';
+PolynomialTerm y = 'y';
+
+var entry = 1 + x * x - y * y;
+Assert.Equal(2 + 2 * y, entry.Composition(x, y + 1));
+```
+
+### Polynomials division
+
+Division of polynomials can be seen by example
 
 ```C#
 PolynomialTerm x = 'x';
@@ -50,14 +62,13 @@ Assert.Equal(1 / (2 * x + 1), expression.DerivativeBy(y));
 Assert.True(expression.DerivativeBy(y).DerivativeBy(y).IsZero);
 ```
 
-or with polynomials composition
+and basic reduction
 
 ```C#
 PolynomialTerm x = 'x';
 PolynomialTerm y = 'y';
-
-var entry = 1 + x * x - y * y;
-Assert.Equal(2 + 2 * y, entry.Composition(x, y + 1));
+      
+Assert.Equal(x + y, (x * x - y * y).ReduceBy(x - y));
 ```
 
 ### Roadmap

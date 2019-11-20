@@ -97,5 +97,67 @@ namespace Arnible.MathModeling.Test
       var entry = 1 + x * x - y * y;
       Assert.Equal(2 + 2 * y, entry.Composition(x, y + 1));
     }
+
+    [Fact]
+    public void Power_ByZero()
+    {
+      PolynomialTerm x = 'x';
+      Assert.Equal(1, (x + 1).Power(0));
+    }
+
+    [Fact]
+    public void Power_ByOne()
+    {
+      PolynomialTerm x = 'x';
+      Assert.Equal(x + 1, (x + 1).Power(1));
+    }
+
+    [Fact]
+    public void Power_ByTwo()
+    {
+      PolynomialTerm x = 'x';
+      Assert.Equal(x * x + 2 * x + 1, (x + 1).Power(2));
+    }
+
+    [Fact]
+    public void TryDivide_ByConstant()
+    {
+      PolynomialTerm x = 'x';
+      Assert.True((x + 1).TryDivide(0.5, out Polynomial result));
+      Assert.Equal(2 * (x + 1), result);
+    }
+
+    [Fact]
+    public void TryDivide_ByExpression()
+    {
+      PolynomialTerm x = 'x';
+      Assert.True((x * x * x - 27).TryDivide(x - 3, out Polynomial result));
+      Assert.Equal(x * x + 3 * x + 9, result);
+    }
+
+    [Fact]
+    public void TryDivide_ByExpression_False()
+    {
+      PolynomialTerm x = 'x';
+      Assert.False((x * x * x - 26).TryDivide(x - 3, out _));
+    }
+
+    [Fact]
+    public void TryDivide_0ByExpression()
+    {
+      PolynomialTerm x = 'x';
+      Polynomial zero = 0;
+      Assert.True(zero.TryDivide(x - 3, out Polynomial result));
+      Assert.Equal(0, result);
+    }
+
+    [Fact]
+    public void Division_Simplification_x2_minus_1()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+      
+      Assert.Equal(x + y, (x * x - y * y).ReduceBy(x - y));
+    }
   }
 }
