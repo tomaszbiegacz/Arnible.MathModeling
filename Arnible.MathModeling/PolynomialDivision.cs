@@ -6,6 +6,10 @@ namespace Arnible.MathModeling
 {
   public struct PolynomialDivision : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation
   {
+    public static PolynomialDivision Zero => new PolynomialDivision(0, 1);
+
+    public static PolynomialDivision One => new PolynomialDivision(1, 1);
+
     public Polynomial Numerator { get; }
     public Polynomial Denominator { get; }
 
@@ -16,7 +20,8 @@ namespace Arnible.MathModeling
         throw new DivideByZeroException();
       }
 
-      if(numerator.TryDivide(denominator, out Polynomial reducedNumerator))
+      Polynomial reducedNumerator = numerator.ReduceBy(denominator, out Polynomial reducedDenominator);
+      if (reducedDenominator == 0)
       {
         // let's simplify it if we can
         Numerator = reducedNumerator;
@@ -26,7 +31,7 @@ namespace Arnible.MathModeling
       {
         Numerator = numerator;
         Denominator = denominator;
-      }      
+      }
     }
 
     public bool Equals(PolynomialDivision other) => IsZero ? other.IsZero : other.Numerator == Numerator && other.Denominator == Denominator;
@@ -86,14 +91,74 @@ namespace Arnible.MathModeling
      * Operators
      */
 
-    public static explicit operator Polynomial(PolynomialDivision v) => v.Numerator / (double)v.Denominator;    
+    public static explicit operator Polynomial(PolynomialDivision v) => v.Numerator / (double)v.Denominator;
 
-    public static PolynomialDivision operator *(PolynomialDivision a, double numerator)
+    // +
+
+    public static PolynomialDivision operator +(PolynomialDivision a, Polynomial b)
+    {
+      return new PolynomialDivision(a.Numerator + b * a.Denominator, a.Denominator);
+    }
+
+    public static PolynomialDivision operator +(Polynomial a, PolynomialDivision b) => b + a;
+
+    public static PolynomialDivision operator +(PolynomialDivision a, PolynomialDivision b)
+    {
+      if (a.Denominator == b.Denominator)
+      {
+        return new PolynomialDivision(a.Numerator + b.Numerator, a.Denominator);
+      }
+      else
+      {
+        return new PolynomialDivision(a.Numerator * b.Denominator + b.Numerator * a.Denominator, a.Denominator * b.Denominator);
+      }
+    }
+
+    // -
+
+    public static PolynomialDivision operator -(PolynomialDivision a, Polynomial b) => a + (-1) * b;
+
+    public static PolynomialDivision operator -(Polynomial a, PolynomialDivision b) => a + (-1) * b;
+
+    public static PolynomialDivision operator -(PolynomialDivision a, PolynomialDivision b) => a + (-1) * b;
+
+    // *
+
+    public static PolynomialDivision operator *(PolynomialDivision a, Polynomial numerator)
     {
       return new PolynomialDivision(numerator * a.Numerator, a.Denominator);
     }
 
-    public static PolynomialDivision operator *(double numerator, PolynomialDivision a) => a * numerator;
+    public static PolynomialDivision operator *(Polynomial numerator, PolynomialDivision a) => a * numerator;
+
+    public static PolynomialDivision operator *(PolynomialDivision a, PolynomialDivision b)
+    {
+      return new PolynomialDivision(a.Numerator * b.Numerator, a.Denominator * b.Denominator);
+    }
+
+    // /
+
+    public static PolynomialDivision operator /(PolynomialDivision a, Polynomial denominator)
+    {
+      return new PolynomialDivision(a.Numerator, a.Denominator * denominator);
+    }
+
+    public static PolynomialDivision operator /(Polynomial a, PolynomialDivision denominator)
+    {
+      return new PolynomialDivision(a * denominator.Denominator, denominator.Numerator);
+    }
+
+    public static PolynomialDivision operator /(PolynomialDivision a, PolynomialDivision b)
+    {
+      if (a.Denominator == b.Denominator)
+      {
+        return new PolynomialDivision(numerator: a.Numerator, denominator: b.Numerator);
+      }
+      else
+      {
+        return new PolynomialDivision(numerator: a.Numerator * b.Denominator, denominator: a.Denominator * b.Numerator);
+      }
+    }
 
     public PolynomialDivision DerivativeBy(char name)
     {
@@ -140,7 +205,12 @@ namespace Arnible.MathModeling
         numerator: Numerator.Composition(variable, replacement),
         denominator: Denominator.Composition(variable, replacement));
 
+    public PolynomialDivision Composition(char variable, PolynomialDivision replacement) => 
+        Numerator.Composition(variable, replacement) / Denominator.Composition(variable, replacement);
+
     public PolynomialDivision Composition(PolynomialTerm variable, Polynomial replacement) => Composition((char)variable, replacement);
+
+    public PolynomialDivision Composition(PolynomialTerm variable, PolynomialDivision replacement) => Composition((char)variable, replacement);
 
     /*
      * IPolynomialOperation
@@ -150,7 +220,7 @@ namespace Arnible.MathModeling
 
     public double Value(IReadOnlyDictionary<char, double> x)
     {
-      if(IsNaN)
+      if (IsNaN)
       {
         throw new InvalidOperationException("Cannot calculate value from NaN");
       }
@@ -163,6 +233,6 @@ namespace Arnible.MathModeling
       {
         return Numerator.Value(x) / Denominator.Value(x);
       }
-    }    
+    }
   }
 }

@@ -37,16 +37,6 @@ Polynomial z = 'z';
 Assert.Equal(z * (x * x - 1), (new[] { x - 1, x + 1, z }).Product());
 ```
 
-The more interesting bit starts with polynomials composition
-
-```C#
-PolynomialTerm x = 'x';
-PolynomialTerm y = 'y';
-
-var entry = 1 + x * x - y * y;
-Assert.Equal(2 + 2 * y, entry.Composition(x, y + 1));
-```
-
 ### Polynomials division
 
 Division of polynomials can be seen by example
@@ -55,7 +45,7 @@ Division of polynomials can be seen by example
 PolynomialTerm x = 'x';
 PolynomialTerm y = 'y';
 
-var expression = (y + x + 1) / (2 * x + 1);
+var expression = 1 + (y + x + 1) / (2 * x + 1);
 Assert.Equal(-1 * (2 * y + 1) / (4 * x * x + 4 * x + 1), expression.DerivativeBy(x));
 Assert.Equal(1 / (2 * x + 1), expression.DerivativeBy(y));
 
@@ -69,6 +59,37 @@ PolynomialTerm x = 'x';
 PolynomialTerm y = 'y';
       
 Assert.Equal(x + y, (x * x - y * y).ReduceBy(x - y));
+```
+
+or calculating reduction leftovers
+
+```C#
+PolynomialTerm x = 'x';
+
+var toDivide = (x - 1) * (x - 1) * (x + 1) + 2 * x + 3;
+Assert.Equal(2 * x + 3, toDivide % (x * x - 1));
+``` 
+
+### Composition
+
+Example of polynomials composition
+
+```C#
+PolynomialTerm x = 'x';
+PolynomialTerm y = 'y';
+
+var entry = 1 + x * x - y * y;
+Assert.Equal(2 + 2 * y, entry.Composition(x, y + 1));
+```
+
+and composition of polynomials division
+
+```C#
+PolynomialTerm x = 'x';
+PolynomialTerm y = 'y';
+
+PolynomialDivision entry = x / (x + 1);
+Assert.Equal(y / (x + y), entry.Composition(x, y / x));
 ```
 
 ### Roadmap

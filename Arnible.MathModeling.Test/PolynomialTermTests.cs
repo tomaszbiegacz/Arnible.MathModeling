@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Xunit;
+﻿using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
@@ -13,6 +12,10 @@ namespace Arnible.MathModeling.Test
       Assert.True(v.IsZero);
       Assert.True(v.IsConstant);
       Assert.Equal("0", v.ToString());
+
+      Assert.Equal(0, v.PowerSum);
+      Assert.Equal(0, v.GreatestPower.Key);
+      Assert.Equal(0u, v.GreatestPower.Value);
 
       Assert.Equal(0, v);
       Assert.Equal(0, (double)v);
@@ -35,6 +38,10 @@ namespace Arnible.MathModeling.Test
       Assert.True(v.IsConstant);
       Assert.Equal("2", v.ToString());
 
+      Assert.Equal(0, v.PowerSum);
+      Assert.Equal(0, v.GreatestPower.Key);
+      Assert.Equal(0u, v.GreatestPower.Value);
+
       Assert.Equal(2, v);
       Assert.Equal(2, (double)v);
       Assert.NotEqual(1, v);
@@ -54,6 +61,11 @@ namespace Arnible.MathModeling.Test
       PolynomialTerm v = 'a';
       Assert.False(v.IsZero);
       Assert.False(v.IsConstant);
+
+      Assert.Equal(1, v.PowerSum);
+      Assert.Equal('a', v.GreatestPower.Key);
+      Assert.Equal(1u, v.GreatestPower.Value);
+
       Assert.Equal("a", v.ToString());
       Assert.NotEqual('b', v);
 
@@ -74,6 +86,10 @@ namespace Arnible.MathModeling.Test
       Assert.False(v.IsZero);
       Assert.False(v.IsConstant);
       Assert.Equal("2.1*a*c^3", v.ToString());
+
+      Assert.Equal(4, v.PowerSum);
+      Assert.Equal('c', v.GreatestPower.Key);
+      Assert.Equal(3u, v.GreatestPower.Value);
 
       Assert.Equal(2.1 * (PolynomialTerm)('c', 3), v.DerivativeBy('a'));
       Assert.Equal(0, v.DerivativeBy('b'));
@@ -115,9 +131,13 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Simplify_To_Sum()
     {
-      var expected = new PolynomialTerm[] { 3, 2 * (PolynomialTerm)('a', 1), 'b' };
-      var actual = PolynomialTerm.Simplify(new PolynomialTerm[] { 1, 'a', 2, 'b', 'a' });
-      expected.Should().BeEquivalentTo(actual);
+      PolynomialTerm a = 'a';
+      PolynomialTerm b = 'b';
+      PolynomialTerm c = 'c';
+
+      var expected = new PolynomialTerm[] { a * b * c, a * a, b * b, a * b, a, 2 * b, 3 };
+      var before   = new PolynomialTerm[] { 1, b, 2, b, a, a * b, a * b * c, a * a, b * b };
+      Assert.Equal(expected, PolynomialTerm.Simplify(before));
     }
 
     [Fact]
@@ -185,8 +205,8 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void TryDivide_ByTerm_BySupersetVariables_9x_x()
     {
-      PolynomialTerm x = 'x';      
-      Assert.True((9*x).TryDivide(x, out PolynomialTerm r));
+      PolynomialTerm x = 'x';
+      Assert.True((9 * x).TryDivide(x, out PolynomialTerm r));
       Assert.Equal(9, r);
     }
 

@@ -10,7 +10,9 @@ namespace Arnible.MathModeling
   {
     private readonly double _coefficient;
     private readonly IEnumerable<KeyValuePair<char, uint>> _indeterminates;
+
     private readonly string _indeterminatesSignature;
+    private KeyValuePair<char, uint> _greatestPower;
 
     private PolynomialTerm(double coefficient, params (char, uint)[] indeterminates)
       : this(coefficient, Normalize(indeterminates.ToDictionary(i => i.Item1, i => i.Item2)))
@@ -37,6 +39,7 @@ namespace Arnible.MathModeling
       _coefficient = coefficient;
       _indeterminates = indeterminates;
       _indeterminatesSignature = signature;
+      _greatestPower = default;
     }
 
     public static implicit operator PolynomialTerm(char name) => new PolynomialTerm(1, (name, 1));
@@ -46,6 +49,29 @@ namespace Arnible.MathModeling
     private IEnumerable<KeyValuePair<char, uint>> Indeterminates => _indeterminates ?? Enumerable.Empty<KeyValuePair<char, uint>>();
 
     private string IndeterminatesSignature => _indeterminatesSignature ?? String.Empty;
+
+    public long PowerSum => Indeterminates.Sum(kv => kv.Value);
+
+    public KeyValuePair<char, uint> GreatestPower
+    {
+      get
+      {
+        if (_greatestPower.Value == default)
+        {
+          // build cache
+          foreach (var kv in Indeterminates)
+          {
+            if (kv.Value > _greatestPower.Value)
+            {
+              _greatestPower = kv;
+            }
+          }
+        }
+        
+        // return last fetched value
+        return _greatestPower;
+      }
+    }
 
     private static IEnumerable<KeyValuePair<char, uint>> Normalize(IEnumerable<KeyValuePair<char, uint>> source)
     {
@@ -281,7 +307,7 @@ namespace Arnible.MathModeling
               resultIndeterminates.Add(new KeyValuePair<char, uint>(kv.Key, kv.Value - bPower));
             }
             bIndeterminates.Remove(kv.Key);
-          }          
+          }
         }
         else
         {
@@ -321,7 +347,9 @@ namespace Arnible.MathModeling
 
     public static IEnumerable<PolynomialTerm> Simplify(IEnumerable<PolynomialTerm> variables)
     {
-      return variables.GroupBy(v => v.IndeterminatesSignature).Select(g => Add(g)).Where(v => !v.IsZero).OrderByDescending(v => v.IndeterminatesSignature);
+      return variables.GroupBy(v => v.IndeterminatesSignature)
+        .Select(g => Add(g)).Where(v => !v.IsZero)
+        .OrderByDescending(v => v.PowerSum).ThenByDescending(v => v.GreatestPower.Value).ThenBy(v => v.GreatestPower.Key);
     }
 
     public static bool IsSimplified(IEnumerable<PolynomialTerm> variables)
@@ -350,6 +378,20 @@ namespace Arnible.MathModeling
 
       uint power = _indeterminates.Single(kv => kv.Key == variable).Value;
       Polynomial inPlace = 1;
+      for (uint i = 0; i < power; ++i)
+      {
+        inPlace *= replacement;
+      }
+
+      return remaining * inPlace;
+    }
+
+    public PolynomialDivision Composition(char variable, PolynomialDivision replacement)
+    {
+      var remaining = new PolynomialTerm(_coefficient, _indeterminates.Where(kv => kv.Key != variable));
+
+      uint power = _indeterminates.Single(kv => kv.Key == variable).Value;
+      PolynomialDivision inPlace = PolynomialDivision.One;
       for (uint i = 0; i < power; ++i)
       {
         inPlace *= replacement;

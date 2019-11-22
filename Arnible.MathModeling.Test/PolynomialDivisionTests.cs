@@ -9,6 +9,18 @@ namespace Arnible.MathModeling.Test
     private readonly PolynomialTerm y = 'y';
 
     [Fact]
+    public void Const_Zero()
+    {
+      Assert.Equal(0, (Polynomial)PolynomialDivision.Zero);
+    }
+
+    [Fact]
+    public void Const_One()
+    {
+      Assert.Equal(1, (Polynomial)PolynomialDivision.One);
+    }
+
+    [Fact]
     public void Constructor_Polynomial()
     {
       Polynomial x = 'x';
@@ -77,7 +89,7 @@ namespace Arnible.MathModeling.Test
       PolynomialTerm x = 'x';
       PolynomialTerm y = 'y';
 
-      var expression = (y + x + 1) / (2 * x + 1);
+      var expression = 1 + (y + x + 1) / (2 * x + 1);
       Assert.Equal(-1 * (2 * y + 1) / (4 * x * x + 4 * x + 1), expression.DerivativeBy(x));
       Assert.Equal(1 / (2 * x + 1), expression.DerivativeBy(y));
 
@@ -107,6 +119,16 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
+    public void Composition_Division()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+
+      PolynomialDivision entry = x / (x + 1);
+      Assert.Equal(y / (x + y), entry.Composition(x, y / x));
+    }
+
+    [Fact]
     public void Division_Simplification_x2_minus_1()
     {
       PolynomialTerm x = 'x';
@@ -115,5 +137,79 @@ namespace Arnible.MathModeling.Test
       var expression = (x * x - y * y) / (x - y);
       Assert.Equal(x + y, (Polynomial)expression);
     }
+
+    [Fact]
+    public void Operator_Minus_Polynomial()
+    {
+      PolynomialTerm x = 'x';
+
+      Assert.Equal(x / (x + 1), 1 - 1 / (x + 1));
+    }
+
+    [Fact]
+    public void Operator_Minus_Long()
+    {
+      PolynomialTerm x = 'x';
+
+      var a = x / (x - 2);
+      var b = 1 / (x + 2);
+      Assert.Equal((x * x + x + 2) / (x * x - 4), a - b);
+    }
+
+    [Fact]
+    public void Operator_Minus_Short()
+    {
+      PolynomialTerm x = 'x';
+
+      var a = x / (x - 2);
+      var b = 1 / (x - 2);
+      Assert.Equal((x - 1) / (x - 2), a - b);
+    }
+
+    [Fact]
+    public void Operator_Multiply_Polynomial()
+    {
+      PolynomialTerm x = 'x';
+
+      Assert.Equal((1 - 2 * x + x * x) / (1 + x), (1 - x) / (1 + x) * (1 - x));
+    }
+
+    [Fact]
+    public void Operator_Multiply_Long()
+    {
+      PolynomialTerm x = 'x';
+
+      var a = (x - 1) / (x - 2);
+      var b = (x + 1) / (x + 2);
+      Assert.Equal((x * x - 1) / (x * x - 4), a * b);
+    }
+
+    [Fact]
+    public void Operator_Divide_Polynomial()
+    {
+      PolynomialTerm x = 'x';
+
+      Assert.Equal(1 / (1 - x * x), 1 / (1 - x) / (1 + x));
+    }
+
+    [Fact]
+    public void Operator_Divide_Short()
+    {
+      PolynomialTerm x = 'x';
+
+      var a = (x - 1) / (2 * x + 3);
+      var b = (x - 2) / (2 * x + 3);
+      Assert.Equal((x - 1) / (x - 2), a / b);
+    }
+
+    [Fact]
+    public void Operator_Divide_Long()
+    {
+      PolynomialTerm x = 'x';
+
+      var a = (x - 1) / (x + 2);
+      var b = (x - 2) / (x + 1);
+      Assert.Equal((x * x - 1) / (x * x - 4), a / b);
+    }    
   }
 }

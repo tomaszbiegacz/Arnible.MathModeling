@@ -166,7 +166,7 @@ namespace Arnible.MathModeling
       return new Polynomial(a.Terms.Select(t => t / denominator));
     }
 
-    private static bool TryReduce(
+    private static Polynomial TryReduce(
       Polynomial a,
       PolynomialTerm denominator,
       Polynomial denominatorSuffix,
@@ -175,7 +175,7 @@ namespace Arnible.MathModeling
       if (a == 0)
       {
         // we are done, there is nothing more to extract from
-        return true;
+        return 0;
       }
 
       foreach (PolynomialTerm aTerm in a.Terms)
@@ -191,45 +191,43 @@ namespace Arnible.MathModeling
       }
 
       // we weren't able to reduce it
-      return false;
+      return a;
     }
 
-    public bool TryDivide(Polynomial b, out Polynomial result)
+    public Polynomial ReduceBy(Polynomial b, out Polynomial reminder)
     {
       if (b.IsConstant)
       {
-        result = this / (double)b;
-        return true;
+        reminder = default;
+        return this / (double)b;
       }
-      if(IsZero)
+      if (IsZero)
       {
-        result = 0;
-        return true;
+        reminder = default;
+        return 0;
       }
 
       PolynomialTerm denominator = b.Terms.First();
       Polynomial denominatorSuffix = new Polynomial(b.Terms.Skip(1));
       var resultTerms = new List<PolynomialTerm>();
-      if (TryReduce(this, denominator, denominatorSuffix, resultTerms))
-      {
-        result = new Polynomial(resultTerms);
-        return true;
-      }
+      reminder = TryReduce(this, denominator, denominatorSuffix, resultTerms);
+      return new Polynomial(resultTerms);
+    }
 
-      result = default;
-      return false;
+    public static Polynomial operator %(Polynomial a, Polynomial b)
+    {
+      a.ReduceBy(b, out Polynomial reminder);
+      return reminder;
     }
 
     public Polynomial ReduceBy(Polynomial b)
     {
-      if(TryDivide(b, out Polynomial result))
-      {
-        return result;
-      }
-      else
+      Polynomial result = ReduceBy(b, out Polynomial reminder);
+      if (reminder != 0)
       {
         throw new InvalidOperationException($"Cannot reduce [{this}] with [{b}].");
       }
+      return result;
     }
 
     public Polynomial DerivativeBy(char name)
@@ -264,7 +262,34 @@ namespace Arnible.MathModeling
       return result;
     }
 
+    public PolynomialDivision Composition(char variable, PolynomialDivision replacement)
+    {
+      List<PolynomialTerm> remaining = new List<PolynomialTerm>();
+
+      PolynomialDivision result = PolynomialDivision.Zero;
+      foreach (PolynomialTerm term in Terms)
+      {
+        if (term.Variables.Contains(variable))
+        {
+          result += term.Composition(variable, replacement);
+        }
+        else
+        {
+          remaining.Add(term);
+        }
+      }
+
+      if (remaining.Count > 0)
+      {
+        result += new Polynomial(remaining);
+      }
+
+      return result;
+    }
+
     public Polynomial Composition(PolynomialTerm variable, Polynomial replacement) => Composition((char)variable, replacement);
+
+    public PolynomialDivision Composition(PolynomialTerm variable, PolynomialDivision replacement) => Composition((char)variable, replacement);
 
     /*
      * IPolynomialOperation

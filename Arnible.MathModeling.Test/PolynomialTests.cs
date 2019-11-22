@@ -120,35 +120,50 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
-    public void TryDivide_ByConstant()
+    public void ReduceBy_ByConstant()
     {
       PolynomialTerm x = 'x';
-      Assert.True((x + 1).TryDivide(0.5, out Polynomial result));
-      Assert.Equal(2 * (x + 1), result);
+      Assert.Equal(2 * (x + 1), (x + 1).ReduceBy(0.5));
     }
 
     [Fact]
-    public void TryDivide_ByExpression()
+    public void ReduceBy_ByExpression()
     {
       PolynomialTerm x = 'x';
-      Assert.True((x * x * x - 27).TryDivide(x - 3, out Polynomial result));
-      Assert.Equal(x * x + 3 * x + 9, result);
+      Assert.Equal(x * x + 3 * x + 9, (x * x * x - 27).ReduceBy(x - 3));
     }
 
     [Fact]
-    public void TryDivide_ByExpression_False()
+    public void ReduceBy_ByExpression_RemainderConstant()
     {
       PolynomialTerm x = 'x';
-      Assert.False((x * x * x - 26).TryDivide(x - 3, out _));
+      Assert.Equal(x * x + 3 * x + 9, (x * x * x - 25).ReduceBy(x - 3, out Polynomial remainder));
+      Assert.Equal(2, remainder);
     }
 
     [Fact]
-    public void TryDivide_0ByExpression()
+    public void ReduceBy_ByExpression_RemainderExpression()
+    {
+      PolynomialTerm x = 'x';
+      Polynomial toDivide = 5 * (x - 1) * (x - 1) * (x + 1) + 2 * x + 3;
+      Assert.Equal(x - 1, toDivide.ReduceBy(5 * (x * x - 1), out Polynomial remainder));
+      Assert.Equal(2 * x + 3, remainder);
+    }
+
+    [Fact]
+    public void Remainder_ByExpression()
+    {
+      PolynomialTerm x = 'x';
+      var toDivide = (x - 1) * (x - 1) * (x + 1) + 2 * x + 3;
+      Assert.Equal(2 * x + 3, toDivide % (x * x - 1));
+    }
+
+    [Fact]
+    public void ReduceBy_0ByExpression()
     {
       PolynomialTerm x = 'x';
       Polynomial zero = 0;
-      Assert.True(zero.TryDivide(x - 3, out Polynomial result));
-      Assert.Equal(0, result);
+      Assert.Equal(0, zero.ReduceBy(x - 3));
     }
 
     [Fact]
@@ -156,7 +171,7 @@ namespace Arnible.MathModeling.Test
     {
       PolynomialTerm x = 'x';
       PolynomialTerm y = 'y';
-      
+
       Assert.Equal(x + y, (x * x - y * y).ReduceBy(x - y));
     }
   }
