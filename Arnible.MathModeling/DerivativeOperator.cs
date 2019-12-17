@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Arnible.MathModeling
@@ -36,5 +37,7 @@ namespace Arnible.MathModeling
         first: () => args.Select(d => d.First).Product(),
         second: () => args.Indexes().Select(pos => Derivative2Ingredient(args, pos)).Sum());
     }
+
+    public static IEnumerable<PolynomialTerm> DerivativeBy(this IEnumerable<PolynomialTerm> terms, char name) => terms.SelectMany(t => t.DerivativeBy(name));
   }
 }

@@ -1,21 +1,4 @@
-# Arnible.MathModelling
-
-Beside math modelling tools, this library extends LINQ operators for various math specific operations  like `Product` or `AggregateCombinations`.
-
-## Lazy operations on derivatives
-
-Library can be helpful when calculating first and second derivative over composition of functions with known derivatives.
-
-```C#
-var d1 = new DerivativeValue(2, 3);
-var d2 = new DerivativeValue(5, 7);
-var d3 = new DerivativeValue(11, 13);
-var d = DerivativeOperator.Multiply(d1, d2, d3);
-Assert.Equal(2 * 5 * 11, d.First);
-Assert.Equal(3 * 5 * 5 * 11 * 11 + 2 * 7 * 11 * 11 + 2 * 5 * 13, d.Second);
-```
-
-## Polynomials arithmetic
+﻿# Arnible.MathModelling
 
 Usage for basic operations over polynomials can be shown via example
 
@@ -37,7 +20,7 @@ Polynomial z = 'z';
 Assert.Equal(z * (x * x - 1), (new[] { x - 1, x + 1, z }).Product());
 ```
 
-### Polynomials division
+## Polynomials division
 
 Division of polynomials can be seen by example
 
@@ -52,7 +35,7 @@ Assert.Equal(1 / (2 * x + 1), expression.DerivativeBy(y));
 Assert.True(expression.DerivativeBy(y).DerivativeBy(y).IsZero);
 ```
 
-and basic reduction
+Basic reduction
 
 ```C#
 PolynomialTerm x = 'x';
@@ -70,7 +53,7 @@ var toDivide = (x - 1) * (x - 1) * (x + 1) + 2 * x + 3;
 Assert.Equal(2 * x + 3, toDivide % (x * x - 1));
 ``` 
 
-### Composition
+## Polynomials composition
 
 Example of polynomials composition
 
@@ -92,7 +75,49 @@ PolynomialDivision entry = x / (x + 1);
 Assert.Equal(y / (x + y), entry.Composition(x, y / x));
 ```
 
-### Roadmap
+## Polar coordinates
+
+Following basic support of trigonometric functions, polynomials can be also analysed in polar coordinates
+
+```C#
+using static Arnible.MathModeling.MetaMath;
+using static Arnible.MathModeling.Term;
+
+public class PolarCoordinatesTest
+{
+	[Fact]
+	public void ErrorExpression()
+	{
+		// error expression in cartesian coordinates (x, y)
+		var error = (c - x * y).ToPower(2);
+      
+		Assert.Equal(
+			-2 * y * (c - x * y), 
+			error.DerivativeBy(x));
+
+		Assert.Equal(
+			-2 * x * (c - x * y), 
+			error.DerivativeBy(y));
+
+		// error expression in polar coordinates (r, θ)
+		var errorPolar = error.Composition(x, r * Cos(θ)).Composition(y, r * Sin(θ));
+
+		Assert.Equal(
+			(c - r.ToPower(2) * Sin(θ) * Cos(θ)).ToPower(2),
+			errorPolar);
+
+		Assert.Equal(
+			-4 * r * Sin(θ) * Cos(θ) * (c - r.ToPower(2) * Sin(θ) * Cos(θ)), 
+			errorPolar.DerivativeBy(r));
+
+		Assert.Equal(
+			-2 * r.ToPower(2) * (c - r.ToPower(2) * Sin(θ) * Cos(θ)) * (Cos(θ).ToPower(2) - Sin(θ).ToPower(2)),
+			errorPolar.DerivativeBy(θ));
+	}
+}
+```
+
+## Roadmap
 
 Todo:
 * Polynomial Factorizer/Simplifier.

@@ -32,10 +32,10 @@ namespace Arnible.MathModeling
 
     public override int GetHashCode()
     {
-      int result = 1;
+      int result = 0;
       foreach (var v in Terms)
       {
-        result *= v.GetHashCode();
+        result ^= v.GetHashCode();
       }
       return result;
     }
@@ -143,7 +143,7 @@ namespace Arnible.MathModeling
 
     public static Polynomial operator *(Polynomial b, PolynomialTerm a) => a * b;
 
-    public Polynomial Power(uint power)
+    public Polynomial ToPower(uint power)
     {
       switch (power)
       {
@@ -152,7 +152,7 @@ namespace Arnible.MathModeling
         case 1:
           return this;
         default:
-          return this * this.Power(power - 1);
+          return this * this.ToPower(power - 1);
       }
     }
 
@@ -232,7 +232,7 @@ namespace Arnible.MathModeling
 
     public Polynomial DerivativeBy(char name)
     {
-      return new Polynomial(Terms.Select(v => v.DerivativeBy(name)));
+      return new Polynomial(Terms.SelectMany(v => v.DerivativeBy(name)));
     }
 
     public Polynomial DerivativeBy(PolynomialTerm name) => DerivativeBy((char)name);
@@ -262,7 +262,7 @@ namespace Arnible.MathModeling
       return result;
     }
 
-    public PolynomialDivision Composition(char variable, PolynomialDivision replacement)
+    private PolynomialDivision Composition(char variable, PolynomialDivision replacement)
     {
       List<PolynomialTerm> remaining = new List<PolynomialTerm>();
 

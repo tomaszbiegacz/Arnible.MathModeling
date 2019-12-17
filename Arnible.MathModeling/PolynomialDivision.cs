@@ -38,7 +38,7 @@ namespace Arnible.MathModeling
 
     public bool Equals(Polynomial other) => IsPolynomial ? other.Equals((Polynomial)this) : false;
 
-    public override int GetHashCode() => IsZero ? 0 : Numerator.GetHashCode() * Denominator.GetHashCode();
+    public override int GetHashCode() => IsZero ? 0 : Numerator.GetHashCode() ^ Denominator.GetHashCode();
 
     public override bool Equals(object obj)
     {

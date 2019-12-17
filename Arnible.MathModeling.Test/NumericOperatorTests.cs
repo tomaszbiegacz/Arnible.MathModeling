@@ -75,15 +75,15 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Power()
     {
-      Assert.Equal(1, NumericOperator.Power(2, 0));
-      Assert.Equal(2, NumericOperator.Power(2, 1));
-      Assert.Equal(4, NumericOperator.Power(2, 2));
-      Assert.Equal(8, NumericOperator.Power(2, 3));
-      Assert.Equal(16, NumericOperator.Power(2, 4));
-      Assert.Equal(32, NumericOperator.Power(2, 5));
-      Assert.Equal(64, NumericOperator.Power(2, 6));
-      Assert.Equal(128, NumericOperator.Power(2, 7));
-      Assert.Equal(256, NumericOperator.Power(2, 8));
+      Assert.Equal(1, NumericOperator.ToPower(2, 0));
+      Assert.Equal(2, NumericOperator.ToPower(2, 1));
+      Assert.Equal(4, NumericOperator.ToPower(2, 2));
+      Assert.Equal(8, NumericOperator.ToPower(2, 3));
+      Assert.Equal(16, NumericOperator.ToPower(2, 4));
+      Assert.Equal(32, NumericOperator.ToPower(2, 5));
+      Assert.Equal(64, NumericOperator.ToPower(2, 6));
+      Assert.Equal(128, NumericOperator.ToPower(2, 7));
+      Assert.Equal(256, NumericOperator.ToPower(2, 8));
     }
   }
 }

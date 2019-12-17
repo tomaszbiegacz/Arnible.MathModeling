@@ -62,8 +62,8 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(1, v.DerivativeBy('a'));
       Assert.Equal(0, v.DerivativeBy('b'));
 
-      Assert.Equal(2 * (PolynomialTerm)('a', 1), 2 * v);
-      Assert.Equal(0.5 * (PolynomialTerm)('a', 1), v / 2);
+      Assert.Equal(2 * Term.a, 2 * v);
+      Assert.Equal(0.5 * Term.a, v / 2);
 
       Assert.Equal(5, v.GetOperation('a').Value(5));
     }
@@ -102,21 +102,21 @@ namespace Arnible.MathModeling.Test
     public void Power_ByZero()
     {
       PolynomialTerm x = 'x';
-      Assert.Equal(1, (x + 1).Power(0));
+      Assert.Equal(1, (x + 1).ToPower(0));
     }
 
     [Fact]
     public void Power_ByOne()
     {
       PolynomialTerm x = 'x';
-      Assert.Equal(x + 1, (x + 1).Power(1));
+      Assert.Equal(x + 1, (x + 1).ToPower(1));
     }
 
     [Fact]
     public void Power_ByTwo()
     {
       PolynomialTerm x = 'x';
-      Assert.Equal(x * x + 2 * x + 1, (x + 1).Power(2));
+      Assert.Equal(x * x + 2 * x + 1, (x + 1).ToPower(2));
     }
 
     [Fact]

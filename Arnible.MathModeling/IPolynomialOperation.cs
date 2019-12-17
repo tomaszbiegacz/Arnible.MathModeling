@@ -6,8 +6,6 @@ namespace Arnible.MathModeling
   {
     IEnumerable<char> Variables { get; }
 
-    bool IsZero { get; }
-
     double Value(IReadOnlyDictionary<char, double> x);
   }
 }

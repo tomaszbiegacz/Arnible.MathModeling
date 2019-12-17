@@ -20,7 +20,9 @@ namespace Arnible.MathModeling
         }
       }
       else
+      {
         return false;
+      }
     }
 
     public static bool IsValidNumeric(this double a)
@@ -28,7 +30,7 @@ namespace Arnible.MathModeling
       return !double.IsNaN(a) && !double.IsInfinity(a);
     }
 
-    public static double Power(this double a, uint b)
+    public static double ToPower(this double a, uint b)
     {
       if (a == 1)
       {
