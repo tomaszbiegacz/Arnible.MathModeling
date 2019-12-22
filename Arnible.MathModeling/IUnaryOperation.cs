@@ -1,12 +1,7 @@
 ﻿namespace Arnible.MathModeling
 {
-  public interface IUnaryOperation
+  public interface IUnaryOperation<TNumber> where TNumber : struct
   {
-    double Value(double x);    
-  }
-
-  public interface IUnaryOperationWithDerivative : IUnaryOperation
-  {
-    IDerivative Derivative(double x);
+    TNumber Value(TNumber x);
   }
 }

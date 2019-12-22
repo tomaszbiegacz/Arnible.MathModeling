@@ -233,11 +233,11 @@ namespace Arnible.MathModeling
         switch(_modifier)
         {
           case ElementaryUnaryOperation.Identity:
-            return NumericOperator.ToPower(x[Variable], Power);
+            return x[Variable].ToPower(Power);
           case ElementaryUnaryOperation.Sine:
-            return NumericOperator.ToPower(Math.Sin(x[Variable]), Power);
+            return Math.Sin(x[Variable]).ToPower(Power);
           case ElementaryUnaryOperation.Cosine:
-            return NumericOperator.ToPower(Math.Cos(x[Variable]), Power);
+            return Math.Cos(x[Variable]).ToPower(Power);
           default:
             throw new InvalidOperationException("Unknown modifier: " + _modifier);
         }        

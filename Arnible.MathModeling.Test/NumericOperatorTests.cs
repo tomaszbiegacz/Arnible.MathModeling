@@ -21,69 +21,69 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Equals_Infinity_Infinity_Not()
     {
-      Assert.False(NumericOperator.Equals(double.PositiveInfinity, double.PositiveInfinity));
+      Assert.False(double.PositiveInfinity.NumericEquals(double.PositiveInfinity));
     }
 
     [Fact]
     public void Equals_NaN_NaN_Not()
     {
-      Assert.False(NumericOperator.Equals(double.PositiveInfinity, double.PositiveInfinity));
+      Assert.False(double.PositiveInfinity.NumericEquals(double.PositiveInfinity));
     }
 
     [Fact]
     public void Equals_Zero_Zero()
     {
-      Assert.True(NumericOperator.Equals(0d, 0d));
+      Assert.True(0d.NumericEquals(0d));
     }
 
     [Fact]
     public void Equals_Zero_Epsilon()
     {
-      Assert.True(NumericOperator.Equals(0d, double.Epsilon));
+      Assert.True(0d.NumericEquals(double.Epsilon));
     }
 
     [Fact]
     public void Epsilon_Zero_Equals()
     {
-      Assert.True(NumericOperator.Equals(double.Epsilon, 0d));
+      Assert.True(double.Epsilon.NumericEquals(0d));
     }
 
     [Fact]
     public void Equals_Zero_1E16()
     {
-      Assert.True(NumericOperator.Equals(0d, 1E-16));
+      Assert.True(0d.NumericEquals(1E-16));
     }
 
     [Fact]
     public void Equals_Zero_2E16_Not()
     {
-      Assert.False(NumericOperator.Equals(0d, 2E-16));
+      Assert.False(0d.NumericEquals(2E-16));
     }
 
     [Fact]
     public void Equals_One_1E16()
     {
-      Assert.True(NumericOperator.Equals(1d, 1.0000000000000001));
+      Assert.True(1d.NumericEquals(1.0000000000000001));
     }
 
     [Fact]
     public void Equals_One_2E16_Not()
     {
-      Assert.False(NumericOperator.Equals(1d, 1.0000000000000002));
+      Assert.False(1d.NumericEquals(1.0000000000000002));
     }
 
     [Fact]
     public void Power()
     {
-      Assert.Equal(1, NumericOperator.ToPower(2, 0));
-      Assert.Equal(2, NumericOperator.ToPower(2, 1));
-      Assert.Equal(4, NumericOperator.ToPower(2, 2));
-      Assert.Equal(8, NumericOperator.ToPower(2, 3));
-      Assert.Equal(16, NumericOperator.ToPower(2, 4));
-      Assert.Equal(32, NumericOperator.ToPower(2, 5));
-      Assert.Equal(64, NumericOperator.ToPower(2, 6));
-      Assert.Equal(128, NumericOperator.ToPower(2, 7));
-      Assert.Equal(256, NumericOperator.ToPower(2, 8));
+      Assert.Equal(1, 2d.ToPower(0));
+      Assert.Equal(2, 2d.ToPower(1));
+      Assert.Equal(4, 2d.ToPower(2));
+      Assert.Equal(8, 2d.ToPower(3));
+      Assert.Equal(16, 2d.ToPower(4));
+      Assert.Equal(32, 2d.ToPower(5));
+      Assert.Equal(64, 2d.ToPower(6));
+      Assert.Equal(128, 2d.ToPower(7));
+      Assert.Equal(256, 2d.ToPower(8));
     }
   }
 }

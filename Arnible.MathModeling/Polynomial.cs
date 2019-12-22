@@ -15,7 +15,7 @@ namespace Arnible.MathModeling
       // intentionally empty
     }
 
-    public Polynomial(IEnumerable<PolynomialTerm> terms)
+    private Polynomial(IEnumerable<PolynomialTerm> terms)
     {
       _terms = PolynomialTerm.Simplify(terms).ToArray();
     }

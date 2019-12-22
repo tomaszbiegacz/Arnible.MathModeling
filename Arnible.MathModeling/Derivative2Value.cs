@@ -2,9 +2,9 @@
 
 namespace Arnible.MathModeling
 {
-  public class DerivativeValue : Derivative, IDerivative
+  public class Derivative2Value : IDerivative2
   {
-    public DerivativeValue(double first, double second)
+    public Derivative2Value(Number first, Number second)
     {
       if (!first.IsValidNumeric())
       {
@@ -19,8 +19,8 @@ namespace Arnible.MathModeling
       Second = second;
     }
 
-    public override double First { get; }
+    public Number First { get; }
 
-    public override double Second { get; }
+    public Number Second { get; }
   }
 }

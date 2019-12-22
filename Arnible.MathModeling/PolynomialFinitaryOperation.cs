@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Arnible.MathModeling
 {
-  class PolynomialFinitaryOperation : IFinitaryOperation
+  class PolynomialFinitaryOperation : IFinitaryOperation<double>
   {
     private readonly IPolynomialOperation _polynomial;
     private readonly char[] _variables;

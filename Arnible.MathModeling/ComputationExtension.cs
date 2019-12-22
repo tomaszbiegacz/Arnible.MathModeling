@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Arnible.MathModeling
 {
@@ -15,6 +16,16 @@ namespace Arnible.MathModeling
       return current;
     }
 
+    public static Number Product(this IEnumerable<Number> x)
+    {
+      Number current = 1;
+      foreach (Number v in x)
+      {
+        current *= v;
+      }
+      return current;
+    }
+
     public static double Sum(this IEnumerable<double> x)
     {
       double current = 0;
@@ -24,6 +35,16 @@ namespace Arnible.MathModeling
       }
       return current;
     }
+
+    public static Number Sum(this IEnumerable<Number> x)
+    {
+      Number current = 0;
+      foreach (Number v in x)
+      {
+        current += v;
+      }
+      return current;
+    }    
 
     private static IEnumerable<double> AggregateCombinations(double[] x, uint i, uint groupCount, Func<IEnumerable<double>, double> aggregator, Stack<double> combination)
     {

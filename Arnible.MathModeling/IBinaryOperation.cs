@@ -1,14 +1,7 @@
 ﻿namespace Arnible.MathModeling
 {
-  public interface IBinaryOperation
+  public interface IBinaryOperation<TNumber> where TNumber : struct
   {
-    double Value(double x, double y);    
-  }
-
-  public interface IBinaryOperationWithDerivative : IBinaryOperation
-  {
-    IDerivative DerivativeByX(double x, double y);
-
-    IDerivative DerivativeByY(double x, double y);
+    TNumber Value(TNumber x, TNumber y);
   }
 }

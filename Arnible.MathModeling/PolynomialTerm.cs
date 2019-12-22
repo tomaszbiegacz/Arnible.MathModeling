@@ -90,7 +90,7 @@ namespace Arnible.MathModeling
 
     public bool Equals(PolynomialTerm other)
     {
-      return IndeterminatesSignature == other.IndeterminatesSignature && NumericOperator.Equals(_coefficient, other._coefficient);
+      return IndeterminatesSignature == other.IndeterminatesSignature && _coefficient.NumericEquals(other._coefficient);
     }
 
     public override int GetHashCode()
@@ -178,7 +178,7 @@ namespace Arnible.MathModeling
           return this;
         default:
           return new PolynomialTerm(
-            coefficient: NumericOperator.ToPower(_coefficient, power),
+            coefficient: _coefficient.ToPower(power),
             indeterminates: Indeterminates.Select(kv => kv.ToPower(power)));
       }
     }
@@ -271,9 +271,17 @@ namespace Arnible.MathModeling
 
     public static IEnumerable<PolynomialTerm> Simplify(IEnumerable<PolynomialTerm> variables)
     {
-      return variables.GroupBy(v => v.IndeterminatesSignature)
-        .Select(g => Add(g)).Where(v => !v.IsZero)
-        .OrderByDescending(v => v.PowerSum).ThenByDescending(v => v.GreatestPowerIndeterminate.Power).ThenBy(v => v.GreatestPowerIndeterminate.Signature);
+      var vars = variables.Where(v => !v.IsZero).ToArray();
+      switch(vars.Length)
+      {
+        case 0:
+        case 1:
+          return vars;
+        default:
+          return variables.GroupBy(v => v.IndeterminatesSignature)
+            .Select(g => Add(g)).Where(v => !v.IsZero)
+            .OrderByDescending(v => v.PowerSum).ThenByDescending(v => v.GreatestPowerIndeterminate.Power).ThenBy(v => v.GreatestPowerIndeterminate.Signature);
+      }
     }
 
     public static bool IsSimplified(IEnumerable<PolynomialTerm> variables)

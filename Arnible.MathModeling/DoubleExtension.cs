@@ -2,9 +2,9 @@
 
 namespace Arnible.MathModeling
 {
-  public static class NumericOperator
+  public static class DoubleExtension
   {
-    public static bool Equals(double a, double b)
+    public static bool NumericEquals(this double a, double b)
     {
       if (IsValidNumeric(a) && IsValidNumeric(b))
       {
@@ -28,7 +28,7 @@ namespace Arnible.MathModeling
     public static bool IsValidNumeric(this double a)
     {
       return !double.IsNaN(a) && !double.IsInfinity(a);
-    }
+    }    
 
     public static double ToPower(this double a, uint b)
     {

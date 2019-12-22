@@ -6,7 +6,7 @@ namespace Arnible.MathModeling
 {
   public static class DerivativeOperator
   {
-    private static double Derivative2Ingredient(IDerivative[] args, int pos)
+    private static double Derivative2Ingredient(IDerivative2[] args, int pos)
     {
       double result = args[pos].Second;
       for (int i = 0; i < pos; ++i)
@@ -25,7 +25,7 @@ namespace Arnible.MathModeling
       return result;
     }
 
-    public static IDerivative Multiply(params IDerivative[] args)
+    public static IDerivative2 Multiply(params IDerivative2[] args)
     {
       // keep an ICollection/array here due to two levels of iteration
       if (args?.Length < 1)
@@ -33,8 +33,8 @@ namespace Arnible.MathModeling
         throw new ArgumentException(nameof(args));
       }
 
-      return new DerivativeLazy(
-        first: () => args.Select(d => d.First).Product(),
+      return new Derivative2Lazy(
+        first: args.Select(d => d.First).Product(),
         second: () => args.Indexes().Select(pos => Derivative2Ingredient(args, pos)).Sum());
     }
 
