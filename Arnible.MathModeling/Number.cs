@@ -13,5 +13,7 @@
     public static implicit operator double(Number v) => v._value;
 
     public bool IsValidNumeric() => _value.IsValidNumeric();
+
+    public Number ToPower(uint b) => DoubleExtension.ToPower(_value, b);
   }
 }

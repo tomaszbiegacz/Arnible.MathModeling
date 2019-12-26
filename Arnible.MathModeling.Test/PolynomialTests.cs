@@ -173,6 +173,6 @@ namespace Arnible.MathModeling.Test
       PolynomialTerm y = 'y';
 
       Assert.Equal(x + y, (x * x - y * y).ReduceBy(x - y));
-    }
+    }    
   }
 }

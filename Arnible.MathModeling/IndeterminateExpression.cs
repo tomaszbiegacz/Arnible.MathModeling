@@ -19,6 +19,9 @@ namespace Arnible.MathModeling
     public static IndeterminateExpression Sin(char name) => new IndeterminateExpression(name, ElementaryUnaryOperation.Sine, 1);
     public static IndeterminateExpression Cos(char name) => new IndeterminateExpression(name, ElementaryUnaryOperation.Cosine, 1);
 
+    public static IndeterminateExpression Sin(PolynomialTerm name) => Sin((char)name);
+    public static IndeterminateExpression Cos(PolynomialTerm name) => Cos((char)name);
+
     public override string ToString()
     {
       string powerExpression;

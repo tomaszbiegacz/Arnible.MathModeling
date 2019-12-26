@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Arnible.MathModeling</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Arnible.MathModeling\CollectionExtension.cs" Link="CollectionExtension.cs" />
+    <Compile Include="..\Arnible.MathModeling\ComputationExtension.cs" Link="ComputationExtension.cs" />
+    <Compile Include="..\Arnible.MathModeling\Derivative2Lazy.cs" Link="Derivative2Lazy.cs" />
+    <Compile Include="..\Arnible.MathModeling\Derivative2Value.cs" Link="Derivative2Value.cs" />
+    <Compile Include="..\Arnible.MathModeling\DoubleExtension.cs" Link="DoubleExtension.cs" />
+    <Compile Include="..\Arnible.MathModeling\ElementaryUnaryOperation.cs" Link="ElementaryUnaryOperation.cs" />
+    <Compile Include="..\Arnible.MathModeling\Geometry\PolarCoordinate.cs" Link="Geometry\PolarCoordinate.cs" />
+    <Compile Include="..\Arnible.MathModeling\Geometry\RectangularCoordianate.cs" Link="Geometry\RectangularCoordianate.cs" />
+    <Compile Include="..\Arnible.MathModeling\IBinaryOperation.cs" Link="IBinaryOperation.cs" />
+    <Compile Include="..\Arnible.MathModeling\IDerivative2.cs" Link="IDerivative2.cs" />
+    <Compile Include="..\Arnible.MathModeling\IndeterminateExpression.cs" Link="IndeterminateExpression.cs" />
+    <Compile Include="..\Arnible.MathModeling\IPolynomialOperation.cs" Link="IPolynomialOperation.cs" />
+    <Compile Include="..\Arnible.MathModeling\MetaMath.cs" Link="MetaMath.cs" />
+    <Compile Include="..\Arnible.MathModeling\NumericFormatting.cs" Link="NumericFormatting.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomial.cs" Link="Polynomial.cs" />
+    <Compile Include="..\Arnible.MathModeling\PolynomialDivision.cs" Link="PolynomialDivision.cs" />
+    <Compile Include="..\Arnible.MathModeling\PolynomialTerm.cs" Link="PolynomialTerm.cs" />
+    <Compile Include="..\Arnible.MathModeling\Term.cs" Link="Term.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit" Version="2.4.1" />
+  </ItemGroup>
+
+</Project>
