@@ -6,16 +6,16 @@ namespace Arnible.MathModeling
 {
   public static class DerivativeOperator
   {
-    private static double Derivative2Ingredient(IDerivative2[] args, int pos)
+    private static Number Derivative2Ingredient(IDerivative2[] args, int pos)
     {
-      double result = args[pos].Second;
+      Number result = args[pos].Second;
       for (int i = 0; i < pos; ++i)
       {
         result *= args[i].First;
       }
       if (pos + 1 < args.Length)
       {
-        double remainder = 1;
+        Number remainder = 1;
         for (int i = pos + 1; i < args.Length; ++i)
         {
           remainder *= args[i].First;

@@ -10,7 +10,7 @@
     }
 
     public static implicit operator Number(double v) => new Number(v);
-    public static implicit operator double(Number v) => v._value;
+    public static implicit operator double(Number v) => v._value;    
 
     public bool IsValidNumeric() => _value.IsValidNumeric();
 

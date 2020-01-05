@@ -25,7 +25,7 @@ namespace Arnible.MathModeling.Test.Geometry
       PolarCoordinate pc = (new RectangularCoordianate(x, y)).ToPolar();
 
       Assert.Equal(r, pc.R, 10);
-      Assert.Equal(φ, pc.Φ, 10);
+      Assert.Equal(φ, pc.Φ, 10);      
     }    
   }
 }
