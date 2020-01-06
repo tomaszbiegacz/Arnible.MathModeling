@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Arnible.MathModeling
 {
@@ -20,17 +21,23 @@ namespace Arnible.MathModeling
     public static explicit operator double(Number v) => (double)v._term;
     public static explicit operator PolynomialTerm(Number v) => (PolynomialTerm)v._term;
 
-    public static PolynomialTerm Term(uint pos) => (char)('a' + pos);
+    public static PolynomialTerm Term(uint pos) => pos < 26 ? (char)('a' + pos) : throw new ArgumentException($"To big pos: {pos}");
 
-    public static Number[] Terms(uint pos)
+    public static PolynomialTerm GreekTerm(uint pos) => pos < 24 ? (char)('α' + pos) : throw new ArgumentException($"To big pos: {pos}");
+
+    private static Number[] Terms(uint pos, Func<uint, PolynomialTerm> termFactory)
     {
       List<Number> result = new List<Number>();
       for (uint i = 0; i < pos; ++i)
       {
-        result.Add(Term(i));
+        result.Add(termFactory(i));
       }
       return result.ToArray();
     }
+
+    public static Number[] Terms(uint pos) => Terms(pos, Term);
+
+    public static Number[] GreekTerms(uint pos) => Terms(pos, GreekTerm);
 
     public bool IsValidNumeric() => true;
 
@@ -70,9 +77,7 @@ namespace Arnible.MathModeling
     public static Number operator *(Number a, Polynomial b) => a._term * b;
     public static Number operator *(Polynomial a, Number b) => a * b._term;
     public static Number operator *(Number a, double b) => a._term * b;
-    public static Number operator *(double a, Number b) => a * b._term;
-
-    public Number ToPower(uint b) => _term.ToPower(b);
+    public static Number operator *(double a, Number b) => a * b._term;    
 
     public override bool Equals(object obj)
     {
@@ -82,6 +87,13 @@ namespace Arnible.MathModeling
     public override int GetHashCode()
     {
       return _term.GetHashCode();
+    }
+
+    public Number ToPower(uint b) => _term.ToPower(b);
+
+    public IEnumerable<Number> Yield()
+    {
+      yield return this;
     }
   }
 }

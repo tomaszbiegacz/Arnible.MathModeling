@@ -226,5 +226,26 @@ namespace Arnible.MathModeling.Test
       Assert.True((2 * x.ToPower(3) * y.ToPower(2)).TryDivide(0.5 * x, out PolynomialTerm r));
       Assert.Equal(4 * x.ToPower(2) * y.ToPower(2), r);
     }
+
+    [Fact]
+    public void Composition_SinWithZero()
+    {
+      var sinExpression = MetaMath.Sin(Term.α) + 1;
+      Assert.Equal(1, sinExpression.Composition(Term.α, 0));
+    }
+
+    [Fact]
+    public void Composition_CosWithZero()
+    {
+      var sinExpression = MetaMath.Cos(Term.α) + 1;
+      Assert.Equal(2, sinExpression.Composition(Term.α, 0));
+    }
+
+    [Fact]
+    public void Composition_SinCosWithZero()
+    {
+      var sinExpression = MetaMath.Sin(Term.α)* MetaMath.Cos(Term.α) + 1;
+      Assert.Equal(1, sinExpression.Composition(Term.α, 0));
+    }
   }
 }

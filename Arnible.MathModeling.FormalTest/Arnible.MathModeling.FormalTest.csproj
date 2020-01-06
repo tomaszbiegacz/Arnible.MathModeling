@@ -24,12 +24,15 @@
     <Compile Include="..\Arnible.MathModeling\Geometry\RectangularCoordianate.cs" Link="Geometry\RectangularCoordianate.cs" />
     <Compile Include="..\Arnible.MathModeling\IBinaryOperation.cs" Link="IBinaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IDerivative2.cs" Link="IDerivative2.cs" />
+    <Compile Include="..\Arnible.MathModeling\IFinitaryOperation.cs" Link="IFinitaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IndeterminateExpression.cs" Link="IndeterminateExpression.cs" />
     <Compile Include="..\Arnible.MathModeling\IPolynomialOperation.cs" Link="IPolynomialOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\MetaMath.cs" Link="MetaMath.cs" />
     <Compile Include="..\Arnible.MathModeling\NumericFormatting.cs" Link="NumericFormatting.cs" />
+    <Compile Include="..\Arnible.MathModeling\OperationExtension.cs" Link="OperationExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\Polynomial.cs" Link="Polynomial.cs" />
     <Compile Include="..\Arnible.MathModeling\PolynomialDivision.cs" Link="PolynomialDivision.cs" />
+    <Compile Include="..\Arnible.MathModeling\PolynomialFinitaryOperation.cs" Link="PolynomialFinitaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\PolynomialTerm.cs" Link="PolynomialTerm.cs" />
     <Compile Include="..\Arnible.MathModeling\Term.cs" Link="Term.cs" />
   </ItemGroup>

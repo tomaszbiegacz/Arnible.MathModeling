@@ -10,16 +10,16 @@ namespace Arnible.MathModeling.Geometry
 
     public Number R { get; }
 
-    public HypersphericalCoordinate(Number r, params Number[] angles)
+    public HypersphericalCoordinate(Number r, IEnumerable<Number> angles)
     {
       R = r;
-      _angles = angles;
+      _angles = angles.ToArray();
 
       if(r < 0)
       {
         throw new ArgumentException($"Negative r: {r}");
       }
-      if(r == 0 && angles.Length > 0)
+      if(r == 0 && _angles.Length > 0)
       {
         throw new ArgumentException($"For zero r, angles also has to be empty, got {angles}");
       }
@@ -40,7 +40,7 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public static implicit operator HypersphericalCoordinate(PolarCoordinate pc) => new HypersphericalCoordinate(pc.R, pc.Φ);
+    public static implicit operator HypersphericalCoordinate(PolarCoordinate pc) => new HypersphericalCoordinate(pc.R, pc.Φ.Yield());
 
     public IEnumerable<Number> Angles => _angles ?? Enumerable.Empty<Number>();
 

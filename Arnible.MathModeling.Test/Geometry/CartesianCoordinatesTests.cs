@@ -21,9 +21,9 @@ namespace Arnible.MathModeling.Test.Geometry
     [Fact]
     public void Constructor_3d()
     {
-      var cc = new CartesianCoordinate(2, 3, 4);       
+      var cc = new CartesianCoordinate(new Number[] { 2, 3, 4 });
 
-      Assert.Equal(3u, cc.DimensionsCount);      
+      Assert.Equal(3u, cc.DimensionsCount);
       Assert.Equal(2, cc.Coordinates.ElementAt(0));
       Assert.Equal(3, cc.Coordinates.ElementAt(1));
       Assert.Equal(4, cc.Coordinates.ElementAt(2));

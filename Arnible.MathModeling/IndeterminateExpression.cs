@@ -100,11 +100,30 @@ namespace Arnible.MathModeling
 
     public bool HasUnaryModifier => _modifier != ElementaryUnaryOperation.Identity;
 
+    public double SimplifyForConstant(double value)
+    {
+      switch (_modifier)
+      {
+        case ElementaryUnaryOperation.Identity:
+          return value;
+        case ElementaryUnaryOperation.Sine:
+          if (value == 0) return 0;
+          else if (value == Math.PI / 2) return 1;
+          else return Math.Sin(value);
+        case ElementaryUnaryOperation.Cosine:
+          if (value == 0) return 1;
+          else if (value == Math.PI / 2) return 0;
+          else return Math.Cos(value);
+        default:
+          throw new InvalidOperationException("Unknown modifier: " + _modifier);
+      }
+    }
+
     public IEnumerable<char> Variables
     {
       get
       {
-        if(Variable != default)
+        if (Variable != default)
           yield return Variable;
       }
     }
@@ -139,7 +158,7 @@ namespace Arnible.MathModeling
         if (compareResult == 0)
           compareResult = vi1._modifier.CompareTo(vi2._modifier);
 
-        if(compareResult < 0)
+        if (compareResult < 0)
         {
           yield return vi1;
           isEi1Valid = ei1.MoveNext();
@@ -157,7 +176,7 @@ namespace Arnible.MathModeling
           }
           isEi1Valid = ei1.MoveNext();
           isEi2Valid = ei2.MoveNext();
-        }        
+        }
       }
 
       while (isEi1Valid)
@@ -202,7 +221,7 @@ namespace Arnible.MathModeling
       {
         throw new InvalidOperationException("Cannot derivative intermediate expresion being IsOne.");
       }
-      if(Variable != name)
+      if (Variable != name)
       {
         throw new InvalidOperationException($"Cannot derivative intermediate expression of {Variable} by {name}.");
       }
@@ -213,7 +232,7 @@ namespace Arnible.MathModeling
         case ElementaryUnaryOperation.Identity:
           return result;
         case ElementaryUnaryOperation.Sine:
-          return result * (new IndeterminateExpression(Variable, ElementaryUnaryOperation.Cosine, 1));          
+          return result * (new IndeterminateExpression(Variable, ElementaryUnaryOperation.Cosine, 1));
         case ElementaryUnaryOperation.Cosine:
           return result * -1 * (new IndeterminateExpression(Variable, ElementaryUnaryOperation.Sine, 1));
         default:
@@ -233,7 +252,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        switch(_modifier)
+        switch (_modifier)
         {
           case ElementaryUnaryOperation.Identity:
             return x[Variable].ToPower(Power);
@@ -243,8 +262,8 @@ namespace Arnible.MathModeling
             return Math.Cos(x[Variable]).ToPower(Power);
           default:
             throw new InvalidOperationException("Unknown modifier: " + _modifier);
-        }        
-      }      
+        }
+      }
     }
   }
 }

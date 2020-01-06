@@ -7,12 +7,15 @@ namespace Arnible.MathModeling.Geometry
   {
     private readonly Number[] _coordinates;
 
-    public CartesianCoordinate(params Number[] coordinates)
+    public CartesianCoordinate(IEnumerable<Number> coordinates)
     {
-      _coordinates = coordinates;
+      _coordinates = coordinates.ToArray();
     }
 
-    public static implicit operator CartesianCoordinate(RectangularCoordianate rc) => new CartesianCoordinate(rc.X, rc.Y);
+    public static implicit operator CartesianCoordinate(RectangularCoordianate rc)
+    {
+      return new CartesianCoordinate(new Number[] { rc.X, rc.Y });
+    }
 
     public IEnumerable<Number> Coordinates => _coordinates ?? Enumerable.Empty<Number>();
 

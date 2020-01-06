@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Xunit;
 using static Arnible.MathModeling.MetaMath;
 
@@ -22,6 +21,8 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(1, v.GetOperation().Value());
 
       Assert.Throws<InvalidOperationException>(() => v.DerivativeBy('a'));
+
+      Assert.Equal(12, v.SimplifyForConstant(12));
     }
 
     [Fact]
@@ -38,6 +39,8 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(5, v.GetOperation('v').Value(5));
 
       Assert.Equal(2 * (PolynomialTerm)v, v.ToPower(2).DerivativeBy('v'));
+
+      Assert.Equal(23, v.SimplifyForConstant(23));
     }
 
     [Fact]
@@ -53,8 +56,11 @@ namespace Arnible.MathModeling.Test
 
       Assert.Equal(0, v.GetOperation('v').Value(0));
       Assert.Equal(1, v.GetOperation('v').Value(Math.PI / 2));
-      
+
       Assert.Equal(2 * Cos(Term.v) * Sin(Term.v), v.ToPower(2).DerivativeBy('v'));
+
+      Assert.Equal(0, v.SimplifyForConstant(0));
+      Assert.Equal(1, v.SimplifyForConstant(Math.PI / 2));
     }
 
     [Fact]
@@ -72,6 +78,9 @@ namespace Arnible.MathModeling.Test
       Assert.Equal(0, v.GetOperation('v').Value(Math.PI / 2), 15);
 
       Assert.Equal(-2 * Cos(Term.v) * Sin(Term.v), v.ToPower(2).DerivativeBy('v'));
+
+      Assert.Equal(1, v.SimplifyForConstant(0));
+      Assert.Equal(0, v.SimplifyForConstant(Math.PI / 2));
     }
 
     [Fact]
@@ -93,7 +102,7 @@ namespace Arnible.MathModeling.Test
 
       Assert.Equal(-1, a.CompareTo(sinA));
       Assert.Equal(-1, a.CompareTo(sinB));
-      
+
       Assert.Equal(1, sinA.CompareTo(a));
       Assert.Equal(1, sinB.CompareTo(a));
     }

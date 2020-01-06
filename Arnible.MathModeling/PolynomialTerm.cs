@@ -312,16 +312,31 @@ namespace Arnible.MathModeling
       Polynomial inPlace = 1;
       if (toReplace.Length > 0)
       {
-        if (toReplace.Length > 1 && toReplace.Any(i => i.HasUnaryModifier))
+        if (toReplace.Any(i => i.HasUnaryModifier))
         {
-          throw new NotSupportedException("Composition of variables used in modifiers is not supported");
+          if(replacement.IsConstant)
+          {
+            double constantReplacement = (double)replacement;
+            inPlace = toReplace.Select(r => r.SimplifyForConstant(constantReplacement)).Product();
+          }
+          else
+          {
+            throw new NotSupportedException("Composition of variables used in modifiers is not supported");
+          }          
         }
+        else
+        {
+          if(toReplace.Length > 1)
+          {
+            throw new InvalidOperationException("Something is wrong, got two terms with the same variable...");
+          }
 
-        uint power = toReplace.Single().Power;
-        for (uint i = 0; i < power; ++i)
-        {
-          inPlace *= replacement;
-        }
+          uint power = toReplace.Single().Power;
+          for (uint i = 0; i < power; ++i)
+          {
+            inPlace *= replacement;
+          }
+        }        
       }
 
       return remaining * inPlace;

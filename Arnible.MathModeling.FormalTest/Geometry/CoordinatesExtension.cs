@@ -29,8 +29,8 @@ namespace Arnible.MathModeling.Geometry
       Polynomial replacement = hypersphericalPoint.R;
       var result = source;
 
-      var cd = cartesianPoint.Coordinates.ToArray();
-      var ad = hypersphericalPoint.Angles.ToArray();
+      var cd = cartesianPoint.Coordinates.Reverse().ToArray();
+      var ad = hypersphericalPoint.Angles.Reverse().ToArray();
       for (int i=0; i< ad.Length; ++i)
       {
         var cartesianDimension = (PolynomialTerm)cd[i];
