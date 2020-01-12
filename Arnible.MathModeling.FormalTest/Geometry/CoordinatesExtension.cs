@@ -45,5 +45,21 @@ namespace Arnible.MathModeling.Geometry
     }
 
     public static Number ToSpherical(this Number source, CartesianCoordinate cartesianPoint, HypersphericalCoordinate hypersphericalPoint) => ToSpherical((Polynomial)source, cartesianPoint, hypersphericalPoint);
+
+    public static Polynomial Composition(this Polynomial source, CartesianCoordinate c1, CartesianCoordinate c2)
+    {
+      if(c1.DimensionsCount != c2.DimensionsCount)
+      {
+        throw new ArgumentException("Coordinates are with different dimensions");
+      }
+
+      var result = source;
+      for(uint i=0; i<c1.Coordinates.Count; ++i)
+      {
+        var cartesianDimension = (PolynomialTerm)c1.Coordinates[i];
+        result = result.Composition(cartesianDimension, c2.Coordinates[i]);
+      }
+      return result;
+    }
   }
 }

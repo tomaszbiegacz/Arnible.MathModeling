@@ -64,6 +64,21 @@ namespace Arnible.MathModeling.Geometry
       return new HypersphericalCoordinate(R, Angles.Append(Math.PI / 2).ToVector());
     }
 
+    public CartesianCoordinate ToCartesian()
+    {
+      var cartesianDimensions = new List<Number>();
+      var replacement = R;
+      foreach (var angle in Angles.Reverse())
+      {
+        cartesianDimensions.Add(replacement * Cos(angle));
+        replacement *= Sin(angle);
+      }
+      cartesianDimensions.Add(replacement);
+      cartesianDimensions.Reverse();
+
+      return new CartesianCoordinate(cartesianDimensions.ToVector());
+    }
+
     public IEnumerable<IDerivative1> DerivativeByRForCartesianCoordinates()
     {
       var result = new List<IDerivative1>();
@@ -77,6 +92,6 @@ namespace Arnible.MathModeling.Geometry
       result.Reverse();
 
       return result;
-    }
+    }    
   }
 }

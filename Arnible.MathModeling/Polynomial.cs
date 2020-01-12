@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Arnible.MathModeling
 {
-  public struct Polynomial : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation
+  public struct Polynomial : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation, IEnumerable<PolynomialTerm>
   {
+    const char InPlaceVariableReplacement = '$';
+
     private readonly IEnumerable<PolynomialTerm> _terms;
 
     internal Polynomial(params PolynomialTerm[] terms)
@@ -152,7 +155,15 @@ namespace Arnible.MathModeling
         case 1:
           return this;
         default:
-          return this * this.ToPower(power - 1);
+          {
+            uint power2 = power / 2;
+            var power2Item = this.ToPower(power2);
+            var power2Item2 = power2Item * power2Item;
+            if (power % 2 == 0)
+              return power2Item2;
+            else
+              return power2Item2 * this;
+          }
       }
     }
 
@@ -237,29 +248,40 @@ namespace Arnible.MathModeling
 
     public Polynomial DerivativeBy(PolynomialTerm name) => DerivativeBy((char)name);
 
-    public Polynomial Composition(char variable, Polynomial replacement)
+    private IEnumerable<PolynomialTerm> CompositionIngredients(char variable, Polynomial replacement)
     {
       List<PolynomialTerm> remaining = new List<PolynomialTerm>();
-
-      Polynomial result = 0;
       foreach (PolynomialTerm term in Terms)
       {
         if (term.Variables.Contains(variable))
         {
-          result += term.Composition(variable, replacement);
+          foreach(var replacedTerm in term.Composition(variable, replacement))
+          {
+            yield return replacedTerm;
+          }          
         }
         else
         {
-          remaining.Add(term);
+          yield return term;
         }
       }
+    }
 
-      if (remaining.Count > 0)
+    public Polynomial Composition(char variable, Polynomial replacement)
+    {
+      if (replacement.Variables.Contains(variable))
       {
-        result += new Polynomial(remaining);
+        if (variable == InPlaceVariableReplacement)
+        {
+          throw new InvalidOperationException("Something went wrong with in-place variables replacement.");
+        }
+
+        // special case for in-place variables replacement
+        Polynomial temporaryReplacement = replacement.Composition(variable, InPlaceVariableReplacement);
+        return Composition(variable, temporaryReplacement).Composition(InPlaceVariableReplacement, variable);
       }
 
-      return result;
+      return new Polynomial(CompositionIngredients(variable, replacement));
     }
 
     private PolynomialDivision Composition(char variable, PolynomialDivision replacement)
@@ -308,5 +330,13 @@ namespace Arnible.MathModeling
         return _terms.Select(t => t.Value(x)).Sum();
       }
     }
+
+    /*
+     * IEnumerator<PolynomialTerm>
+     */
+
+    public IEnumerator<PolynomialTerm> GetEnumerator() => Terms.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => Terms.GetEnumerator();
   }
 }

@@ -99,6 +99,26 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
+    public void Composition_InPlace()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+
+      var entry = 1 + x * x - y * y;
+      Assert.Equal(x * x + 2 * x + 2 - y * y, entry.Composition(x, x + 1));
+    }
+
+    [Fact]
+    public void Composition_Constant()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+
+      var entry = 1 + x * x - y * y;
+      Assert.Equal(1 - y * y, entry.Composition(x, 0));
+    }
+
+    [Fact]
     public void Power_ByZero()
     {
       PolynomialTerm x = 'x';
@@ -117,6 +137,13 @@ namespace Arnible.MathModeling.Test
     {
       PolynomialTerm x = 'x';
       Assert.Equal(x * x + 2 * x + 1, (x + 1).ToPower(2));
+    }
+
+    [Fact]
+    public void Power_ByThree()
+    {
+      PolynomialTerm x = 'x';
+      Assert.Equal(x * x * x + 3 * x * x + 3 * x + 1, (x + 1).ToPower(3));
     }
 
     [Fact]
@@ -173,6 +200,6 @@ namespace Arnible.MathModeling.Test
       PolynomialTerm y = 'y';
 
       Assert.Equal(x + y, (x * x - y * y).ReduceBy(x - y));
-    }    
+    }
   }
 }

@@ -52,24 +52,6 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public static CartesianCoordinate ToCartesian(this HypersphericalCoordinate hypersphericalPoint)
-    {
-      var replacement = hypersphericalPoint.R;
-
-      var cartesianDimensions = new List<Number>();
-      NumberVector ad = hypersphericalPoint.Angles.Reverse();
-      for (uint i = 0; i < ad.Count; ++i)
-      {
-        var angle = ad[i];
-        cartesianDimensions.Add(replacement * Cos(angle));
-        replacement *= Sin(angle);
-      }
-      cartesianDimensions.Add(replacement);
-      cartesianDimensions.Reverse();
-
-      return new CartesianCoordinate(cartesianDimensions.ToVector());
-    }
-
     public static Number VectorLength(this CartesianCoordinate point)
     {
       return Math.Sqrt(point.Coordinates.Select(d => d * d).Sum());

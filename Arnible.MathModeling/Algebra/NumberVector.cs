@@ -62,7 +62,7 @@ namespace Arnible.MathModeling.Algebra
     // IEquatable
     //
 
-    public bool Equals(NumberVector other) => Values.SequenceEqual(other.Values);    
+    public bool Equals(NumberVector other) => Values.SequenceEqual(other.Values);
 
     public override bool Equals(object obj)
     {
@@ -113,22 +113,18 @@ namespace Arnible.MathModeling.Algebra
       return new NumberVector(Values.Reverse());
     }
 
+    public IEnumerable<uint> Indexes()
+    {
+      for(uint i=0; i<Count; ++i)
+      {
+        yield return i;
+      }
+    }
+
     //
     // arithmetic operators
     //
 
-    private NumberVector Add(Number[] b)
-    {
-      if (Count != b?.Length)
-        throw new InvalidOperationException("Not comparable");
-
-      return Transform((i, v) => v + b[i]);
-    }
-
-    public static NumberVector operator +(NumberVector a, NumberVector b) => a.Add(b._values);
-    
-    public static NumberVector operator +(NumberVector a, IEnumerable<Number> b) => a.Add(b.ToArray());
-
-    public static NumberVector operator +(IEnumerable<Number> a, NumberVector b) => b.Add(a.ToArray());    
+    public static NumberVector operator +(NumberVector a, NumberVector b) => new NumberVector(a.Values.SelectMerged(b.Values, (va, vb) => va + vb));
   }
 }

@@ -93,6 +93,6 @@ namespace Arnible.MathModeling
 
       Stack<double> combination = new Stack<double>();
       return AggregateCombinations(x, 0, groupCount, aggregator, combination);
-    }
+    }    
   }
 }

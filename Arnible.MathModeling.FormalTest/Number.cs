@@ -97,12 +97,7 @@ namespace Arnible.MathModeling
 
     public bool IsValidNumeric => true;
 
-    public Number ToPower(uint b) => _term.ToPower(b);
-
-    public IEnumerable<Number> Yield()
-    {
-      yield return this;
-    }
+    public Number ToPower(uint b) => _term.ToPower(b);    
 
     //
     // Term

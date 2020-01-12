@@ -21,5 +21,11 @@ namespace Arnible.MathModeling.Test
     {
       Assert.Equal(new[] { 0, 1, 2 }, (new[] { 1, 2, 3 }).Indexes());
     }
+
+    [Fact]
+    public void SelectMerged()
+    {
+      Assert.Equal(new[] { 5, 7, 9 }, (new[] { 1, 2, 3 }).SelectMerged(new[] { 4, 5, 6 }, (a, b) => a + b));
+    }
   }
 }

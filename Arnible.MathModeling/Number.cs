@@ -59,11 +59,6 @@ namespace Arnible.MathModeling
 
     public bool IsValidNumeric => _value.IsValidNumeric();
 
-    public Number ToPower(uint b) => DoubleExtension.ToPower(_value, b);
-
-    public IEnumerable<Number> Yield()
-    {
-      yield return this;
-    }    
+    public Number ToPower(uint b) => DoubleExtension.ToPower(_value, b);    
   }
 }
