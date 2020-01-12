@@ -2,24 +2,18 @@
 
 namespace Arnible.MathModeling
 {
-  public class Derivative2Value : IDerivative2
+  public class Derivative2Value : Derivative1Value, IDerivative2
   {
     public Derivative2Value(Number first, Number second)
+      : base(first)
     {
-      if (!first.IsValidNumeric())
-      {
-        throw new ArgumentException(nameof(first));
-      }
-      if (!second.IsValidNumeric())
+      if (!second.IsValidNumeric)
       {
         throw new ArgumentException(nameof(second));
       }
 
-      First = first;
       Second = second;
     }
-
-    public Number First { get; }
 
     public Number Second { get; }
   }

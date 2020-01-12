@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Arnible.MathModeling
 {
-  public struct Number
+  public struct Number : IEquatable<Number>
   {
     private Polynomial _term;
 
@@ -21,29 +21,41 @@ namespace Arnible.MathModeling
     public static explicit operator double(Number v) => (double)v._term;
     public static explicit operator PolynomialTerm(Number v) => (PolynomialTerm)v._term;
 
-    public static PolynomialTerm Term(uint pos) => pos < 26 ? (char)('a' + pos) : throw new ArgumentException($"To big pos: {pos}");
+    //
+    // Object
+    //
 
-    public static PolynomialTerm GreekTerm(uint pos) => pos < 24 ? (char)('α' + pos) : throw new ArgumentException($"To big pos: {pos}");
-
-    private static Number[] Terms(uint pos, Func<uint, PolynomialTerm> termFactory)
+    public override bool Equals(object obj)
     {
-      List<Number> result = new List<Number>();
-      for (uint i = 0; i < pos; ++i)
+      if (obj is Number v)
       {
-        result.Add(termFactory(i));
+        return Equals(v);
       }
-      return result.ToArray();
+      else
+      {
+        return false;
+      }
     }
 
-    public static Number[] Terms(uint pos) => Terms(pos, Term);
+    public override int GetHashCode()
+    {
+      return _term.GetHashCode();
+    }
 
-    public static Number[] GreekTerms(uint pos) => Terms(pos, GreekTerm);
+    public override string ToString()
+    {
+      return _term.ToString();
+    }
 
-    public bool IsValidNumeric() => true;
+    //
+    // Operators
+    //
 
-    public static bool operator ==(Number a, Number b) => a._term == b._term;
-    public static bool operator !=(Number a, Number b) => a._term != b._term;
+    public static bool operator ==(Number a, Number b) => a.Equals(b);
+    public static bool operator !=(Number a, Number b) => !a.Equals(b);
 
+    public bool Equals(Number other) => _term == other._term;    
+   
     public static bool operator >(Number a, Number b)
     {
       var result = a._term - b._term;
@@ -77,17 +89,13 @@ namespace Arnible.MathModeling
     public static Number operator *(Number a, Polynomial b) => a._term * b;
     public static Number operator *(Polynomial a, Number b) => a * b._term;
     public static Number operator *(Number a, double b) => a._term * b;
-    public static Number operator *(double a, Number b) => a * b._term;    
+    public static Number operator *(double a, Number b) => a * b._term;
 
-    public override bool Equals(object obj)
-    {
-      return obj is Number number && _term.Equals(number._term);
-    }
+    //
+    // Number
+    //
 
-    public override int GetHashCode()
-    {
-      return _term.GetHashCode();
-    }
+    public bool IsValidNumeric => true;
 
     public Number ToPower(uint b) => _term.ToPower(b);
 
@@ -95,5 +103,25 @@ namespace Arnible.MathModeling
     {
       yield return this;
     }
+
+    //
+    // Term
+    //
+
+    public static PolynomialTerm Term(uint pos) => pos < 26 ? (char)('a' + pos) : throw new ArgumentException($"To big pos: {pos}");
+
+    public static PolynomialTerm GreekTerm(uint pos) => pos < 24 ? (char)('α' + pos) : throw new ArgumentException($"To big pos: {pos}");
+
+    private static IEnumerable<Number> Terms(uint pos, Func<uint, PolynomialTerm> termFactory)
+    {
+      for (uint i = 0; i < pos; ++i)
+      {
+        yield return termFactory(i);
+      }
+    }
+
+    public static IEnumerable<Number> Terms(uint pos) => Terms(pos, Term);
+
+    public static IEnumerable<Number> GreekTerms(uint pos) => Terms(pos, GreekTerm);
   }
 }

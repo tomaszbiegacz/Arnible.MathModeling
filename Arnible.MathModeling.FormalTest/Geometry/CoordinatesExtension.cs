@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Arnible.MathModeling.Algebra;
+using System;
 using System.Linq;
 using static Arnible.MathModeling.MetaMath;
 
@@ -25,13 +26,13 @@ namespace Arnible.MathModeling.Geometry
       {
         throw new ArgumentException($"Invalid dimensions count");
       }
-      
+
       Polynomial replacement = hypersphericalPoint.R;
       var result = source;
 
-      var cd = cartesianPoint.Coordinates.Reverse().ToArray();
-      var ad = hypersphericalPoint.Angles.Reverse().ToArray();
-      for (int i=0; i< ad.Length; ++i)
+      NumberVector cd = cartesianPoint.Coordinates.Reverse();
+      NumberVector ad = hypersphericalPoint.Angles.Reverse();
+      for (uint i = 0; i < ad.Count; ++i)
       {
         var cartesianDimension = (PolynomialTerm)cd[i];
         var angle = (PolynomialTerm)ad[i];

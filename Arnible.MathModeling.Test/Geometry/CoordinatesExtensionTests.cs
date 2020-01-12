@@ -1,11 +1,28 @@
 ﻿using Arnible.MathModeling.Geometry;
+using Arnible.MathModeling.Algebra;
 using System.Linq;
 using Xunit;
+using System;
 
 namespace Arnible.MathModeling.Test.Geometry
 {
   public class CoordinatesExtensionTests
   {
+    const double Sqrt2 = 1.4142135623731;
+    const double Sqrt3 = 1.7320508075689;
+
+    const double one_Sqrt2 = 1 / Sqrt2;
+
+    /// <summary>
+    /// 45 degrees
+    /// </summary>
+    const double π_4 = Math.PI / 4;
+
+    /// <summary>
+    /// 30 degres
+    /// </summary>
+    const double π_6 = Math.PI / 6;
+
     [Theory]
     [InlineData(1, 1)]
     [InlineData(2, 3)]
@@ -26,16 +43,12 @@ namespace Arnible.MathModeling.Test.Geometry
     }
 
     [Theory]
-    [InlineData(new double[] { 1, 1 }, TestsConst.Sqrt2, new[] { TestsConst.π_4 })]
-    [InlineData(
-      new double[] { TestsConst.one_Sqrt2, TestsConst.one_Sqrt2, 1 },
-      TestsConst.Sqrt2, new[] { TestsConst.π_4, TestsConst.π_4 })]
-    [InlineData(
-      new double[] { TestsConst.Sqrt2, TestsConst.Sqrt2, 2 * TestsConst.Sqrt3 },
-      4, new[] { TestsConst.π_4, TestsConst.π_6 })]
+    [InlineData(new [] { 1d, 1d },                  Sqrt2,  new[] { π_4 })]
+    [InlineData(new [] { one_Sqrt2, one_Sqrt2, 1 }, Sqrt2,  new[] { π_4, π_4 })]
+    [InlineData(new [] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4,      new[] { π_4, π_6 })]
     public void Cast_ToHyperspherical(double[] cartesian, double r, double[] angles)
     {
-      var cc = new CartesianCoordinate(cartesian.Select(c => (Number)c).ToArray());
+      var cc = new CartesianCoordinate(cartesian.ToVector());
 
       var sc = cc.ToSpherical();
       AssertNumber.Equal(r, sc.R);
@@ -43,19 +56,28 @@ namespace Arnible.MathModeling.Test.Geometry
     }
 
     [Theory]
-    [InlineData(new double[] { 1, 1 }, TestsConst.Sqrt2, new[] { TestsConst.π_4 })]
-    [InlineData(
-      new double[] { TestsConst.one_Sqrt2, TestsConst.one_Sqrt2, 1 },
-      TestsConst.Sqrt2, new[] { TestsConst.π_4, TestsConst.π_4 })]
-    [InlineData(
-      new double[] { TestsConst.Sqrt2, TestsConst.Sqrt2, 2 * TestsConst.Sqrt3 },
-      4, new[] { TestsConst.π_4, TestsConst.π_6 })]
+    [InlineData(new [] { 1d, 1d },                  Sqrt2,  new[] { π_4 })]
+    [InlineData(new [] { one_Sqrt2, one_Sqrt2, 1 }, Sqrt2,  new[] { π_4, π_4 })]
+    [InlineData(new [] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4,      new[] { π_4, π_6 })]
     public void Cast_ToCartesian(double[] cartesian, double r, double[] angles)
     {
-      var sc = new HypersphericalCoordinate(r, angles.Select(c => (Number)c).ToArray());
+      var sc = new HypersphericalCoordinate(r, angles.ToVector());
 
       var cc = sc.ToCartesian();
       AssertNumber.Equal(cartesian, cc.Coordinates);
+    }
+
+    [Theory]
+    [InlineData(new[] { 1d, 1d }, Sqrt2, new[] { π_4 })]
+    [InlineData(new[] { one_Sqrt2, one_Sqrt2, 1 }, Sqrt2, new[] { π_4, π_4 })]
+    [InlineData(new[] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4, new[] { π_4, π_6 })]
+    public void AddDimension(double[] cartesian, double r, double[] angles)
+    {
+      var cc = new CartesianCoordinate(cartesian.ToVector());
+      var sc = new HypersphericalCoordinate(r, angles.ToVector());
+
+      Assert.Equal(cc.AddDimension(), sc.AddDimension().ToCartesian());
+      Assert.Equal(sc.AddDimension(), cc.AddDimension().ToSpherical());
     }
   }
 }

@@ -1,4 +1,5 @@
-﻿using Arnible.MathModeling.Geometry;
+﻿using Arnible.MathModeling.Algebra;
+using Arnible.MathModeling.Geometry;
 using Xunit;
 using static Arnible.MathModeling.Term;
 
@@ -15,8 +16,8 @@ namespace Arnible.MathModeling.FormalTest.Test.Geometry
       var pc = new PolarCoordinate(r, φ);
       var expected = expression.ToPolar(rc, pc);
 
-      var cc = new CartesianCoordinate(new Number[] { x, y });
-      var hc = new HypersphericalCoordinate(r, new Number[] { φ });
+      var cc = new CartesianCoordinate(new NumberVector(x, y));
+      var hc = new HypersphericalCoordinate(r, new NumberVector(φ));
       var actual = expression.ToSpherical(cc, hc);
 
       AssertFormal.Equal(expected, actual);

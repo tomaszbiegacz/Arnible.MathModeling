@@ -1,9 +1,7 @@
 ﻿namespace Arnible.MathModeling
 {
-  public interface IDerivative2
+  public interface IDerivative2 : IDerivative1
   {
-    Number First { get; }
-
     Number Second { get; }
   }
 }

@@ -2,17 +2,15 @@
 
 namespace Arnible.MathModeling
 {
-  public class Derivative2Lazy : IDerivative2
+  public class Derivative2Lazy : Derivative1Value, IDerivative2
   {
-    private Lazy<Number> _second;
+    private readonly Lazy<Number> _second;
 
     public Derivative2Lazy(Number first, Func<Number> second)
+      : base(first)
     {
-      First = first;
       _second = new Lazy<Number>(second);
     }
-
-    public Number First { get; }
 
     public Number Second => _second.Value;
   }

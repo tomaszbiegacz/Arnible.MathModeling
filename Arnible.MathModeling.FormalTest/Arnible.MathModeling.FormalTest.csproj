@@ -10,8 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Arnible.MathModeling\Algebra\NumberVector.cs" Link="Algebra\NumberVector.cs" />
+    <Compile Include="..\Arnible.MathModeling\Algebra\NumberVectorExtension.cs" Link="Algebra\NumberVectorExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\CollectionExtension.cs" Link="CollectionExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\ComputationExtension.cs" Link="ComputationExtension.cs" />
+    <Compile Include="..\Arnible.MathModeling\Derivative1Value.cs" Link="Derivative1Value.cs" />
     <Compile Include="..\Arnible.MathModeling\Derivative2Lazy.cs" Link="Derivative2Lazy.cs" />
     <Compile Include="..\Arnible.MathModeling\Derivative2Value.cs" Link="Derivative2Value.cs" />
     <Compile Include="..\Arnible.MathModeling\DerivativeOperator.cs" Link="DerivativeOperator.cs" />
@@ -23,6 +26,7 @@
     <Compile Include="..\Arnible.MathModeling\Geometry\PolarCoordinate.cs" Link="Geometry\PolarCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\RectangularCoordianate.cs" Link="Geometry\RectangularCoordianate.cs" />
     <Compile Include="..\Arnible.MathModeling\IBinaryOperation.cs" Link="IBinaryOperation.cs" />
+    <Compile Include="..\Arnible.MathModeling\IDerivative1.cs" Link="IDerivative1.cs" />
     <Compile Include="..\Arnible.MathModeling\IDerivative2.cs" Link="IDerivative2.cs" />
     <Compile Include="..\Arnible.MathModeling\IFinitaryOperation.cs" Link="IFinitaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IndeterminateExpression.cs" Link="IndeterminateExpression.cs" />
@@ -39,6 +43,10 @@
 
   <ItemGroup>
     <PackageReference Include="xunit" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Algebra\" />
   </ItemGroup>
 
 </Project>

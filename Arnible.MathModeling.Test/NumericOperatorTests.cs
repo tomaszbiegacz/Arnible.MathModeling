@@ -55,9 +55,9 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
-    public void Equals_Zero_2E16_Not()
+    public void Equals_Zero_1E10_Not()
     {
-      Assert.False(0d.NumericEquals(2E-16));
+      Assert.False(0d.NumericEquals(1E-10));
     }
 
     [Fact]
@@ -67,9 +67,9 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
-    public void Equals_One_2E16_Not()
+    public void Equals_One_1E10_Not()
     {
-      Assert.False(1d.NumericEquals(1.0000000000000002));
+      Assert.False(1d.NumericEquals(1.0000000001));
     }
 
     [Fact]

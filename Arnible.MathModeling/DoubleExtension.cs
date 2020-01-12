@@ -16,7 +16,7 @@ namespace Arnible.MathModeling
         {
           double diff = Math.Abs(a - b);
           double denominator = Math.Min(a, b);
-          return (denominator == 0 ? diff : diff / denominator) < 2E-16;
+          return (denominator == 0 ? diff : diff / denominator) < 1E-10;
         }
       }
       else

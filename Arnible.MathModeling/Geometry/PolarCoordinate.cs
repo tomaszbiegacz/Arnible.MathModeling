@@ -6,6 +6,9 @@ namespace Arnible.MathModeling.Geometry
   {
     public Number R { get; }
 
+    /// <summary>
+    /// Angle from y axis to vector
+    /// </summary>
     public Number Φ { get; }
 
     public PolarCoordinate(Number r, Number φ)

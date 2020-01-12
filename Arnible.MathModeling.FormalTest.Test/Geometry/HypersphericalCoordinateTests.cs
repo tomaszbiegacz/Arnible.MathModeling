@@ -1,7 +1,8 @@
 ﻿using Arnible.MathModeling.Geometry;
 using System;
-using System.Linq;
+using Arnible.MathModeling.Algebra;
 using Xunit;
+using System.Linq;
 
 namespace Arnible.MathModeling.FormalTest.Test.Geometry
 {
@@ -10,8 +11,8 @@ namespace Arnible.MathModeling.FormalTest.Test.Geometry
     private static Polynomial GetSum(uint inputCount)
     {
       var cartesianInputs = Number.Terms(inputCount);
-      var cartesianPoint = new CartesianCoordinate(cartesianInputs);
-      var sphericalPoint = new HypersphericalCoordinate((PolynomialTerm)'R', Number.GreekTerms(inputCount - 1));
+      var cartesianPoint = new CartesianCoordinate(cartesianInputs.ToVector());
+      var sphericalPoint = new HypersphericalCoordinate((PolynomialTerm)'R', Number.GreekTerms(inputCount - 1).ToVector());
 
       Polynomial product = cartesianInputs.Sum();
       return product.ToSpherical(cartesianPoint, sphericalPoint);
@@ -32,10 +33,10 @@ namespace Arnible.MathModeling.FormalTest.Test.Geometry
       }
     }
 
-    private void EqualityAfterTranformation(Polynomial polynomial)
+    private static void EqualityAfterTranformation(Polynomial polynomial)
     {
-      var cartesianPoint = new CartesianCoordinate(new Number[] { Term.x, Term.y, Term.z });
-      var sphericalPoint = new HypersphericalCoordinate(Term.r, new Number[] { Term.θ, Term.φ });
+      var cartesianPoint = new CartesianCoordinate(new NumberVector(Term.x, Term.y, Term.z));
+      var sphericalPoint = new HypersphericalCoordinate(Term.r, new NumberVector(Term.θ, Term.φ));
       
       var sphericalPolynomial = polynomial.ToSpherical(cartesianPoint, sphericalPoint);
 
@@ -51,5 +52,22 @@ namespace Arnible.MathModeling.FormalTest.Test.Geometry
 
     [Fact]
     public void EqualityAfterTranformation_Polynomial3d() => EqualityAfterTranformation(1 + Term.x + 2 * Term.y * Term.z);
+
+    [Fact]
+    public void DerivativeByRForCartesianCoordinates()
+    {
+      var cartesianPoint = new CartesianCoordinate(new NumberVector(Term.x, Term.y, Term.z));
+      var sphericalPoint = new HypersphericalCoordinate(Term.r, new NumberVector(Term.θ, Term.φ));
+
+      var derivatives = sphericalPoint.DerivativeByRForCartesianCoordinates().ToArray();
+      Number r = Term.r;
+
+      Assert.Equal((int)cartesianPoint.DimensionsCount, derivatives.Length);
+      for(uint i=0; i<cartesianPoint.DimensionsCount; ++i)
+      {
+        var symbol = (Polynomial)cartesianPoint.Coordinates[i];
+        AssertFormal.Equal(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[i].First);
+      }
+    }
   }
 }
