@@ -33,5 +33,11 @@ namespace Arnible.MathModeling.Test
     {
       Assert.Equal(new[] { 24d }, (new[] { 4d, 2d, 3d }).AggregateCombinations(3, g => g.Product()));
     }
+
+    [Fact]
+    public void AggregateAllCombinations_3()
+    {
+      Assert.Equal(new[] { 4d, 2d, 3d, 8d, 12d, 6d, 24d }, (new[] { 4d, 2d, 3d }).AggregateAllCombinations(g => g.Product()));
+    }
   }
 }

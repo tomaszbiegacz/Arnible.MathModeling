@@ -31,7 +31,7 @@ namespace Arnible.MathModeling.Geometry
       var result = source;
 
       NumberVector cd = cartesianPoint.Coordinates.Reverse();
-      NumberVector ad = hypersphericalPoint.Angles.Reverse();
+      NumberVector ad = hypersphericalPoint.Angles.Reverse().ToVector();
       for (uint i = 0; i < ad.Count; ++i)
       {
         var cartesianDimension = (PolynomialTerm)cd[i];

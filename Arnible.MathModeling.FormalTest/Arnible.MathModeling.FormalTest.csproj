@@ -21,6 +21,7 @@
     <Compile Include="..\Arnible.MathModeling\DoubleExtension.cs" Link="DoubleExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\ElementaryUnaryOperation.cs" Link="ElementaryUnaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\CartesianCoordinate.cs" Link="Geometry\CartesianCoordinate.cs" />
+    <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleVector.cs" Link="Geometry\HypersphericalAngleVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinate.cs" Link="Geometry\HypersphericalCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\ICoordinate.cs" Link="Geometry\ICoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\PolarCoordinate.cs" Link="Geometry\PolarCoordinate.cs" />

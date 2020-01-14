@@ -16,14 +16,14 @@ namespace Arnible.MathModeling.Geometry
     /// <remarks>
     /// New dimension is being created by adding angle with π/4 (90 degres)
     /// </remarks>
-    public NumberVector Angles { get; }
+    public HypersphericalAngleVector Angles { get; }
 
     public Number R { get; }
 
     public HypersphericalCoordinate(Number r, NumberVector angles)
     {
       R = r;
-      Angles = angles;
+      Angles = new HypersphericalAngleVector(angles);
 
       if (r < 0)
       {
@@ -32,21 +32,6 @@ namespace Arnible.MathModeling.Geometry
       if (r == 0 && !angles.IsZero)
       {
         throw new ArgumentException($"For zero r, angles also has to be empty, got {angles}");
-      }
-      if (angles.Any())
-      {
-        if (angles.Any(a => a < 0))
-        {
-          throw new ArgumentException($"Found negative angular cooridnate: {angles}");
-        }
-        if (angles.Take(angles.Count - 1).Any(a => a >= Math.PI))
-        {
-          throw new ArgumentException($"Invalid first angular coordinates: {angles}");
-        }
-        if (angles.Last() >= 2 * Math.PI)
-        {
-          throw new ArgumentException($"Invalid last angualr coordinate: {angles.Last()}");
-        }
       }
     }
 
@@ -57,11 +42,11 @@ namespace Arnible.MathModeling.Geometry
       return new NumberVector(R).Concat(Angles).ToVector().ToString();
     }
 
-    public uint DimensionsCount => (uint)Angles.Count() + 1;
+    public uint DimensionsCount => (uint)Angles.Count + 1;
 
     public HypersphericalCoordinate AddDimension()
     {
-      return new HypersphericalCoordinate(R, Angles.Append(Math.PI / 2).ToVector());
+      return new HypersphericalCoordinate(R, Angles.AddDimension());
     }
 
     public CartesianCoordinate ToCartesian()
@@ -92,6 +77,20 @@ namespace Arnible.MathModeling.Geometry
       result.Reverse();
 
       return result;
-    }    
+    }
+
+    public IEnumerable<HypersphericalAngleVector> CartesianCoordinatesAngles()
+    {
+      var anglesCount = Angles.Count;
+      Number[] x = Enumerable.Repeat(HypersphericalAngleVector.AxisEraseAngle, anglesCount).ToArray();
+
+      yield return new HypersphericalAngleVector(x.ToVector());
+      for (uint i = 0; i < anglesCount; ++i)
+      {
+        x[i] = 0;
+        yield return new HypersphericalAngleVector(x.ToVector());
+        x[i] = HypersphericalAngleVector.AxisEraseAngle;
+      }
+    }
   }
 }

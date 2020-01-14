@@ -45,7 +45,9 @@ namespace Arnible.MathModeling.Test.Geometry
       var hc = cc.ToSpherical();
       Assert.Equal(2u, hc.DimensionsCount);
       Assert.Equal(2, hc.R);
-      Assert.Equal<Number>(Math.PI / 6, hc.Angles.Single());            // r to y
+
+      const double φ = Math.PI / 6;                           // r to y
+      Assert.Equal<Number>(φ, hc.Angles.Single());
 
       var derrivatives = hc.DerivativeByRForCartesianCoordinates().ToArray();
       Assert.Equal(2, derrivatives.Length);
@@ -53,6 +55,21 @@ namespace Arnible.MathModeling.Test.Geometry
       Assert.Equal<Number>(Math.Sqrt(3) / 2, derrivatives[1].First);    // y
 
       Assert.Equal(cc, hc.ToCartesian());
+      VerifyCartesianCoordinateAngle(hc, cc);
+    }
+
+    private static void VerifyCartesianCoordinateAngle(HypersphericalCoordinate hc, CartesianCoordinate cc)
+    {
+      var cartesianCoordinatesAngles = hc.CartesianCoordinatesAngles().ToArray();
+      Assert.Equal((uint)cartesianCoordinatesAngles.Length, cc.DimensionsCount);
+
+      for (uint pos = 0; pos < cc.DimensionsCount; ++pos)
+      {
+        var axisCc = new HypersphericalCoordinate(hc.R, cartesianCoordinatesAngles[pos]).ToCartesian();
+        Assert.Equal(cc.DimensionsCount, axisCc.DimensionsCount);
+        Assert.Equal(hc.R, axisCc.Coordinates[pos]);
+        Assert.Equal(1, axisCc.Coordinates.Count(v => v != 0));
+      }
     }
 
     [Fact]
@@ -74,6 +91,7 @@ namespace Arnible.MathModeling.Test.Geometry
       Assert.Equal<Number>(Math.Cos(θ), derrivatives[2].First);                 // z
 
       Assert.Equal(cc, hc.ToCartesian());
+      VerifyCartesianCoordinateAngle(hc, cc);
     }
 
     [Fact]
@@ -97,6 +115,6 @@ namespace Arnible.MathModeling.Test.Geometry
       Assert.Equal<Number>(Math.Sqrt(3) / 2, derrivatives[2].First);      // z
 
       Assert.Equal(cc, hc.ToCartesian());
-    }    
+    }
   }
 }
