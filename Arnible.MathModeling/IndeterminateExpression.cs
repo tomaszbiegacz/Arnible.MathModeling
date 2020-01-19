@@ -144,52 +144,53 @@ namespace Arnible.MathModeling
 
     internal static IEnumerable<IndeterminateExpression> Multiply(IEnumerable<IndeterminateExpression> i1, IEnumerable<IndeterminateExpression> i2)
     {
-      var ei1 = i1.OrderBy(i => i).GetEnumerator();
-      var ei2 = i2.OrderBy(i => i).GetEnumerator();
-
-      bool isEi1Valid = ei1.MoveNext();
-      bool isEi2Valid = ei2.MoveNext();
-      while (isEi1Valid && isEi2Valid)
+      using (var ei1 = i1.OrderBy(i => i).GetEnumerator())
+      using (var ei2 = i2.OrderBy(i => i).GetEnumerator())
       {
-        var vi1 = ei1.Current;
-        var vi2 = ei2.Current;
+        bool isEi1Valid = ei1.MoveNext();
+        bool isEi2Valid = ei2.MoveNext();
+        while (isEi1Valid && isEi2Valid)
+        {
+          var vi1 = ei1.Current;
+          var vi2 = ei2.Current;
 
-        int compareResult = vi1.Variable.CompareTo(vi2.Variable);
-        if (compareResult == 0)
-          compareResult = vi1._modifier.CompareTo(vi2._modifier);
+          int compareResult = vi1.Variable.CompareTo(vi2.Variable);
+          if (compareResult == 0)
+            compareResult = vi1._modifier.CompareTo(vi2._modifier);
 
-        if (compareResult < 0)
-        {
-          yield return vi1;
-          isEi1Valid = ei1.MoveNext();
-        }
-        else if (compareResult > 0)
-        {
-          yield return vi2;
-          isEi2Valid = ei2.MoveNext();
-        }
-        else
-        {
-          if (vi1.Power + vi2.Power > 0)
+          if (compareResult < 0)
           {
-            yield return new IndeterminateExpression(vi1.Variable, vi1._modifier, vi1.Power + vi2.Power);
+            yield return vi1;
+            isEi1Valid = ei1.MoveNext();
           }
+          else if (compareResult > 0)
+          {
+            yield return vi2;
+            isEi2Valid = ei2.MoveNext();
+          }
+          else
+          {
+            if (vi1.Power + vi2.Power > 0)
+            {
+              yield return new IndeterminateExpression(vi1.Variable, vi1._modifier, vi1.Power + vi2.Power);
+            }
+            isEi1Valid = ei1.MoveNext();
+            isEi2Valid = ei2.MoveNext();
+          }
+        }
+
+        while (isEi1Valid)
+        {
+          yield return ei1.Current;
           isEi1Valid = ei1.MoveNext();
+        }
+
+        while (isEi2Valid)
+        {
+          yield return ei2.Current;
           isEi2Valid = ei2.MoveNext();
         }
-      }
-
-      while (isEi1Valid)
-      {
-        yield return ei1.Current;
-        isEi1Valid = ei1.MoveNext();
-      }
-
-      while (isEi2Valid)
-      {
-        yield return ei2.Current;
-        isEi2Valid = ei2.MoveNext();
-      }
+      }      
     }
 
     public IndeterminateExpression ToPower(uint power)

@@ -37,8 +37,8 @@ namespace Arnible.MathModeling.Geometry
         var cartesianDimension = (PolynomialTerm)cd[i];
         var angle = (PolynomialTerm)ad[i];
 
-        result = result.Composition(cartesianDimension, replacement * Cos(angle));
-        replacement *= Sin(angle);
+        result = result.Composition(cartesianDimension, replacement * Sin(angle));
+        replacement *= Cos(angle);
       }
 
       return result.Composition((PolynomialTerm)cd.Last(), replacement);

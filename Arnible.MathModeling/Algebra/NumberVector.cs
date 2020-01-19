@@ -115,7 +115,7 @@ namespace Arnible.MathModeling.Algebra
 
     public IEnumerable<uint> Indexes()
     {
-      for(uint i=0; i<Count; ++i)
+      for (uint i = 0; i < Count; ++i)
       {
         yield return i;
       }
@@ -125,6 +125,12 @@ namespace Arnible.MathModeling.Algebra
     // arithmetic operators
     //
 
-    public static NumberVector operator +(NumberVector a, NumberVector b) => new NumberVector(a.Values.SelectMerged(b.Values, (va, vb) => va + vb));
+    public static NumberVector operator +(NumberVector a, NumberVector b) => new NumberVector(a.Values.ZipDefensive(b.Values, (va, vb) => va + vb));
+    public static NumberVector operator -(NumberVector a, NumberVector b) => new NumberVector(a.Values.ZipDefensive(b.Values, (va, vb) => va - vb));
+
+    public static NumberVector operator /(NumberVector a, double b) => new NumberVector(a.Values.Select(v => v / b));
+
+    public static NumberVector operator *(NumberVector a, double b) => new NumberVector(a.Values.Select(v => v * b));
+    public static NumberVector operator *(double a, NumberVector b) => new NumberVector(b.Values.Select(v => v * a));
   }
 }

@@ -10,11 +10,12 @@ namespace Arnible.MathModeling.Geometry
   {
     /// <summary>
     /// Angles:
-    /// - from y axis to xy vector
-    /// - from z axis to xyz vector
+    /// - from x axis to r(xy)
+    /// - from xy plane to r(xyz)
+    /// - etc..
     /// </summary>
     /// <remarks>
-    /// New dimension is being created by adding angle with π/4 (90 degres)
+    /// New (hidden) dimension is being created by adding 0 angle
     /// </remarks>
     public HypersphericalAngleVector Angles { get; }
 
@@ -55,8 +56,8 @@ namespace Arnible.MathModeling.Geometry
       var replacement = R;
       foreach (var angle in Angles.Reverse())
       {
-        cartesianDimensions.Add(replacement * Cos(angle));
-        replacement *= Sin(angle);
+        cartesianDimensions.Add(replacement * Sin(angle));
+        replacement *= Cos(angle);
       }
       cartesianDimensions.Add(replacement);
       cartesianDimensions.Reverse();
@@ -70,8 +71,8 @@ namespace Arnible.MathModeling.Geometry
       Number replacement = 1;
       foreach (var angle in Angles.Reverse())
       {
-        result.Add(new Derivative1Value(replacement * Cos(angle)));
-        replacement *= Sin(angle);
+        result.Add(new Derivative1Value(replacement * Sin(angle)));
+        replacement *= Cos(angle);
       }
       result.Add(new Derivative1Value(replacement));
       result.Reverse();
@@ -82,14 +83,14 @@ namespace Arnible.MathModeling.Geometry
     public IEnumerable<HypersphericalAngleVector> CartesianCoordinatesAngles()
     {
       var anglesCount = Angles.Count;
-      Number[] x = Enumerable.Repeat(HypersphericalAngleVector.AxisEraseAngle, anglesCount).ToArray();
+      Number[] x = Enumerable.Repeat<Number>(0, anglesCount).ToArray();
 
       yield return new HypersphericalAngleVector(x.ToVector());
       for (uint i = 0; i < anglesCount; ++i)
       {
-        x[i] = 0;
+        x[i] = HypersphericalAngleVector.RightAngle;
         yield return new HypersphericalAngleVector(x.ToVector());
-        x[i] = HypersphericalAngleVector.AxisEraseAngle;
+        x[i] = 0;
       }
     }
   }

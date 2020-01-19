@@ -27,7 +27,7 @@ namespace Arnible.MathModeling.FormalTest.Test.Geometry
         Polynomial current = GetSum(i);
         if (last != default)
         {          
-          Assert.Equal(last, current.Composition(Number.GreekTerm(i - 2), Math.PI / 2));
+          Assert.Equal(last, current.Composition(Number.GreekTerm(i - 2), 0));
         }
         last = current;
       }
@@ -43,7 +43,7 @@ namespace Arnible.MathModeling.FormalTest.Test.Geometry
       double sqrt2 = Math.Sqrt(2);
       double sqrt3 = Math.Sqrt(3);
       double polynomialResult = polynomial.GetOperation(Term.x, Term.y, Term.z).Value(sqrt2, sqrt2, 2 * sqrt3);
-      double sphericalResult = sphericalPolynomial.GetOperation(Term.r, Term.θ, Term.φ).Value(4, Math.PI / 4, Math.PI / 6);
+      double sphericalResult = sphericalPolynomial.GetOperation(Term.r, Term.θ, Term.φ).Value(4, Math.PI / 4, Math.PI / 3);
       Assert.Equal(polynomialResult, sphericalResult, 10);
     }
 

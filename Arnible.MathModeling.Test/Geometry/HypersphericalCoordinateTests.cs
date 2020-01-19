@@ -22,11 +22,11 @@ namespace Arnible.MathModeling.Test.Geometry
     [Fact]
     public void Constructor_3d()
     {
-      var hc = new HypersphericalCoordinate(3, new NumberVector(1, 2));
+      var hc = new HypersphericalCoordinate(3, new NumberVector(1, 0.5));
 
       Assert.Equal(3u, hc.DimensionsCount);
       AssertNumber.Equal(3, hc.R);
-      AssertNumber.Equal(new[] { 1, 2 }, hc.Angles);
+      AssertNumber.Equal(new[] { 1, 0.5 }, hc.Angles);
     }
 
     [Fact]
@@ -46,7 +46,7 @@ namespace Arnible.MathModeling.Test.Geometry
       Assert.Equal(2u, hc.DimensionsCount);
       Assert.Equal(2, hc.R);
 
-      const double φ = Math.PI / 6;                           // r to y
+      const double φ = Math.PI / 3;                           // x to r
       Assert.Equal<Number>(φ, hc.Angles.Single());
 
       var derrivatives = hc.DerivativeByRForCartesianCoordinates().ToArray();
@@ -86,9 +86,9 @@ namespace Arnible.MathModeling.Test.Geometry
 
       var derrivatives = hc.DerivativeByRForCartesianCoordinates().ToArray();
       Assert.Equal(3, derrivatives.Length);
-      Assert.Equal<Number>(Math.Sin(θ) * Math.Sin(φ), derrivatives[0].First);   // x
-      Assert.Equal<Number>(Math.Sin(θ) * Math.Cos(φ), derrivatives[1].First);   // y
-      Assert.Equal<Number>(Math.Cos(θ), derrivatives[2].First);                 // z
+      Assert.Equal<Number>(Math.Cos(θ) * Math.Cos(φ), derrivatives[0].First);   // x
+      Assert.Equal<Number>(Math.Cos(θ) * Math.Sin(φ), derrivatives[1].First);   // y
+      Assert.Equal<Number>(Math.Sin(θ), derrivatives[2].First);                 // z
 
       Assert.Equal(cc, hc.ToCartesian());
       VerifyCartesianCoordinateAngle(hc, cc);
@@ -99,8 +99,8 @@ namespace Arnible.MathModeling.Test.Geometry
     {
       var cc = new CartesianCoordinate(Math.Sqrt(2), Math.Sqrt(2), 2 * Math.Sqrt(3));
 
-      const double φ = Math.PI / 4;   // r to y
-      const double θ = Math.PI / 6;   // r to xy
+      const double φ = Math.PI / 4;   // x to r(xy)
+      const double θ = Math.PI / 3;   // xy to r
 
       var hc = cc.ToSpherical();
       Assert.Equal(3u, hc.DimensionsCount);

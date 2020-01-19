@@ -46,7 +46,7 @@ namespace Arnible.MathModeling
       return current;
     }
 
-    private static IEnumerable<T> AggregateCombinations<T>(T[] x, uint i, uint groupCount, Func<IEnumerable<T>, T> aggregator, Stack<T> combination) where T : struct
+    private static IEnumerable<T> AggregateCombinations<T>(T[] x, uint i, uint groupCount, Func<IEnumerable<T>, T> aggregator, Stack<T> combination)
     {
       if (groupCount == combination.Count)
       {
@@ -72,7 +72,7 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static IEnumerable<T> AggregateCombinations<T>(this IEnumerable<T> items, uint groupCount, Func<IEnumerable<T>, T> aggregator) where T : struct
+    public static IEnumerable<T> AggregateCombinations<T>(this IEnumerable<T> items, uint groupCount, Func<IEnumerable<T>, T> aggregator)
     {
       if (groupCount < 1)
       {
@@ -97,7 +97,7 @@ namespace Arnible.MathModeling
       return AggregateCombinations(x, 0, groupCount, aggregator, combination);
     }
 
-    public static IEnumerable<T> AggregateAllCombinations<T>(this IEnumerable<T> items, Func<IEnumerable<T>, T> aggregator) where T : struct
+    public static IEnumerable<T> AggregateAllCombinations<T>(this IEnumerable<T> items, Func<IEnumerable<T>, T> aggregator)
     {
       if (items == null)
       {
@@ -117,6 +117,6 @@ namespace Arnible.MathModeling
           yield return item;
         }
       }
-    }
+    }    
   }
 }

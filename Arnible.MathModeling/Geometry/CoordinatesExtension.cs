@@ -8,11 +8,8 @@ namespace Arnible.MathModeling.Geometry
 {
   public static class CoordinatesExtension
   {
-    private static double GetFirstAngle(double x, double y)
-    {
-      var angle = Atan2(x, y);
-      return angle >= 0 ? angle : 2 * Math.PI + angle;
-    }
+    private static double GetFirstAngle(double x, double y) => Atan2(y, x);
+    
     public static PolarCoordinate ToPolar(this RectangularCoordianate p)
     {
       return new PolarCoordinate(
@@ -37,8 +34,8 @@ namespace Arnible.MathModeling.Geometry
         for (uint i = p.DimensionsCount; i > 2; i--)
         {
           double radius2 = pc2.Take((int)i).Sum();
-          double angleCos = pc[i - 1] / Sqrt(radius2);
-          double angle = Acos(angleCos);
+          double angleSin = pc[i - 1] / Sqrt(radius2);
+          double angle = Asin(angleSin);
           angles.Add(angle);
         }
         angles.Add(GetFirstAngle(pc[0], pc[1]));

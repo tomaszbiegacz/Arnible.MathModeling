@@ -19,9 +19,9 @@ namespace Arnible.MathModeling.Test.Geometry
     const double π_4 = Math.PI / 4;
 
     /// <summary>
-    /// 30 degres
+    /// 60 degres
     /// </summary>
-    const double π_6 = Math.PI / 6;
+    const double π_3 = Math.PI / 3;
 
     [Theory]
     [InlineData(1, 1)]
@@ -45,7 +45,7 @@ namespace Arnible.MathModeling.Test.Geometry
     [Theory]
     [InlineData(new [] { 1d, 1d },                  Sqrt2,  new[] { π_4 })]
     [InlineData(new [] { one_Sqrt2, one_Sqrt2, 1 }, Sqrt2,  new[] { π_4, π_4 })]
-    [InlineData(new [] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4,      new[] { π_4, π_6 })]
+    [InlineData(new [] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4,      new[] { π_4, π_3 })]
     public void Cast_ToHyperspherical(double[] cartesian, double r, double[] angles)
     {
       var cc = new CartesianCoordinate(cartesian.ToVector());
@@ -58,7 +58,7 @@ namespace Arnible.MathModeling.Test.Geometry
     [Theory]
     [InlineData(new [] { 1d, 1d },                  Sqrt2,  new[] { π_4 })]
     [InlineData(new [] { one_Sqrt2, one_Sqrt2, 1 }, Sqrt2,  new[] { π_4, π_4 })]
-    [InlineData(new [] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4,      new[] { π_4, π_6 })]
+    [InlineData(new [] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4,      new[] { π_4, π_3 })]
     public void Cast_ToCartesian(double[] cartesian, double r, double[] angles)
     {
       var sc = new HypersphericalCoordinate(r, angles.ToVector());
@@ -70,7 +70,7 @@ namespace Arnible.MathModeling.Test.Geometry
     [Theory]
     [InlineData(new[] { 1d, 1d }, Sqrt2, new[] { π_4 })]
     [InlineData(new[] { one_Sqrt2, one_Sqrt2, 1 }, Sqrt2, new[] { π_4, π_4 })]
-    [InlineData(new[] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4, new[] { π_4, π_6 })]
+    [InlineData(new[] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4, new[] { π_4, π_3 })]
     public void AddDimension(double[] cartesian, double r, double[] angles)
     {
       var cc = new CartesianCoordinate(cartesian.ToVector());

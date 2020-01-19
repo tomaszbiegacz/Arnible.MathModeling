@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Arnible.MathModeling.Algebra;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -19,6 +21,11 @@ namespace Arnible.MathModeling.Geometry
         }
       }
       return current.Value;
+    }
+
+    public static HypersphericalAngleVector Average(this IEnumerable<HypersphericalAngleVector> angles)
+    {
+      return new HypersphericalAngleVector(angles.Select(v => (NumberVector)v).Average());
     }
   }
 }

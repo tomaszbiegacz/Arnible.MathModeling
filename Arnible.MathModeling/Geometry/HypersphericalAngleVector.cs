@@ -11,7 +11,7 @@ namespace Arnible.MathModeling.Geometry
     const double FullCycle = 2 * Math.PI;
     const double HalfCycle = Math.PI;
 
-    public static Number AxisEraseAngle => Math.PI / 2;
+    public const double RightAngle = Math.PI / 2;
 
     private readonly NumberVector _angles;
 
@@ -25,32 +25,19 @@ namespace Arnible.MathModeling.Geometry
     {
       if (angles.Any())
       {
-        if (angles.Any(a => a < 0))
+        var first = angles.First();
+        if (first > HalfCycle || first < -1 * HalfCycle)
         {
-          throw new ArgumentException($"Found negative angular cooridnate: {angles}");
+          throw new ArgumentException($"Invalid first angualr coordinate: {first}");
         }
-        if (angles.First() >= FullCycle)
+        if (angles.Skip(1).Any(a => a > RightAngle || a < -1 * RightAngle))
         {
-          throw new ArgumentException($"Invalid last angualr coordinate: {angles.Last()}");
-        }
-        if (angles.Skip(1).Any(a => a > HalfCycle))
-        {
-          throw new ArgumentException($"Invalid first angular coordinates: {angles}");
+          throw new ArgumentException($"Invalid angular coordinates: {angles}");
         }
       }
 
       _angles = angles;
     }
-
-    public bool IsEmpty => _angles.Count == 0;
-
-    public int Count => _angles.Count;
-
-    public Number this[uint pos] => _angles[pos];
-
-    public IEnumerator<Number> GetEnumerator() => _angles.GetEnumerator();
-
-    IEnumerator IEnumerable.GetEnumerator() => _angles.GetEnumerator();
 
     public override string ToString() => _angles.ToString();
 
@@ -70,23 +57,59 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(HypersphericalAngleVector other) => other._angles == _angles;
 
+    public static implicit operator NumberVector(HypersphericalAngleVector v) => v._angles;
+
+    //
+    // Properties
+    //
+
+    public bool IsEmpty => _angles.Count == 0;
+
+    public int Count => _angles.Count;
+
+    //
+    // IReadonlyCollection
+    //
+
+    public Number this[uint pos] => _angles[pos];
+
+    public IEnumerator<Number> GetEnumerator() => _angles.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => _angles.GetEnumerator();
+
+    //
+    // Operators
+    //
+
     public static bool operator ==(HypersphericalAngleVector a, HypersphericalAngleVector b) => a.Equals(b);
     public static bool operator !=(HypersphericalAngleVector a, HypersphericalAngleVector b) => !a.Equals(b);
 
-    public static implicit operator NumberVector(HypersphericalAngleVector v) => v._angles;
-
-    public HypersphericalAngleVector AddDimension() => new HypersphericalAngleVector(_angles.Append(AxisEraseAngle).ToVector());
+    public HypersphericalAngleVector AddDimension() => new HypersphericalAngleVector(_angles.Append(0).ToVector());
 
     //
     // arithmetic
     //
 
-    private static Number RoundAngle(Number v, Number maxValue)
+    private static Number RoundAngleFullCycle(Number v)
     {
-      if (v > maxValue)
-        return 2 * maxValue - v;
-      else
-        return v;
+      if (v > HalfCycle)
+        return v - FullCycle;
+
+      if (v < -1 * HalfCycle)
+        return FullCycle + v;
+
+      return v;
+    }
+
+    private static Number RoundAngleHalfCycle(Number v)
+    {
+      if (v > RightAngle)
+        return v - HalfCycle;
+
+      if (v < -1 * RightAngle)
+        return HalfCycle + v;
+
+      return v;
     }
 
     private static IEnumerable<Number> AddAngles(NumberVector a, NumberVector b)
@@ -96,12 +119,12 @@ namespace Arnible.MathModeling.Geometry
         throw new ArgumentException(nameof(a));
       }
 
-      yield return RoundAngle(a[0] + b[0], FullCycle);
+      yield return RoundAngleFullCycle(a[0] + b[0]);
       for (uint i = 1; i < a.Count; ++i)
       {
-        yield return RoundAngle(a[i] + b[i], HalfCycle);
+        yield return RoundAngleHalfCycle(a[i] + b[i]);
       }
-    }    
+    }
 
     public static HypersphericalAngleVector operator +(HypersphericalAngleVector a, HypersphericalAngleVector b)
     {

@@ -13,13 +13,13 @@ namespace Arnible.MathModeling
     }
 
     public static implicit operator Number(double v) => new Number(v);
-    public static implicit operator Number(PolynomialTerm v) => new Number(v);
-    public static implicit operator Number(Polynomial v) => new Number(v);
-
-    public static implicit operator Polynomial(Number v) => v._term;
-
     public static explicit operator double(Number v) => (double)v._term;
+
+    public static implicit operator Number(PolynomialTerm v) => new Number(v);
     public static explicit operator PolynomialTerm(Number v) => (PolynomialTerm)v._term;
+
+    public static implicit operator Number(Polynomial v) => new Number(v);
+    public static implicit operator Polynomial(Number v) => v._term;
 
     //
     // Object
@@ -53,9 +53,8 @@ namespace Arnible.MathModeling
 
     public static bool operator ==(Number a, Number b) => a.Equals(b);
     public static bool operator !=(Number a, Number b) => !a.Equals(b);
+    public bool Equals(Number other) => _term == other._term;
 
-    public bool Equals(Number other) => _term == other._term;    
-   
     public static bool operator >(Number a, Number b)
     {
       var result = a._term - b._term;
@@ -63,7 +62,7 @@ namespace Arnible.MathModeling
       {
         return (double)result > 0;
       }
-      else      
+      else
       {
         return false;
       }
@@ -73,31 +72,31 @@ namespace Arnible.MathModeling
     public static bool operator >=(Number a, Number b) => a > b || a == b;
     public static bool operator <=(Number a, Number b) => a < b || a == b;
 
+    public static Number operator /(Number a, double b) => new Number(a._term / b);
+
     public static Number operator +(Number a, Number b) => a._term + b._term;
-    public static Number operator +(Number a, Polynomial b) => a._term + b;
-    public static Number operator +(Polynomial a, Number b) => a + b._term;
     public static Number operator +(Number a, double b) => a._term + b;
     public static Number operator +(double a, Number b) => a + b._term;
+    public static Number operator +(Number a, Polynomial b) => a._term + b;
+    public static Number operator +(Polynomial a, Number b) => a + b._term;
 
     public static Number operator -(Number a, Number b) => a._term - b._term;
-    public static Number operator -(Number a, Polynomial b) => a._term - b;
-    public static Number operator -(Polynomial a, Number b) => a - b._term;
     public static Number operator -(Number a, double b) => a._term - b;
     public static Number operator -(double a, Number b) => a - b._term;
+    public static Number operator -(Number a, Polynomial b) => a._term - b;
+    public static Number operator -(Polynomial a, Number b) => a - b._term;
 
     public static Number operator *(Number a, Number b) => a._term * b._term;
-    public static Number operator *(Number a, Polynomial b) => a._term * b;
-    public static Number operator *(Polynomial a, Number b) => a * b._term;
     public static Number operator *(Number a, double b) => a._term * b;
     public static Number operator *(double a, Number b) => a * b._term;
+    public static Number operator *(Number a, Polynomial b) => a._term * b;
+    public static Number operator *(Polynomial a, Number b) => a * b._term;
 
     //
     // Number
     //
 
-    public bool IsValidNumeric => true;
-
-    public Number ToPower(uint b) => _term.ToPower(b);    
+    public Number ToPower(uint b) => _term.ToPower(b);
 
     //
     // Term

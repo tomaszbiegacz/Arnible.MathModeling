@@ -19,8 +19,8 @@ namespace Arnible.MathModeling.Test.Geometry
     }
 
     [Theory]
-    [InlineData(1, 0, 1, Math.PI / 2)]
-    [InlineData(0, 1, 1, 0)]
+    [InlineData(1, 0, 1, 0)]
+    [InlineData(0, 1, 1, Math.PI / 2)]
     [InlineData(1, 1, Sqrt2, Math.PI / 4)]
     public void Constructor_Cases(double x, double y, double r, double φ)
     {      

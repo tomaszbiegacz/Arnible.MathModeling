@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Arnible.MathModeling
 {
@@ -9,6 +8,10 @@ namespace Arnible.MathModeling
 
     private Number(double value)
     {
+      if (!value.IsValidNumeric())
+      {
+        throw new ArgumentException(nameof(value));
+      }
       _value = value;
     }
 
@@ -47,18 +50,23 @@ namespace Arnible.MathModeling
 
     public static bool operator ==(Number a, Number b) => a.Equals(b);
     public static bool operator !=(Number a, Number b) => !a.Equals(b);
-
     public bool Equals(Number other)
     {
       return _value.NumericEquals(other._value);
     }
 
+    public static Number operator /(Number a, double b) => new Number(a._value / b);
+
+    public static Number operator +(Number a, Number b) => new Number(a._value + b._value);    
+
+    public static Number operator -(Number a, Number b) => new Number(a._value - b._value);    
+
+    public static Number operator *(Number a, Number b) => new Number(a._value * b._value);    
+
     //
     // Number
-    //
+    //    
 
-    public bool IsValidNumeric => _value.IsValidNumeric();
-
-    public Number ToPower(uint b) => DoubleExtension.ToPower(_value, b);    
+    public Number ToPower(uint b) => DoubleExtension.ToPower(_value, b);
   }
 }

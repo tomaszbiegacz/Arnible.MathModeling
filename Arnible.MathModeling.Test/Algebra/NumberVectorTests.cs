@@ -1,5 +1,6 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Arnible.MathModeling.Test.Algebra
@@ -84,6 +85,58 @@ namespace Arnible.MathModeling.Test.Algebra
     {
       IEnumerable<Number> args = new Number[] { 2, 3, 4 };
       Assert.Equal(new Number[] { 2, 3, 4 }, args.ToVector());
+    }
+
+    [Fact]
+    public void Plus()
+    {
+      Assert.Equal(new NumberVector(2, 5, 8), new NumberVector(1, 2, 3) + new NumberVector(1, 3, 5));
+    }
+
+    [Fact]
+    public void Minus()
+    {
+      Assert.Equal(new NumberVector(0, -1, -2), new NumberVector(1, 2, 3) - new NumberVector(1, 3, 5));
+    }
+
+    [Fact]
+    public void Divide()
+    {
+      Assert.Equal(new NumberVector(1, 2, 3), new NumberVector(2, 4, 6) / 2);
+    }
+
+    [Fact]
+    public void Multiply()
+    {
+      Assert.Equal(new NumberVector(2, 4, 6), new NumberVector(1, 2, 3) * 2);
+      Assert.Equal(new NumberVector(2, 4, 6), 2 * new NumberVector(1, 2, 3));
+    }
+
+    [Fact]
+    public void Indexes()
+    {
+      Assert.Equal(Enumerable.Range(0, 3).Select(i => (uint)i), new NumberVector(1, 2, 3).Indexes());      
+    }
+
+    [Fact]
+    public void Sum_One()
+    {
+      var arr = new NumberVector[] { new NumberVector(1, 2, 3) };
+      Assert.Equal(new NumberVector(1, 2, 3), arr.Sum());      
+    }
+
+    [Fact]
+    public void Sum_Two()
+    {      
+      var arr = new NumberVector[] { new NumberVector(1, 2, 3), new NumberVector(1, 3, 5) };
+      Assert.Equal(new NumberVector(2, 5, 8), arr.Sum());
+    }
+
+    [Fact]
+    public void Average_Two()
+    {
+      var arr = new NumberVector[] { new NumberVector(1, 2, 3), new NumberVector(1, 3, 5) };
+      Assert.Equal(new NumberVector(1, 2.5, 4), arr.Average());
     }
   }
 }

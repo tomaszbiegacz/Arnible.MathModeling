@@ -30,7 +30,7 @@ namespace Arnible.MathModeling
 
     public static IEnumerable<IDerivative1> ForEachElementComposition(this IEnumerable<IDerivative1> valueDerrivativeByParameters, IEnumerable<IDerivative1> parametersDerivatives)
     {
-      return valueDerrivativeByParameters.SelectMerged(parametersDerivatives, (a, b) => new Derivative1Value(a.First * b.First));      
+      return valueDerrivativeByParameters.ZipDefensive(parametersDerivatives, (a, b) => new Derivative1Value(a.First * b.First));      
     }
 
     public static IDerivative2 ForComposition(this IEnumerable<IDerivative2> derivatives)

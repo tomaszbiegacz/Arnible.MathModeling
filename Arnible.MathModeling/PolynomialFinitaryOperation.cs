@@ -26,22 +26,23 @@ namespace Arnible.MathModeling
       // possibly move it at class level to reduce GC at the cost of thread safety
       var args = new Dictionary<char, double>();
 
-      var xEnum = x.GetEnumerator();
-      int i = -1;
-      while (xEnum.MoveNext())
+      using (var xEnum = x.GetEnumerator())
       {
-        i++;
-        if (i >= _variables.Length)
+        int i = -1;
+        while (xEnum.MoveNext())
         {
-          throw new ArgumentException($"Too many arguments, expected {_variables.Length}, got {i}.");
+          i++;
+          if (i >= _variables.Length)
+          {
+            throw new ArgumentException($"Too many arguments, expected {_variables.Length}, got {i}.");
+          }
+          args[_variables[i]] = xEnum.Current;
         }
-        args[_variables[i]] = xEnum.Current;
-      }
-      if (i < _variables.Length - 1)
-      {
-        throw new ArgumentException($"too few arguments, expected {_variables.Length}, got {i}.");
-      }
-
+        if (i < _variables.Length - 1)
+        {
+          throw new ArgumentException($"too few arguments, expected {_variables.Length}, got {i}.");
+        }
+      }        
       return _polynomial.Value(args);
     }
   }

@@ -6,11 +6,6 @@ namespace Arnible.MathModeling
   {
     public Derivative1Value(Number first)
     {
-      if (!first.IsValidNumeric)
-      {
-        throw new ArgumentException(nameof(first));
-      }
-
       First = first;
     }
 

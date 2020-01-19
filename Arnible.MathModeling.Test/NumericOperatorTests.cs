@@ -22,7 +22,7 @@ namespace Arnible.MathModeling.Test
     public void Equals_Infinity_Infinity_Not()
     {
       Assert.False(double.PositiveInfinity.NumericEquals(double.PositiveInfinity));
-    }
+    }    
 
     [Fact]
     public void Equals_NaN_NaN_Not()

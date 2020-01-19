@@ -21,24 +21,6 @@ namespace Arnible.MathModeling.Test
     {
       Assert.NotEqual(first, second);
       Assert.Equal<Number>(first, second);
-    }
-
-    [Theory]    
-    [InlineData(double.NegativeInfinity, double.PositiveInfinity)]
-    public void NotEqual_Both(double first, double second)
-    {
-      Assert.NotEqual(first, second);
-      Assert.NotEqual<Number>(first, second);
-    }
-
-    [Theory]
-    [InlineData(double.NaN)]
-    [InlineData(double.PositiveInfinity)]
-    [InlineData(double.NegativeInfinity)]
-    public void NotEqual_Different(double first)
-    {
-      Assert.Equal(first, first);
-      Assert.NotEqual<Number>(first, first);
-    }
+    }    
   }
 }

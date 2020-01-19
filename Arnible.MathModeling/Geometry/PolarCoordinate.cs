@@ -30,11 +30,7 @@ namespace Arnible.MathModeling.Geometry
       }
       else
       {
-        if (φ < 0)
-        {
-          throw new ArgumentException($"Found negative angular cooridnate: {φ}");
-        }
-        if (φ >= 2 * Math.PI)
+        if (φ < -1 * Math.PI || φ >= Math.PI)
         {
           throw new ArgumentException($"Invalid angualr coordinate: {φ}");
         }
