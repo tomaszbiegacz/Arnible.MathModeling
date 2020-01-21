@@ -24,7 +24,7 @@ namespace Arnible.MathModeling.Geometry
         if (result != 0)
           return result;
         else
-          return -1 * _deterministicOrder.Compare(x, y);
+          return _deterministicOrder.Compare(x, y);
       }
 
       public void IncreaseFitness(HypersphericalAngleQuantified d)
@@ -64,16 +64,22 @@ namespace Arnible.MathModeling.Geometry
 
     public void IncreaseFitness(HypersphericalAngleQuantified direction)
     {
-      _angles.Remove(direction);
+      if (!_angles.Remove(direction))
+      {
+        throw new ArgumentException(nameof(direction));
+      }
       _comparer.IncreaseFitness(direction);
       AddAngle(direction);
     }
 
     public void DecreaseFitness(HypersphericalAngleQuantified direction)
     {
-      _angles.Remove(direction);
+      if (!_angles.Remove(direction))
+      {
+        throw new ArgumentException(nameof(direction));
+      }
       _comparer.DecreaseFitness(direction);
       AddAngle(direction);
-    }    
+    }
   }
 }

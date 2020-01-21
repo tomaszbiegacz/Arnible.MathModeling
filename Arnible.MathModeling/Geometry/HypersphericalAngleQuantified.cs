@@ -97,7 +97,32 @@ namespace Arnible.MathModeling.Geometry
       Id = id;
       _rightAngleResolution = rightAngleResolution;
       _angles = angles.ToArray();
-      UsedDirectionsCount = (byte)_angles.Count(a => a != 0);
+      UsedDirectionsCount = GetUsedDirectionsCount(_angles, rightAngleResolution);
+      
+    }
+
+    private static byte GetUsedDirectionsCount(IReadOnlyList<sbyte> angles, byte rightAngleResolution)
+    {
+      byte result = 0;
+      if (angles.Any())
+      {
+        int firstAnglePos = angles.IndexOf(a => a == rightAngleResolution);
+        if (firstAnglePos >= 0)
+        {
+          result = 1;
+          firstAnglePos++;
+        }
+        else
+        {
+          if (angles.First() == 0)
+          {
+            result = 1;
+          }
+          firstAnglePos = 0;
+        }
+        result += (byte)angles.Skip(firstAnglePos).Count(a => a != 0);
+      }
+      return result;
     }
 
     public uint Id { get; }

@@ -1,10 +1,23 @@
 ﻿using Arnible.MathModeling.Algebra;
+using System;
 using System.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
   public struct CartesianCoordinate : ICoordinate<CartesianCoordinate>
   {
+    public static CartesianCoordinate ForAxis(uint dimensionsCount, uint axisNumber, Number value)
+    {
+      if (dimensionsCount == 0)
+        throw new ArgumentException(nameof(dimensionsCount));
+      if (axisNumber >= dimensionsCount)
+        throw new ArgumentException(nameof(dimensionsCount));
+
+      var coordinates = new Number[dimensionsCount];
+      coordinates[axisNumber] = value;
+      return new CartesianCoordinate(coordinates);
+    }
+
     public NumberVector Coordinates { get; }
 
     public CartesianCoordinate(NumberVector coordinates)

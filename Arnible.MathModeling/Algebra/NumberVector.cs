@@ -32,7 +32,10 @@ namespace Arnible.MathModeling.Algebra
     {
       get
       {
-        return Values.All(an => an == 0);
+        if (Values.Any())
+          return Values.All(an => an == 0);
+        else
+          return true;
       }
     }
 

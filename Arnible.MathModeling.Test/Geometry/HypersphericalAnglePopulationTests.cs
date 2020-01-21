@@ -9,7 +9,7 @@ namespace Arnible.MathModeling.Test.Geometry
   {
     class ComparerForTests1d : IComparer<HypersphericalAngleQuantified>
     {
-      public int Compare(HypersphericalAngleQuantified x, HypersphericalAngleQuantified y) => x.Angles.Single().CompareTo(y.Angles.Single());
+      public int Compare(HypersphericalAngleQuantified x, HypersphericalAngleQuantified y) => -1 * x.Angles.Single().CompareTo(y.Angles.Single());
     }
 
     private static void AssertAngles(HypersphericalAnglePopulation population, params sbyte[] angles)
