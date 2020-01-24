@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
 namespace Arnible.MathModeling
 {
-  public struct Polynomial : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation, IEnumerable<PolynomialTerm>
+  public readonly struct Polynomial : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation, IEnumerable<PolynomialTerm>
   {
     const char InPlaceVariableReplacement = '$';
 
@@ -59,7 +60,7 @@ namespace Arnible.MathModeling
       }
     }
 
-    public override string ToString()
+    public string ToString(CultureInfo cultureInfo)
     {
       if (IsZero)
       {
@@ -75,13 +76,16 @@ namespace Arnible.MathModeling
           {
             result.Append("+");
           }
-          result.Append(variable.ToString());
+          result.Append(variable.ToString(cultureInfo));
 
           printOperator = true;
         }
         return result.ToString();
       }
     }
+
+    public override string ToString() => ToString(CultureInfo.InvariantCulture);
+
 
     public static bool operator ==(Polynomial a, Polynomial b) => a.Equals(b);
     public static bool operator !=(Polynomial a, Polynomial b) => !a.Equals(b);

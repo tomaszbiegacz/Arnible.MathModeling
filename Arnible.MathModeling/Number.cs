@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Arnible.MathModeling
 {
-  public struct Number : IEquatable<Number>
+  public readonly struct Number : IEquatable<Number>
   {
     private readonly double _value;
 
@@ -39,9 +40,11 @@ namespace Arnible.MathModeling
       return _value.GetHashCode();
     }
 
-    public override string ToString()
+    public override string ToString() => ToString(CultureInfo.InvariantCulture);    
+
+    public string ToString(CultureInfo cultureInfo)
     {
-      return _value.ToString();
+      return _value.ToString(cultureInfo);
     }
 
     //

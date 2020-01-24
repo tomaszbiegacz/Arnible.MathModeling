@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public struct HypersphericalAngleQuantified : IEquatable<HypersphericalAngleQuantified>
+  public readonly struct HypersphericalAngleQuantified : IEquatable<HypersphericalAngleQuantified>
   {
     class InnerFactory
     {

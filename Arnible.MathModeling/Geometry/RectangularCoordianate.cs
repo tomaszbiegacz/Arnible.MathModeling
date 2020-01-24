@@ -1,6 +1,6 @@
 ﻿namespace Arnible.MathModeling.Geometry
 {
-  public struct RectangularCoordianate
+  public readonly struct RectangularCoordianate
   {
     public Number X { get; }
 

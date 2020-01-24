@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public struct HypersphericalAngleVector : IEquatable<HypersphericalAngleVector>, IReadOnlyCollection<Number>
+  public readonly struct HypersphericalAngleVector : IEquatable<HypersphericalAngleVector>, IReadOnlyCollection<Number>
   {
     const double FullCycle = 2 * Math.PI;
     const double HalfCycle = Math.PI;

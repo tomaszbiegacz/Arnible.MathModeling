@@ -6,84 +6,89 @@ using System.Linq;
 
 namespace Arnible.MathModeling
 {
-  public struct PolynomialTerm : IEquatable<PolynomialTerm>, IPolynomialOperation
+  public readonly struct PolynomialTerm : IEquatable<PolynomialTerm>, IPolynomialOperation
   {
     private readonly double _coefficient;
-    private readonly ImmutableList<IndeterminateExpression> _indeterminates;
-
+    private readonly IImmutableList<IndeterminateExpression> _indeterminates;
     private readonly string _indeterminatesSignature;
-    private IndeterminateExpression _greatestPower;
 
     private PolynomialTerm(double coefficient, IEnumerable<IndeterminateExpression> indeterminates)
-      : this(coefficient, indeterminates.Where(i => !i.IsOne).Order().ToImmutableList(), null)
+      : this(coefficient, indeterminates.Where(i => !i.IsOne).Order().ToImmutableList(), default, default)
     {
       // intentionally empty
     }
 
-    private PolynomialTerm(double coefficient, ImmutableList<IndeterminateExpression> indeterminates, string signature)
+    private PolynomialTerm(
+      double coefficient,
+      IImmutableList<IndeterminateExpression> indeterminates,
+      string signature,
+      IndeterminateExpression greatestPowerExpression)
     {
-      if (coefficient == 0)
-      {
-        if (indeterminates != null && indeterminates.Count > 0)
-        {
-          throw new ArgumentException(nameof(indeterminates));
-        }
+      bool anyIndeterminates = indeterminates != null && indeterminates.Count > 0;
+      bool hasSignature = signature != null;
+      if (coefficient == 0 && anyIndeterminates)
+      {        
+        throw new ArgumentException(nameof(indeterminates));
       }
 
       _coefficient = coefficient;
       _indeterminates = indeterminates;
-      _indeterminatesSignature = signature ?? string.Join(string.Empty, indeterminates);
-      _greatestPower = default;
+      if (anyIndeterminates == hasSignature)
+      {
+        _indeterminatesSignature = signature;
+        GreatestPowerIndeterminate = greatestPowerExpression;
+      }
+      else
+      {
+        _indeterminatesSignature = anyIndeterminates ? string.Join(string.Empty, indeterminates) : null;        
+         GreatestPowerIndeterminate = anyIndeterminates ? FindGreatestPowerIndeterminate(indeterminates) : default;
+      }
     }
 
-    public static implicit operator PolynomialTerm(char name) => new PolynomialTerm(1, new[] { (IndeterminateExpression)name });
-    public static implicit operator PolynomialTerm(IndeterminateExpression name) => new PolynomialTerm(1, new[] { name });
+    public static implicit operator PolynomialTerm(char name) => new PolynomialTerm(1, ((IndeterminateExpression)name).Yield());
+    public static implicit operator PolynomialTerm(IndeterminateExpression name) => new PolynomialTerm(1, name.Yield());
     public static implicit operator PolynomialTerm(double value) => new PolynomialTerm(value, Enumerable.Empty<IndeterminateExpression>());
 
     private IEnumerable<IndeterminateExpression> Indeterminates => _indeterminates ?? Enumerable.Empty<IndeterminateExpression>();
 
-    private string IndeterminatesSignature => _indeterminatesSignature ?? String.Empty;
+    private string IndeterminatesSignature => _indeterminatesSignature ?? string.Empty;
 
     public long PowerSum => Indeterminates.Sum(kv => kv.Power);
 
-    public IndeterminateExpression GreatestPowerIndeterminate
-    {
-      get
-      {
-        if (_greatestPower == default)
-        {
-          // build cache
-          foreach (var kv in Indeterminates)
-          {
-            if (kv.Power > _greatestPower.Power)
-            {
-              _greatestPower = kv;
-            }
-          }
-        }
+    public IndeterminateExpression GreatestPowerIndeterminate { get; }
 
-        // return last fetched value
-        return _greatestPower;
+    private static IndeterminateExpression FindGreatestPowerIndeterminate(IEnumerable<IndeterminateExpression> indeterminates)
+    {
+      IndeterminateExpression greatestPower = default;
+      foreach (var kv in indeterminates)
+      {
+        if (kv.Power > greatestPower.Power)
+        {
+          greatestPower = kv;
+        }
       }
+      return greatestPower;
     }
 
-    public override string ToString()
+    public override string ToString() => ToString(CultureInfo.InvariantCulture);
+
+    public string ToString(CultureInfo cultureInfo)
     {
       if (IsZero)
         return "0";
       if (IsConstant)
-        return _coefficient.ToString();
+        return _coefficient.ToString(cultureInfo);
       if (_coefficient == 1)
         return IndeterminatesSignature;
       if (_coefficient == -1)
         return $"-{IndeterminatesSignature}";
-
-      return $"{_coefficient.ToString(CultureInfo.InvariantCulture)}{IndeterminatesSignature}";
+      else
+        return $"{_coefficient.ToString(cultureInfo)}{IndeterminatesSignature}";
     }
 
     public bool Equals(PolynomialTerm other)
     {
-      return IndeterminatesSignature == other.IndeterminatesSignature && _coefficient.NumericEquals(other._coefficient);
+      return _indeterminatesSignature == other._indeterminatesSignature && _coefficient.NumericEquals(other._coefficient);
     }
 
     public override int GetHashCode()
@@ -111,7 +116,7 @@ namespace Arnible.MathModeling
      */
 
     public bool IsZero => _coefficient == 0;
-    public bool IsConstant => IndeterminatesSignature.Length == 0;
+    public bool IsConstant => _indeterminatesSignature == null;
     public bool HasPositiveCoefficient => _coefficient > 0;
 
     /*
@@ -130,7 +135,7 @@ namespace Arnible.MathModeling
     {
       if (v._coefficient == 1 && v.Indeterminates.Count() == 1)
       {
-        return (char)v.Indeterminates.Single();
+        return (char)v._indeterminates.Single();
       }
 
       throw new InvalidOperationException("Polynomial term is not a single variable");
@@ -145,8 +150,6 @@ namespace Arnible.MathModeling
     {
       return new Polynomial(a, -1 * b);
     }
-
-
 
     public static PolynomialTerm operator *(PolynomialTerm a, PolynomialTerm b)
     {
@@ -186,7 +189,11 @@ namespace Arnible.MathModeling
       {
         throw new DivideByZeroException();
       }
-      return new PolynomialTerm(a._coefficient / denominator, a._indeterminates, a.IndeterminatesSignature);
+      return new PolynomialTerm(
+        a._coefficient / denominator,
+        a._indeterminates,
+        a._indeterminatesSignature,
+        a.GreatestPowerIndeterminate);
     }
 
     public static PolynomialDivision operator /(PolynomialTerm a, PolynomialTerm b)
@@ -271,7 +278,7 @@ namespace Arnible.MathModeling
         case 1:
           return vars;
         default:
-          return variables.GroupBy(v => v.IndeterminatesSignature)
+          return variables.GroupBy(v => v._indeterminatesSignature)
             .Select(g => Add(g)).Where(v => !v.IsZero)
             .OrderByDescending(v => v.PowerSum).ThenByDescending(v => v.GreatestPowerIndeterminate.Power).ThenBy(v => v.GreatestPowerIndeterminate.Signature);
       }
@@ -279,7 +286,7 @@ namespace Arnible.MathModeling
 
     public static bool IsSimplified(IEnumerable<PolynomialTerm> variables)
     {
-      return variables.Select(v => v.IndeterminatesSignature).Distinct().Count() == variables.Count();
+      return variables.Select(v => v._indeterminatesSignature).Distinct().Count() == variables.Count();
     }
 
     private static PolynomialTerm Add(IEnumerable<PolynomialTerm> variables)
@@ -293,7 +300,11 @@ namespace Arnible.MathModeling
       else
       {
         var result = variables.First();
-        return new PolynomialTerm(coefficient, result._indeterminates, result.IndeterminatesSignature);
+        return new PolynomialTerm(
+          coefficient,
+          result._indeterminates,
+          result._indeterminatesSignature,
+          result.GreatestPowerIndeterminate);
       }
     }
 
@@ -306,9 +317,9 @@ namespace Arnible.MathModeling
       }
       else
       {
-        var remaining = new PolynomialTerm(_coefficient, _indeterminates.Where(kv => kv.Variable != variable));
+        var remaining = new PolynomialTerm(_coefficient, Indeterminates.Where(kv => kv.Variable != variable));
 
-        var toReplace = _indeterminates.Where(kv => kv.Variable == variable);
+        var toReplace = Indeterminates.Where(kv => kv.Variable == variable);
         if (toReplace.Any(i => i.HasUnaryModifier))
         {
           if (replacement.IsConstant)
@@ -341,9 +352,9 @@ namespace Arnible.MathModeling
 
     public PolynomialDivision Composition(char variable, PolynomialDivision replacement)
     {
-      var remaining = new PolynomialTerm(_coefficient, _indeterminates.Where(kv => kv.Variable != variable));
+      var remaining = new PolynomialTerm(_coefficient, Indeterminates.Where(kv => kv.Variable != variable));
 
-      var toReplace = _indeterminates.Where(kv => kv.Variable == variable).ToArray();
+      var toReplace = Indeterminates.Where(kv => kv.Variable == variable).ToArray();
       PolynomialDivision inPlace = PolynomialDivision.One;
       if (toReplace.Length > 0)
       {
@@ -376,7 +387,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        return _coefficient * _indeterminates.Select(kv => kv.Value(x)).Product();
+        return _coefficient * Indeterminates.Select(kv => kv.Value(x)).Product();
       }
     }
   }

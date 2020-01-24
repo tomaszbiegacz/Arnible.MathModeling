@@ -6,7 +6,7 @@ using static Arnible.MathModeling.MetaMath;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public struct HypersphericalCoordinate : ICoordinate<HypersphericalCoordinate>
+  public readonly struct HypersphericalCoordinate : ICoordinate<HypersphericalCoordinate>
   {
     /// <summary>
     /// Angles:

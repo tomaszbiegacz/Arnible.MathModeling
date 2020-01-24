@@ -2,7 +2,7 @@
 
 namespace Arnible.MathModeling.Geometry
 {
-  public struct PolarCoordinate
+  public readonly struct PolarCoordinate
   {
     public Number R { get; }
 

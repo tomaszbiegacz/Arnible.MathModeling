@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public struct CartesianCoordinate : ICoordinate<CartesianCoordinate>
+  public readonly struct CartesianCoordinate : ICoordinate<CartesianCoordinate>
   {
     public static CartesianCoordinate ForAxis(uint dimensionsCount, uint axisNumber, Number value)
     {

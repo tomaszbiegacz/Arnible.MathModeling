@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Arnible.MathModeling.Algebra
 {
-  public struct NumberVector : IEquatable<NumberVector>, IReadOnlyCollection<Number>
+  public readonly struct NumberVector : IEquatable<NumberVector>, IReadOnlyCollection<Number>
   {
     private readonly Number[] _values;
 
@@ -82,6 +83,11 @@ namespace Arnible.MathModeling.Algebra
     public override string ToString()
     {
       return "[" + String.Join(" ", Values) + "]";
+    }
+
+    public string ToString(CultureInfo cultureInfo)
+    {
+      return "[" + String.Join(" ", Values.Select(v => v.ToString(cultureInfo))) + "]";
     }
 
     public override int GetHashCode()

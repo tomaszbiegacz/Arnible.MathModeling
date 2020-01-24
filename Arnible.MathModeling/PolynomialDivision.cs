@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Arnible.MathModeling
 {
-  public struct PolynomialDivision : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation
+  public readonly struct PolynomialDivision : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation
   {
     public static PolynomialDivision Zero => new PolynomialDivision(0, 1);
 

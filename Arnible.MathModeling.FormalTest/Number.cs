@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Arnible.MathModeling
 {
-  public struct Number : IEquatable<Number>
+  public readonly struct Number : IEquatable<Number>
   {
-    private Polynomial _term;
+    private readonly Polynomial _term;
 
     private Number(Polynomial term)
     {
@@ -42,9 +43,11 @@ namespace Arnible.MathModeling
       return _term.GetHashCode();
     }
 
-    public override string ToString()
+    public override string ToString() => ToString(CultureInfo.InvariantCulture);
+
+    public string ToString(CultureInfo cultureInfo)
     {
-      return _term.ToString();
+      return _term.ToString(cultureInfo);
     }
 
     //

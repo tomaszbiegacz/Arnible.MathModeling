@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Arnible.MathModeling
 {
-  public struct IndeterminateExpression : IEquatable<IndeterminateExpression>, IComparable<IndeterminateExpression>, IPolynomialOperation
+  public readonly struct IndeterminateExpression : IEquatable<IndeterminateExpression>, IComparable<IndeterminateExpression>, IPolynomialOperation
   {
     private readonly ElementaryUnaryOperation _modifier;    
 
