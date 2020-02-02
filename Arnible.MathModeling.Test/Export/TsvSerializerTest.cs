@@ -31,7 +31,7 @@ namespace Arnible.MathModeling.Test.Export
 
       string result;
       var serializer = new TsvSerializer<TestRecord>();
-      using(var stream = new MemoryStream())
+      await using (MemoryStream stream = new MemoryStream())
       {
         await serializer.Serialize(new[] { record }, stream, default);
 

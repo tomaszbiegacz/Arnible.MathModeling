@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Arnible.MathModeling
 {
-  public readonly struct Number : IEquatable<Number>
+  public readonly struct Number : IEquatable<Number>, IComparable<Number>
   {
     private readonly double _value;
 
@@ -71,5 +71,11 @@ namespace Arnible.MathModeling
     //    
 
     public Number ToPower(uint b) => DoubleExtension.ToPower(_value, b);
+
+    public int CompareTo(Number other)
+    {
+      if (_value == other._value) return 0;
+      return _value > other._value ? 1 : -1;
+    }
   }
 }

@@ -138,19 +138,42 @@ namespace Arnible.MathModeling.Test.Geometry
     }
 
     [Fact]
+    public void UsedDirectionsCount_TwoAngles()
+    {
+      var directions = HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 2, resolution: 2).ToList();
+
+      Assert.Equal(1, GetDirection(directions, 0, 0).UsedCartesianDirectionsCount);
+      Assert.Equal(1, GetDirection(directions, 2, 0).UsedCartesianDirectionsCount);
+      Assert.Equal(1, GetDirection(directions, 0, 2).UsedCartesianDirectionsCount);
+      Assert.Equal(1, GetDirection(directions, 0, 0).UsedCartesianDirectionsCount);
+
+      Assert.Equal(2, GetDirection(directions, 1, 0).UsedCartesianDirectionsCount);
+      Assert.Equal(2, GetDirection(directions, -1, 0).UsedCartesianDirectionsCount);
+      Assert.Equal(2, GetDirection(directions, 0, 1).UsedCartesianDirectionsCount);
+
+      Assert.Equal(3, GetDirection(directions, 1, 1).UsedCartesianDirectionsCount);
+    }
+
+    [Fact]
     public void UsedDirectionsCount_ThreeAngles()
     {
       var directions = HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 3, resolution: 2).ToList();
 
-      Assert.Equal(1, GetDirection(directions, 0, 0, 0).UsedDirectionsCount);
-      Assert.Equal(1, GetDirection(directions, 1, 0, 0).UsedDirectionsCount);
-      Assert.Equal(1, GetDirection(directions, 0, 2, 0).UsedDirectionsCount);
-      Assert.Equal(1, GetDirection(directions, 0, 0, 2).UsedDirectionsCount);
+      Assert.Equal(1, GetDirection(directions, 0, 0, 0).UsedCartesianDirectionsCount);
+      Assert.Equal(1, GetDirection(directions, 2, 0, 0).UsedCartesianDirectionsCount);
+      Assert.Equal(1, GetDirection(directions, 0, 2, 0).UsedCartesianDirectionsCount);
+      Assert.Equal(1, GetDirection(directions, 0, 0, 2).UsedCartesianDirectionsCount);
 
-      Assert.Equal(2, GetDirection(directions, 0, 1, 0).UsedDirectionsCount);
-      Assert.Equal(2, GetDirection(directions, 0, 2, 1).UsedDirectionsCount);
+      Assert.Equal(2, GetDirection(directions, 1, 0, 0).UsedCartesianDirectionsCount);
+      Assert.Equal(2, GetDirection(directions, 0, 1, 0).UsedCartesianDirectionsCount);
+      Assert.Equal(2, GetDirection(directions, 0, 2, 1).UsedCartesianDirectionsCount);
 
-      Assert.Equal(3, GetDirection(directions, 0, 1, 1).UsedDirectionsCount);
+      Assert.Equal(3, GetDirection(directions, 0, 1, 1).UsedCartesianDirectionsCount);
+      Assert.Equal(3, GetDirection(directions, 2, 1, 1).UsedCartesianDirectionsCount);
+      Assert.Equal(3, GetDirection(directions, 1, 1, 0).UsedCartesianDirectionsCount);
+      Assert.Equal(3, GetDirection(directions, 1, 0, 1).UsedCartesianDirectionsCount);
+
+      Assert.Equal(4, GetDirection(directions, 1, 1, 1).UsedCartesianDirectionsCount);
     }
   }
 }

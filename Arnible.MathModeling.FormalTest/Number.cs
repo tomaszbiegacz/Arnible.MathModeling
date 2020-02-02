@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace Arnible.MathModeling
 {
-  public readonly struct Number : IEquatable<Number>
+  public readonly struct Number : IEquatable<Number>, IComparable<Number>
   {
     private readonly Polynomial _term;
 
@@ -120,5 +120,13 @@ namespace Arnible.MathModeling
     public static IEnumerable<Number> Terms(uint pos) => Terms(pos, Term);
 
     public static IEnumerable<Number> GreekTerms(uint pos) => Terms(pos, GreekTerm);
+
+    public int CompareTo(Number other)
+    {
+      if (_term == other._term) return 0;
+
+      double result = (double)(_term - other._term);
+      return result > 0 ? 1 : -1;
+    }
   }
 }

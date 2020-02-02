@@ -23,8 +23,12 @@ namespace Arnible.MathModeling.Geometry
         int result = -1 * _fitness[x].CompareTo(_fitness[y]);
         if (result != 0)
           return result;
-        else
-          return _deterministicOrder.Compare(x, y);
+        
+        result = _deterministicOrder.Compare(x, y);
+        if (result != 0)
+          return result;
+
+        return x.Angles.SequenceCompare(y.Angles);
       }
 
       public void IncreaseFitness(HypersphericalAngleQuantified d)

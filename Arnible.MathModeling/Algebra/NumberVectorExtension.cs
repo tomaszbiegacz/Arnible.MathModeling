@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Algebra
       return new NumberVector(numbers.Select(v => (Number)v));
     }
 
-    public static (NumberVector, uint) SumWithCount(IEnumerable<NumberVector> vectors)
+    private static (NumberVector, uint) SumWithCount(IEnumerable<NumberVector> vectors)
     {
       Number[] result = null;
       uint itemsCount = 0;

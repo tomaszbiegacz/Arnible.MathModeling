@@ -31,7 +31,7 @@ namespace Arnible.MathModeling.Geometry
           yield return angle;
         }
       }
-      
+
       public IEnumerable<sbyte> Axis(uint angleCount)
       {
         if (angleCount == 0)
@@ -97,37 +97,45 @@ namespace Arnible.MathModeling.Geometry
       Id = id;
       _rightAngleResolution = rightAngleResolution;
       _angles = angles.ToArray();
-      UsedDirectionsCount = GetUsedDirectionsCount(_angles, rightAngleResolution);
-      
+      if(_angles.Count(a => a == rightAngleResolution) > 1)
+      {
+        throw new ArgumentException(nameof(angles));
+      }
+      UsedCartesianDirectionsCount = GetUsedCartesianDirectionsCount(_angles, rightAngleResolution);
     }
 
-    private static byte GetUsedDirectionsCount(IReadOnlyList<sbyte> angles, byte rightAngleResolution)
+    private static byte GetUsedCartesianDirectionsCount(sbyte[] angles, byte rightAngleResolution)
     {
       byte result = 0;
-      if (angles.Any())
+      if (angles.Length > 0)
       {
         int firstAnglePos = angles.IndexOf(a => a == rightAngleResolution);
-        if (firstAnglePos >= 0)
+        if (firstAnglePos > 0)
         {
           result = 1;
           firstAnglePos++;
         }
         else
         {
-          if (angles.First() == 0)
+          sbyte firstAngle = angles[0];
+          if (firstAngle == 0 || firstAngle == rightAngleResolution)
           {
             result = 1;
           }
-          firstAnglePos = 0;
+          else
+          {
+            result = 2;
+          }
+          firstAnglePos = 1;
         }
         result += (byte)angles.Skip(firstAnglePos).Count(a => a != 0);
       }
       return result;
-    }
+    }    
 
     public uint Id { get; }
 
-    public byte UsedDirectionsCount { get; }
+    public byte UsedCartesianDirectionsCount { get; }    
 
     public IEnumerable<sbyte> Angles => _angles ?? Enumerable.Empty<sbyte>();
 
@@ -148,7 +156,7 @@ namespace Arnible.MathModeling.Geometry
 
     public override string ToString()
     {
-      return "[" + string.Join(",", Angles) + "]";
+      return "[" + string.Join(" ", Angles) + "]";
     }
 
     public HypersphericalAngleVector ToVector()

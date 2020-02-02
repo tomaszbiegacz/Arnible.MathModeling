@@ -31,6 +31,24 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
+    public void SequenceCompare_Equal()
+    {
+      Assert.Equal(0, (new[] { 1, 2, 3 }).SequenceCompare(new[] { 1, 2, 3 }));
+    }
+
+    [Fact]
+    public void SequenceCompare_SecondGreater()
+    {
+      Assert.Equal(1, (new[] { 1, 2, 3 }).SequenceCompare(new[] { 1, 0, 3 }));
+    }
+
+    [Fact]
+    public void SequenceCompare_ThirdLower()
+    {
+      Assert.Equal(-1, (new[] { 1, 2, 3 }).SequenceCompare(new[] { 1, 2, 4 }));
+    }
+
+    [Fact]
     public void ZipDefensive()
     {
       Assert.Equal(new[] { 5, 7, 9 }, (new[] { 1, 2, 3 }).ZipDefensive(new[] { 4, 5, 6 }, (a, b) => a + b));

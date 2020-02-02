@@ -26,7 +26,7 @@ namespace Arnible.MathModeling.Geometry
       if (angles.Any())
       {
         var first = angles.First();
-        if (first > HalfCycle || first < -1 * HalfCycle)
+        if (first > HalfCycle || first <= -1 * HalfCycle)
         {
           throw new ArgumentException($"Invalid first angualr coordinate: {first}");
         }
@@ -85,6 +85,8 @@ namespace Arnible.MathModeling.Geometry
     public static bool operator !=(HypersphericalAngleVector a, HypersphericalAngleVector b) => !a.Equals(b);
 
     public HypersphericalAngleVector AddDimension() => new HypersphericalAngleVector(_angles.Append(0).ToVector());
+
+    public HypersphericalAngleVector Mirror() => new HypersphericalAngleVector(-1 * _angles);
 
     //
     // arithmetic

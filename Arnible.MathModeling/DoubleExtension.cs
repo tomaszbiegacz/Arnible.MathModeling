@@ -13,10 +13,19 @@ namespace Arnible.MathModeling
           return true;
         }
         else
-        {
+        {          
           double diff = Math.Abs(a - b);
-          double denominator = Math.Min(a, b);
-          return (denominator == 0 ? diff : diff / denominator) < 1E-10;
+          double denominator = Math.Min(Math.Abs(a), Math.Abs(b));
+          const double resolution = 1E-10;
+          if (denominator == 0)
+          {
+            return diff < resolution;
+          }            
+          else
+          {
+            double relativeDifference = diff / denominator;
+            return relativeDifference < resolution;
+          }
         }
       }
       else

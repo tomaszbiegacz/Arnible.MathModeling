@@ -13,7 +13,7 @@ namespace Arnible.MathModeling
     public static IEnumerable<T> Yield<T>(this T src)
     {
       yield return src;
-    }    
+    }
 
     public static IEnumerable<T> Prepend<T>(this IEnumerable<T> src, T item)
     {
@@ -21,7 +21,7 @@ namespace Arnible.MathModeling
       foreach (var srcItem in src)
       {
         yield return srcItem;
-      }      
+      }
     }
 
     /*
@@ -36,9 +36,9 @@ namespace Arnible.MathModeling
 
     public static int IndexOf<T>(this IReadOnlyList<T> src, Func<T, bool> predicate)
     {
-      for(int i=0; i<src.Count; ++i)
+      for (int i = 0; i < src.Count; ++i)
       {
-        if(predicate(src[i]))
+        if (predicate(src[i]))
         {
           return i;
         }
@@ -49,6 +49,19 @@ namespace Arnible.MathModeling
     /*
      * Enumerable
      */
+
+    public static bool All(this IEnumerable<bool> col1)
+    {
+      using (var col1Enum = col1.GetEnumerator())
+      {
+        while (col1Enum.MoveNext())
+        {
+          if (!col1Enum.Current)
+            return false;
+        }
+      }
+      return true;
+    }
 
     public static IEnumerable<T> ExcludeAt<T>(this IEnumerable<T> x, uint pos)
     {
@@ -82,6 +95,36 @@ namespace Arnible.MathModeling
     public static IEnumerable<T> Order<T>(this IEnumerable<T> collection) where T : struct, IComparable<T>
     {
       return collection.OrderBy(i => i, new BuildinComparerStruct<T>());
+    }
+
+    public static int SequenceCompare<T>(this IEnumerable<T> col1, IEnumerable<T> col2) where T : struct, IComparable<T>
+    {
+      using (var col1Enum = col1.GetEnumerator())
+      using (var col2Enum = col2.GetEnumerator())
+      {
+        bool isCol1Valid = col1Enum.MoveNext();
+        bool isCol2Valid = col2Enum.MoveNext();
+        while (isCol1Valid && isCol2Valid)
+        {
+          int result = col1Enum.Current.CompareTo(col2Enum.Current);
+          if (result != 0)
+          {
+            // first difference
+            return result;
+          }
+
+          isCol1Valid = col1Enum.MoveNext();
+          isCol2Valid = col2Enum.MoveNext();
+        }
+
+        if (isCol1Valid || isCol2Valid)
+        {
+          throw new InvalidOperationException("Collections are not the same size.");
+        }
+      }
+
+      // there is no difference
+      return 0;
     }
 
     /// <summary>
@@ -130,7 +173,7 @@ namespace Arnible.MathModeling
 
     private static IEnumerable<IEnumerable<T>> ToSequncesWithReturningInternal<T>(List<T> items, uint length)
     {
-      if(length > 0)
+      if (length > 0)
       {
         if (length == 1)
         {
@@ -143,14 +186,14 @@ namespace Arnible.MathModeling
         {
           for (int i = 0; i < items.Count; ++i)
           {
-            var e = items[i];            
+            var e = items[i];
             foreach (IEnumerable<T> combination in ToSequncesWithReturningInternal(items, length - 1))
             {
               yield return combination.Prepend(e);
             }
           }
         }
-      }      
+      }
     }
   }
 }

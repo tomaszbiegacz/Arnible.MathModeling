@@ -11,5 +11,10 @@ namespace Arnible.MathModeling
     }
 
     public Number Second { get; }
+
+    public override string ToString()
+    {
+      return $"[{First}, {Second}]";
+    }
   }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Arnible.MathModeling
+﻿namespace Arnible.MathModeling
 {
   public class Derivative1Value : IDerivative1
   {
@@ -10,5 +8,10 @@ namespace Arnible.MathModeling
     }
 
     public Number First { get; }
+
+    public override string ToString()
+    {
+      return $"[{First}]";
+    }
   }
 }

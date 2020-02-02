@@ -7,7 +7,10 @@ namespace Arnible.MathModeling
 {
   public static class DerivativeOperator
   {
-    public static IEnumerable<PolynomialTerm> DerivativeBy(this IEnumerable<PolynomialTerm> terms, char name) => terms.SelectMany(t => t.DerivativeBy(name));
+    public static IEnumerable<PolynomialTerm> DerivativeBy(this IEnumerable<PolynomialTerm> terms, char name)
+    {
+      return terms.SelectMany(t => t.DerivativeBy(name));
+    }
 
     private static Number Derivative2Ingredient(IDerivative2[] args, int pos)
     {
@@ -28,7 +31,9 @@ namespace Arnible.MathModeling
       return result;
     }
 
-    public static IEnumerable<IDerivative1> ForEachElementComposition(this IEnumerable<IDerivative1> valueDerrivativeByParameters, IEnumerable<IDerivative1> parametersDerivatives)
+    public static IEnumerable<IDerivative1> ForEachElementComposition(
+      this IEnumerable<IDerivative1> valueDerrivativeByParameters, 
+      IEnumerable<IDerivative1> parametersDerivatives)
     {
       return valueDerrivativeByParameters.ZipDefensive(parametersDerivatives, (a, b) => new Derivative1Value(a.First * b.First));      
     }
