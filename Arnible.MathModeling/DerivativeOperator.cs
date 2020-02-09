@@ -7,6 +7,9 @@ namespace Arnible.MathModeling
 {
   public static class DerivativeOperator
   {
+    /// <summary>
+    /// Polynomial derivative.
+    /// </summary>    
     public static IEnumerable<PolynomialTerm> DerivativeBy(this IEnumerable<PolynomialTerm> terms, char name)
     {
       return terms.SelectMany(t => t.DerivativeBy(name));
@@ -31,6 +34,9 @@ namespace Arnible.MathModeling
       return result;
     }
 
+    /// <summary>
+    /// Simply multiplication of the first derivatives from both enums (composed functions).
+    /// </summary>    
     public static IEnumerable<IDerivative1> ForEachElementComposition(
       this IEnumerable<IDerivative1> valueDerrivativeByParameters, 
       IEnumerable<IDerivative1> parametersDerivatives)
@@ -38,6 +44,9 @@ namespace Arnible.MathModeling
       return valueDerrivativeByParameters.ZipDefensive(parametersDerivatives, (a, b) => new Derivative1Value(a.First * b.First));      
     }
 
+    /// <summary>
+    /// Calculates up to second derivatives composition.
+    /// </summary>    
     public static IDerivative2 ForComposition(this IEnumerable<IDerivative2> derivatives)
     {
       var args = derivatives.ToArray();
@@ -51,15 +60,27 @@ namespace Arnible.MathModeling
         second: () => args.Indexes().Select(pos => Derivative2Ingredient(args, pos)).Sum());
     }
 
+    /// <summary>
+    /// Calculates up to second derivatives composition.
+    /// </summary>    
     public static IDerivative2 ForComposition(params IDerivative2[] args) => args.ForComposition();
 
+    /// <summary>
+    /// Calculates first derivatives composition.
+    /// </summary>    
     public static IDerivative1 ForComposition(this IEnumerable<IDerivative1> derivatives)
     {
       return new Derivative1Value(derivatives.Select(d => d.First).Product());      
     }
 
+    /// <summary>
+    /// Calculates first derivatives composition.
+    /// </summary>    
     public static IDerivative1 ForComposition(params IDerivative1[] args) => args.ForComposition();
 
+    /// <summary>
+    /// Calculate derivative as a sum of (value derivate and other values product) for each value.
+    /// </summary>    
     public static IDerivative1 ForProductByParameter(NumberVector productValues, IEnumerable<IDerivative1> valueDerrivativeByParameter)
     {
       if (productValues.Count < 1)

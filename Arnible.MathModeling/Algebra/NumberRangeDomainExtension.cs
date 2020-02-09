@@ -17,6 +17,11 @@ namespace Arnible.MathModeling.Algebra
       return new NumberVector(value.ZipDefensive(delta, (v, t) => domain.Transpose(v, t)));
     }
 
+    public static bool IsValidTranspose(this INumberRangeDomain domain, NumberVector value, NumberVectorTransposition delta)
+    {
+      return value.ZipDefensive(delta, (v, t) => domain.IsValidTranspose(v, t)).All();
+    }
+
     public static Number GetValidTransposeRatio(this INumberRangeDomain domain, NumberVector value, NumberVectorTransposition delta)
     {
       return value.ZipDefensive(delta, (v, t) => domain.GetValidTransposeRatio(v, t)).Min();

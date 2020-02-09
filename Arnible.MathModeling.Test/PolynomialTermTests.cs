@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xunit;
 
 namespace Arnible.MathModeling.Test
@@ -246,6 +247,32 @@ namespace Arnible.MathModeling.Test
     {
       var sinExpression = MetaMath.Sin(Term.α)* MetaMath.Cos(Term.α) + 1;
       Assert.Equal(1, sinExpression.Composition(Term.α, 0));
+    }
+
+    [Fact]
+    public void Sin_Variable()
+    {
+      Assert.Equal(IndeterminateExpression.Sin('a'), PolynomialTerm.Sin(Term.a));
+    }
+
+    [Fact]
+    public void Sin_Constant()
+    {
+      PolynomialTerm term = Math.PI / 2;
+      Assert.Equal(1, PolynomialTerm.Sin(term));
+    }
+
+    [Fact]
+    public void Cos_Variable()
+    {
+      Assert.Equal(IndeterminateExpression.Cos('a'), PolynomialTerm.Cos(Term.a));
+    }
+
+    [Fact]
+    public void Cos_Constant()
+    {
+      PolynomialTerm term = 0;
+      Assert.Equal(1, PolynomialTerm.Cos(term));
     }
   }
 }

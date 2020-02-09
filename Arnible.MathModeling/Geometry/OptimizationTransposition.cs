@@ -31,7 +31,7 @@ namespace Arnible.MathModeling.Geometry
       }
       else
       {
-        hc = new HypersphericalCoordinate(-1 * rDelta, direction.Mirror());
+        hc = new HypersphericalCoordinate(Math.Abs(rDelta), direction.Mirror);
       }
       return new NumberVectorTransposition(hc.ToCartesian().Coordinates);
     }

@@ -86,7 +86,7 @@ namespace Arnible.MathModeling.Geometry
 
     public HypersphericalAngleVector AddDimension() => new HypersphericalAngleVector(_angles.Append(0).ToVector());
 
-    public HypersphericalAngleVector Mirror() => new HypersphericalAngleVector(-1 * _angles);
+    public HypersphericalAngleVector Mirror => new HypersphericalAngleVector(-1 * _angles);
 
     //
     // arithmetic

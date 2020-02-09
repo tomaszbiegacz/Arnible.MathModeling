@@ -18,9 +18,8 @@ namespace Arnible.MathModeling
     public static implicit operator IndeterminateExpression(char name) => new IndeterminateExpression(name, ElementaryUnaryOperation.Identity, 1);
     public static IndeterminateExpression Sin(char name) => new IndeterminateExpression(name, ElementaryUnaryOperation.Sine, 1);
     public static IndeterminateExpression Cos(char name) => new IndeterminateExpression(name, ElementaryUnaryOperation.Cosine, 1);
-
-    public static IndeterminateExpression Sin(PolynomialTerm name) => Sin((char)name);
-    public static IndeterminateExpression Cos(PolynomialTerm name) => Cos((char)name);
+    public static double Sin(double value) => SimplifyForConstant(ElementaryUnaryOperation.Sine, value);
+    public static double Cos(double value) => SimplifyForConstant(ElementaryUnaryOperation.Cosine, value);
 
     public override string ToString()
     {
@@ -100,22 +99,24 @@ namespace Arnible.MathModeling
 
     public bool HasUnaryModifier => _modifier != ElementaryUnaryOperation.Identity;
 
-    public double SimplifyForConstant(double value)
+    public double SimplifyForConstant(double value) => SimplifyForConstant(_modifier, value);    
+
+    private static double SimplifyForConstant(ElementaryUnaryOperation modifier, double value)
     {
-      switch (_modifier)
+      switch (modifier)
       {
         case ElementaryUnaryOperation.Identity:
           return value;
         case ElementaryUnaryOperation.Sine:
-          if (value == 0) return 0;
-          else if (value == Math.PI / 2) return 1;
+          if (value.NumericEquals(0)) return 0;
+          else if (value.NumericEquals(Math.PI / 2)) return 1;
           else return Math.Sin(value);
         case ElementaryUnaryOperation.Cosine:
-          if (value == 0) return 1;
-          else if (value == Math.PI / 2) return 0;
+          if (value.NumericEquals(0)) return 1;
+          else if (value.NumericEquals(Math.PI / 2)) return 0;
           else return Math.Cos(value);
         default:
-          throw new InvalidOperationException("Unknown modifier: " + _modifier);
+          throw new InvalidOperationException("Unknown modifier: " + modifier);
       }
     }
 

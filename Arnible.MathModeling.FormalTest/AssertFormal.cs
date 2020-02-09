@@ -1,10 +1,16 @@
-﻿using Xunit;
+﻿using System;
 
 namespace Arnible.MathModeling
 {
   public static class AssertFormal
   {
-    public static void Equal(Polynomial p1, Polynomial p2) => Assert.Equal(p1, p2);
+    public static void Equal(Polynomial p1, Polynomial p2)
+    {
+      if (p1 != p2)
+      {
+        throw new InvalidOperationException($"Expected [{p2}], got [{p1}]");
+      }
+    }
 
     public static void VerifyDerivatives(Polynomial value, Number term, IDerivative2 derivative) => VerifyDerivatives(value, (PolynomialTerm)term, derivative);
 

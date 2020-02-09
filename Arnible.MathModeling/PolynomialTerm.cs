@@ -111,6 +111,30 @@ namespace Arnible.MathModeling
     public static bool operator ==(PolynomialTerm a, PolynomialTerm b) => a.Equals(b);
     public static bool operator !=(PolynomialTerm a, PolynomialTerm b) => !a.Equals(b);
 
+    public static PolynomialTerm Sin(PolynomialTerm name)
+    {
+      if(name.IsConstant)
+      {
+        return IndeterminateExpression.Sin((double)name);
+      }
+      else
+      {
+        return IndeterminateExpression.Sin((char)name);
+      }
+    }
+
+    public static PolynomialTerm Cos(PolynomialTerm name)
+    {
+      if (name.IsConstant)
+      {
+        return IndeterminateExpression.Cos((double)name);
+      }
+      else
+      {
+        return IndeterminateExpression.Cos((char)name);
+      }
+    }
+
     /*
      * Properties
      */

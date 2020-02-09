@@ -8,6 +8,8 @@ namespace Arnible.MathModeling.Algebra
 
     Number Transpose(Number value, Number delta);
 
+    bool IsValidTranspose(Number value, Number delta);
+
     Number GetValidTransposeRatio(Number value, Number delta);
   }
 
@@ -57,7 +59,29 @@ namespace Arnible.MathModeling.Algebra
       return delta;
     }
 
-    public Number Transpose(Number value, Number delta) => value + GetTransposeDelta(value, delta);
+    public bool IsValidTranspose(Number value, Number delta)
+    {
+      Validate(value);
+
+      if (delta != 0)
+      {
+        Number minimum = Minimum - value;
+        if (delta < minimum)
+        {
+          return false;
+        }
+
+        Number maximum = Maximum - value;
+        if (delta > maximum)
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    public Number Transpose(Number value, Number delta) => value + GetTransposeDelta(value, delta);    
 
     public Number GetValidTransposeRatio(Number value, Number delta)
     {
