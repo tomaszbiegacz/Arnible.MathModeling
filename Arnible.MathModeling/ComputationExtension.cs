@@ -46,6 +46,16 @@ namespace Arnible.MathModeling
       return current;
     }
 
+    public static Number Sum(this IEnumerable<Number> x, Func<Number, Number> cast)
+    {
+      Number current = 0;
+      foreach (Number v in x)
+      {
+        current += cast(v);
+      }
+      return current;
+    }
+
     private static IEnumerable<T> AggregateCombinations<T>(T[] x, uint i, uint groupCount, Func<IEnumerable<T>, T> aggregator, Stack<T> combination)
     {
       if (groupCount == combination.Count)

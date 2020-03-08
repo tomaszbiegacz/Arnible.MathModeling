@@ -1,14 +1,12 @@
-﻿using Arnible.MathModeling.Geometry;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Arnible.MathModeling.Algebra
 {
   public readonly struct NumberVectorTransposition : IEquatable<NumberVectorTransposition>, IEnumerable<Number>
   {
-    private readonly NumberVector _change;    
+    private readonly NumberVector _change;
 
     public NumberVectorTransposition(NumberVector change)
     {
@@ -56,5 +54,11 @@ namespace Arnible.MathModeling.Algebra
     public Number this[uint pos] => _change[pos];
 
     public Number GetLengthSquare() => _change.Sum(v => v * v);
+
+    /*
+     * Operations
+     */
+
+    public NumberVector Transpose(NumberVector src) => src + _change;    
   }
 }

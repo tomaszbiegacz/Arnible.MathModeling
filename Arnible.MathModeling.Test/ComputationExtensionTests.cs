@@ -11,6 +11,18 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
+    public void Sum_OfThreeNumbers()
+    {
+      Assert.Equal(6, (new Number[] { 1d, 2d, 3d }).Sum());
+    }
+
+    [Fact]
+    public void Sum_OfThreeNumbers_WithPredicate()
+    {
+      Assert.Equal(-6, (new Number[] { 1, 2, 3 }).Sum(v => -1 * v));
+    }
+
+    [Fact]
     public void Product_OfThree()
     {
       Assert.Equal(24d, (new[] { 4d, 2d, 3d }).Product());

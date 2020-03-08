@@ -10,8 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Arnible.MathModeling\Algebra\INumberRangeDomain.cs" Link="Algebra\INumberRangeDomain.cs" />
+    <Compile Include="..\Arnible.MathModeling\Algebra\NumberRangeDomainExtension.cs" Link="Algebra\NumberRangeDomainExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVector.cs" Link="Algebra\NumberVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVectorExtension.cs" Link="Algebra\NumberVectorExtension.cs" />
+    <Compile Include="..\Arnible.MathModeling\Algebra\NumberVectorTransposition.cs" Link="Algebra\NumberVectorTransposition.cs" />
     <Compile Include="..\Arnible.MathModeling\CollectionExtension.cs" Link="CollectionExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\ComputationExtension.cs" Link="ComputationExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\Derivative1Value.cs" Link="Derivative1Value.cs" />
@@ -44,10 +47,6 @@
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Algebra\" />
   </ItemGroup>
 
 </Project>

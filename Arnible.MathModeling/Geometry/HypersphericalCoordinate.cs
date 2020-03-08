@@ -67,9 +67,14 @@ namespace Arnible.MathModeling.Geometry
 
     public IEnumerable<IDerivative1> DerivativeByRForCartesianCoordinates()
     {
+      return DerivativeByRForCartesianCoordinates(Angles);
+    }
+
+    public static IEnumerable<IDerivative1> DerivativeByRForCartesianCoordinates(HypersphericalAngleVector angles)
+    {
       var result = new List<IDerivative1>();
       Number replacement = 1;
-      foreach (var angle in Angles.Reverse())
+      foreach (var angle in angles.Reverse())
       {
         result.Add(new Derivative1Value(replacement * Sin(angle)));
         replacement *= Cos(angle);

@@ -2,17 +2,6 @@
 
 namespace Arnible.MathModeling.Algebra
 {
-  public interface INumberRangeDomain
-  {
-    void Validate(Number value);
-
-    Number Transpose(Number value, Number delta);
-
-    bool IsValidTranspose(Number value, Number delta);
-
-    Number GetValidTransposeRatio(Number value, Number delta);
-  }
-
   public class NumberRangeDomain : INumberRangeDomain
   {
     public Number Minimum { get; }
@@ -81,7 +70,7 @@ namespace Arnible.MathModeling.Algebra
       return true;
     }
 
-    public Number Transpose(Number value, Number delta) => value + GetTransposeDelta(value, delta);    
+    public Number Transpose(Number value, Number delta) => value + GetTransposeDelta(value, delta);
 
     public Number GetValidTransposeRatio(Number value, Number delta)
     {

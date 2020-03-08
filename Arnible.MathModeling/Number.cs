@@ -11,7 +11,7 @@ namespace Arnible.MathModeling
     {
       if (!value.IsValidNumeric())
       {
-        throw new ArgumentException(nameof(value));
+        throw new ArgumentException($"{nameof(value)}: [{value}]");
       }
       _value = value;
     }
