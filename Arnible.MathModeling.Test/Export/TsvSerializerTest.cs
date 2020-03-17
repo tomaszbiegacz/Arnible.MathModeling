@@ -46,5 +46,33 @@ namespace Arnible.MathModeling.Test.Export
       Assert.Equal("1\t-1\t2\t-2\t3\t-3\t4\t-4\tvalue\t1.1\t1.2\t[1 2]", lines[1]);
       Assert.Empty(lines[2]);
     }
+
+    [Fact]
+    public async Task InlineSerialization()
+    {
+      var record = new TestComplexRecord
+      {
+        RootValue = 1,
+        Record = new TestSubRecord(2),
+        OtherValue = 3
+      };
+
+      string result;
+      var serializer = new TsvSerializer<TestComplexRecord>();
+      await using (MemoryStream stream = new MemoryStream())
+      {
+        await serializer.Serialize(new[] { record }, stream, default);
+
+        stream.Position = 0;
+        var bytes = stream.ToArray();
+        result = Encoding.UTF8.GetString(bytes);
+      }
+
+      string[] lines = result.Split(Environment.NewLine);
+      Assert.Equal(3, lines.Length);
+      Assert.Equal(new[] { "RootValue", "Record_Value", "OtherValue" }, lines[0].Split('\t'));
+      Assert.Equal("1\t2\t3", lines[1]);
+      Assert.Empty(lines[2]);
+    }
   }
 }

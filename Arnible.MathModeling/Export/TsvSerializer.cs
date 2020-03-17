@@ -1,5 +1,4 @@
-﻿using Arnible.MathModeling.Algebra;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -11,106 +10,132 @@ using System.Threading.Tasks;
 
 namespace Arnible.MathModeling.Export
 {
+  public class TsvSerializerShared
+  {
+    protected static readonly char SeparatorChar = '\t';
+    protected static readonly ReadOnlyMemory<char> Separator = new[] { SeparatorChar };
+
+    protected static readonly ReadOnlyMemory<char> NewLine = Environment.NewLine.AsMemory();
+    protected static TextWriter CreateTextWriter(Stream output) => new StreamWriter(output, Encoding.UTF8);
+
+    static readonly Dictionary<Type, Func<object, ReadOnlyMemory<char>>> _valueSerializators;
+
+    public SerializationMediaType MediaType => SerializationMediaType.TabSeparatedValues;
+
+
+    private static ReadOnlyMemory<char> ConvertKnown(string value)
+    {
+      if (string.IsNullOrWhiteSpace(value))
+        return default;
+
+      string trimValue = value.Trim();
+      if (trimValue.Contains(SeparatorChar))
+      {
+        throw new ArgumentException($"Value [{value}] contains tab!");
+      }
+      return trimValue.AsMemory();
+    }
+
+    static TsvSerializerShared()
+    {
+      _valueSerializators = new Dictionary<Type, Func<object, ReadOnlyMemory<char>>>
+        {
+          { typeof(byte),     new ToStringSerializer<byte>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
+          { typeof(sbyte),    new ToStringSerializer<sbyte>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
+          { typeof(short),    new ToStringSerializer<short>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
+          { typeof(ushort),   new ToStringSerializer<ushort>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
+          { typeof(int),      new ToStringSerializer<int>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
+          { typeof(uint),     new ToStringSerializer<uint>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
+          { typeof(long),     new ToStringSerializer<long>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
+          { typeof(ulong),    new ToStringSerializer<ulong>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
+          { typeof(double),   new ToStringSerializer<double>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
+          { typeof(char),     new ToStringSerializer<char>(v => new ReadOnlyMemory<char>(new[] { v })).Serializator },
+          { typeof(string),   new ToStringSerializer<string>(v => ConvertKnown(v)).Serializator }
+        };
+    }
+
+    protected static Func<object, TextWriter, CancellationToken, Task> GetValueSerializer(Type type)
+    {
+      Func<object, ReadOnlyMemory<char>> valueSerializer;
+      if (_valueSerializators.TryGetValue(type, out var serializator))
+      {
+        valueSerializer = serializator;
+      }
+      else
+      {
+        var serializatorAttr = type
+          .GetCustomAttributes()
+          .OfType<RecordSerializerAttribute>()
+          .Where(a => a.MediaType == SerializationMediaType.TabSeparatedValues)
+          .SingleOrDefault();
+
+        if (serializatorAttr == null)
+        {
+          throw new InvalidOperationException($"Unknown serializator for {type}");
+        }
+        if (serializatorAttr.HasStructure)
+          valueSerializer = null;
+        else
+          valueSerializer = serializatorAttr.Serialize;
+
+        _valueSerializators.Add(type, valueSerializer);
+      }
+
+      if (valueSerializer == null)
+        return null;
+      else
+        return (value, stream, token) => stream.WriteAsync(valueSerializer(value), token);
+    }
+  }
+
   /// <summary>
   /// TSV file that can be open in Excel
   /// </summary>
   /// <remarks>
   /// https://en.wikipedia.org/wiki/Tab-separated_values
   /// </remarks>
-  public class TsvSerializer<T> : IRecordSerializer<T> where T : struct
+  public class TsvSerializer<T> : TsvSerializerShared, IRecordSerializer<T> where T : struct
   {
     public static RecordSerializerFileStream<T> ToTempFile() => RecordSerializerFileStream<T>.ToTempFile(new TsvSerializer<T>());
 
-    class ConvertToWritableString
+    static IEnumerable<PropertyInfo> GetProperties(Type t) => t
+      .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty)
+      .Where(p => !p.GetCustomAttributes<RecordPropertyIgnoreAttribute>().Any());
+
+    
+    private static string GetHeaderNameWithPrefix(string name, string prefix)
     {
-      private ReadOnlyMemory<char> ConvertKnown(byte value) => value.ToString(CultureInfo.InvariantCulture).AsMemory();
-      private ReadOnlyMemory<char> ConvertKnown(sbyte value) => value.ToString(CultureInfo.InvariantCulture).AsMemory();
-      private ReadOnlyMemory<char> ConvertKnown(short value) => value.ToString(CultureInfo.InvariantCulture).AsMemory();
-      private ReadOnlyMemory<char> ConvertKnown(ushort value) => value.ToString(CultureInfo.InvariantCulture).AsMemory();
-      private ReadOnlyMemory<char> ConvertKnown(int value) => value.ToString(CultureInfo.InvariantCulture).AsMemory();
-      private ReadOnlyMemory<char> ConvertKnown(uint value) => value.ToString(CultureInfo.InvariantCulture).AsMemory();
-      private ReadOnlyMemory<char> ConvertKnown(long value) => value.ToString(CultureInfo.InvariantCulture).AsMemory();
-      private ReadOnlyMemory<char> ConvertKnown(ulong value) => value.ToString(CultureInfo.InvariantCulture).AsMemory();
-      private ReadOnlyMemory<char> ConvertKnown(double value) => value.ToString(CultureInfo.InvariantCulture).AsMemory();
-      private ReadOnlyMemory<char> ConvertKnown(Number value) => value.ToString(CultureInfo.InvariantCulture).AsMemory();
-      private ReadOnlyMemory<char> ConvertKnown(NumberVector value) => value.ToString(CultureInfo.InvariantCulture).AsMemory();
-      private ReadOnlyMemory<char> ConvertKnown(string value)
-      {
-        if (string.IsNullOrWhiteSpace(value))
-          return default;
+      return prefix == null ? name : $"{prefix}_{name}";
+    }
 
-        string trimValue = value.Trim();
-        if (trimValue.Contains(SeparatorChar))
+    private static IEnumerable<string> GetHeaders(Type t, string prefix)
+    {
+      foreach (var property in GetProperties(t))
+      {
+        Type propertyType = property.PropertyType;
+        if (GetValueSerializer(propertyType) != null)
         {
-          throw new ArgumentException($"Value [{value}] contains tab!");
+          
+          yield return GetHeaderNameWithPrefix(property.Name, prefix);
         }
-        return trimValue.AsMemory();
-      }
-      private ReadOnlyMemory<char> ConvertKnown(char value) => new ReadOnlyMemory<char>(new[] { value });
-
-      public ReadOnlyMemory<char> Convert(object value)
-      {
-        if (value == null)
-          return default;
-
-        Type valueType = value.GetType();
-
-        if (valueType == typeof(byte))
-          return ConvertKnown((byte)value);
-        if (valueType == typeof(sbyte))
-          return ConvertKnown((sbyte)value);
-
-        if (valueType == typeof(short))
-          return ConvertKnown((short)value);
-        if (valueType == typeof(ushort))
-          return ConvertKnown((ushort)value);
-
-        if (valueType == typeof(int))
-          return ConvertKnown((int)value);
-        if (valueType == typeof(uint))
-          return ConvertKnown((uint)value);
-
-        if (valueType == typeof(long))
-          return ConvertKnown((long)value);
-        if (valueType == typeof(ulong))
-          return ConvertKnown((ulong)value);
-
-        if (valueType == typeof(double))
-          return ConvertKnown((double)value);
-
-        if (valueType == typeof(string))
-          return ConvertKnown((string)value);
-        if (valueType == typeof(char))
-          return ConvertKnown((char)value);
-
-        if (valueType == typeof(Number))
-          return ConvertKnown((Number)value);
-        if (valueType == typeof(NumberVector))
-          return ConvertKnown((NumberVector)value);
-
-        throw new ArgumentException("Unknown serializer");
+        else
+        {
+          foreach (string name in GetHeaders(propertyType, property.Name))
+          {
+            yield return GetHeaderNameWithPrefix(name, prefix);
+          }
+        }
       }
     }
 
-    static readonly char SeparatorChar = '\t';
-
-    static readonly ReadOnlyMemory<char> Separator = new[] { SeparatorChar };
-    static readonly ReadOnlyMemory<char> NewLine = Environment.NewLine.AsMemory();
-
-    static readonly IEnumerable<PropertyInfo> Properties = typeof(T)
-        .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
-    static readonly ConvertToWritableString Converter = new ConvertToWritableString();
-
-    public SerializationMediaType MediaType => SerializationMediaType.TabSeparatedValues;
-
-    private TextWriter CreateTextWriter(Stream output) => new StreamWriter(output, Encoding.UTF8);
+    static readonly IEnumerable<ReadOnlyMemory<char>> Headers = GetHeaders(typeof(T), null).Select(n => n.AsMemory()).ToArray();
 
     public async ValueTask SerializeHeader(Stream output, CancellationToken cancellationToken)
     {
       // stream should be dispose with "output"
       TextWriter writer = CreateTextWriter(output);
       bool useSeparator = false;
-      foreach (var header in Properties.Select(p => p.Name.AsMemory()))
+      foreach (var header in Headers)
       {
         if (useSeparator)
         {
@@ -125,35 +150,60 @@ namespace Arnible.MathModeling.Export
       }
       await writer.WriteAsync(NewLine);
       await writer.FlushAsync();
+    }
+
+    static async Task SerializeRecord(
+      object record, 
+      TextWriter writer, 
+      CancellationToken cancellationToken, 
+      bool useSeparator,
+      bool isRoot)
+    {            
+      if (record != null)
+      {
+        Type recordType = record.GetType();
+        Func<object, TextWriter, CancellationToken, Task> valueSerializer = null;
+        if (!isRoot)
+        {
+          valueSerializer = GetValueSerializer(recordType);
+        }
+
+        if (valueSerializer == null)
+        {
+          foreach (var property in GetProperties(recordType))
+          {
+            object value = property.GetValue(record);
+            await SerializeRecord(value, writer, cancellationToken, useSeparator, isRoot: false);            
+            useSeparator = true;            
+          }
+        }
+        else
+        {
+          if (useSeparator)
+          {
+            await writer.WriteAsync(Separator, cancellationToken);
+          }
+
+          await valueSerializer(record, writer, cancellationToken);
+        }
+      }
+      else
+      {
+        if (useSeparator)
+        {
+          await writer.WriteAsync(Separator, cancellationToken);
+        }
+      }      
     }
 
     public async ValueTask SerializeRecord(T record, Stream output, CancellationToken cancellationToken)
     {
-      // stream should be dispose with "output"
-      TextWriter writer = CreateTextWriter(output);
-      bool useSeparator = false;
-      foreach (var property in Properties)
-      {
-        object value = property.GetValue(record);
-        if (useSeparator)
-        {
-          await writer.WriteAsync(Separator, cancellationToken);
-          await WriteValue(writer, value, cancellationToken);
-        }
-        else
-        {
-          await WriteValue(writer, value, cancellationToken);
-          useSeparator = true;
-        }
+      // stream should be disposed with "output"
+      TextWriter writer = CreateTextWriter(output);      
+      await SerializeRecord(record, writer, cancellationToken, useSeparator: false, isRoot: true);
 
-      }
       await writer.WriteAsync(NewLine);
       await writer.FlushAsync();
-    }
-
-    private static async ValueTask WriteValue(TextWriter writer, object value, CancellationToken cancellationToken)
-    {
-      await writer.WriteAsync(Converter.Convert(value), cancellationToken);
     }
   }
 }

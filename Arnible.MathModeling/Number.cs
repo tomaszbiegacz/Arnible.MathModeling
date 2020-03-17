@@ -1,10 +1,20 @@
-﻿using System;
+﻿using Arnible.MathModeling.Export;
+using System;
 using System.Globalization;
 
 namespace Arnible.MathModeling
 {
+  [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
   public readonly struct Number : IEquatable<Number>, IComparable<Number>
   {
+    class Serializer : ToStringSerializer<Number>
+    {
+      public Serializer() : base(v => v.ToString(CultureInfo.InvariantCulture))
+      {
+        // intentionally empty
+      }
+    }
+
     private readonly double _value;
 
     private Number(double value)

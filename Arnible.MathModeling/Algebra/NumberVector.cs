@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Arnible.MathModeling.Export;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,8 +7,17 @@ using System.Linq;
 
 namespace Arnible.MathModeling.Algebra
 {
+  [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
   public readonly struct NumberVector : IEquatable<NumberVector>, IReadOnlyCollection<Number>
   {
+    class Serializer : ToStringSerializer<NumberVector>
+    {
+      public Serializer() : base(v => v.ToString(CultureInfo.InvariantCulture))
+      {
+        // intentionally empty
+      }
+    }
+
     private readonly Number[] _values;
 
     public NumberVector(params Number[] parameters)

@@ -23,6 +23,10 @@
     <Compile Include="..\Arnible.MathModeling\DerivativeOperator.cs" Link="DerivativeOperator.cs" />
     <Compile Include="..\Arnible.MathModeling\DoubleExtension.cs" Link="DoubleExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\ElementaryUnaryOperation.cs" Link="ElementaryUnaryOperation.cs" />
+    <Compile Include="..\Arnible.MathModeling\Export\MediaTypeSpecificationAttribute.cs" Link="Export\MediaTypeSpecificationAttribute.cs" />
+    <Compile Include="..\Arnible.MathModeling\Export\RecordSerializerAttribute.cs" Link="Export\RecordSerializerAttribute.cs" />
+    <Compile Include="..\Arnible.MathModeling\Export\SerializationMediaType.cs" Link="Export\SerializationMediaType.cs" />
+    <Compile Include="..\Arnible.MathModeling\Export\ToStringSerializer.cs" Link="Export\ToStringSerializer.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\CartesianCoordinate.cs" Link="Geometry\CartesianCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleVector.cs" Link="Geometry\HypersphericalAngleVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinate.cs" Link="Geometry\HypersphericalCoordinate.cs" />
@@ -47,6 +51,10 @@
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Export\" />
   </ItemGroup>
 
 </Project>
