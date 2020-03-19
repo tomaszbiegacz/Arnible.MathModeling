@@ -54,6 +54,7 @@ namespace Arnible.MathModeling.Test.Export
       {
         RootValue = 1,
         Record = new TestSubRecord(2),
+        Nullable = null,
         OtherValue = 3
       };
 
@@ -70,8 +71,8 @@ namespace Arnible.MathModeling.Test.Export
 
       string[] lines = result.Split(Environment.NewLine);
       Assert.Equal(3, lines.Length);
-      Assert.Equal(new[] { "RootValue", "Record_Value", "OtherValue" }, lines[0].Split('\t'));
-      Assert.Equal("1\t2\t3", lines[1]);
+      Assert.Equal(new[] { "RootValue", "Record_Value", "Nullable_NotPresentValue", "Nullable_NotPresentOther", "OtherValue" }, lines[0].Split('\t'));
+      Assert.Equal("1\t2\t\t\t3", lines[1]);
       Assert.Empty(lines[2]);
     }
   }

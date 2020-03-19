@@ -9,8 +9,6 @@ namespace Arnible.MathModeling.Export
 
     public SerializationMediaType MediaType { get; }
 
-    public bool HasStructure => _serializator == null;
-
     public RecordSerializerAttribute(SerializationMediaType mediaType, Func<object, ReadOnlyMemory<char>> serializator)
     {
       MediaType = mediaType;
@@ -37,20 +35,6 @@ namespace Arnible.MathModeling.Export
       }
     }
 
-    public RecordSerializerAttribute(SerializationMediaType mediaType)
-    {
-      MediaType = mediaType;
-      _serializator = null;
-    }
-
-    public ReadOnlyMemory<char> Serialize(object value)
-    {
-      if (HasStructure)
-      {
-        throw new InvalidOperationException("Serialize method can be only called for simplified serialization.");
-      }
-
-      return _serializator(value);
-    }
+    public ReadOnlyMemory<char> Serialize(object value) => _serializator(value);
   }
 }

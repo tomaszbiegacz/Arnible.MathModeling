@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Arnible.MathModeling.Export
 {
-  public interface IRecordSerializer<T> where T : struct
+  public interface IRecordSerializer<T>
   {
     SerializationMediaType MediaType { get; }
 

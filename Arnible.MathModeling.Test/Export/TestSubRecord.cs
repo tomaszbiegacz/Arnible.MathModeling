@@ -2,7 +2,6 @@
 
 namespace Arnible.MathModeling.Test.Export
 {
-  [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
   public struct TestSubRecord
   {
     public TestSubRecord(int value)
