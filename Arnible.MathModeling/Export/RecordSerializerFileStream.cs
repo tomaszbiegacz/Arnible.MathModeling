@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Arnible.MathModeling.Export
 {
-  public class RecordSerializerFileStream<T> : RecordSerializerStream<T>
+  public class RecordSerializerFileStream<T> : RecordSerializerStream<T> where T: struct
   {
     private static MediaTypeSpecificationAttribute GetMediaTypeSpecification(SerializationMediaType mediaType)
     {

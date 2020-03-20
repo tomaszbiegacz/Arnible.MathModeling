@@ -12,7 +12,7 @@ namespace Arnible.MathModeling.Export
   /// <remarks>
   /// https://en.wikipedia.org/wiki/Tab-separated_values
   /// </remarks>
-  public class TsvSerializer<T> : IRecordSerializer<T>
+  public class TsvSerializer<T> : IRecordSerializer<T> where T: struct
   {
     static readonly ReadOnlyMemory<char> Separator = new[] { TsvConst.SeparatorChar };
     static readonly ReadOnlyMemory<char> NewLine = Environment.NewLine.AsMemory();

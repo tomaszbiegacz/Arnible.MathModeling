@@ -4,6 +4,6 @@
   {
     public int NotPresentValue { get; } = 2;
 
-    public int NotPresentOther { get; } = 2;
+    public int NotPresentOther { get; } = 3;
   }
 }

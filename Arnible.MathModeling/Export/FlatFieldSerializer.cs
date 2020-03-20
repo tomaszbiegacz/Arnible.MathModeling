@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -15,11 +16,50 @@ namespace Arnible.MathModeling.Export
 
   class FlatFieldSerializer : IFlatFieldSerializer
   {
-    static string GetHeaderNameWithPrefix(string name, string prefix) => prefix == null ? name : $"{prefix}_{name}";
+    static string GetHeaderNameWithPrefix(string prefix, string name) => prefix == null ? name : $"{prefix}_{name}";
 
-    static Func<object, ReadOnlyMemory<char>> NullablePropertySerializer(PropertyInfo property, Func<object, ReadOnlyMemory<char>> valueSerializer)
+    static Func<object, ReadOnlyMemory<char>> NullablePropertySerializer(
+      PropertyInfo property,
+      Func<object, ReadOnlyMemory<char>> valueSerializer)
     {
       return o => o == null ? default : valueSerializer(property.GetValue(o));
+    }
+
+    static string GetHeaderNameWithPrefix(string prefix, uint pos, string name) => $"{prefix}_{pos}_{name}";
+
+    static object GetIndexedPropertyValue(PropertyInfo property, uint pos, object value)
+    {
+      object propertyValue = property.GetValue(value);
+      if (propertyValue == null)
+      {
+        return null;
+      }
+
+      var enumValue = (IEnumerable)propertyValue;
+      IEnumerator enumerator = enumValue.GetEnumerator();
+
+      uint i = 0;
+      while (enumerator.MoveNext())
+      {
+        if (i == pos)
+        {
+          return enumerator.Current;
+        }
+        else
+        {
+          i++;
+        }
+      }
+
+      return null;
+    }
+
+    static Func<object, ReadOnlyMemory<char>> NullablePropertySerializer(
+      PropertyInfo property,
+      uint pos,
+      Func<object, ReadOnlyMemory<char>> valueSerializer)
+    {
+      return o => o == null ? default : valueSerializer(GetIndexedPropertyValue(property, pos, o));
     }
 
     private readonly Func<object, ReadOnlyMemory<char>> _valueSerializer;
@@ -44,8 +84,15 @@ namespace Arnible.MathModeling.Export
     public FlatFieldSerializer ForProperty(PropertyInfo property)
     {
       return new FlatFieldSerializer(
-        GetHeaderNameWithPrefix(new string(Header.Span), property.Name),
+        GetHeaderNameWithPrefix(property.Name, new string(Header.Span)),
         NullablePropertySerializer(property, _valueSerializer));
+    }
+
+    public FlatFieldSerializer ForIndexedProperty(PropertyInfo property, uint pos)
+    {
+      return new FlatFieldSerializer(
+        GetHeaderNameWithPrefix(property.Name, pos, new string(Header.Span)),
+        NullablePropertySerializer(property, pos, _valueSerializer));
     }
   }
 }

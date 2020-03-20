@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace Arnible.MathModeling.Export
 {
-  public interface IRecordSerializerStream<T> : IAsyncDisposable
+  public interface IRecordSerializerStream<T> : IAsyncDisposable where T: struct
   {
     ValueTask Serialize(T record, CancellationToken cancellationToken);
   }
 
-  public class RecordSerializerStream<T> : IRecordSerializerStream<T>
+  public class RecordSerializerStream<T> : IRecordSerializerStream<T> where T : struct
   {
     private bool _isHeaderPrinted;
     private readonly Stream _stream;

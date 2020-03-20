@@ -75,5 +75,90 @@ namespace Arnible.MathModeling.Test.Export
       Assert.Equal("1\t2\t\t\t3", lines[1]);
       Assert.Empty(lines[2]);
     }
+
+    [Fact]
+    public async Task ArraySerialization()
+    {
+      var record = new TestRecordArray
+      {
+        Records = new[] {
+          null,
+          new NullableSubRecord(),
+          null
+        }
+      };
+
+      string result;
+      var serializer = new TsvSerializer<TestRecordArray>();
+      await using (MemoryStream stream = new MemoryStream())
+      {
+        await serializer.Serialize(new[] { record }, stream, default);
+
+        stream.Position = 0;
+        var bytes = stream.ToArray();
+        result = Encoding.UTF8.GetString(bytes);
+      }
+
+      string[] lines = result.Split(Environment.NewLine);
+      Assert.Equal(3, lines.Length);
+      Assert.Equal(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
+      Assert.Equal("\t\t2\t3\t\t", lines[1]);
+      Assert.Empty(lines[2]);
+    }
+
+    [Fact]
+    public async Task ArraySerialization_Underscaled()
+    {
+      var record = new TestRecordArray
+      {
+        Records = new[] {
+          null,
+          new NullableSubRecord()
+        }
+      };
+
+      string result;
+      var serializer = new TsvSerializer<TestRecordArray>();
+      await using (MemoryStream stream = new MemoryStream())
+      {
+        await serializer.Serialize(new[] { record }, stream, default);
+
+        stream.Position = 0;
+        var bytes = stream.ToArray();
+        result = Encoding.UTF8.GetString(bytes);
+      }
+
+      string[] lines = result.Split(Environment.NewLine);
+      Assert.Equal(3, lines.Length);
+      Assert.Equal(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
+      Assert.Equal("\t\t2\t3\t\t", lines[1]);
+      Assert.Empty(lines[2]);
+    }
+
+    [Fact]
+    public async Task ArraySerialization_Empty()
+    {
+      var record = new TestRecordArray
+      {
+        Records = null
+      };
+
+      string result;
+      var serializer = new TsvSerializer<TestRecordArray>();
+      await using (MemoryStream stream = new MemoryStream())
+      {
+        await serializer.Serialize(new[] { record }, stream, default);
+
+        stream.Position = 0;
+        var bytes = stream.ToArray();
+        result = Encoding.UTF8.GetString(bytes);
+      }
+
+      string[] lines = result.Split(Environment.NewLine);
+      Assert.Equal(3, lines.Length);
+      Assert.Equal(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
+      Assert.Equal("\t\t\t\t\t", lines[1]);
+      Assert.Empty(lines[2]);
+    }
   }
 }

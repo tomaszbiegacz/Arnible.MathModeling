@@ -7,7 +7,7 @@ using System.Reflection;
 namespace Arnible.MathModeling.Export
 {
   class TsvFlatFieldSerializerCollection : FlatFieldSerializerCollection
-  {    
+  {
     static readonly Dictionary<Type, Func<object, ReadOnlyMemory<char>>> _valueSerializers;
     static readonly Dictionary<Type, TsvFlatFieldSerializerCollection> _structureSerializers;
 
@@ -84,23 +84,59 @@ namespace Arnible.MathModeling.Export
       return new FlatFieldSerializer(property, valueSerializer);
     }
 
+    static bool IsEnumerable(Type t)
+    {
+      return t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+    }
+
+    static IEnumerable<FlatFieldSerializer> ResolveStructureProperties(PropertyInfo property)
+    {
+      TsvFlatFieldSerializerCollection structureSerializer = GetStructureSerializer(property.PropertyType);
+      foreach (FlatFieldSerializer field in structureSerializer._fields)
+      {
+        yield return field.ForProperty(property);
+      }
+    }
+
+    static IEnumerable<FlatFieldSerializer> ResolveEnumerableStructures(PropertyInfo property)
+    {      
+      FixedArraySerializerAttribute fixedArray = property.GetCustomAttribute<FixedArraySerializerAttribute>();
+      if(fixedArray == null)
+      {
+        throw new InvalidOperationException("Only fixed sized enumerables are supported.");
+      }      
+
+      Type enumerableInterfaceType = property
+        .PropertyType.GetInterfaces()
+        .Single(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+      Type elementType = enumerableInterfaceType.GetGenericArguments().Single();
+      TsvFlatFieldSerializerCollection structureSerializer = GetStructureSerializer(elementType);
+
+      for(uint i=0; i<fixedArray.Size; ++i)
+      {
+        foreach (FlatFieldSerializer field in structureSerializer._fields)
+        {
+          yield return field.ForIndexedProperty(property, i);
+        }
+      }
+    }
+
     static IEnumerable<FlatFieldSerializer> ForRootProperty(PropertyInfo property)
     {
       Type t = property.PropertyType;
 
       var valueSerializer = GetValueSerializer(t);
-      if(valueSerializer != null)
+      if (valueSerializer != null)
       {
-        yield return ForRootProperty(property, valueSerializer);
+        return ForRootProperty(property, valueSerializer).Yield();
       }
       else
       {
-        var structureSerializer = GetStructureSerializer(t);
-        foreach(FlatFieldSerializer field in structureSerializer._fields)
-        {
-          yield return field.ForProperty(property);
-        }
-      }      
+        if (IsEnumerable(t))
+          return ResolveEnumerableStructures(property);
+        else
+          return ResolveStructureProperties(property);
+      }
     }
 
     private TsvFlatFieldSerializerCollection(Type t)
