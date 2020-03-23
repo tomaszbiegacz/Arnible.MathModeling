@@ -4,6 +4,7 @@ using System.Globalization;
 
 namespace Arnible.MathModeling
 {
+  [Serializable]
   [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
   public readonly struct Number : IEquatable<Number>, IComparable<Number>
   {

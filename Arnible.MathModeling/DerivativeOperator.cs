@@ -38,10 +38,10 @@ namespace Arnible.MathModeling
     /// Simply multiplication of the first derivatives from both enums (composed functions).
     /// </summary>    
     public static IEnumerable<IDerivative1> ForEachElementComposition(
-      this IEnumerable<IDerivative1> valueDerrivativeByParameters, 
+      this IEnumerable<IDerivative1> valueDerrivativeByParameters,
       IEnumerable<IDerivative1> parametersDerivatives)
     {
-      return valueDerrivativeByParameters.ZipDefensive(parametersDerivatives, (a, b) => new Derivative1Value(a.First * b.First));      
+      return valueDerrivativeByParameters.ZipDefensive(parametersDerivatives, (a, b) => new Derivative1Value(a.First * b.First));
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ namespace Arnible.MathModeling
     /// </summary>    
     public static IDerivative1 ForComposition(this IEnumerable<IDerivative1> derivatives)
     {
-      return new Derivative1Value(derivatives.Select(d => d.First).Product());      
+      return new Derivative1Value(derivatives.Select(d => d.First).Product());
     }
 
     /// <summary>
@@ -88,17 +88,21 @@ namespace Arnible.MathModeling
         throw new ArgumentException(nameof(productValues));
       }
       var valueDerivatives = valueDerrivativeByParameter.ToArray();
-      if(valueDerivatives.Length != productValues.Count)
+      if (valueDerivatives.Length != productValues.Count)
       {
         throw new ArgumentException(nameof(valueDerrivativeByParameter));
       }
 
       Number result = 0;
-      for(uint i=0; i< productValues.Count; ++ i)
+      for (uint i = 0; i < productValues.Count; ++i)
       {
-        result += productValues.ExcludeAt(i).Product() * valueDerivatives[i].First;
+        Number derivative = valueDerivatives[i].First;
+        if (derivative != 0)
+        {
+          result += productValues.ExcludeAt(i).Product() * derivative;
+        }
       }
       return new Derivative1Value(result);
-    }    
+    }
   }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace Arnible.MathModeling.Algebra
 {
+  [Serializable]
   [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
   public readonly struct NumberVector : IEquatable<NumberVector>, IReadOnlyCollection<Number>
   {

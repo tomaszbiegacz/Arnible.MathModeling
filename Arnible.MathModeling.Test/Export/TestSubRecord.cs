@@ -12,7 +12,7 @@ namespace Arnible.MathModeling.Test.Export
 
     public int Value { get; }
 
-    [RecordPropertyIgnore]
+    [RecordSerializerIgnore]
     public int HiddenValue { get; }
   }
 }

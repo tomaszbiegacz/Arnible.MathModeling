@@ -3,7 +3,7 @@
 namespace Arnible.MathModeling.Export
 {
   [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-  public class RecordPropertyIgnoreAttribute : Attribute
+  public class RecordSerializerIgnoreAttribute : Attribute
   {
     // intentionally empty
   }

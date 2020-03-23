@@ -21,7 +21,7 @@ namespace Arnible.MathModeling.Export
   {
     protected static IEnumerable<PropertyInfo> GetProperties(Type t) => t
       .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty)
-      .Where(p => !p.GetCustomAttributes<RecordPropertyIgnoreAttribute>().Any())
+      .Where(p => !p.GetCustomAttributes<RecordSerializerIgnoreAttribute>().Any())
       .ToArray();
 
     protected readonly IEnumerable<FlatFieldSerializer> _fields;
