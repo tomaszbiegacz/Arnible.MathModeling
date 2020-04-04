@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Arnible.MathModeling
 {
-  public static class CollectionExtension
+  public static class IEnumerableExtensions
   {
     /*
      * Single item extensions
@@ -30,6 +30,52 @@ namespace Arnible.MathModeling
 
     public static IEnumerable<int> Indexes<T>(this T[] arg) => Enumerable.Range(0, arg.Length);
 
+    public static T[][] ToJaggedArray<T>(this T[,] twoDimensionalArray)
+    {
+      int rowsFirstIndex = twoDimensionalArray.GetLowerBound(0);
+      int rowsLastIndex = twoDimensionalArray.GetUpperBound(0);
+      int numberOfRows = rowsLastIndex + 1;
+
+      int columnsFirstIndex = twoDimensionalArray.GetLowerBound(1);
+      int columnsLastIndex = twoDimensionalArray.GetUpperBound(1);
+      int numberOfColumns = columnsLastIndex + 1;
+
+      T[][] jaggedArray = new T[numberOfRows][];
+      for (int i = rowsFirstIndex; i <= rowsLastIndex; i++)
+      {
+        jaggedArray[i] = new T[numberOfColumns];
+
+        for (int j = columnsFirstIndex; j <= columnsLastIndex; j++)
+        {
+          jaggedArray[i][j] = twoDimensionalArray[i, j];
+        }
+      }
+      return jaggedArray;
+    }
+
+    public static T[][] ToInversedJaggedArray<T>(this T[,] twoDimensionalArray)
+    {
+      int rowsFirstIndex = twoDimensionalArray.GetLowerBound(1);
+      int rowsLastIndex = twoDimensionalArray.GetUpperBound(1);
+      int numberOfRows = rowsLastIndex + 1;
+
+      int columnsFirstIndex = twoDimensionalArray.GetLowerBound(0);
+      int columnsLastIndex = twoDimensionalArray.GetUpperBound(0);
+      int numberOfColumns = columnsLastIndex + 1;
+
+      T[][] jaggedArray = new T[numberOfRows][];
+      for (int i = rowsFirstIndex; i <= rowsLastIndex; i++)
+      {
+        jaggedArray[i] = new T[numberOfColumns];
+
+        for (int j = columnsFirstIndex; j <= columnsLastIndex; j++)
+        {
+          jaggedArray[i][j] = twoDimensionalArray[j, i];
+        }
+      }
+      return jaggedArray;
+    }
+
     /*
      * IReadOnlyList extension
      */
@@ -47,7 +93,7 @@ namespace Arnible.MathModeling
     }
 
     /*
-     * Enumerable
+     * Predicates
      */
 
     public static bool All(this IEnumerable<bool> col1)
@@ -62,6 +108,10 @@ namespace Arnible.MathModeling
       }
       return true;
     }
+
+    /*
+     * Enumerable modifications
+     */
 
     public static IEnumerable<T> ExcludeAt<T>(this IEnumerable<T> x, uint pos)
     {
@@ -86,6 +136,32 @@ namespace Arnible.MathModeling
         }
       }
     }
+
+    public static IEnumerable<T> DuplicateAt<T>(this IEnumerable<T> x, uint pos)
+    {
+      bool isDuplicated = false;
+      using (var xEnumerator = x.GetEnumerator())
+      {
+        uint i;
+        for (i = 0; xEnumerator.MoveNext(); ++i)
+        {
+          yield return xEnumerator.Current;
+          if (i == pos)
+          {
+            isDuplicated = true;
+            yield return xEnumerator.Current;
+          }
+        }
+        if (!isDuplicated)
+        {
+          throw new ArgumentException($"Enumerator length {i}, hence I can't duplicate at {pos}");
+        }
+      }
+    }
+
+    /*
+     * Sorting
+     */
 
     class BuildinComparerStruct<T> : IComparer<T> where T : struct, IComparable<T>
     {
@@ -151,6 +227,10 @@ namespace Arnible.MathModeling
         }
       }
     }
+
+    /*
+     * Statistics
+     */
 
     public static IEnumerable<IEnumerable<T>> ToSequncesWithReturning<T>(this IEnumerable<T> items, uint length)
     {

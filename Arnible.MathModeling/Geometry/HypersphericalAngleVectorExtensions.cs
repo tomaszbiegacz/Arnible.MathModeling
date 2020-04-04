@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public static class HypersphericalAngleVectorExtension
+  public static class HypersphericalAngleVectorExtensions
   {
     public static HypersphericalAngleVector Sum(this IEnumerable<HypersphericalAngleVector> x)
     {

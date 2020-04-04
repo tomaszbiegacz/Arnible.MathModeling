@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Arnible.MathModeling
 {
-  public static class ComputationExtension
+  public static class ComputationExtensions
   {
     public static double Product(this IEnumerable<double> x)
     {

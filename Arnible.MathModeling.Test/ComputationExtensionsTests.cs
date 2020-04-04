@@ -2,7 +2,7 @@ using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
-  public class ComputationExtensionTests
+  public class ComputationExtensionsTests
   {    
     [Fact]
     public void Sum_OfThree()

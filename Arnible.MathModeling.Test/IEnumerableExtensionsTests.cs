@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
-  public class CollectionExtensionTests
+  public class IEnumerableExtensionsTests
   {
     [Fact]
     public void Yield_Prepend_Append()
@@ -25,9 +25,33 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
+    public void Duplicate_First()
+    {
+      Assert.Equal(new[] { 1, 1, 2, 3, 4 }, (new[] { 1, 2, 3, 4 }).DuplicateAt(0));
+    }
+
+    [Fact]
+    public void Duplicate_1Of3()
+    {
+      Assert.Equal(new[] { 2d, 1d, 1d, 3d }, (new[] { 2d, 1d, 3d }).DuplicateAt(1));
+    }
+
+    [Fact]
     public void Indexes()
     {
       Assert.Equal(new[] { 0, 1, 2 }, (new[] { 1, 2, 3 }).Indexes());
+    }
+
+    [Fact]
+    public void ToJaggedArray()
+    {
+      Assert.Equal(new int[][] { new[] { 0, 1, 2 }, new[] { 1, 2, 3 } }, new int[,] { { 0, 1, 2 }, { 1, 2, 3 } }.ToJaggedArray());
+    }
+
+    [Fact]
+    public void ToInversedJaggedArray()
+    {
+      Assert.Equal(new int[][] { new[] { 0, 1 }, new[] { 1, 2 }, new[] { 2, 3 } }, new int[,] { { 0, 1, 2 }, { 1, 2, 3 } }.ToInversedJaggedArray());
     }
 
     [Fact]

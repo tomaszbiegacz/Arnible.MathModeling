@@ -2,7 +2,7 @@
 
 namespace Arnible.MathModeling.Algebra
 {
-  public static class NumberRangeDomainExtension
+  public static class INumberRangeDomainExtensions
   {
     public static void Validate(this INumberRangeDomain domain, NumberVector value)
     {

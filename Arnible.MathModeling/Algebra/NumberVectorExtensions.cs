@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Arnible.MathModeling.Algebra
 {
-  public static class NumberVectorExtension
+  public static class NumberVectorExtensions
   {
     public static NumberVector ToVector(this IEnumerable<Number> numbers)
     {

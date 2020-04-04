@@ -11,12 +11,11 @@
 
   <ItemGroup>
     <Compile Include="..\Arnible.MathModeling\Algebra\INumberRangeDomain.cs" Link="Algebra\INumberRangeDomain.cs" />
-    <Compile Include="..\Arnible.MathModeling\Algebra\NumberRangeDomainExtension.cs" Link="Algebra\NumberRangeDomainExtension.cs" />
+    <Compile Include="..\Arnible.MathModeling\Algebra\INumberRangeDomainExtensions.cs" Link="Algebra\INumberRangeDomainExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVector.cs" Link="Algebra\NumberVector.cs" />
-    <Compile Include="..\Arnible.MathModeling\Algebra\NumberVectorExtension.cs" Link="Algebra\NumberVectorExtension.cs" />
+    <Compile Include="..\Arnible.MathModeling\Algebra\NumberVectorExtensions.cs" Link="Algebra\NumberVectorExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVectorTransposition.cs" Link="Algebra\NumberVectorTransposition.cs" />
-    <Compile Include="..\Arnible.MathModeling\CollectionExtension.cs" Link="CollectionExtension.cs" />
-    <Compile Include="..\Arnible.MathModeling\ComputationExtension.cs" Link="ComputationExtension.cs" />
+    <Compile Include="..\Arnible.MathModeling\ComputationExtensions.cs" Link="ComputationExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Derivative1Value.cs" Link="Derivative1Value.cs" />
     <Compile Include="..\Arnible.MathModeling\Derivative2Lazy.cs" Link="Derivative2Lazy.cs" />
     <Compile Include="..\Arnible.MathModeling\Derivative2Value.cs" Link="Derivative2Value.cs" />
@@ -36,6 +35,7 @@
     <Compile Include="..\Arnible.MathModeling\IBinaryOperation.cs" Link="IBinaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IDerivative1.cs" Link="IDerivative1.cs" />
     <Compile Include="..\Arnible.MathModeling\IDerivative2.cs" Link="IDerivative2.cs" />
+    <Compile Include="..\Arnible.MathModeling\IEnumerableExtensions.cs" Link="IEnumerableExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\IFinitaryOperation.cs" Link="IFinitaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IndeterminateExpression.cs" Link="IndeterminateExpression.cs" />
     <Compile Include="..\Arnible.MathModeling\IPolynomialOperation.cs" Link="IPolynomialOperation.cs" />

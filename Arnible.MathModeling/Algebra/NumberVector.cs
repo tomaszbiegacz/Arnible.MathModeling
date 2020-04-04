@@ -9,7 +9,7 @@ namespace Arnible.MathModeling.Algebra
 {
   [Serializable]
   [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
-  public readonly struct NumberVector : IEquatable<NumberVector>, IReadOnlyCollection<Number>
+  public readonly struct NumberVector : IEquatable<NumberVector>, IReadOnlyList<Number>
   {
     class Serializer : ToStringSerializer<NumberVector>
     {
@@ -19,7 +19,7 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    private readonly Number[] _values;
+    private readonly IReadOnlyList<Number> _values;
 
     public NumberVector(params Number[] parameters)
     {
@@ -57,13 +57,17 @@ namespace Arnible.MathModeling.Algebra
       {
         if (pos >= Count)
           throw new InvalidOperationException($"Invalid index: {pos}");
-        return _values[pos];
+        return _values[(int)pos];
       }
     }
 
+    public uint Length => (uint)Count;
+
     //
-    // IReadOnlyCollection
+    // IReadOnlyList
     //
+
+    public Number this[int pos] => _values[pos];
 
     private IEnumerable<Number> Values => _values ?? Enumerable.Empty<Number>();
 
@@ -71,7 +75,7 @@ namespace Arnible.MathModeling.Algebra
 
     IEnumerator IEnumerable.GetEnumerator() => Values.GetEnumerator();
 
-    public int Count => _values?.Length ?? 0;
+    public int Count => _values?.Count ?? 0;
 
     //
     // IEquatable
@@ -142,7 +146,7 @@ namespace Arnible.MathModeling.Algebra
     }
 
     //
-    // arithmetic operators
+    // Arithmetic operators
     //
 
     public static NumberVector operator +(NumberVector a, NumberVector b) => new NumberVector(a.Values.ZipDefensive(b.Values, (va, vb) => va + vb));
