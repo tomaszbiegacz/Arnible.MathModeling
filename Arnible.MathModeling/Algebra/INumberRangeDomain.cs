@@ -4,10 +4,10 @@
   {
     void Validate(Number value);
 
-    Number Transpose(Number value, Number delta);
+    Number Translate(Number value, Number delta);
 
-    bool IsValidTranspose(Number value, Number delta);
+    bool IsValidTranslation(Number value, Number delta);
 
-    Number GetValidTransposeRatio(Number value, Number delta);
+    Number GetValidTranslationRatio(Number value, Number delta);
   }
 }

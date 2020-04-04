@@ -4,22 +4,22 @@ using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Algebra
 {
-  public readonly struct NumberVectorTransposition : IEquatable<NumberVectorTransposition>, IEnumerable<Number>
+  public readonly struct NumberTranslationVector : IEquatable<NumberTranslationVector>, IEnumerable<Number>
   {
     private readonly NumberVector _change;
 
-    public NumberVectorTransposition(NumberVector change)
+    public NumberTranslationVector(NumberVector change)
     {
       _change = change;
     }
 
-    public bool Equals(NumberVectorTransposition other) => other._change == _change;
+    public bool Equals(NumberTranslationVector other) => other._change == _change;
 
     public override string ToString() => _change.ToString();
 
     public override bool Equals(object obj)
     {
-      if (obj is NumberVectorTransposition v)
+      if (obj is NumberTranslationVector v)
       {
         return Equals(v);
       }
@@ -31,11 +31,11 @@ namespace Arnible.MathModeling.Algebra
 
     public override int GetHashCode() => _change.GetHashCode();
 
-    public static bool operator ==(NumberVectorTransposition a, NumberVectorTransposition b) => a.Equals(b);
-    public static bool operator !=(NumberVectorTransposition a, NumberVectorTransposition b) => !a.Equals(b);
+    public static bool operator ==(NumberTranslationVector a, NumberTranslationVector b) => a.Equals(b);
+    public static bool operator !=(NumberTranslationVector a, NumberTranslationVector b) => !a.Equals(b);
 
-    public static NumberVectorTransposition operator *(NumberVectorTransposition a, double b) => new NumberVectorTransposition(b * a._change);
-    public static NumberVectorTransposition operator *(double a, NumberVectorTransposition b) => new NumberVectorTransposition(a * b._change);
+    public static NumberTranslationVector operator *(NumberTranslationVector a, double b) => new NumberTranslationVector(b * a._change);
+    public static NumberTranslationVector operator *(double a, NumberTranslationVector b) => new NumberTranslationVector(a * b._change);
 
     /*
      * IEnumerable
@@ -59,6 +59,6 @@ namespace Arnible.MathModeling.Algebra
      * Operations
      */
 
-    public NumberVector Transpose(NumberVector src) => src + _change;    
+    public NumberVector Translate(NumberVector src) => src + _change;    
   }
 }

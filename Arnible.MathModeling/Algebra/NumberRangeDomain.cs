@@ -26,7 +26,7 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    private Number GetTransposeDelta(Number value, Number delta)
+    private Number GetTranslationDelta(Number value, Number delta)
     {
       Validate(value);
 
@@ -48,7 +48,7 @@ namespace Arnible.MathModeling.Algebra
       return delta;
     }
 
-    public bool IsValidTranspose(Number value, Number delta)
+    public bool IsValidTranslation(Number value, Number delta)
     {
       Validate(value);
 
@@ -70,9 +70,9 @@ namespace Arnible.MathModeling.Algebra
       return true;
     }
 
-    public Number Transpose(Number value, Number delta) => value + GetTransposeDelta(value, delta);
+    public Number Translate(Number value, Number delta) => value + GetTranslationDelta(value, delta);
 
-    public Number GetValidTransposeRatio(Number value, Number delta)
+    public Number GetValidTranslationRatio(Number value, Number delta)
     {
       if (delta == 0)
       {
@@ -80,7 +80,7 @@ namespace Arnible.MathModeling.Algebra
       }
       else
       {
-        Number validDelta = GetTransposeDelta(value, delta);
+        Number validDelta = GetTranslationDelta(value, delta);
         return validDelta / delta;
       }
     }

@@ -22,13 +22,13 @@ namespace Arnible.MathModeling.Algebra
       // intentionally empty
     }
 
-    public Number Transpose(Number value, Number delta) => value + delta;    
+    public Number Translate(Number value, Number delta) => value + delta;    
 
-    public bool IsValidTranspose(Number value, Number delta)
+    public bool IsValidTranslation(Number value, Number delta)
     {
       return true;
     }
 
-    public Number GetValidTransposeRatio(Number value, Number delta) => 1;    
+    public Number GetValidTranslationRatio(Number value, Number delta) => 1;    
   }
 }

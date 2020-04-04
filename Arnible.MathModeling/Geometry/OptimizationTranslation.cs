@@ -3,7 +3,7 @@ using System;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public static class OptimizationTransposition
+  public static class OptimizationTranslation
   {
     public static Number Minimum(Number value, IDerivative1 derivative)
     {
@@ -18,7 +18,7 @@ namespace Arnible.MathModeling.Geometry
       return -1 * value / derivative.First;
     }
 
-    public static NumberVectorTransposition Minimum(
+    public static NumberTranslationVector Minimum(
       Number value,
       HypersphericalAngleVector direction,
       IDerivative1 derivative)
@@ -33,7 +33,7 @@ namespace Arnible.MathModeling.Geometry
       {
         hc = new HypersphericalCoordinate(Math.Abs(rDelta), direction.Mirror);
       }
-      return new NumberVectorTransposition(hc.ToCartesian().Coordinates);
+      return new NumberTranslationVector(hc.ToCartesian().Coordinates);
     }
   }
 }

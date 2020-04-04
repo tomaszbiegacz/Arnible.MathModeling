@@ -16,9 +16,9 @@ namespace Arnible.MathModeling.Test.Algebra
     [InlineData(0.5, -1.5, -1)]
     [InlineData(0.5, -1.6, -1)]
     [InlineData(-1, -0.6, -1)]
-    public void Transpose(double currentValue, double evaluatedDelta, double expectedValue)
+    public void Translate(double currentValue, double evaluatedDelta, double expectedValue)
     {
-      Assert.Equal<Number>(expectedValue, _strategy.Transpose(currentValue, evaluatedDelta));
+      Assert.Equal<Number>(expectedValue, _strategy.Translate(currentValue, evaluatedDelta));
     }
 
     [Theory]
@@ -33,9 +33,9 @@ namespace Arnible.MathModeling.Test.Algebra
     [InlineData(0.4, -1.2, 1)]
     [InlineData(0.4, -1.4, 1)]
     [InlineData(0.4, -2.8, 0.5)]
-    public void GetValidTransposeRatio(double currentValue, double evaluatedDelta, double expectedValue)
+    public void GetValidTranslationRatio(double currentValue, double evaluatedDelta, double expectedValue)
     {
-      Assert.Equal<Number>(expectedValue, _strategy.GetValidTransposeRatio(currentValue, evaluatedDelta));
+      Assert.Equal<Number>(expectedValue, _strategy.GetValidTranslationRatio(currentValue, evaluatedDelta));
     }
   }
 }

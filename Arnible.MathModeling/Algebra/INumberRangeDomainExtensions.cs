@@ -12,19 +12,19 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public static NumberVector Transpose(this INumberRangeDomain domain, NumberVector value, NumberVectorTransposition delta)
+    public static NumberVector Translate(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)
     {
-      return new NumberVector(value.ZipDefensive(delta, (v, t) => domain.Transpose(v, t)));
+      return new NumberVector(value.ZipDefensive(delta, (v, t) => domain.Translate(v, t)));
     }
 
-    public static bool IsValidTranspose(this INumberRangeDomain domain, NumberVector value, NumberVectorTransposition delta)
+    public static bool IsValidTranslation(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)
     {
-      return value.ZipDefensive(delta, (v, t) => domain.IsValidTranspose(v, t)).All();
+      return value.ZipDefensive(delta, (v, t) => domain.IsValidTranslation(v, t)).All();
     }
 
-    public static Number GetValidTransposeRatio(this INumberRangeDomain domain, NumberVector value, NumberVectorTransposition delta)
+    public static Number GetValidTranslationRatio(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)
     {
-      return value.ZipDefensive(delta, (v, t) => domain.GetValidTransposeRatio(v, t)).Min();
+      return value.ZipDefensive(delta, (v, t) => domain.GetValidTranslationRatio(v, t)).Min();
     }
   }
 }
