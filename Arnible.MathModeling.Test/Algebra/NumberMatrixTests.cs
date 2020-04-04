@@ -31,6 +31,8 @@ namespace Arnible.MathModeling.Test.Algebra
       Assert.Equal(v.Column(1), new Number[] { 3, 6 });
       Assert.Equal(v.Column(2), new Number[] { 4, 7 });
 
+      Assert.Equal(3, v[0, 1]);
+
       Assert.Equal(2u, v.Height);
       Assert.Equal(v.Row(0), new Number[] { 2, 3, 4 });
       Assert.Equal(v.Row(1), new Number[] { 5, 6, 7 });

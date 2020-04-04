@@ -46,7 +46,7 @@ namespace Arnible.MathModeling.Algebra
 
     public bool IsZero => Height == 0;
 
-    public Number this[uint column, uint row] => Row(row).ElementAt((int)column);
+    public Number this[uint row, uint column] => Row(row).ElementAt((int)column);
 
     public IEnumerable<Number> Row(uint row)
     {
