@@ -1,12 +1,11 @@
 ﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Export;
 using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Arnible.MathModeling.Test.Export
+namespace Arnible.MathModeling.Export.Test
 {
   public class TsvSerializerTest
   {

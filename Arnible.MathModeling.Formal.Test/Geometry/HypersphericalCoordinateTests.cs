@@ -1,10 +1,9 @@
-﻿using Arnible.MathModeling.Geometry;
+﻿using Arnible.MathModeling.Algebra;
 using System;
-using Arnible.MathModeling.Algebra;
-using Xunit;
 using System.Linq;
+using Xunit;
 
-namespace Arnible.MathModeling.FormalTest.Test.Geometry
+namespace Arnible.MathModeling.Geometry.Test
 {
   public class HypersphericalCoordinateTests
   {
@@ -26,7 +25,7 @@ namespace Arnible.MathModeling.FormalTest.Test.Geometry
       {
         Polynomial current = GetSum(i);
         if (last != default)
-        {          
+        {
           Assert.Equal(last, current.Composition(Number.GreekTerm(i - 2), 0));
         }
         last = current;
@@ -37,7 +36,7 @@ namespace Arnible.MathModeling.FormalTest.Test.Geometry
     {
       var cartesianPoint = new CartesianCoordinate(new NumberVector(Term.x, Term.y, Term.z));
       var sphericalPoint = new HypersphericalCoordinate(Term.r, new NumberVector(Term.θ, Term.φ));
-      
+
       var sphericalPolynomial = polynomial.ToSpherical(cartesianPoint, sphericalPoint);
 
       double sqrt2 = Math.Sqrt(2);
@@ -63,7 +62,7 @@ namespace Arnible.MathModeling.FormalTest.Test.Geometry
       Number r = Term.r;
 
       Assert.Equal((int)cartesianPoint.DimensionsCount, derivatives.Length);
-      for(uint i=0; i<cartesianPoint.DimensionsCount; ++i)
+      for (uint i = 0; i < cartesianPoint.DimensionsCount; ++i)
       {
         var symbol = (Polynomial)cartesianPoint.Coordinates[i];
         AssertFormal.Equal(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[i].First);

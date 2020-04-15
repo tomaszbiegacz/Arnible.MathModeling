@@ -1,6 +1,6 @@
 ﻿using Arnible.MathModeling.Algebra;
 
-namespace Arnible.MathModeling.Test.Export
+namespace Arnible.MathModeling.Export.Test
 {
   public struct TestRecord
   {

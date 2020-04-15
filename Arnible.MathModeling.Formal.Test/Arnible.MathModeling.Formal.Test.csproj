@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Arnible.MathModeling.FormalTest\Arnible.MathModeling.FormalTest.csproj" />
+    <ProjectReference Include="..\Arnible.MathModeling.Formal\Arnible.MathModeling.Formal.csproj" />
   </ItemGroup>
 
 </Project>

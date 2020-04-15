@@ -1,10 +1,10 @@
 ﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Geometry;
+using Arnible.MathModeling.Test;
 using System;
 using System.Linq;
 using Xunit;
 
-namespace Arnible.MathModeling.Test.Geometry
+namespace Arnible.MathModeling.Geometry.Test
 {
   public class HypersphericalCoordinateTests
   {

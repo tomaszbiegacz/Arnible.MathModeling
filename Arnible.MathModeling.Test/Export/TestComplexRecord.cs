@@ -1,4 +1,4 @@
-﻿namespace Arnible.MathModeling.Test.Export
+﻿namespace Arnible.MathModeling.Export.Test
 {
   public struct TestComplexRecord
   {

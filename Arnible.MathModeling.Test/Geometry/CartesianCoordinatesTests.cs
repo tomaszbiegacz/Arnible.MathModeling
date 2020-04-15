@@ -1,9 +1,8 @@
 ﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Geometry;
 using System.Linq;
 using Xunit;
 
-namespace Arnible.MathModeling.Test.Geometry
+namespace Arnible.MathModeling.Geometry.Test
 {
   public class CartesianCoordinatesTests
   {

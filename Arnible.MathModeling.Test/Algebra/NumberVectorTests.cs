@@ -1,9 +1,8 @@
-﻿using Arnible.MathModeling.Algebra;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Arnible.MathModeling.Test.Algebra
+namespace Arnible.MathModeling.Algebra.Test
 {
   public class NumberVectorTests
   {
@@ -115,19 +114,19 @@ namespace Arnible.MathModeling.Test.Algebra
     [Fact]
     public void Indexes()
     {
-      Assert.Equal(Enumerable.Range(0, 3).Select(i => (uint)i), new NumberVector(1, 2, 3).Indexes());      
+      Assert.Equal(Enumerable.Range(0, 3).Select(i => (uint)i), new NumberVector(1, 2, 3).Indexes());
     }
 
     [Fact]
     public void Sum_One()
     {
       var arr = new NumberVector[] { new NumberVector(1, 2, 3) };
-      Assert.Equal(new NumberVector(1, 2, 3), arr.Sum());      
+      Assert.Equal(new NumberVector(1, 2, 3), arr.Sum());
     }
 
     [Fact]
     public void Sum_Two()
-    {      
+    {
       var arr = new NumberVector[] { new NumberVector(1, 2, 3), new NumberVector(1, 3, 5) };
       Assert.Equal(new NumberVector(2, 5, 8), arr.Sum());
     }

@@ -1,9 +1,8 @@
 ﻿using Arnible.MathModeling.Geometry;
-using Arnible.MathModeling.Test;
 using Xunit;
 using static Arnible.MathModeling.Term;
 
-namespace Arnible.MathModeling.FormalTest.Test
+namespace Arnible.MathModeling.Test
 {
   public class SquareErrorTests
   {
@@ -34,7 +33,7 @@ namespace Arnible.MathModeling.FormalTest.Test
     {
       var cartesianPoint = new RectangularCoordianate(x, y);
       var polarPoint = new PolarCoordinate(r, φ);
-      var valueInPolar =  _error.Value(x, y).ToPolar(cartesianPoint, polarPoint);
+      var valueInPolar = _error.Value(x, y).ToPolar(cartesianPoint, polarPoint);
       AssertFormal.VerifyDerivatives(valueInPolar, r, _error.DerivativeByR(polarPoint));
     }
 

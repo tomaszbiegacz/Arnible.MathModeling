@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace Arnible.MathModeling.FormalTest.Test
+namespace Arnible.MathModeling.Test
 {
   public class NumberTests
   {

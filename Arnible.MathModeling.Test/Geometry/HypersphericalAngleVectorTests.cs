@@ -1,8 +1,7 @@
-﻿using Arnible.MathModeling.Geometry;
-using System;
+﻿using System;
 using Xunit;
 
-namespace Arnible.MathModeling.Test.Geometry
+namespace Arnible.MathModeling.Geometry.Test
 {
   public class HypersphericalAngleVectorTests
   {
@@ -85,7 +84,7 @@ namespace Arnible.MathModeling.Test.Geometry
     {
       var a = new HypersphericalAngleVector(π, π_2);
       var b = new HypersphericalAngleVector(π_2, π_4);
-      Assert.Equal(new HypersphericalAngleVector(3.0/4 * π, 3.0/8 * π), new[] { a, b }.Average());
+      Assert.Equal(new HypersphericalAngleVector(3.0 / 4 * π, 3.0 / 8 * π), new[] { a, b }.Average());
     }
   }
 }

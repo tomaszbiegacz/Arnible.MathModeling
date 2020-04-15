@@ -3,8 +3,9 @@ using Arnible.MathModeling.Algebra;
 using System.Linq;
 using Xunit;
 using System;
+using Arnible.MathModeling.Test;
 
-namespace Arnible.MathModeling.Test.Geometry
+namespace Arnible.MathModeling.Geometry.Test
 {
   public class CoordinatesExtensionTests
   {

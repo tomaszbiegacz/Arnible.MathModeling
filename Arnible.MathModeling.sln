@@ -12,9 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arnible.MathModeling.FormalTest", "Arnible.MathModeling.FormalTest\Arnible.MathModeling.FormalTest.csproj", "{E5F2C6B5-A65A-445B-AA56-5AE375D4D94F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arnible.MathModeling.Formal", "Arnible.MathModeling.Formal\Arnible.MathModeling.Formal.csproj", "{E5F2C6B5-A65A-445B-AA56-5AE375D4D94F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arnible.MathModeling.FormalTest.Test", "Arnible.MathModeling.FormalTest.Test\Arnible.MathModeling.FormalTest.Test.csproj", "{FB715C29-D260-488B-AE5D-DA4F612A7200}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arnible.MathModeling.Formal.Test", "Arnible.MathModeling.Formal.Test\Arnible.MathModeling.Formal.Test.csproj", "{FB715C29-D260-488B-AE5D-DA4F612A7200}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

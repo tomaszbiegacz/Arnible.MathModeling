@@ -1,9 +1,8 @@
 ﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Geometry;
 using Xunit;
 using static Arnible.MathModeling.Term;
 
-namespace Arnible.MathModeling.FormalTest.Test.Geometry
+namespace Arnible.MathModeling.Geometry.Test
 {
   public class CoordinatesExtensionTests
   {

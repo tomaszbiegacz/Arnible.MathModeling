@@ -1,7 +1,6 @@
-﻿using Arnible.MathModeling.Algebra;
-using Xunit;
+﻿using Xunit;
 
-namespace Arnible.MathModeling.Test.Algebra
+namespace Arnible.MathModeling.Algebra.Test
 {
   public class NumberRangeDomainTests
   {

@@ -1,8 +1,8 @@
-﻿using Arnible.MathModeling.Geometry;
+﻿using Arnible.MathModeling.Test;
 using System;
 using Xunit;
 
-namespace Arnible.MathModeling.Test.Geometry
+namespace Arnible.MathModeling.Geometry.Test
 {
   public class PolarCoordinatesTests
   {
@@ -23,11 +23,11 @@ namespace Arnible.MathModeling.Test.Geometry
     [InlineData(0, 1, 1, Math.PI / 2)]
     [InlineData(1, 1, Sqrt2, Math.PI / 4)]
     public void Constructor_Cases(double x, double y, double r, double φ)
-    {      
+    {
       PolarCoordinate pc = (new RectangularCoordianate(x, y)).ToPolar();
 
       AssertNumber.Equal(r, pc.R);
-      AssertNumber.Equal(φ, pc.Φ);      
-    }    
+      AssertNumber.Equal(φ, pc.Φ);
+    }
   }
 }
