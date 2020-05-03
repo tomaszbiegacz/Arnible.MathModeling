@@ -30,7 +30,7 @@ namespace Arnible.MathModeling.Geometry
       }
       else
       {
-        if (φ < -1 * Math.PI || φ >= Math.PI)
+        if (φ < -1 * Angle.HalfCycle || φ >= Angle.HalfCycle)
         {
           throw new ArgumentException($"Invalid angualr coordinate: {φ}");
         }

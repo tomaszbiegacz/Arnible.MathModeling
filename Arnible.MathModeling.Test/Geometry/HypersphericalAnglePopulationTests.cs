@@ -21,7 +21,7 @@ namespace Arnible.MathModeling.Geometry.Test
     }
 
     [Fact]
-    public void HappyDay()
+    public void HappyDay_1_2()
     {
       var population = new HypersphericalAnglePopulation(HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 1, resolution: 2), new ComparerForTests1d());
       AssertAngles(population, 2, 1, 0, -1);

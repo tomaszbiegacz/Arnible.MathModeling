@@ -163,9 +163,8 @@ namespace Arnible.MathModeling.Geometry
     {
       if (!Angles.Any())
         return default;
-
-      const double RightAngle = Math.PI / 2;
-      Number step = RightAngle / _rightAngleResolution;
+      
+      Number step = Angle.RightAngle / _rightAngleResolution;
       return new HypersphericalAngleVector(new NumberVector(_angles.Select(v => v * step)));
     }
   }

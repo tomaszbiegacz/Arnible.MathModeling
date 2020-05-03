@@ -6,13 +6,11 @@ using System.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
+  /// <summary>
+  /// Hyperspherical angle vector, where first coordinate angle range over [-π, π] and others range over [-π/2, π/2].
+  /// </summary>
   public readonly struct HypersphericalAngleVector : IEquatable<HypersphericalAngleVector>, IReadOnlyCollection<Number>
   {
-    const double FullCycle = 2 * Math.PI;
-    const double HalfCycle = Math.PI;
-
-    public const double RightAngle = Math.PI / 2;
-
     private readonly NumberVector _angles;
 
     public HypersphericalAngleVector(params Number[] angles)
@@ -26,11 +24,11 @@ namespace Arnible.MathModeling.Geometry
       if (angles.Any())
       {
         var first = angles.First();
-        if (first > HalfCycle || first <= -1 * HalfCycle)
+        if (first > Angle.HalfCycle || first <= -1 * Angle.HalfCycle)
         {
           throw new ArgumentException($"Invalid first angualr coordinate: {first}");
         }
-        if (angles.Skip(1).Any(a => a > RightAngle || a < -1 * RightAngle))
+        if (angles.Skip(1).Any(a => a > Angle.RightAngle || a < -1 * Angle.RightAngle))
         {
           throw new ArgumentException($"Invalid angular coordinates: {angles}");
         }
@@ -86,7 +84,31 @@ namespace Arnible.MathModeling.Geometry
 
     public HypersphericalAngleVector AddDimension() => new HypersphericalAngleVector(_angles.Append(0).ToVector());
 
-    public HypersphericalAngleVector Mirror => new HypersphericalAngleVector(-1 * _angles);
+    private IEnumerable<Number> MirrorAngles
+    {
+      get
+      {
+        if(_angles.Count > 0)
+        {
+          Number firstAngle = _angles.First();
+          if(firstAngle > 0)
+          {
+            yield return -1 * Angle.HalfCycle + firstAngle;
+          }
+          else
+          {
+            yield return Angle.HalfCycle + firstAngle;
+          }
+
+          foreach(Number angle in _angles.Skip(1))
+          {
+            yield return -1 * angle;
+          }
+        }
+      }
+    }
+
+    public HypersphericalAngleVector Mirror => new HypersphericalAngleVector(MirrorAngles.ToVector());
 
     //
     // arithmetic
@@ -94,22 +116,22 @@ namespace Arnible.MathModeling.Geometry
 
     private static Number RoundAngleFullCycle(Number v)
     {
-      if (v > HalfCycle)
-        return v - FullCycle;
+      if (v > Angle.HalfCycle)
+        return v - Angle.FullCycle;
 
-      if (v < -1 * HalfCycle)
-        return FullCycle + v;
+      if (v < -1 * Angle.HalfCycle)
+        return Angle.FullCycle + v;
 
       return v;
     }
 
     private static Number RoundAngleHalfCycle(Number v)
     {
-      if (v > RightAngle)
-        return v - HalfCycle;
+      if (v > Angle.RightAngle)
+        return v - Angle.HalfCycle;
 
-      if (v < -1 * RightAngle)
-        return HalfCycle + v;
+      if (v < -1 * Angle.RightAngle)
+        return Angle.HalfCycle + v;
 
       return v;
     }

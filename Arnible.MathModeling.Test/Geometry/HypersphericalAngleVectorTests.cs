@@ -86,5 +86,25 @@ namespace Arnible.MathModeling.Geometry.Test
       var b = new HypersphericalAngleVector(π_2, π_4);
       Assert.Equal(new HypersphericalAngleVector(3.0 / 4 * π, 3.0 / 8 * π), new[] { a, b }.Average());
     }
+
+    [Theory]
+    [InlineData(0, π)]
+    [InlineData(π_4, -3 * π_4)]
+    [InlineData(π_2, -1 * π_2)]
+    [InlineData(π_2 + π_4, -1 * π_4)]
+    public void Mirror_Single(double original, double result)
+    {
+      var a = new HypersphericalAngleVector(original);      
+      Assert.Equal(new HypersphericalAngleVector(result), a.Mirror);
+    }
+
+    [Theory]
+    [InlineData(0, 0, π, 0)]
+    [InlineData(π_4, π_4, - 3 * π_4, -1* π_4)]    
+    public void Mirror_Two(double original1, double original2, double result1, double result2)
+    {
+      var a = new HypersphericalAngleVector(original1, original2);
+      Assert.Equal(new HypersphericalAngleVector(result1, result2), a.Mirror);
+    }
   }
 }

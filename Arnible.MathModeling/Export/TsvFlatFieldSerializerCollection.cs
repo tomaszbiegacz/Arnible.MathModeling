@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,8 +9,8 @@ namespace Arnible.MathModeling.Export
 {
   class TsvFlatFieldSerializerCollection : FlatFieldSerializerCollection
   {
-    static readonly Dictionary<Type, Func<object, ReadOnlyMemory<char>>> _valueSerializers;
-    static readonly Dictionary<Type, TsvFlatFieldSerializerCollection> _structureSerializers;
+    static readonly ConcurrentDictionary<Type, Func<object, ReadOnlyMemory<char>>> _valueSerializers;
+    static readonly ConcurrentDictionary<Type, TsvFlatFieldSerializerCollection> _structureSerializers;
 
     private static ReadOnlyMemory<char> ConvertKnown(string value)
     {
@@ -26,7 +27,7 @@ namespace Arnible.MathModeling.Export
 
     static TsvFlatFieldSerializerCollection()
     {
-      _valueSerializers = new Dictionary<Type, Func<object, ReadOnlyMemory<char>>>
+      _valueSerializers = new ConcurrentDictionary<Type, Func<object, ReadOnlyMemory<char>>>(new Dictionary<Type, Func<object, ReadOnlyMemory<char>>>
         {
           { typeof(byte),     new ToStringSerializer<byte>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
           { typeof(sbyte),    new ToStringSerializer<sbyte>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
@@ -39,8 +40,8 @@ namespace Arnible.MathModeling.Export
           { typeof(double),   new ToStringSerializer<double>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
           { typeof(char),     new ToStringSerializer<char>(v => new ReadOnlyMemory<char>(new[] { v })).Serializator },
           { typeof(string),   new ToStringSerializer<string>(v => ConvertKnown(v)).Serializator }
-        };
-      _structureSerializers = new Dictionary<Type, TsvFlatFieldSerializerCollection>();
+        });
+      _structureSerializers = new ConcurrentDictionary<Type, TsvFlatFieldSerializerCollection>();
     }
 
     static Func<object, ReadOnlyMemory<char>> GetValueSerializer(Type t)
@@ -61,7 +62,7 @@ namespace Arnible.MathModeling.Export
         if (serializatorAttr != null)
         {
           valueSerializer = serializatorAttr.Serialize;
-          _valueSerializers.Add(t, valueSerializer);
+          _valueSerializers.TryAdd(t, valueSerializer);
         }
       }
       return valueSerializer;
@@ -72,7 +73,7 @@ namespace Arnible.MathModeling.Export
       if (!_structureSerializers.TryGetValue(t, out var fields))
       {
         fields = new TsvFlatFieldSerializerCollection(t);
-        _structureSerializers.Add(t, fields);
+        _structureSerializers.TryAdd(t, fields);
       }
       return fields;
     }
@@ -99,12 +100,12 @@ namespace Arnible.MathModeling.Export
     }
 
     static IEnumerable<FlatFieldSerializer> ResolveEnumerableStructures(PropertyInfo property)
-    {      
+    {
       FixedArraySerializerAttribute fixedArray = property.GetCustomAttribute<FixedArraySerializerAttribute>();
-      if(fixedArray == null)
+      if (fixedArray == null)
       {
         throw new InvalidOperationException("Only fixed sized enumerables are supported.");
-      }      
+      }
 
       Type enumerableInterfaceType = property
         .PropertyType.GetInterfaces()
@@ -112,7 +113,7 @@ namespace Arnible.MathModeling.Export
       Type elementType = enumerableInterfaceType.GetGenericArguments().Single();
       TsvFlatFieldSerializerCollection structureSerializer = GetStructureSerializer(elementType);
 
-      for(uint i=0; i<fixedArray.Size; ++i)
+      for (uint i = 0; i < fixedArray.Size; ++i)
       {
         foreach (FlatFieldSerializer field in structureSerializer._fields)
         {

@@ -36,5 +36,11 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       Assert.Equal<Number>(expectedValue, _strategy.GetValidTranslationRatio(currentValue, evaluatedDelta));
     }
+
+    [Fact]
+    public void Width()
+    {
+      Assert.Equal(2, _strategy.Width);
+    }
   }
 }

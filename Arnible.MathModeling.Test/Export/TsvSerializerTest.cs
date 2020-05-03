@@ -1,4 +1,5 @@
 ﻿using Arnible.MathModeling.Algebra;
+using Arnible.MathModeling.Test.Export;
 using System;
 using System.IO;
 using System.Text;
@@ -158,6 +159,57 @@ namespace Arnible.MathModeling.Export.Test
       Assert.Equal(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
       Assert.Equal("\t\t\t\t\t", lines[1]);
       Assert.Empty(lines[2]);
+    }
+
+    [Fact]
+    public async Task GenericSerializer()
+    {
+      var serializerNumber = new TsvSerializer<TestGenericRecord<Number>>();
+      var serializerVector = new TsvSerializer<TestGenericRecord<NumberVector>>();
+
+      var recordNumber = new TestGenericRecord<Number>
+      {
+        Output = 1,
+        Error = 2,
+        ErrorVector = new NumberVector(1, 2),
+        SubOutput = new TestGenericSubRecord<Number>(5)
+      };
+      await using (MemoryStream stream = new MemoryStream())
+      {
+        await serializerNumber.Serialize(new[] { recordNumber }, stream, default);
+
+        stream.Position = 0;
+        var bytes = stream.ToArray();
+        string result = Encoding.UTF8.GetString(bytes);
+
+        string[] lines = result.Split(Environment.NewLine);
+        Assert.Equal(3, lines.Length);
+        Assert.Equal(new[] { "Output", "Error", "ErrorVector", "SubOutput_Property" }, lines[0].Split('\t'));
+        Assert.Equal("1\t2\t[1 2]\t5", lines[1]);
+        Assert.Empty(lines[2]);
+      }
+
+      var recordVector = new TestGenericRecord<NumberVector>
+      {
+        Output = new NumberVector(1, 2),
+        Error = 2,
+        ErrorVector = new NumberVector(1, 2),
+        SubOutput = new TestGenericSubRecord<NumberVector>(new NumberVector(3, 5))
+      };
+      await using (MemoryStream stream = new MemoryStream())
+      {
+        await serializerVector.Serialize(new[] { recordVector }, stream, default);
+
+        stream.Position = 0;
+        var bytes = stream.ToArray();
+        string result = Encoding.UTF8.GetString(bytes);
+
+        string[] lines = result.Split(Environment.NewLine);
+        Assert.Equal(3, lines.Length);
+        Assert.Equal(new[] { "Output", "Error", "ErrorVector", "SubOutput_Property" }, lines[0].Split('\t'));
+        Assert.Equal("[1 2]\t2\t[1 2]\t[3 5]", lines[1]);
+        Assert.Empty(lines[2]);
+      }
     }
   }
 }

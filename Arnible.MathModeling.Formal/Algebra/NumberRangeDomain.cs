@@ -17,6 +17,8 @@ namespace Arnible.MathModeling.Algebra
       Maximum = maximum;
     }
 
+    public double Width => (double)(Maximum - Minimum);
+
     public void Validate(Number value)
     {
       // intentionally empty

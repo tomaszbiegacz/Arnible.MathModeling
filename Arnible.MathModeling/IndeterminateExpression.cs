@@ -109,11 +109,11 @@ namespace Arnible.MathModeling
           return value;
         case ElementaryUnaryOperation.Sine:
           if (value.NumericEquals(0)) return 0;
-          else if (value.NumericEquals(Math.PI / 2)) return 1;
+          else if (value.NumericEquals(Angle.RightAngle)) return 1;
           else return Math.Sin(value);
         case ElementaryUnaryOperation.Cosine:
           if (value.NumericEquals(0)) return 1;
-          else if (value.NumericEquals(Math.PI / 2)) return 0;
+          else if (value.NumericEquals(Angle.RightAngle)) return 0;
           else return Math.Cos(value);
         default:
           throw new InvalidOperationException("Unknown modifier: " + modifier);

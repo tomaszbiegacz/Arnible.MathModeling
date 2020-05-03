@@ -8,6 +8,12 @@ namespace Arnible.MathModeling.Algebra
   {
     private readonly NumberVector _change;
 
+    public NumberTranslationVector(params Number[] parameters)
+      : this(new NumberVector(parameters))
+    {
+      // intentionally empty
+    }
+
     public NumberTranslationVector(NumberVector change)
     {
       _change = change;

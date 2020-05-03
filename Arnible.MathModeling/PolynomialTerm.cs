@@ -139,7 +139,7 @@ namespace Arnible.MathModeling
      * Properties
      */
 
-    public bool IsZero => _coefficient == 0;
+    public bool IsZero =>  _coefficient.NumericEquals(0);
     public bool IsConstant => _indeterminatesSignature == null;
     public bool HasPositiveCoefficient => _coefficient > 0;
 

@@ -18,6 +18,8 @@ namespace Arnible.MathModeling.Algebra
       Maximum = maximum;
     }
 
+    public double Width => Maximum - Minimum;
+
     public void Validate(Number value)
     {
       if (value < Minimum || value > Maximum)

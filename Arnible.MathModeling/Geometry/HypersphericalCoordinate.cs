@@ -10,8 +10,8 @@ namespace Arnible.MathModeling.Geometry
   {
     /// <summary>
     /// Angles:
-    /// - from x axis to r(xy)
-    /// - from xy plane to r(xyz)
+    /// - from x axis to r(xy) range over [-π, π]
+    /// - from xy plane to r(xyz) range over [-π/2, π/2]
     /// - etc..
     /// </summary>
     /// <remarks>
@@ -93,7 +93,7 @@ namespace Arnible.MathModeling.Geometry
       yield return new HypersphericalAngleVector(x.ToVector());
       for (uint i = 0; i < anglesCount; ++i)
       {
-        x[i] = HypersphericalAngleVector.RightAngle;
+        x[i] = Angle.RightAngle;
         yield return new HypersphericalAngleVector(x.ToVector());
         x[i] = 0;
       }
