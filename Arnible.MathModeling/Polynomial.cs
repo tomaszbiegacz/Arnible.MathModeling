@@ -287,11 +287,11 @@ namespace Arnible.MathModeling
       return new Polynomial(CompositionIngredients(variable, replacement));
     }
 
-    private PolynomialDivision Composition(char variable, PolynomialDivision replacement)
+    public PolynomialDivision Composition(char variable, PolynomialDivision replacement)
     {
       List<PolynomialTerm> remaining = new List<PolynomialTerm>();
 
-      PolynomialDivision result = PolynomialDivision.Zero;
+      PolynomialDivision result = 0;
       foreach (PolynomialTerm term in Terms)
       {
         if (term.Variables.Any(v => v == variable))

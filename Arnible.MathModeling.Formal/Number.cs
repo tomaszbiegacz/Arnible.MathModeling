@@ -6,7 +6,12 @@ namespace Arnible.MathModeling
 {
   public readonly struct Number : IEquatable<Number>, IComparable<Number>
   {
-    private readonly Polynomial _term;
+    private readonly PolynomialDivision _term;
+
+    private Number(PolynomialDivision term)
+    {
+      _term = term;
+    }
 
     private Number(Polynomial term)
     {
@@ -20,7 +25,10 @@ namespace Arnible.MathModeling
     public static explicit operator PolynomialTerm(Number v) => (PolynomialTerm)v._term;
 
     public static implicit operator Number(Polynomial v) => new Number(v);
-    public static implicit operator Polynomial(Number v) => v._term;
+    public static explicit operator Polynomial(Number v) => (Polynomial)v._term;
+
+    public static implicit operator Number(PolynomialDivision v) => new Number(v);
+    public static implicit operator PolynomialDivision(Number v) => v._term;
 
     //
     // Object

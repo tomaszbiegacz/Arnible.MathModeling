@@ -6,23 +6,23 @@ namespace Arnible.MathModeling.Geometry.Test
 {
   public class HypersphericalCoordinateTests
   {
-    private static Polynomial GetSum(uint inputCount)
+    private static PolynomialDivision GetSum(uint inputCount)
     {
       var cartesianInputs = Number.Terms(inputCount);
       var cartesianPoint = new CartesianCoordinate(cartesianInputs.ToVector());
       var sphericalPoint = new HypersphericalCoordinate((PolynomialTerm)'R', Number.GreekTerms(inputCount - 1).ToVector());
 
-      Polynomial product = cartesianInputs.SumDefensive();
+      Number product = cartesianInputs.SumDefensive();
       return product.ToSpherical(cartesianPoint, sphericalPoint);
     }
 
     [Fact]
     public void GeneralizationForSum()
     {
-      Polynomial last = default;
+      PolynomialDivision last = default;
       for (uint i = 2; i <= 5; ++i)
       {
-        Polynomial current = GetSum(i);
+        PolynomialDivision current = GetSum(i);
         if (last != default)
         {
           Assert.Equal(last, current.Composition(Number.GreekTerm(i - 2), 0));
@@ -31,12 +31,12 @@ namespace Arnible.MathModeling.Geometry.Test
       }
     }
 
-    private static void EqualityAfterTranformation(Polynomial polynomial)
+    private static void EqualityAfterTranformation(PolynomialDivision polynomial)
     {
       var cartesianPoint = new CartesianCoordinate(new NumberVector(Term.x, Term.y, Term.z));
       var sphericalPoint = new HypersphericalCoordinate(Term.r, new NumberVector(Term.θ, Term.φ));
 
-      var sphericalPolynomial = polynomial.ToSpherical(cartesianPoint, sphericalPoint);
+      PolynomialDivision sphericalPolynomial = polynomial.ToSpherical(cartesianPoint, sphericalPoint);
 
       double sqrt2 = Math.Sqrt(2);
       double sqrt3 = Math.Sqrt(3);
@@ -63,7 +63,7 @@ namespace Arnible.MathModeling.Geometry.Test
       Assert.Equal((int)cartesianPoint.DimensionsCount, derivatives.Length);
       for (uint i = 0; i < cartesianPoint.DimensionsCount; ++i)
       {
-        var symbol = (Polynomial)cartesianPoint.Coordinates[i];
+        var symbol = (PolynomialDivision)cartesianPoint.Coordinates[i];
         AssertFormal.Equal(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[i].First);
       }
     }

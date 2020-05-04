@@ -378,7 +378,7 @@ namespace Arnible.MathModeling
       var remaining = new PolynomialTerm(_coefficient, Indeterminates.Where(kv => kv.Variable != variable));
 
       var toReplace = Indeterminates.Where(kv => kv.Variable == variable).ToArray();
-      PolynomialDivision inPlace = PolynomialDivision.One;
+      PolynomialDivision inPlace = 1;
       if (toReplace.Length > 0)
       {
         if (toReplace.Length > 1 && toReplace.Any(i => i.HasUnaryModifier))

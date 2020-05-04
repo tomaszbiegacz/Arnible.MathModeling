@@ -9,15 +9,62 @@ namespace Arnible.MathModeling.Test
     private readonly PolynomialTerm y = 'y';
 
     [Fact]
-    public void Const_Zero()
+    public void Constructor_Default()
     {
-      Assert.Equal(0, (Polynomial)PolynomialDivision.Zero);
+      PolynomialDivision v = default;
+      Assert.Equal(0, v);
+      Assert.True(v.IsZero);
+      Assert.True(v.IsPolynomial);
+      Assert.True(v.IsConstant);
+      Assert.Equal("0", v.ToString());
+
+      Assert.Equal(0, v.DerivativeBy('a'));
+
+      Assert.Equal(0, 2 * v);
+      Assert.Equal(0, v / 2);
+
+      Assert.Equal(0, v.GetOperation().Value());
     }
 
     [Fact]
-    public void Const_One()
+    public void Constructor_Constant()
     {
-      Assert.Equal(1, (Polynomial)PolynomialDivision.One);
+      PolynomialDivision v = 2;      
+      Assert.False(v.IsZero);
+      Assert.True(v.IsPolynomial);
+      Assert.True(v.IsConstant);
+      Assert.Equal("2", v.ToString());
+
+      Assert.Equal(2, v);
+      Assert.Equal(2, (double)v);
+      Assert.NotEqual(1, v);
+      Assert.NotEqual(0, v);
+
+      Assert.Equal(0, v.DerivativeBy('a'));
+
+      Assert.Equal(4, 2 * v);
+      Assert.Equal(1, v / 2);
+
+      Assert.Equal(2, v.GetOperation().Value());
+    }
+
+    [Fact]
+    public void Constructor_Variable()
+    {
+      PolynomialDivision v = 'a';
+      Assert.False(v.IsZero);
+      Assert.False(v.IsConstant);
+      Assert.Equal("a", v.ToString());
+
+      Assert.Equal('a', (PolynomialTerm)v);
+
+      Assert.Equal(1, v.DerivativeBy('a'));
+      Assert.Equal(0, v.DerivativeBy('b'));
+
+      Assert.Equal(2 * Term.a, 2 * v);
+      Assert.Equal(0.5 * Term.a, v / 2);
+
+      Assert.Equal(5, v.GetOperation('a').Value(5));
     }
 
     [Fact]
@@ -25,17 +72,25 @@ namespace Arnible.MathModeling.Test
     {
       Polynomial x = 'x';
       Polynomial constant = 1;
-      PolynomialDivision pol = x / constant;
-      Assert.True(pol.IsPolynomial);
-      Assert.Equal('x', (Polynomial)pol);
+      PolynomialDivision v = x / constant;
+      Assert.True(v.IsPolynomial);
+      Assert.False(v.IsConstant);
+      Assert.Equal("x", v.ToString());
     }
 
     [Fact]
-    public void ToString_Special()
+    public void Constructor_PolynomialDivision()
     {
-      Assert.Equal("0", (0 / (PolynomialTerm)'x').ToString());
-      Assert.Equal("NaN", (new PolynomialDivision()).ToString());
-    }
+      Polynomial x = 'x';
+      Polynomial y = 'y';
+      PolynomialDivision v = x / y;
+      Assert.False(v.IsZero);
+      Assert.False(v.IsPolynomial);
+      Assert.False(v.IsConstant);
+      Assert.Equal("x/y", v.ToString());
+
+      Assert.Equal(5, v.GetOperation('x', 'y').Value(10, 2));
+    }    
 
     [Fact]
     public void ToString_Common()
