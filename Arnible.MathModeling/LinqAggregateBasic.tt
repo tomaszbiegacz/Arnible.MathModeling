@@ -1,0 +1,82 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".tt.cs" #>
+<#
+
+string[] generatedTypes = new[] { "double", "Number" };
+
+#>
+using System;
+using System.Collections.Generic;
+
+namespace Arnible.MathModeling
+{
+  public static class LinqAggregateBasic
+  {
+<#
+
+foreach(string typeName in generatedTypes)
+{
+
+#>
+    public static <#= typeName #> MinDefensive(this IEnumerable<<#= typeName #>> x)
+    {
+      if (x == null)
+      {
+        throw new ArgumentNullException(nameof(x));
+      }      
+      <#= typeName #>? result = null;
+      foreach (<#= typeName #> v in x)
+      {
+        if (result.HasValue)
+        {
+          if (v < result.Value)
+          {
+            result = v;
+          }
+        }
+        else
+        {
+          result = v;
+        }        
+      }
+      if (!result.HasValue)
+      {
+        throw new ArgumentException("Empty enumerator");
+      }
+      return result.Value;
+    }    
+
+    public static <#= typeName #> MaxDefensive(this IEnumerable<<#= typeName #>> x)
+    {
+      if (x == null)
+      {
+        throw new ArgumentNullException(nameof(x));
+      }      
+      <#= typeName #>? result = null;
+      foreach (<#= typeName #> v in x)
+      {
+        if (result.HasValue)
+        {
+          if (v > result.Value)
+          {
+            result = v;
+          }
+        }
+        else
+        {
+          result = v;
+        }        
+      }
+      if (!result.HasValue)
+      {
+        throw new ArgumentException("Empty enumerator");
+      }
+      return result.Value;
+    }    
+<#
+
+}
+
+#>
+  }
+}

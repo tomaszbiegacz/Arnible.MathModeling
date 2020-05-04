@@ -59,7 +59,7 @@ namespace Arnible.MathModeling.Algebra
 
     public Number this[uint pos] => _change[pos];
 
-    public Number GetLengthSquare() => _change.Sum(v => v * v);
+    public Number GetLengthSquare() => _change.Select(v => v * v).SumWithDefault();
 
     /*
      * Operations

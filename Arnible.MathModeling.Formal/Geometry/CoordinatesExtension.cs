@@ -1,6 +1,5 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
-using System.Linq;
 using static Arnible.MathModeling.MetaMath;
 
 namespace Arnible.MathModeling.Geometry
@@ -32,7 +31,7 @@ namespace Arnible.MathModeling.Geometry
 
       NumberVector cd = cartesianPoint.Coordinates.Reverse();
       NumberVector ad = hypersphericalPoint.Angles.Reverse().ToVector();
-      for (uint i = 0; i < ad.Count; ++i)
+      for (uint i = 0; i < ad.Length; ++i)
       {
         var cartesianDimension = (PolynomialTerm)cd[i];
         var angle = (PolynomialTerm)ad[i];
@@ -54,7 +53,7 @@ namespace Arnible.MathModeling.Geometry
       }
 
       var result = source;
-      for(uint i=0; i<c1.Coordinates.Count; ++i)
+      for(uint i=0; i<c1.Coordinates.Length; ++i)
       {
         var cartesianDimension = (PolynomialTerm)c1.Coordinates[i];
         result = result.Composition(cartesianDimension, c2.Coordinates[i]);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Arnible.MathModeling
 {
@@ -216,7 +215,7 @@ namespace Arnible.MathModeling
      * IPolynomialOperation
      */
 
-    public IEnumerable<char> Variables => Numerator.Variables.Union(Denominator.Variables);
+    public IEnumerable<char> Variables => Numerator.Variables.Concat(Denominator.Variables).Distinct();
 
     public double Value(IReadOnlyDictionary<char, double> x)
     {

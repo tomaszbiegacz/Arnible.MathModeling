@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
-using System.Linq;
 
 namespace Arnible.MathModeling
 {
@@ -45,15 +44,15 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static implicit operator PolynomialTerm(char name) => new PolynomialTerm(1, ((IndeterminateExpression)name).Yield());
-    public static implicit operator PolynomialTerm(IndeterminateExpression name) => new PolynomialTerm(1, name.Yield());
-    public static implicit operator PolynomialTerm(double value) => new PolynomialTerm(value, Enumerable.Empty<IndeterminateExpression>());
+    public static implicit operator PolynomialTerm(char name) => new PolynomialTerm(1, LinqEnumerable.Yield<IndeterminateExpression>(name));
+    public static implicit operator PolynomialTerm(IndeterminateExpression name) => new PolynomialTerm(1, LinqEnumerable.Yield(name));
+    public static implicit operator PolynomialTerm(double value) => new PolynomialTerm(value, LinqEnumerable.Empty<IndeterminateExpression>());
 
-    private IEnumerable<IndeterminateExpression> Indeterminates => _indeterminates ?? Enumerable.Empty<IndeterminateExpression>();
+    private IEnumerable<IndeterminateExpression> Indeterminates => _indeterminates ?? LinqEnumerable.Empty<IndeterminateExpression>();
 
     private string IndeterminatesSignature => _indeterminatesSignature ?? string.Empty;
 
-    public long PowerSum => Indeterminates.Sum(kv => kv.Power);
+    public ulong PowerSum => Indeterminates.Select(kv => kv.Power).SumWithDefault();
 
     public IndeterminateExpression GreatestPowerIndeterminate { get; }
 
@@ -239,7 +238,7 @@ namespace Arnible.MathModeling
         return true;
       }
 
-      var bIndeterminates = b.Indeterminates.ToDictionary(kv => kv.Signature, kv => kv);
+      var bIndeterminates = b.Indeterminates.ToDictionary(kv => kv.Signature);
       var resultIndeterminates = new List<IndeterminateExpression>();
       foreach (var aInt in Indeterminates)
       {
@@ -302,9 +301,9 @@ namespace Arnible.MathModeling
         case 1:
           return vars;
         default:
-          return variables.GroupBy(v => v._indeterminatesSignature)
-            .Select(g => Add(g)).Where(v => !v.IsZero)
-            .OrderByDescending(v => v.PowerSum).ThenByDescending(v => v.GreatestPowerIndeterminate.Power).ThenBy(v => v.GreatestPowerIndeterminate.Signature);
+          return variables.AggregateBy(v => v._indeterminatesSignature, g => Add(g))
+            .Where(v => !v.IsZero)
+            .OrderByDescending(v => v.PowerSum, v => v.GreatestPowerIndeterminate.Power).ThenOrderBy(v => v.GreatestPowerIndeterminate.Signature);
       }
     }
 
@@ -315,7 +314,7 @@ namespace Arnible.MathModeling
 
     private static PolynomialTerm Add(IEnumerable<PolynomialTerm> variables)
     {
-      var coefficient = variables.Select(v => v._coefficient).OrderBy(k => k).Sum();
+      var coefficient = variables.Select(v => v._coefficient).SumWithDefault();
 
       if (coefficient == 0)
       {
@@ -337,7 +336,7 @@ namespace Arnible.MathModeling
       if (!Indeterminates.Any(kv => kv.Variable == variable))
       {
         // nothing to do here
-        return this.Yield();
+        return LinqEnumerable.Yield(this);
       }
       else
       {
@@ -349,7 +348,7 @@ namespace Arnible.MathModeling
           if (replacement.IsConstant)
           {
             double constantReplacement = (double)replacement;
-            Polynomial inPlace = toReplace.Select(r => r.SimplifyForConstant(constantReplacement)).Product();
+            Polynomial inPlace = toReplace.Select(r => r.SimplifyForConstant(constantReplacement)).ProductDefensive();
             return inPlace * remaining;
           }
           else
@@ -363,7 +362,7 @@ namespace Arnible.MathModeling
           if (replacement.HasOneTerm)
           {
             var temp = (PolynomialTerm)replacement;
-            return (temp.ToPower(power) * remaining).Yield();
+            return LinqEnumerable.Yield(temp.ToPower(power) * remaining);
           }
           else
           {
@@ -411,7 +410,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        return _coefficient * Indeterminates.Select(kv => kv.Value(x)).Product();
+        return _coefficient * Indeterminates.Select(kv => kv.Value(x)).ProductWithDefault();
       }
     }
   }

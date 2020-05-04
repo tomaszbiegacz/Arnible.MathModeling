@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
 
 namespace Arnible.MathModeling.Export
@@ -109,7 +108,8 @@ namespace Arnible.MathModeling.Export
 
       Type enumerableInterfaceType = property
         .PropertyType.GetInterfaces()
-        .Single(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+        .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+        .Single();
       Type elementType = enumerableInterfaceType.GetGenericArguments().Single();
       TsvFlatFieldSerializerCollection structureSerializer = GetStructureSerializer(elementType);
 
@@ -129,7 +129,7 @@ namespace Arnible.MathModeling.Export
       var valueSerializer = GetValueSerializer(t);
       if (valueSerializer != null)
       {
-        return ForRootProperty(property, valueSerializer).Yield();
+        return LinqEnumerable.Yield(ForRootProperty(property, valueSerializer));
       }
       else
       {

@@ -1,7 +1,6 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Arnible.MathModeling
 {
@@ -15,17 +14,17 @@ namespace Arnible.MathModeling
       return terms.SelectMany(t => t.DerivativeBy(name));
     }
 
-    private static Number Derivative2Ingredient(IDerivative2[] args, int pos)
+    private static Number Derivative2Ingredient(IDerivative2[] args, uint pos)
     {
       Number result = args[pos].Second;
-      for (int i = 0; i < pos; ++i)
+      for (uint i = 0; i < pos; ++i)
       {
         result *= args[i].First;
       }
       if (pos + 1 < args.Length)
       {
         Number remainder = 1;
-        for (int i = pos + 1; i < args.Length; ++i)
+        for (uint i = pos + 1; i < args.Length; ++i)
         {
           remainder *= args[i].First;
         }
@@ -50,14 +49,9 @@ namespace Arnible.MathModeling
     public static IDerivative2 ForComposition(this IEnumerable<IDerivative2> derivatives)
     {
       var args = derivatives.ToArray();
-      if (args.Length < 1)
-      {
-        throw new ArgumentException(nameof(args));
-      }
-
       return new Derivative2Lazy(
-        first: args.Select(d => d.First).Product(),
-        second: () => args.Indexes().Select(pos => Derivative2Ingredient(args, pos)).Sum());
+        first: args.Select(d => d.First).ProductDefensive(),
+        second: () => args.Indexes().Select(pos => Derivative2Ingredient(args, pos)).SumDefensive());
     }
 
     /// <summary>
@@ -70,7 +64,7 @@ namespace Arnible.MathModeling
     /// </summary>    
     public static IDerivative1 ForComposition(this IEnumerable<IDerivative1> derivatives)
     {
-      return new Derivative1Value(derivatives.Select(d => d.First).Product());
+      return new Derivative1Value(derivatives.Select(d => d.First).ProductDefensive());
     }
 
     /// <summary>
@@ -83,23 +77,23 @@ namespace Arnible.MathModeling
     /// </summary>    
     public static IDerivative1 ForProductByParameter(NumberVector productValues, IEnumerable<IDerivative1> valueDerrivativeByParameter)
     {
-      if (productValues.Count < 1)
+      if (productValues.Length < 1)
       {
         throw new ArgumentException(nameof(productValues));
       }
       var valueDerivatives = valueDerrivativeByParameter.ToArray();
-      if (valueDerivatives.Length != productValues.Count)
+      if (valueDerivatives.Length != productValues.Length)
       {
         throw new ArgumentException(nameof(valueDerrivativeByParameter));
       }
 
       Number result = 0;
-      for (uint i = 0; i < productValues.Count; ++i)
+      for (uint i = 0; i < productValues.Length; ++i)
       {
         Number derivative = valueDerivatives[i].First;
         if (derivative != 0)
         {
-          result += productValues.ExcludeAt(i).Product() * derivative;
+          result += productValues.ExcludeAt(i).ProductWithDefault() * derivative;
         }
       }
       return new Derivative1Value(result);

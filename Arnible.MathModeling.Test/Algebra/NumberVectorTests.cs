@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Arnible.MathModeling.Algebra.Test
@@ -13,7 +12,7 @@ namespace Arnible.MathModeling.Algebra.Test
       Assert.True(v.IsZero);
       Assert.Empty(v);
 #pragma warning disable xUnit2013 // Do not use equality check to check for collection size.
-      Assert.Equal(0, v.Count);
+      Assert.Equal(0u, v.Length);
 #pragma warning restore xUnit2013 // Do not use equality check to check for collection size.      
       Assert.Equal("[]", v.ToString());
 
@@ -26,7 +25,7 @@ namespace Arnible.MathModeling.Algebra.Test
       NumberVector v = new NumberVector(2, 3, 4);
       Assert.False(v.IsZero);
       Assert.Equal(v, new Number[] { 2, 3, 4 });
-      Assert.Equal(3, v.Count);
+      Assert.Equal(3u, v.Length);
       Assert.Equal("[2 3 4]", v.ToString());
 
       NumberVector v1 = new NumberVector(1, 2, 3);
@@ -114,7 +113,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void Indexes()
     {
-      Assert.Equal(Enumerable.Range(0, 3).Select(i => (uint)i), new NumberVector(1, 2, 3).Indexes());
+      Assert.Equal(LinqEnumerable.RangeUint(0, 3), new NumberVector(1, 2, 3).Indexes());
     }
 
     [Fact]

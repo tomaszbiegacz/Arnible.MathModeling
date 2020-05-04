@@ -1,7 +1,6 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -97,7 +96,7 @@ namespace Arnible.MathModeling.Geometry
       Id = id;
       _rightAngleResolution = rightAngleResolution;
       _angles = angles.ToArray();
-      if(_angles.Count(a => a == rightAngleResolution) > 1)
+      if(_angles.Where(a => a == rightAngleResolution).Count() > 1)
       {
         throw new ArgumentException(nameof(angles));
       }
@@ -109,11 +108,12 @@ namespace Arnible.MathModeling.Geometry
       byte result = 0;
       if (angles.Length > 0)
       {
-        int firstAnglePos = angles.IndexOf(a => a == rightAngleResolution);
+        uint anglePos;
+        uint? firstAnglePos = angles.IndexOf(a => a == rightAngleResolution);        
         if (firstAnglePos > 0)
         {
           result = 1;
-          firstAnglePos++;
+          anglePos = firstAnglePos.Value + 1;
         }
         else
         {
@@ -126,9 +126,9 @@ namespace Arnible.MathModeling.Geometry
           {
             result = 2;
           }
-          firstAnglePos = 1;
+          anglePos = 1;
         }
-        result += (byte)angles.Skip(firstAnglePos).Count(a => a != 0);
+        result += (byte)angles.SkipExactly(anglePos).Where(a => a != 0).Count();
       }
       return result;
     }    
@@ -137,7 +137,7 @@ namespace Arnible.MathModeling.Geometry
 
     public byte UsedCartesianDirectionsCount { get; }    
 
-    public IEnumerable<sbyte> Angles => _angles ?? Enumerable.Empty<sbyte>();
+    public IEnumerable<sbyte> Angles => _angles ?? LinqEnumerable.Empty<sbyte>();
 
     public bool Equals(HypersphericalAngleQuantified other) => Id == other.Id;
 

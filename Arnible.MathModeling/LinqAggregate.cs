@@ -1,59 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Arnible.MathModeling
 {
-  public static class ComputationExtensions
+  public static class LinqAggregate
   {
-    public static double Product(this IEnumerable<double> x)
+    public static IEnumerable<TResult> AggregateBy<TSource, TKey, TResult>(
+      this IEnumerable<TSource> source, 
+      Func<TSource, TKey> keySelector, 
+      Func<IEnumerable<TSource>, TResult> aggregator)
     {
-      double current = 1;
-      foreach (double v in x)
-      {
-        current *= v;
-      }
-      return current;
-    }
-
-    public static Number Product(this IEnumerable<Number> x)
-    {
-      Number current = 1;
-      foreach (Number v in x)
-      {
-        current *= v;
-      }
-      return current;
-    }
-
-    public static double Sum(this IEnumerable<double> x)
-    {
-      double current = 0;
-      foreach (double v in x)
-      {
-        current += v;
-      }
-      return current;
-    }
-
-    public static Number Sum(this IEnumerable<Number> x)
-    {
-      Number current = 0;
-      foreach (Number v in x)
-      {
-        current += v;
-      }
-      return current;
-    }
-
-    public static Number Sum(this IEnumerable<Number> x, Func<Number, Number> cast)
-    {
-      Number current = 0;
-      foreach (Number v in x)
-      {
-        current += cast(v);
-      }
-      return current;
+      return System.Linq.Enumerable.GroupBy(source, keySelector).Select(g => aggregator(g));
     }
 
     private static IEnumerable<T> AggregateCombinations<T>(T[] x, uint i, uint groupCount, Func<IEnumerable<T>, T> aggregator, Stack<T> combination)
@@ -107,7 +64,7 @@ namespace Arnible.MathModeling
       return AggregateCombinations(x, 0, groupCount, aggregator, combination);
     }
 
-    public static IEnumerable<T> AggregateAllCombinations<T>(this IEnumerable<T> items, Func<IEnumerable<T>, T> aggregator)
+    public static IEnumerable<T> AggregateCombinationsAll<T>(this IEnumerable<T> items, Func<IEnumerable<T>, T> aggregator)
     {
       if (items == null)
       {
@@ -127,6 +84,36 @@ namespace Arnible.MathModeling
           yield return item;
         }
       }
-    }    
+    }
+
+    public static uint Count<T>(this IEnumerable<T> source)
+    {
+      return (uint)System.Linq.Enumerable.LongCount(source);
+    }
+
+    /// <summary>
+    /// If validation of equal length is not needed, use Enumerable.Zip instead.
+    /// </summary>    
+    public static IEnumerable<TResult> ZipDefensive<T, TResult>(this IEnumerable<T> col1, IEnumerable<T> col2, Func<T, T, TResult> merge)
+    {
+      using (var col1Enum = col1.GetEnumerator())
+      using (var col2Enum = col2.GetEnumerator())
+      {
+        bool isCol1Valid = col1Enum.MoveNext();
+        bool isCol2Valid = col2Enum.MoveNext();
+        while (isCol1Valid && isCol2Valid)
+        {
+          yield return merge(col1Enum.Current, col2Enum.Current);
+
+          isCol1Valid = col1Enum.MoveNext();
+          isCol2Valid = col2Enum.MoveNext();
+        }
+
+        if (isCol1Valid || isCol2Valid)
+        {
+          throw new InvalidOperationException("Collections are not the same size.");
+        }
+      }
+    }
   }
 }

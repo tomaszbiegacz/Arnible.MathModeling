@@ -1,6 +1,5 @@
 ﻿using Arnible.MathModeling.Geometry;
 using Arnible.MathModeling.Algebra;
-using System.Linq;
 using Xunit;
 using System;
 using Arnible.MathModeling.Test;

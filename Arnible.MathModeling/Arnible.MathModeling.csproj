@@ -7,10 +7,63 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <TransformOnBuild>true</TransformOnBuild>
+    <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
+    <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="LinqAggregateBasic.tt.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LinqAggregateBasic.tt</DependentUpon>
+    </None>
+    <None Include="LinqSum.tt.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LinqSum.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="LinqAggregateBasic.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LinqAggregateBasic.tt.cs</LastGenOutput>
+    </None>
+    <None Update="LinqProduct.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LinqProduct.tt.cs</LastGenOutput>
+    </None>
+    <None Update="LinqSum.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LinqSum.tt.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="LinqAggregateBasic.tt.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LinqAggregateBasic.tt</DependentUpon>
+    </Compile>
+    <Compile Update="LinqProduct.tt.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LinqProduct.tt</DependentUpon>
+    </Compile>
+    <Compile Update="LinqSum.tt.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LinqSum.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

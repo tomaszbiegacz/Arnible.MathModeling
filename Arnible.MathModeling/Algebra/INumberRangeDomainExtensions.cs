@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace Arnible.MathModeling.Algebra
+﻿namespace Arnible.MathModeling.Algebra
 {
   public static class INumberRangeDomainExtensions
   {
@@ -20,11 +18,6 @@ namespace Arnible.MathModeling.Algebra
     public static bool IsValidTranslation(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)
     {
       return value.ZipDefensive(delta, (v, t) => domain.IsValidTranslation(v, t)).All();
-    }
-
-    public static Number GetValidTranslationRatio(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)
-    {
-      return value.ZipDefensive(delta, (v, t) => domain.GetValidTranslationRatio(v, t)).Min();
     }
   }
 }

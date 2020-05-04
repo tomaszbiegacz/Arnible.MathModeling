@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Xunit;
 
 namespace Arnible.MathModeling.Test
@@ -15,7 +14,7 @@ namespace Arnible.MathModeling.Test
       Assert.True(v.IsConstant);
       Assert.Equal("0", v.ToString());
 
-      Assert.Equal(0, v.PowerSum);
+      Assert.Equal(0u, v.PowerSum);
       Assert.Equal(0, v.GreatestPowerIndeterminate.Variable);
       Assert.Equal(0u, v.GreatestPowerIndeterminate.Power);
 
@@ -40,7 +39,7 @@ namespace Arnible.MathModeling.Test
       Assert.True(v.IsConstant);
       Assert.Equal("2", v.ToString());
 
-      Assert.Equal(0, v.PowerSum);
+      Assert.Equal(0u, v.PowerSum);
       Assert.Equal(0, v.GreatestPowerIndeterminate.Variable);
       Assert.Equal(0u, v.GreatestPowerIndeterminate.Power);
 
@@ -64,7 +63,7 @@ namespace Arnible.MathModeling.Test
       Assert.False(v.IsZero);
       Assert.False(v.IsConstant);
 
-      Assert.Equal(1, v.PowerSum);
+      Assert.Equal(1u, v.PowerSum);
       Assert.Equal('a', v.GreatestPowerIndeterminate.Variable);
       Assert.Equal(1u, v.GreatestPowerIndeterminate.Power);
 
@@ -89,7 +88,7 @@ namespace Arnible.MathModeling.Test
       Assert.False(v.IsConstant);
       Assert.Equal("2.1ac³", v.ToString());
 
-      Assert.Equal(4, v.PowerSum);
+      Assert.Equal(4u, v.PowerSum);
       Assert.Equal('c', v.GreatestPowerIndeterminate.Variable);
       Assert.Equal(3u, v.GreatestPowerIndeterminate.Power);      
 

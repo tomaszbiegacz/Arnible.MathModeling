@@ -1,6 +1,5 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
-using System.Linq;
 using Xunit;
 
 namespace Arnible.MathModeling.Geometry.Test
@@ -13,7 +12,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var cartesianPoint = new CartesianCoordinate(cartesianInputs.ToVector());
       var sphericalPoint = new HypersphericalCoordinate((PolynomialTerm)'R', Number.GreekTerms(inputCount - 1).ToVector());
 
-      Polynomial product = cartesianInputs.Sum();
+      Polynomial product = cartesianInputs.SumDefensive();
       return product.ToSpherical(cartesianPoint, sphericalPoint);
     }
 

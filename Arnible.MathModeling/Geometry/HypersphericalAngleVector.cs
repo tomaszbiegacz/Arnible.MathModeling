@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -28,7 +27,7 @@ namespace Arnible.MathModeling.Geometry
         {
           throw new ArgumentException($"Invalid first angualr coordinate: {first}");
         }
-        if (angles.Skip(1).Any(a => a > Angle.RightAngle || a < -1 * Angle.RightAngle))
+        if (angles.SkipExactly(1).Any(a => a > Angle.RightAngle || a < -1 * Angle.RightAngle))
         {
           throw new ArgumentException($"Invalid angular coordinates: {angles}");
         }
@@ -59,11 +58,11 @@ namespace Arnible.MathModeling.Geometry
 
     //
     // Properties
-    //
+    //    
 
-    public bool IsEmpty => _angles.Count == 0;
+    public uint Length => _angles.Length;
 
-    public int Count => _angles.Count;
+    public bool IsEmpty => Length == 0;
 
     //
     // IReadonlyCollection
@@ -74,6 +73,8 @@ namespace Arnible.MathModeling.Geometry
     public IEnumerator<Number> GetEnumerator() => _angles.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => _angles.GetEnumerator();
+
+    int IReadOnlyCollection<Number>.Count => (int)Length;
 
     //
     // Operators
@@ -88,7 +89,7 @@ namespace Arnible.MathModeling.Geometry
     {
       get
       {
-        if(_angles.Count > 0)
+        if(_angles.Length > 0)
         {
           Number firstAngle = _angles.First();
           if(firstAngle > 0)
@@ -100,7 +101,7 @@ namespace Arnible.MathModeling.Geometry
             yield return Angle.HalfCycle + firstAngle;
           }
 
-          foreach(Number angle in _angles.Skip(1))
+          foreach(Number angle in _angles.SkipExactly(1))
           {
             yield return -1 * angle;
           }
@@ -138,13 +139,13 @@ namespace Arnible.MathModeling.Geometry
 
     private static IEnumerable<Number> AddAngles(NumberVector a, NumberVector b)
     {
-      if (a.Count != b.Count)
+      if (a.Length != b.Length)
       {
         throw new ArgumentException(nameof(a));
       }
 
       yield return RoundAngleFullCycle(a[0] + b[0]);
-      for (uint i = 1; i < a.Count; ++i)
+      for (uint i = 1; i < a.Length; ++i)
       {
         yield return RoundAngleHalfCycle(a[i] + b[i]);
       }

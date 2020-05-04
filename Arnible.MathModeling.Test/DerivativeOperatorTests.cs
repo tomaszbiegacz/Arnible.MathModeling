@@ -1,5 +1,4 @@
 ﻿using Arnible.MathModeling.Algebra;
-using System.Linq;
 using Xunit;
 
 namespace Arnible.MathModeling.Test

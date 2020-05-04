@@ -7,6 +7,9 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <TransformOnBuild>true</TransformOnBuild>
+    <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
+    <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +19,6 @@
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVector.cs" Link="Algebra\NumberVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVectorExtensions.cs" Link="Algebra\NumberVectorExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Angle.cs" Link="Angle.cs" />
-    <Compile Include="..\Arnible.MathModeling\ComputationExtensions.cs" Link="ComputationExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Derivative1Value.cs" Link="Derivative1Value.cs" />
     <Compile Include="..\Arnible.MathModeling\Derivative2Lazy.cs" Link="Derivative2Lazy.cs" />
     <Compile Include="..\Arnible.MathModeling\Derivative2Value.cs" Link="Derivative2Value.cs" />
@@ -36,10 +38,18 @@
     <Compile Include="..\Arnible.MathModeling\IBinaryOperation.cs" Link="IBinaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IDerivative1.cs" Link="IDerivative1.cs" />
     <Compile Include="..\Arnible.MathModeling\IDerivative2.cs" Link="IDerivative2.cs" />
-    <Compile Include="..\Arnible.MathModeling\IEnumerableExtensions.cs" Link="IEnumerableExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\IFinitaryOperation.cs" Link="IFinitaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IndeterminateExpression.cs" Link="IndeterminateExpression.cs" />
     <Compile Include="..\Arnible.MathModeling\IPolynomialOperation.cs" Link="IPolynomialOperation.cs" />
+    <Compile Include="..\Arnible.MathModeling\LinqAggregate.cs" Link="LinqAggregate.cs" />
+    <Compile Include="..\Arnible.MathModeling\LinqArray.cs" Link="LinqArray.cs" />
+    <Compile Include="..\Arnible.MathModeling\LinqComparable.cs" Link="LinqComparable.cs" />
+    <Compile Include="..\Arnible.MathModeling\LinqEnumerable.cs" Link="LinqEnumerable.cs" />
+    <Compile Include="..\Arnible.MathModeling\LinqPredicate.cs" Link="LinqPredicate.cs" />
+    <Compile Include="..\Arnible.MathModeling\LinqProduct.tt.cs" Link="LinqProduct.tt.cs" />
+    <Compile Include="..\Arnible.MathModeling\LinqSequence.cs" Link="LinqSequence.cs" />
+    <Compile Include="..\Arnible.MathModeling\LinqSum.tt.cs" Link="LinqSum.tt.cs" />
+    <Compile Include="..\Arnible.MathModeling\LinqTransformation.cs" Link="LinqTransformation.cs" />
     <Compile Include="..\Arnible.MathModeling\MetaMath.cs" Link="MetaMath.cs" />
     <Compile Include="..\Arnible.MathModeling\NumericFormatting.cs" Link="NumericFormatting.cs" />
     <Compile Include="..\Arnible.MathModeling\OperationExtension.cs" Link="OperationExtension.cs" />
@@ -52,10 +62,6 @@
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Export\" />
   </ItemGroup>
 
 </Project>

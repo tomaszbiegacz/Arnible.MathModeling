@@ -1,0 +1,68 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".tt.cs" #>
+<#
+
+Dictionary<string, string> generatedTypes = new Dictionary<string, string>
+{
+    {"double", "double"},
+    {"Number", "Number"},
+    {"int", "long"},
+    {"uint", "ulong"},
+};
+
+#>
+using System;
+using System.Collections.Generic;
+
+namespace Arnible.MathModeling
+{
+  public static class LinqSum
+  {
+<#
+
+foreach(var kv in generatedTypes)
+{
+
+#>
+    public static <#= kv.Value #> SumDefensive(this IEnumerable<<#= kv.Key #>> x)
+    {
+      if (x == null)
+      {
+        throw new ArgumentNullException(nameof(x));
+      }
+      bool anyElement = false;
+      <#= kv.Value #> current = 0;
+      foreach (<#= kv.Key #> v in x)
+      {
+        current += v;
+        anyElement = true;
+      }
+      if (!anyElement)
+      {
+        throw new ArgumentException("Empty enumerator");
+      }
+      return current;
+    }        
+
+    public static <#= kv.Value #> SumWithDefault(this IEnumerable<<#= kv.Key #>> x)
+    {
+      if (x == null)
+      {
+        throw new ArgumentNullException(nameof(x));
+      }      
+      <#= kv.Value #> current = 0;
+      foreach (<#= kv.Key #> v in x)
+      {
+        current += v;        
+      }
+      return current;
+    }        
+    
+<#
+
+}
+
+#>
+  }
+}

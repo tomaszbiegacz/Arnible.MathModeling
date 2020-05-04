@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Arnible.MathModeling.Algebra
 {
@@ -29,7 +28,7 @@ namespace Arnible.MathModeling.Algebra
         }
         else
         {
-          if (item.Count != result.Length)
+          if (item.Length != result.Length)
           {
             throw new ArgumentException(nameof(vectors));
           }

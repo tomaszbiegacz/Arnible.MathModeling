@@ -1,7 +1,6 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using static System.Math;
 
 namespace Arnible.MathModeling.Geometry
@@ -9,7 +8,7 @@ namespace Arnible.MathModeling.Geometry
   public static class CoordinatesExtension
   {
     private static double GetFirstAngle(double x, double y) => Atan2(y, x);
-    
+
     public static PolarCoordinate ToPolar(this RectangularCoordianate p)
     {
       return new PolarCoordinate(
@@ -27,13 +26,13 @@ namespace Arnible.MathModeling.Geometry
       NumberVector pc = p.Coordinates;
       NumberVector pc2 = pc.Transform(c => c * c);
 
-      Number r = Sqrt(pc2.Sum());
+      Number r = Sqrt(pc2.SumDefensive());
       if (r > 0)
       {
         var angles = new List<Number>();
         for (uint i = p.DimensionsCount; i > 2; i--)
         {
-          double radius2 = pc2.Take((int)i).Sum();
+          double radius2 = pc2.TakeExactly(i).SumDefensive();
           double angleSin = pc[i - 1] / Sqrt(radius2);
           double angle = Asin(angleSin);
           angles.Add(angle);
@@ -51,7 +50,7 @@ namespace Arnible.MathModeling.Geometry
 
     public static Number VectorLength(this CartesianCoordinate point)
     {
-      return Math.Sqrt(point.Coordinates.Select(d => d * d).Sum());
+      return Sqrt(point.Coordinates.Select(d => d * d).SumDefensive());
     }
   }
 }

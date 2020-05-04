@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 
 namespace Arnible.MathModeling.Algebra
 {
@@ -19,6 +18,10 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
+    public static NumberVector Zero(uint length) => Repeat(0, length);
+
+    public static NumberVector Repeat(Number value, uint length) => new NumberVector(LinqEnumerable.Repeat(value, length));
+
     private readonly IReadOnlyList<Number> _values;
 
     public NumberVector(params Number[] parameters)
@@ -29,11 +32,6 @@ namespace Arnible.MathModeling.Algebra
     public NumberVector(IEnumerable<Number> parameters)
     {
       _values = parameters?.ToArray();
-    }
-
-    public static NumberVector Repeat(Number element, uint count)
-    {
-      return new NumberVector(Enumerable.Repeat(element, (int)count));
     }
 
     //
@@ -55,13 +53,13 @@ namespace Arnible.MathModeling.Algebra
     {
       get
       {
-        if (pos >= Count)
+        if (pos >= Length)
           throw new InvalidOperationException($"Invalid index: {pos}");
         return _values[(int)pos];
       }
     }
 
-    public uint Length => (uint)Count;
+    public uint Length => (uint)(_values?.Count ?? 0);
 
     //
     // IReadOnlyList
@@ -69,13 +67,13 @@ namespace Arnible.MathModeling.Algebra
 
     public Number this[int pos] => _values[pos];
 
-    private IEnumerable<Number> Values => _values ?? Enumerable.Empty<Number>();
+    private IEnumerable<Number> Values => _values ?? LinqEnumerable.Empty<Number>();
 
     public IEnumerator<Number> GetEnumerator() => Values.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => Values.GetEnumerator();
 
-    public int Count => _values?.Count ?? 0;
+    int IReadOnlyCollection<Number>.Count => (int)Length;
 
     //
     // IEquatable
@@ -107,7 +105,7 @@ namespace Arnible.MathModeling.Algebra
 
     public override int GetHashCode()
     {
-      int hc = Count.GetHashCode();
+      int hc = Length.GetHashCode();
       foreach (var v in Values)
       {
         hc = unchecked(hc * 314159 + v.GetHashCode());
@@ -124,26 +122,17 @@ namespace Arnible.MathModeling.Algebra
 
     public NumberVector Transform(Func<Number, Number> transformation)
     {
-      return new NumberVector(Values.Select(v => transformation(v)));
+      return new NumberVector(Values.Select(transformation));
     }
 
     public NumberVector Transform(Func<uint, Number, Number> transformation)
     {
-      return new NumberVector(Values.Select((v, i) => transformation((uint)i, v)));
+      return new NumberVector(Values.Select(transformation));
     }
 
-    public NumberVector Reverse()
-    {
-      return new NumberVector(Values.Reverse());
-    }
+    public NumberVector Reverse() => new NumberVector(Values.Reverse());
 
-    public IEnumerable<uint> Indexes()
-    {
-      for (uint i = 0; i < Count; ++i)
-      {
-        yield return i;
-      }
-    }
+    public IEnumerable<uint> Indexes() => LinqEnumerable.RangeUint(0, Length);
 
     //
     // Arithmetic operators

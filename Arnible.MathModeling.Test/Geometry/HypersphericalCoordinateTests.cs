@@ -1,7 +1,6 @@
 ﻿using Arnible.MathModeling.Algebra;
 using Arnible.MathModeling.Test;
 using System;
-using System.Linq;
 using Xunit;
 
 namespace Arnible.MathModeling.Geometry.Test
@@ -68,7 +67,7 @@ namespace Arnible.MathModeling.Geometry.Test
         var axisCc = new HypersphericalCoordinate(hc.R, cartesianCoordinatesAngles[pos]).ToCartesian();
         Assert.Equal(cc.DimensionsCount, axisCc.DimensionsCount);
         Assert.Equal(hc.R, axisCc.Coordinates[pos]);
-        Assert.Equal(1, axisCc.Coordinates.Count(v => v != 0));
+        Assert.Equal(1u, axisCc.Coordinates.Where(v => v != 0).Count());
       }
     }
 

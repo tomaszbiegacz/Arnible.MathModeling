@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Arnible.MathModeling
 {
@@ -145,8 +144,8 @@ namespace Arnible.MathModeling
 
     internal static IEnumerable<IndeterminateExpression> Multiply(IEnumerable<IndeterminateExpression> i1, IEnumerable<IndeterminateExpression> i2)
     {
-      using (var ei1 = i1.OrderBy(i => i).GetEnumerator())
-      using (var ei2 = i2.OrderBy(i => i).GetEnumerator())
+      using (var ei1 = i1.Order().GetEnumerator())
+      using (var ei2 = i2.Order().GetEnumerator())
       {
         bool isEi1Valid = ei1.MoveNext();
         bool isEi2Valid = ei2.MoveNext();

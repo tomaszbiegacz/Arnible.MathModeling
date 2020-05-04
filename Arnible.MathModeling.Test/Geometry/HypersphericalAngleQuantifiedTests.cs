@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Arnible.MathModeling.Geometry.Test
@@ -9,35 +8,31 @@ namespace Arnible.MathModeling.Geometry.Test
   {
     private static void AssertDirection(List<HypersphericalAngleQuantified> directions, params sbyte[] expected)
     {
-      int pos = directions.IndexOf(d => expected.SequenceEqual(d.Angles));
-      Assert.True(pos >= 0);
-
-      directions.RemoveAt(pos);
+      uint? pos = directions.IndexOf(d => expected.SequenceEqual(d.Angles));      
+      directions.RemoveAt((int)pos.Value);
     }
 
     private static HypersphericalAngleQuantified GetDirection(List<HypersphericalAngleQuantified> directions, params sbyte[] expected)
     {
-      int pos = directions.IndexOf(d => expected.SequenceEqual(d.Angles));
-      Assert.True(pos >= 0);
-
-      return directions[pos];
+      uint? pos = directions.IndexOf(d => expected.SequenceEqual(d.Angles));      
+      return directions[(int)pos.Value];
     }
 
     [Fact]
     public void ToVector_Single()
     {
-      var directions = HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 1, resolution: 2).ToList();
+      var directions = HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 1, resolution: 2).ToArray();
 
-      Assert.Equal(new HypersphericalAngleVector(-1 * Math.PI / 4), directions.Single(d => d.Angles.Single() == -1).ToVector());
-      Assert.Equal(new HypersphericalAngleVector(0), directions.Single(d => d.Angles.Single() == 0).ToVector());
-      Assert.Equal(new HypersphericalAngleVector(Math.PI / 4), directions.Single(d => d.Angles.Single() == 1).ToVector());
-      Assert.Equal(new HypersphericalAngleVector(Math.PI / 2), directions.Single(d => d.Angles.Single() == 2).ToVector());
+      Assert.Equal(new HypersphericalAngleVector(-1 * Math.PI / 4), directions.Where(d => d.Angles.Single() == -1).Single().ToVector());
+      Assert.Equal(new HypersphericalAngleVector(0), directions.Where(d => d.Angles.Single() == 0).Single().ToVector());
+      Assert.Equal(new HypersphericalAngleVector(Math.PI / 4), directions.Where(d => d.Angles.Single() == 1).Single().ToVector());
+      Assert.Equal(new HypersphericalAngleVector(Math.PI / 2), directions.Where(d => d.Angles.Single() == 2).Single().ToVector());
     }
 
     [Fact]
     public void GetNonLinearDirections_OneAngle()
     {
-      var directions = HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 1, resolution: 2).ToList();
+      var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 1, resolution: 2));
 
       // axis directions 1d: 4 = 2*2
       AssertDirection(directions, 0);        //   0     + 0    x
@@ -53,7 +48,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void GetNonLinearDirections_TwoAngles()
     {
-      var directions = HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 2, resolution: 2).ToList();
+      var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 2, resolution: 2));
 
       // axis directions 1d: 6 = 3*2
       AssertDirection(directions, 0, 0);     //   0    0      + 0 0      x       - 0 0
@@ -80,7 +75,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void GetNonLinearDirections_ThreeAngles()
     {
-      var directions = HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 3, resolution: 2).ToList();
+      var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 3, resolution: 2));
 
       // axis directions 1d: 8 = 4*2
       AssertDirection(directions, 0, 0, 0);     //   0    0    0     + 0 0 0     x       - 0 0 0
@@ -139,7 +134,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void UsedDirectionsCount_TwoAngles()
     {
-      var directions = HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 2, resolution: 2).ToList();
+      var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 2, resolution: 2));
 
       Assert.Equal(1, GetDirection(directions, 0, 0).UsedCartesianDirectionsCount);
       Assert.Equal(1, GetDirection(directions, 2, 0).UsedCartesianDirectionsCount);
@@ -156,7 +151,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void UsedDirectionsCount_ThreeAngles()
     {
-      var directions = HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 3, resolution: 2).ToList();
+      var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetNonLinearDirections(anglesCount: 3, resolution: 2));
 
       Assert.Equal(1, GetDirection(directions, 0, 0, 0).UsedCartesianDirectionsCount);
       Assert.Equal(1, GetDirection(directions, 2, 0, 0).UsedCartesianDirectionsCount);

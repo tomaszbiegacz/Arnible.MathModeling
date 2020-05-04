@@ -1,7 +1,6 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using static Arnible.MathModeling.MetaMath;
 
 namespace Arnible.MathModeling.Geometry
@@ -43,7 +42,7 @@ namespace Arnible.MathModeling.Geometry
       return new NumberVector(R).Concat(Angles).ToVector().ToString();
     }
 
-    public uint DimensionsCount => (uint)Angles.Count + 1;
+    public uint DimensionsCount => Angles.Length + 1;
 
     public HypersphericalCoordinate AddDimension()
     {
@@ -87,8 +86,8 @@ namespace Arnible.MathModeling.Geometry
 
     public IEnumerable<HypersphericalAngleVector> CartesianCoordinatesAngles()
     {
-      var anglesCount = Angles.Count;
-      Number[] x = Enumerable.Repeat<Number>(0, anglesCount).ToArray();
+      uint anglesCount = Angles.Length;
+      Number[] x = LinqEnumerable.Repeat<Number>(0, anglesCount).ToArray();
 
       yield return new HypersphericalAngleVector(x.ToVector());
       for (uint i = 0; i < anglesCount; ++i)

@@ -5,6 +5,11 @@ namespace Arnible.MathModeling.Geometry
 {
   public static class INumberRangeDomainExtensions
   {
+    public static Number GetValidTranslationRatio(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)
+    {
+      return value.ZipDefensive(delta, (v, t) => domain.GetValidTranslationRatio(v, t)).MinDefensive();
+    }
+
     public static NumberTranslationVector GetValidTranslation(
       this INumberRangeDomain domain,
       NumberVector current,

@@ -1,9 +1,7 @@
-﻿using Arnible.MathModeling;
-using Arnible.MathModeling.Export;
+﻿using Arnible.MathModeling.Export;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 
 namespace Arnible.MathModeling.Algebra
 {
@@ -23,7 +21,7 @@ namespace Arnible.MathModeling.Algebra
 
     public NumberMatrix(Number[,] parameters)
     {
-      _rows = parameters?.ToJaggedArray().Select(v => v.ToVector()).ToArray();
+      _rows = parameters?.ToArrayJagged().Select(v => v.ToVector()).ToArray();
     }
 
     private NumberMatrix(IEnumerable<NumberVector> rows)
@@ -33,7 +31,7 @@ namespace Arnible.MathModeling.Algebra
 
     public static NumberMatrix Repeat(Number element, uint width, uint height)
     {
-      return new NumberMatrix(Enumerable.Repeat(NumberVector.Repeat(element, width), (int)height));
+      return new NumberMatrix(LinqEnumerable.Repeat(NumberVector.Repeat(element, width), height));
     }
 
     //
@@ -46,7 +44,16 @@ namespace Arnible.MathModeling.Algebra
 
     public bool IsZero => Height == 0;
 
-    public Number this[uint row, uint column] => Row(row).ElementAt((int)column);
+
+    public Number this[uint row, uint column]
+    {
+      get
+      {
+        if (row >= Height)
+          throw new InvalidOperationException($"Invalid row: {row}");
+        return _rows[(int)row][column];
+      }
+    }
 
     public IEnumerable<Number> Row(uint row)
     {
@@ -60,13 +67,13 @@ namespace Arnible.MathModeling.Algebra
       if (column >= Width)
         throw new InvalidOperationException($"Invalid column: {column}");
 
-      foreach(NumberVector row in _rows)
+      foreach (NumberVector row in _rows)
       {
         yield return row[column];
-      }      
+      }
     }
 
-    private IEnumerable<NumberVector> Rows => _rows ?? Enumerable.Empty<NumberVector>();
+    private IEnumerable<NumberVector> Rows => _rows ?? LinqEnumerable.Empty<NumberVector>();
 
     //
     // IEquatable

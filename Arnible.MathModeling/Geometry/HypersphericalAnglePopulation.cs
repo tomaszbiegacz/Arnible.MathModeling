@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -47,9 +46,17 @@ namespace Arnible.MathModeling.Geometry
 
     public HypersphericalAnglePopulation(IEnumerable<HypersphericalAngleQuantified> angles, IComparer<HypersphericalAngleQuantified> comparer)
     {
-      _angles = angles.ToList();
+      _angles = new List<HypersphericalAngleQuantified>(angles);
       _comparer = new DirectionComparerWithFitness(comparer, _angles);
       _angles.Sort(_comparer);
+    }
+
+    public HypersphericalAngleQuantified this[uint pos]
+    {
+      get
+      {
+        return _angles[(int)pos];
+      }
     }
 
     public IEnumerator<HypersphericalAngleQuantified> GetEnumerator() => _angles.GetEnumerator();

@@ -1,6 +1,5 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
-using System.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -41,7 +40,7 @@ namespace Arnible.MathModeling.Geometry
       return Coordinates.ToString();
     }
 
-    public uint DimensionsCount => (uint)Coordinates.Count;
+    public uint DimensionsCount => Coordinates.Length;
 
     public CartesianCoordinate AddDimension()
     {

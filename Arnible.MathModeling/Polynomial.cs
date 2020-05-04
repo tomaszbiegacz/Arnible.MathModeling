@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 
 namespace Arnible.MathModeling
@@ -28,7 +27,7 @@ namespace Arnible.MathModeling
     public static implicit operator Polynomial(double value) => new Polynomial(value);
     public static implicit operator Polynomial(char name) => new Polynomial(name);
 
-    private IEnumerable<PolynomialTerm> Terms => _terms ?? Enumerable.Empty<PolynomialTerm>();
+    private IEnumerable<PolynomialTerm> Terms => _terms ?? LinqEnumerable.Empty<PolynomialTerm>();
 
     public bool Equals(Polynomial other) => (other - this).IsZero;
 
@@ -223,7 +222,7 @@ namespace Arnible.MathModeling
       }
 
       PolynomialTerm denominator = b.Terms.First();
-      Polynomial denominatorSuffix = new Polynomial(b.Terms.Skip(1));
+      Polynomial denominatorSuffix = new Polynomial(b.Terms.SkipExactly(1));
       var resultTerms = new List<PolynomialTerm>();
       reminder = TryReduce(this, denominator, denominatorSuffix, resultTerms);
       return new Polynomial(resultTerms);
@@ -257,7 +256,7 @@ namespace Arnible.MathModeling
       List<PolynomialTerm> remaining = new List<PolynomialTerm>();
       foreach (PolynomialTerm term in Terms)
       {
-        if (term.Variables.Contains(variable))
+        if (term.Variables.Any(v => v == variable))
         {
           foreach(var replacedTerm in term.Composition(variable, replacement))
           {
@@ -273,7 +272,7 @@ namespace Arnible.MathModeling
 
     public Polynomial Composition(char variable, Polynomial replacement)
     {
-      if (replacement.Variables.Contains(variable))
+      if (replacement.Variables.Any(v => v == variable))
       {
         if (variable == InPlaceVariableReplacement)
         {
@@ -295,7 +294,7 @@ namespace Arnible.MathModeling
       PolynomialDivision result = PolynomialDivision.Zero;
       foreach (PolynomialTerm term in Terms)
       {
-        if (term.Variables.Contains(variable))
+        if (term.Variables.Any(v => v == variable))
         {
           result += term.Composition(variable, replacement);
         }
@@ -331,7 +330,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        return _terms.Select(t => t.Value(x)).Sum();
+        return _terms.Select(t => t.Value(x)).SumDefensive();
       }
     }
 

@@ -1,5 +1,4 @@
 ﻿using Arnible.MathModeling.Algebra;
-using System.Linq;
 using Xunit;
 
 namespace Arnible.MathModeling.Geometry.Test
@@ -13,9 +12,9 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = rc;
 
       Assert.Equal(2u, cc.DimensionsCount);
-      Assert.Equal(2, cc.Coordinates.Count());
-      Assert.Equal(3, cc.Coordinates.ElementAt(0));
-      Assert.Equal(4, cc.Coordinates.ElementAt(1));
+      Assert.Equal(2u, cc.Coordinates.Count());
+      Assert.Equal(3, cc.Coordinates[0]);
+      Assert.Equal(4, cc.Coordinates[1]);
     }
 
     [Fact]
@@ -24,9 +23,9 @@ namespace Arnible.MathModeling.Geometry.Test
       var cc = new CartesianCoordinate(new NumberVector(2, 3, 4));
 
       Assert.Equal(3u, cc.DimensionsCount);
-      Assert.Equal(2, cc.Coordinates.ElementAt(0));
-      Assert.Equal(3, cc.Coordinates.ElementAt(1));
-      Assert.Equal(4, cc.Coordinates.ElementAt(2));
+      Assert.Equal(2, cc.Coordinates[0]);
+      Assert.Equal(3, cc.Coordinates[1]);
+      Assert.Equal(4, cc.Coordinates[2]);
     }
 
     [Fact]

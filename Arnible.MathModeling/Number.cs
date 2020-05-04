@@ -75,11 +75,16 @@ namespace Arnible.MathModeling
 
     public static Number operator -(Number a, Number b) => new Number(a._value - b._value);    
 
-    public static Number operator *(Number a, Number b) => new Number(a._value * b._value);    
+    public static Number operator *(Number a, Number b) => new Number(a._value * b._value);
 
     //
     // Number
-    //    
+    //
+
+    public static bool operator <(Number a, Number b) => a._value < b._value;
+    public static bool operator >(Number a, Number b) => a._value > b._value;
+    public static bool operator <=(Number a, Number b) => a._value < b._value || a.Equals(b);
+    public static bool operator >=(Number a, Number b) => a._value > b._value || a.Equals(b);
 
     public Number ToPower(uint b) => DoubleExtension.ToPower(_value, b);
 
