@@ -29,7 +29,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Constructor_Constant()
     {
-      PolynomialDivision v = 2;      
+      PolynomialDivision v = 2;
       Assert.False(v.IsZero);
       Assert.True(v.IsPolynomial);
       Assert.True(v.IsConstant);
@@ -90,7 +90,7 @@ namespace Arnible.MathModeling.Test
       Assert.Equal("x/y", v.ToString());
 
       Assert.Equal(5, v.GetOperation('x', 'y').Value(10, 2));
-    }    
+    }
 
     [Fact]
     public void ToString_Common()
@@ -161,6 +161,20 @@ namespace Arnible.MathModeling.Test
       Assert.Equal((2 * x * y * (x + 1)) / (4 * x * x + 4 * x + 1), expression.DerivativeBy('x'));
       Assert.Equal((2 * y) / (8 * x * x * x + 12 * x * x + 6 * x + 1), expression.Derivative2By('x'));
       Assert.True(expression.Derivative2By('y').IsZero);
+    }
+
+    [Fact]
+    public void Derivative2_NonZero()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';      
+
+      var denominator = (x + y - x * y);
+      var denominatorExpected = x * x * y * y - 2 * x * x * y - 2 * x * y * y + x * x + y * y + 2 * x * y;
+      Assert.Equal(denominatorExpected, denominator * denominator);
+
+      var expression = (x * y) / denominator;
+      Assert.Equal((y * y) / denominatorExpected, expression.DerivativeBy('x'));
     }
 
     [Fact]
@@ -265,6 +279,6 @@ namespace Arnible.MathModeling.Test
       var a = (x - 1) / (x + 2);
       var b = (x - 2) / (x + 1);
       Assert.Equal((x * x - 1) / (x * x - 4), a / b);
-    }    
+    }
   }
 }

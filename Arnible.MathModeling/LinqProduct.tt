@@ -18,6 +18,9 @@ foreach(string typeName in generatedTypes)
 {
 
 #>
+    /// <summary>
+    /// Calculate items product or throw ArgumentException if passed enumerable is empty
+    /// </summary>
     public static <#= typeName #> ProductDefensive(this IEnumerable<<#= typeName #>> x)
     {
       if (x == null)
@@ -38,6 +41,9 @@ foreach(string typeName in generatedTypes)
       return current;
     }
 
+    /// <summary>
+    /// Calculate items product or return 1 if passed enumerable is empty
+    /// </summary>
     public static <#= typeName #> ProductWithDefault(this IEnumerable<<#= typeName #>> x)
     {
       if (x == null)
@@ -51,6 +57,7 @@ foreach(string typeName in generatedTypes)
       }
       return current;
     }
+
 <#
 
 }

@@ -80,6 +80,50 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
+    public void Square_1p()
+    {
+      PolynomialTerm x = 'x';
+      var expr = x + 1;
+      Assert.Equal(x * x + 2 * x + 1, expr * expr);
+    }
+
+    [Fact]
+    public void Square_2p()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+      var expr = x + y;
+      Assert.Equal(x * x + 2 * x * y + y * y, expr * expr);
+    }
+
+    [Fact]
+    public void Square_2p_value()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+      var expr = x + y + 1;
+      Assert.Equal(x * x + y * y + 2 * x * y + 2 * x + 2 * y + 1, expr * expr);
+    }
+
+    [Fact]
+    public void Square_2p_xy()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+      var expr = x + x * y;
+      Assert.Equal(x * x + 2 * x * x * y + x * x * y * y, expr * expr);
+    }
+
+    [Fact]
+    public void Square_2p_xy_3()
+    {
+      PolynomialTerm x = 'x';
+      PolynomialTerm y = 'y';
+      var expr = x + y + x * y;
+      Assert.Equal(x * x * y * y + 2 * x * x * y + 2 * x * y * y + x * x + y * y + 2 * x * y, expr * expr);
+    }
+
+    [Fact]
     public void Multiply_by0()
     {
       PolynomialTerm x = 'x';

@@ -8,7 +8,7 @@ namespace Arnible.MathModeling
     {
       if (p1 != p2)
       {
-        throw new InvalidOperationException($"Expected [{p2}], got [{p1}]");
+        throw new InvalidOperationException($"Expected [{p1}], got [{p2}]");
       }
     }
 
@@ -21,7 +21,6 @@ namespace Arnible.MathModeling
     {
       var firstDerivative = value.DerivativeBy(term);
       Equal(firstDerivative, derivative.First);
-      Equal(firstDerivative.DerivativeBy(term), derivative.Second);
     }
   }
 }

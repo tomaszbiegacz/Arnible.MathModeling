@@ -25,11 +25,19 @@ namespace Arnible.MathModeling
       return System.Linq.Enumerable.Last(source);
     }
 
+    /// <summary>
+    /// Returns the only element of a sequence
+    /// and throws an exception if there is not exactly one item in sequence.
+    /// </summary>
     public static T Single<T>(this IEnumerable<T> source)
     {
       return System.Linq.Enumerable.Single(source);
     }
 
+    /// <summary>
+    /// Returns the only element of a sequence or default 
+    /// and throws an exception if there are more than one element in sequence.
+    /// </summary>
     public static T SingleOrDefault<T>(this IEnumerable<T> source)
     {
       return System.Linq.Enumerable.SingleOrDefault(source);
@@ -147,6 +155,10 @@ namespace Arnible.MathModeling
      * Filtering out items
      */
 
+    /// <summary>
+    /// Return sequence without element at give position
+    /// and throws an error if pos is greater than sequence length.
+    /// </summary>
     public static IEnumerable<T> ExcludeAt<T>(this IEnumerable<T> x, uint pos)
     {
       if (x == null)

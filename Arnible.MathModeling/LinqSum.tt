@@ -25,6 +25,9 @@ foreach(var kv in generatedTypes)
 {
 
 #>
+    /// <summary>
+    /// Calculate items sum or throw ArgumentException if passed enumerable is empty
+    /// </summary>
     public static <#= kv.Value #> SumDefensive(this IEnumerable<<#= kv.Key #>> x)
     {
       if (x == null)
@@ -45,6 +48,9 @@ foreach(var kv in generatedTypes)
       return current;
     }        
 
+    /// <summary>
+    /// Calculate items sum or return 0 if passed enumerable is empty
+    /// </summary>
     public static <#= kv.Value #> SumWithDefault(this IEnumerable<<#= kv.Key #>> x)
     {
       if (x == null)

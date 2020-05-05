@@ -5,6 +5,9 @@ namespace Arnible.MathModeling
 {
   public static class LinqAggregate
   {
+    /// <summary>
+    /// Group items by "keySelector" and return aggregation for each group
+    /// </summary>
     public static IEnumerable<TResult> AggregateBy<TSource, TKey, TResult>(
       this IEnumerable<TSource> source, 
       Func<TSource, TKey> keySelector, 
@@ -39,11 +42,14 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static IEnumerable<T> AggregateCombinations<T>(this IEnumerable<T> items, uint groupCount, Func<IEnumerable<T>, T> aggregator)
+    /// <summary>
+    /// Calculate aggregate for "groupSize" items count combinations from source collection.
+    /// </summary>
+    public static IEnumerable<T> AggregateCombinations<T>(this IEnumerable<T> items, uint groupSize, Func<IEnumerable<T>, T> aggregator)
     {
-      if (groupCount < 1)
+      if (groupSize < 1)
       {
-        throw new ArgumentException(nameof(groupCount));
+        throw new ArgumentException(nameof(groupSize));
       }
 
       if (items == null)
@@ -51,9 +57,9 @@ namespace Arnible.MathModeling
         throw new ArgumentException(nameof(items));
       }
       var x = items.ToArray();
-      if (x.Length < groupCount)
+      if (x.Length < groupSize)
       {
-        throw new ArgumentException($"x.Length: {x.Length} where groupCount: {groupCount}");
+        throw new ArgumentException($"x.Length: {x.Length} where groupCount: {groupSize}");
       }
       if (aggregator == null)
       {
@@ -61,9 +67,12 @@ namespace Arnible.MathModeling
       }
 
       var combination = new Stack<T>();
-      return AggregateCombinations(x, 0, groupCount, aggregator, combination);
+      return AggregateCombinations(x, 0, groupSize, aggregator, combination);
     }
 
+    /// <summary>
+    /// Calculate aggregate for items count from 1 to collection size
+    /// </summary>
     public static IEnumerable<T> AggregateCombinationsAll<T>(this IEnumerable<T> items, Func<IEnumerable<T>, T> aggregator)
     {
       if (items == null)
@@ -86,14 +95,30 @@ namespace Arnible.MathModeling
       }
     }
 
+    /// <summary>
+    /// Returns total items count in the sequence
+    /// </summary>
     public static uint Count<T>(this IEnumerable<T> source)
     {
       return (uint)System.Linq.Enumerable.LongCount(source);
     }
 
     /// <summary>
-    /// If validation of equal length is not needed, use Enumerable.Zip instead.
-    /// </summary>    
+    /// Applies a specified function to the corresponding elements of two sequences,
+    /// producing a sequence of the results.
+    /// </summary>
+    public static IEnumerable<TResult> Zip<T, TResult>(this IEnumerable<T> col1, IEnumerable<T> col2, Func<T, T, TResult> merge)
+    {
+      return System.Linq.Enumerable.Zip(col1, col2, merge);
+    }
+
+    /// <summary>
+    /// Applies a specified function to the corresponding elements of two sequences,
+    /// producing a sequence of the results.
+    /// </summary>
+    /// <remarks>
+    /// If validation of equal length is not needed, use Zip instead.
+    /// </remarks>
     public static IEnumerable<TResult> ZipDefensive<T, TResult>(this IEnumerable<T> col1, IEnumerable<T> col2, Func<T, T, TResult> merge)
     {
       using (var col1Enum = col1.GetEnumerator())
