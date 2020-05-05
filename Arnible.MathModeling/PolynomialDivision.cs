@@ -11,42 +11,99 @@ namespace Arnible.MathModeling
 
     private PolynomialDivision(Polynomial numerator)
     {
+      // this is polynomial
       _numerator = numerator;
       _denominator = default;
     }
 
-    internal PolynomialDivision(Polynomial numerator, Polynomial denominator)
+    private PolynomialDivision(Polynomial numerator, Polynomial denominator)
     {
       if (denominator.IsZero)
       {
         throw new DivideByZeroException();
       }
 
-      Polynomial reducedNumerator = numerator.ReduceBy(denominator, out Polynomial reducedDenominator);
-      if (reducedDenominator == 0)
+      if (denominator.IsConstant)
       {
-        // let's simplify it if we can
-        _numerator = reducedNumerator;
+        _numerator = numerator / (double)denominator;
         _denominator = default;
+      }
+      else if (numerator.IsConstant)
+      {
+        // denominator is polynomial
+        if (numerator.IsZero)
+        {
+          _numerator = 0;
+          _denominator = default;
+        }
+        else
+        {
+          _numerator = numerator;
+          _denominator = _numerator.IsZero ? default : denominator;
+        }
       }
       else
       {
+        // this is true polynomial division
         _numerator = numerator;
-        _denominator = _numerator.IsZero ? default : denominator;
+        _denominator = denominator;
       }
     }
 
-    internal PolynomialDivision(double numerator, Polynomial denominator)
+    internal static PolynomialDivision SimplifyPolynomialDivision(double numerator, Polynomial denominator)
     {
-      if (denominator.IsZero)
-      {
-        throw new DivideByZeroException();
-      }
-      _numerator = numerator;
-      _denominator = _numerator.IsZero ? default : denominator;
-    }    
+      // normalization is handled in the constructor
+      return new PolynomialDivision(numerator, denominator);
+    }
 
-    public static implicit operator PolynomialDivision(Polynomial v) => new PolynomialDivision(numerator: v, denominator: 1);
+    internal static PolynomialDivision SimplifyPolynomialDivision(Polynomial numerator, Polynomial denominator)
+    {
+      if (numerator.IsConstant || denominator.IsConstant)
+      {
+        // normalization is handled in the constructor
+        return new PolynomialDivision(numerator, denominator);
+      }
+      else
+      {
+        var commonVariables = GetCommonIdentityVariables(numerator: numerator, denominator: denominator);
+        if(commonVariables.Any())
+        {
+          numerator = numerator.ReduceByCommon(commonVariables);
+          denominator = denominator.ReduceByCommon(commonVariables);
+        }
+        return SimplifyByDividingNumeratorByDenominator(numerator: numerator, denominator: denominator);
+      }
+    }
+
+    private static IEnumerable<VariableTerm> GetCommonIdentityVariables(Polynomial numerator, Polynomial denominator)
+    {
+      var numeratorVariables = numerator.GetIdentityVariableTerms();
+      if(numeratorVariables.Count > 0)
+      {
+        var denominatorVariables = denominator.GetIdentityVariableTerms();
+        if(denominatorVariables.Count > 0)
+        {
+          var commonVariables = numeratorVariables.ZipCommon(denominatorVariables, Math.Min);
+          return commonVariables.Select(kv => new VariableTerm(variable: kv.Key, power: kv.Value)).ToArray();
+        }        
+      }
+      return LinqEnumerable.Empty<VariableTerm>();
+    }
+
+    private static PolynomialDivision SimplifyByDividingNumeratorByDenominator(Polynomial numerator, Polynomial denominator)
+    {
+      if (numerator.TryReduceBy(denominator, out Polynomial reducedNumerator))
+      {
+        // let's simplify it if we can
+        return new PolynomialDivision(reducedNumerator);
+      }
+      else
+      {
+        return new PolynomialDivision(numerator, denominator);
+      }
+    }
+
+    public static implicit operator PolynomialDivision(Polynomial v) => new PolynomialDivision(v);
     public static implicit operator PolynomialDivision(PolynomialTerm v) => new PolynomialDivision(v);
     public static implicit operator PolynomialDivision(double v) => new PolynomialDivision(v);
     public static implicit operator PolynomialDivision(char name) => new PolynomialDivision(name);
@@ -174,11 +231,11 @@ namespace Arnible.MathModeling
       }
       else if (a._denominator == b._denominator)
       {
-        return new PolynomialDivision(a._numerator + b._numerator, a._denominator);
+        return SimplifyPolynomialDivision(a._numerator + b._numerator, a._denominator);
       }
       else
       {
-        return new PolynomialDivision(
+        return SimplifyPolynomialDivision(
           numerator: a._numerator * b._denominator + b._numerator * a._denominator,
           denominator: a._denominator * b._denominator);
       }
@@ -192,7 +249,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        return new PolynomialDivision(a._numerator + b * a._denominator, a._denominator);
+        return SimplifyPolynomialDivision(a._numerator + b * a._denominator, a._denominator);
       }
     }
 
@@ -206,7 +263,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        return new PolynomialDivision(a._numerator + b * a._denominator, a._denominator);
+        return SimplifyPolynomialDivision(a._numerator + b * a._denominator, a._denominator);
       }
     }
 
@@ -238,7 +295,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        return new PolynomialDivision(a._numerator * b._numerator, a._denominator * b._denominator);
+        return SimplifyPolynomialDivision(a._numerator * b._numerator, a._denominator * b._denominator);
       }
     }
 
@@ -250,7 +307,14 @@ namespace Arnible.MathModeling
       }
       else
       {
-        return new PolynomialDivision(b * a._numerator, a._denominator);
+        if (a._denominator.TryReduceBy(b, out Polynomial reducedDenominator))
+        {
+          return SimplifyPolynomialDivision(numerator: a._numerator, denominator: reducedDenominator);
+        }
+        else
+        {
+          return SimplifyPolynomialDivision(numerator: b * a._numerator, denominator: a._denominator);
+        }
       }
     }
 
@@ -264,6 +328,7 @@ namespace Arnible.MathModeling
       }
       else
       {
+        // no need for simplification here
         return new PolynomialDivision(b * a._numerator, a._denominator);
       }
     }
@@ -284,11 +349,11 @@ namespace Arnible.MathModeling
       }
       else if (a._denominator == b._denominator)
       {
-        return new PolynomialDivision(numerator: a._numerator, denominator: b._numerator);
+        return SimplifyPolynomialDivision(numerator: a._numerator, denominator: b._numerator);
       }
       else
       {
-        return new PolynomialDivision(numerator: a._numerator * b._denominator, denominator: a._denominator * b._numerator);
+        return SimplifyPolynomialDivision(numerator: a._numerator * b._denominator, denominator: a._denominator * b._numerator);
       }
     }
 
@@ -300,7 +365,14 @@ namespace Arnible.MathModeling
       }
       else
       {
-        return new PolynomialDivision(a._numerator, a._denominator * b);
+        if (a._numerator.TryReduceBy(b, out Polynomial reducedNumerator))
+        {
+          return SimplifyPolynomialDivision(numerator: reducedNumerator, denominator: a._denominator);
+        }
+        else
+        {
+          return SimplifyPolynomialDivision(numerator: a._numerator, denominator: a._denominator * b);
+        }
       }
     }
 
@@ -312,7 +384,14 @@ namespace Arnible.MathModeling
       }
       else
       {
-        return new PolynomialDivision(a * b._denominator, b._numerator);
+        if (b._numerator.TryReduceBy(a, out Polynomial reducedNumerator))
+        {
+          return SimplifyPolynomialDivision(numerator: b._denominator, denominator: reducedNumerator);
+        }
+        else
+        {
+          return SimplifyPolynomialDivision(numerator: a * b._denominator, denominator: b._numerator);
+        }
       }
     }
 
@@ -324,6 +403,7 @@ namespace Arnible.MathModeling
       }
       else
       {
+        // no need for simplification here
         return new PolynomialDivision(a._numerator, a._denominator * b);
       }
     }
@@ -336,6 +416,7 @@ namespace Arnible.MathModeling
       }
       else
       {
+        // no need for simplification here
         return new PolynomialDivision(a * b._denominator, b._numerator);
       }
     }
@@ -352,11 +433,22 @@ namespace Arnible.MathModeling
       }
       else
       {
+        // no need for simplification here
         return new PolynomialDivision(
           numerator: _numerator.ToPower(power),
           denominator: _denominator.ToPower(power)
         );
       }
+    }
+
+    public PolynomialDivision ReduceBy(Polynomial pol)
+    {
+      if (IsPolynomial)
+      {
+        throw new InvalidOperationException("Cannot reduce polynomial");
+      }
+
+      return SimplifyPolynomialDivision(numerator: _numerator.ReduceBy(pol), denominator: _denominator.ReduceBy(pol));
     }
 
     /*
@@ -376,13 +468,13 @@ namespace Arnible.MathModeling
         if (denominatorDerivative.IsZero)
         {
           // this is necessary, since library doesn't support yet polynomials reduction/division
-          return new PolynomialDivision(numeratorDerivative, _denominator);
+          return SimplifyPolynomialDivision(numeratorDerivative, _denominator);
         }
         else
         {
           Polynomial numerator = numeratorDerivative * _denominator - _numerator * denominatorDerivative;
           Polynomial denominator = _denominator * _denominator;
-          return new PolynomialDivision(numerator, denominator);
+          return SimplifyPolynomialDivision(numerator, denominator);
         }
       }
     }
@@ -402,7 +494,7 @@ namespace Arnible.MathModeling
         if (denominatorDerivative.IsZero)
         {
           // this is necessary, since library doesn't support yet polynomials reduction/division
-          return new PolynomialDivision(numeratorDerivative, _denominator).DerivativeBy(name);
+          return SimplifyPolynomialDivision(numeratorDerivative, _denominator).DerivativeBy(name);
         }
         else
         {
@@ -411,7 +503,7 @@ namespace Arnible.MathModeling
 
           Polynomial numerator2 = numerator1.DerivativeBy(name) * _denominator - 2 * numerator1 * denominatorDerivative;
           Polynomial denominator2 = denominator1 * _denominator;
-          return new PolynomialDivision(numerator2, denominator2);
+          return SimplifyPolynomialDivision(numerator2, denominator2);
         }
       }
     }
@@ -430,7 +522,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        return new PolynomialDivision(
+        return SimplifyPolynomialDivision(
           numerator: _numerator.Composition(variable, replacement),
           denominator: _denominator.Composition(variable, replacement));
       }

@@ -202,6 +202,15 @@ namespace Arnible.MathModeling
       return new IndeterminateExpression(Variable, _modifier, Power * power);
     }
 
+    public IndeterminateExpression ReducePowerBy(uint power)
+    {
+      if (power == 0 || power > Power)
+      {
+        throw new ArgumentException(nameof(power));
+      }      
+      return new IndeterminateExpression(Variable, _modifier, Power - power);
+    }
+
     public bool TryDivide(IndeterminateExpression b, out IndeterminateExpression result)
     {
       if (Power < b.Power)

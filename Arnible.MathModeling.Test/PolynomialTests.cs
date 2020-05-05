@@ -4,6 +4,9 @@ namespace Arnible.MathModeling.Test
 {
   public class PolynomialTests
   {
+    private readonly PolynomialTerm x = 'x';
+    private readonly PolynomialTerm y = 'y';
+
     [Fact]
     public void Constructor_Default()
     {
@@ -71,7 +74,6 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Multiply_xp1_xm1()
     {
-      PolynomialTerm x = 'x';
       Polynomial poly = (x + 1) * (x - 1);
 
       Assert.Equal(x * x - 1, poly);
@@ -82,7 +84,6 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Square_1p()
     {
-      PolynomialTerm x = 'x';
       var expr = x + 1;
       Assert.Equal(x * x + 2 * x + 1, expr * expr);
     }
@@ -90,8 +91,6 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Square_2p()
     {
-      PolynomialTerm x = 'x';
-      PolynomialTerm y = 'y';
       var expr = x + y;
       Assert.Equal(x * x + 2 * x * y + y * y, expr * expr);
     }
@@ -99,8 +98,6 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Square_2p_value()
     {
-      PolynomialTerm x = 'x';
-      PolynomialTerm y = 'y';
       var expr = x + y + 1;
       Assert.Equal(x * x + y * y + 2 * x * y + 2 * x + 2 * y + 1, expr * expr);
     }
@@ -108,8 +105,6 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Square_2p_xy()
     {
-      PolynomialTerm x = 'x';
-      PolynomialTerm y = 'y';
       var expr = x + x * y;
       Assert.Equal(x * x + 2 * x * x * y + x * x * y * y, expr * expr);
     }
@@ -117,8 +112,6 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Square_2p_xy_3()
     {
-      PolynomialTerm x = 'x';
-      PolynomialTerm y = 'y';
       var expr = x + y + x * y;
       Assert.Equal(x * x * y * y + 2 * x * x * y + 2 * x * y * y + x * x + y * y + 2 * x * y, expr * expr);
     }
@@ -126,7 +119,6 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Multiply_by0()
     {
-      PolynomialTerm x = 'x';
       Polynomial poly = (x + 1) * (x - 1);
 
       Assert.Equal(0, 0 * poly);
@@ -135,9 +127,6 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Composition_Square()
     {
-      PolynomialTerm x = 'x';
-      PolynomialTerm y = 'y';
-
       var entry = 1 + x * x - y * y;
       Assert.Equal(2 + 2 * y, entry.Composition(x, y + 1));
     }
@@ -145,9 +134,6 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Composition_InPlace()
     {
-      PolynomialTerm x = 'x';
-      PolynomialTerm y = 'y';
-
       var entry = 1 + x * x - y * y;
       Assert.Equal(x * x + 2 * x + 2 - y * y, entry.Composition(x, x + 1));
     }
@@ -155,67 +141,56 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Composition_Constant()
     {
-      PolynomialTerm x = 'x';
-      PolynomialTerm y = 'y';
-
       var entry = 1 + x * x - y * y;
       Assert.Equal(1 - y * y, entry.Composition(x, 0));
     }
 
     [Fact]
     public void Power_ByZero()
-    {
-      PolynomialTerm x = 'x';
+    {      
       Assert.Equal(1, (x + 1).ToPower(0));
     }
 
     [Fact]
     public void Power_ByOne()
     {
-      PolynomialTerm x = 'x';
       Assert.Equal(x + 1, (x + 1).ToPower(1));
     }
 
     [Fact]
     public void Power_ByTwo()
     {
-      PolynomialTerm x = 'x';
       Assert.Equal(x * x + 2 * x + 1, (x + 1).ToPower(2));
     }
 
     [Fact]
     public void Power_ByThree()
     {
-      PolynomialTerm x = 'x';
       Assert.Equal(x * x * x + 3 * x * x + 3 * x + 1, (x + 1).ToPower(3));
     }
 
     [Fact]
     public void ReduceBy_ByConstant()
-    {
-      PolynomialTerm x = 'x';
+    {      
       Assert.Equal(2 * (x + 1), (x + 1).ReduceBy(0.5));
     }
 
     [Fact]
     public void ReduceBy_ByExpression()
-    {
-      PolynomialTerm x = 'x';
+    {     
       Assert.Equal(x * x + 3 * x + 9, (x * x * x - 27).ReduceBy(x - 3));
     }
 
     [Fact]
     public void ReduceBy_ByExpression_RemainderConstant()
-    {
-      PolynomialTerm x = 'x';
+    {     
       Assert.Equal(x * x + 3 * x + 9, (x * x * x - 25).ReduceBy(x - 3, out Polynomial remainder));
       Assert.Equal(2, remainder);
     }
 
     [Fact]
     public void ReduceBy_ByExpression_RemainderExpression()
-    {
-      PolynomialTerm x = 'x';
+    {     
       Polynomial toDivide = 5 * (x - 1) * (x - 1) * (x + 1) + 2 * x + 3;
       Assert.Equal(x - 1, toDivide.ReduceBy(5 * (x * x - 1), out Polynomial remainder));
       Assert.Equal(2 * x + 3, remainder);
@@ -223,26 +198,21 @@ namespace Arnible.MathModeling.Test
 
     [Fact]
     public void Remainder_ByExpression()
-    {
-      PolynomialTerm x = 'x';
+    {     
       var toDivide = (x - 1) * (x - 1) * (x + 1) + 2 * x + 3;
       Assert.Equal(2 * x + 3, toDivide % (x * x - 1));
     }
 
     [Fact]
     public void ReduceBy_0ByExpression()
-    {
-      PolynomialTerm x = 'x';
+    {      
       Polynomial zero = 0;
       Assert.Equal(0, zero.ReduceBy(x - 3));
     }
 
     [Fact]
     public void Division_Simplification_x2_minus_1()
-    {
-      PolynomialTerm x = 'x';
-      PolynomialTerm y = 'y';
-
+    {      
       Assert.Equal(x + y, (x * x - y * y).ReduceBy(x - y));
     }
   }

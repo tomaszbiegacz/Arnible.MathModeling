@@ -8,12 +8,55 @@ namespace Arnible.MathModeling
     /// <summary>
     /// Group items by "keySelector" and return aggregation for each group
     /// </summary>
-    public static IEnumerable<TResult> AggregateBy<TSource, TKey, TResult>(
-      this IEnumerable<TSource> source, 
-      Func<TSource, TKey> keySelector, 
+    public static IDictionary<TKey, TResult> AggregateBy<TSource, TKey, TResult>(
+      this IEnumerable<TSource> source,
+      Func<TSource, TKey> keySelector,
       Func<IEnumerable<TSource>, TResult> aggregator)
     {
-      return System.Linq.Enumerable.GroupBy(source, keySelector).Select(g => aggregator(g));
+      return System.Linq.Enumerable.GroupBy(source, keySelector).ToDictionary(g => g.Key, g => aggregator(g));
+    }
+
+    /// <summary>
+    /// Group items present in each source sequence by "keySelector" and return aggregation for each group
+    /// </summary>
+    public static IDictionary<TKey, TResult> AggregateCommonBy<TSource, TKey, TResult>(
+      this IEnumerable<IEnumerable<TSource>> source,
+      Func<TSource, TKey> keySelector,
+      Func<IEnumerable<TSource>, TResult> aggregator)
+    {
+      if (source == null)
+      {
+        throw new ArgumentNullException(nameof(source));
+      }
+      if (keySelector == null)
+      {
+        throw new ArgumentNullException(nameof(keySelector));
+      }
+      if (aggregator == null)
+      {
+        throw new ArgumentNullException(nameof(aggregator));
+      }
+
+      Dictionary<TKey, List<TSource>> groupByKey = new Dictionary<TKey, List<TSource>>();
+
+      uint sequenceCount = 0;
+      foreach (var sequence in source)
+      {
+        foreach (TSource item in sequence)
+        {
+          TKey key = keySelector(item);
+          List<TSource> groupedItems;
+          if (!groupByKey.TryGetValue(key, out groupedItems))
+          {
+            groupedItems = new List<TSource>();
+            groupByKey.Add(key, groupedItems);
+          }
+          groupedItems.Add(item);
+        }
+        sequenceCount++;
+      }
+
+      return groupByKey.Where(kv => kv.Value.Count == sequenceCount).ToDictionary(kv => kv.Key, kv => aggregator(kv.Value));
     }
 
     private static IEnumerable<T> AggregateCombinations<T>(T[] x, uint i, uint groupCount, Func<IEnumerable<T>, T> aggregator, Stack<T> combination)
@@ -139,6 +182,35 @@ namespace Arnible.MathModeling
           throw new InvalidOperationException("Collections are not the same size.");
         }
       }
+    }
+
+    public static IDictionary<TKey, TMergeResult> ZipCommon<TKey, TResult, TMergeResult>(
+      this IDictionary<TKey, TResult> source,
+      IDictionary<TKey, TResult> other,
+      Func<TResult, TResult, TMergeResult> merge)
+    {
+      if(source == null)
+      {
+        throw new ArgumentNullException(nameof(source));
+      }
+      if(other == null)
+      {
+        throw new ArgumentNullException(nameof(other));
+      }
+      if(merge == null)
+      {
+        throw new ArgumentNullException(nameof(merge));
+      }
+
+      var result = new Dictionary<TKey, TMergeResult>();
+      foreach(TKey key in source.Keys)
+      {
+        if(other.TryGetValue(key, out TResult otherValue))
+        {
+          result.Add(key, merge(source[key], otherValue));
+        }
+      }
+      return result;
     }
   }
 }

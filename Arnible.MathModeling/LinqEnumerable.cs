@@ -58,12 +58,12 @@ namespace Arnible.MathModeling
       return System.Linq.Enumerable.ToArray(source);
     }
 
-    public static Dictionary<TKey, TSource> ToDictionary<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+    public static IDictionary<TKey, TSource> ToDictionary<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
     {
       return System.Linq.Enumerable.ToDictionary(source, keySelector);
     }
 
-    public static Dictionary<TKey, TValue> ToDictionary<TSource, TKey, TValue>(
+    public static IDictionary<TKey, TValue> ToDictionary<TSource, TKey, TValue>(
       this IEnumerable<TSource> source,
       Func<TSource, TKey> keySelector,
       Func<TSource, TValue> valueSelector)

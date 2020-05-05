@@ -42,6 +42,7 @@
     <Compile Include="..\Arnible.MathModeling\IndeterminateExpression.cs" Link="IndeterminateExpression.cs" />
     <Compile Include="..\Arnible.MathModeling\IPolynomialOperation.cs" Link="IPolynomialOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqAggregate.cs" Link="LinqAggregate.cs" />
+    <Compile Include="..\Arnible.MathModeling\LinqAggregateBasic.tt.cs" Link="LinqAggregateBasic.tt.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqArray.cs" Link="LinqArray.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqComparable.cs" Link="LinqComparable.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqEnumerable.cs" Link="LinqEnumerable.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="..\Arnible.MathModeling\PolynomialFinitaryOperation.cs" Link="PolynomialFinitaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\PolynomialTerm.cs" Link="PolynomialTerm.cs" />
     <Compile Include="..\Arnible.MathModeling\Term.cs" Link="Term.cs" />
+    <Compile Include="..\Arnible.MathModeling\VariableTerm.cs" Link="VariableTerm.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,38 +1,25 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" #>
-<#@ output extension=".tt.cs" #>
-<#
-
-//
-// When changing anything here, change also LinqAggregateBasicNumber
-//
-
-string[] generatedTypes = new[] { "double", "int", "uint", "long", "ulong", "byte", "sbyte" };
-
-#>
-using System;
+﻿using System;
 using System.Collections.Generic;
+
+//
+// When changing anything here, change also LinqAggregateBasic
+//
 
 namespace Arnible.MathModeling
 {
-  public static class LinqAggregateBasic
+  public static class LinqAggregateBasicNumber
   {
-<#
-
-foreach(string typeName in generatedTypes)
-{
-
-#>
     /// <summary>
     /// Finds minimum value or throw ArgumentException if passed enumerable is empty
     /// </summary>
-    public static <#= typeName #> MinDefensive(this IEnumerable<<#= typeName #>> x)
+    public static Number MinDefensive(this IEnumerable<Number> x)
     {
       if (x == null)
       {
         throw new ArgumentNullException(nameof(x));
-      }      
-      <#= typeName #>? result = null;
-      foreach (<#= typeName #> v in x)
+      }
+      Number? result = null;
+      foreach (Number v in x)
       {
         if (result.HasValue)
         {
@@ -44,26 +31,26 @@ foreach(string typeName in generatedTypes)
         else
         {
           result = v;
-        }        
+        }
       }
       if (!result.HasValue)
       {
         throw new ArgumentException("Empty enumerator");
       }
       return result.Value;
-    }    
+    }
 
     /// <summary>
     /// Finds maximum value or throw ArgumentException if passed enumerable is empty
     /// </summary>
-    public static <#= typeName #> MaxDefensive(this IEnumerable<<#= typeName #>> x)
+    public static Number MaxDefensive(this IEnumerable<Number> x)
     {
       if (x == null)
       {
         throw new ArgumentNullException(nameof(x));
-      }      
-      <#= typeName #>? result = null;
-      foreach (<#= typeName #> v in x)
+      }
+      Number? result = null;
+      foreach (Number v in x)
       {
         if (result.HasValue)
         {
@@ -75,7 +62,7 @@ foreach(string typeName in generatedTypes)
         else
         {
           result = v;
-        }        
+        }
       }
       if (!result.HasValue)
       {
@@ -83,11 +70,5 @@ foreach(string typeName in generatedTypes)
       }
       return result.Value;
     }
-
-<#
-
-}
-
-#>
   }
 }

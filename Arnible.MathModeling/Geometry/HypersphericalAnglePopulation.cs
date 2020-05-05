@@ -8,7 +8,7 @@ namespace Arnible.MathModeling.Geometry
   {
     class DirectionComparerWithFitness : IComparer<HypersphericalAngleQuantified>
     {
-      private readonly Dictionary<HypersphericalAngleQuantified, int> _fitness;
+      private readonly IDictionary<HypersphericalAngleQuantified, int> _fitness;
       private readonly IComparer<HypersphericalAngleQuantified> _deterministicOrder;
 
       public DirectionComparerWithFitness(IComparer<HypersphericalAngleQuantified> comparer, IEnumerable<HypersphericalAngleQuantified> angles)
