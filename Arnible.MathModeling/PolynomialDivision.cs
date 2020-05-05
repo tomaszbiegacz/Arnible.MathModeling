@@ -9,6 +9,12 @@ namespace Arnible.MathModeling
     private readonly Polynomial _numerator;
     private readonly Polynomial _denominator;
 
+    private PolynomialDivision(Polynomial numerator)
+    {
+      _numerator = numerator;
+      _denominator = default;
+    }
+
     internal PolynomialDivision(Polynomial numerator, Polynomial denominator)
     {
       if (denominator.IsZero)
@@ -26,15 +32,19 @@ namespace Arnible.MathModeling
       else
       {
         _numerator = numerator;
-        _denominator = denominator;
+        _denominator = _numerator.IsZero ? default : denominator;
       }
     }
 
-    private PolynomialDivision(Polynomial numerator)
+    internal PolynomialDivision(double numerator, Polynomial denominator)
     {
+      if (denominator.IsZero)
+      {
+        throw new DivideByZeroException();
+      }
       _numerator = numerator;
-      _denominator = default;
-    }
+      _denominator = _numerator.IsZero ? default : denominator;
+    }    
 
     public static implicit operator PolynomialDivision(Polynomial v) => new PolynomialDivision(numerator: v, denominator: 1);
     public static implicit operator PolynomialDivision(PolynomialTerm v) => new PolynomialDivision(v);
@@ -152,27 +162,13 @@ namespace Arnible.MathModeling
 
     // +
 
-    public static PolynomialDivision operator +(PolynomialDivision a, Polynomial b)
-    {
-      if(a.IsPolynomial)
-      {
-        return a._numerator + b;
-      }
-      else
-      {
-        return new PolynomialDivision(a._numerator + b * a._denominator, a._denominator);
-      }      
-    }
-
-    public static PolynomialDivision operator +(Polynomial a, PolynomialDivision b) => b + a;
-
     public static PolynomialDivision operator +(PolynomialDivision a, PolynomialDivision b)
     {
-      if(a.IsPolynomial)
+      if (a.IsPolynomial)
       {
         return a._numerator + b;
       }
-      else if(b.IsPolynomial)
+      else if (b.IsPolynomial)
       {
         return a + b._numerator;
       }
@@ -183,84 +179,106 @@ namespace Arnible.MathModeling
       else
       {
         return new PolynomialDivision(
-          numerator: a._numerator * b._denominator + b._numerator * a._denominator, 
+          numerator: a._numerator * b._denominator + b._numerator * a._denominator,
           denominator: a._denominator * b._denominator);
       }
     }
 
-    // -
-
-    public static PolynomialDivision operator -(PolynomialDivision a, Polynomial b) => a + (-1) * b;
-
-    public static PolynomialDivision operator -(Polynomial a, PolynomialDivision b) => a + (-1) * b;
-
-    public static PolynomialDivision operator -(PolynomialDivision a, PolynomialDivision b) => a + (-1) * b;
-
-    // *
-
-    public static PolynomialDivision operator *(PolynomialDivision a, Polynomial b)
+    public static PolynomialDivision operator +(PolynomialDivision a, Polynomial b)
     {
-      if(a.IsPolynomial)
+      if (a.IsPolynomial)
       {
-        return a._numerator * b;
+        return a._numerator + b;
       }
       else
       {
-        return new PolynomialDivision(b * a._numerator, a._denominator);
-      }      
+        return new PolynomialDivision(a._numerator + b * a._denominator, a._denominator);
+      }
     }
 
-    public static PolynomialDivision operator *(Polynomial b, PolynomialDivision a) => a * b;
+    public static PolynomialDivision operator +(Polynomial a, PolynomialDivision b) => b + a;
+
+    public static PolynomialDivision operator +(PolynomialDivision a, double b)
+    {
+      if (a.IsPolynomial)
+      {
+        return a._numerator + b;
+      }
+      else
+      {
+        return new PolynomialDivision(a._numerator + b * a._denominator, a._denominator);
+      }
+    }
+
+    public static PolynomialDivision operator +(double a, PolynomialDivision b) => b + a;
+
+    // -
+
+    public static PolynomialDivision operator -(PolynomialDivision a, PolynomialDivision b) => -1 * b + a;
+
+    public static PolynomialDivision operator -(PolynomialDivision a, Polynomial b) => -1 * b + a;
+
+    public static PolynomialDivision operator -(Polynomial a, PolynomialDivision b) => -1 * b + a;
+
+    public static PolynomialDivision operator -(PolynomialDivision a, double b) => -1 * b + a;
+
+    public static PolynomialDivision operator -(double a, PolynomialDivision b) => -1 * b + a;
+
+    // *
 
     public static PolynomialDivision operator *(PolynomialDivision a, PolynomialDivision b)
     {
-      if(a.IsPolynomial)
+      if (a.IsPolynomial)
       {
         return a._numerator * b;
       }
-      else if(b.IsPolynomial)
+      else if (b.IsPolynomial)
       {
         return a * b._numerator;
       }
       else
       {
         return new PolynomialDivision(a._numerator * b._numerator, a._denominator * b._denominator);
-      }      
+      }
     }
+
+    public static PolynomialDivision operator *(PolynomialDivision a, Polynomial b)
+    {
+      if (a.IsPolynomial)
+      {
+        return a._numerator * b;
+      }
+      else
+      {
+        return new PolynomialDivision(b * a._numerator, a._denominator);
+      }
+    }
+
+    public static PolynomialDivision operator *(Polynomial b, PolynomialDivision a) => a * b;
+
+    public static PolynomialDivision operator *(PolynomialDivision a, double b)
+    {
+      if (a.IsPolynomial)
+      {
+        return a._numerator * b;
+      }
+      else
+      {
+        return new PolynomialDivision(b * a._numerator, a._denominator);
+      }
+    }
+
+    public static PolynomialDivision operator *(double b, PolynomialDivision a) => a * b;
 
     // /
 
-    public static PolynomialDivision operator /(PolynomialDivision a, Polynomial b)
-    {
-      if(a.IsPolynomial)
-      {
-        return a._numerator / b;
-      }
-      else
-      {
-        return new PolynomialDivision(a._numerator, a._denominator * b);
-      }      
-    }
-
-    public static PolynomialDivision operator /(Polynomial a, PolynomialDivision b)
-    {
-      if(b.IsPolynomial)
-      {
-        return a / b._numerator;
-      }
-      else
-      {
-        return new PolynomialDivision(a * b._denominator, b._numerator);
-      }      
-    }
-
     public static PolynomialDivision operator /(PolynomialDivision a, PolynomialDivision b)
     {
-      if(a.IsPolynomial)
+      if (a.IsPolynomial)
       {
         return a._numerator / b;
       }
-      else if(b.IsPolynomial)
+      else if (b.IsPolynomial)
       {
         return a / b._numerator;
       }
@@ -274,13 +292,61 @@ namespace Arnible.MathModeling
       }
     }
 
+    public static PolynomialDivision operator /(PolynomialDivision a, Polynomial b)
+    {
+      if (a.IsPolynomial)
+      {
+        return a._numerator / b;
+      }
+      else
+      {
+        return new PolynomialDivision(a._numerator, a._denominator * b);
+      }
+    }
+
+    public static PolynomialDivision operator /(Polynomial a, PolynomialDivision b)
+    {
+      if (b.IsPolynomial)
+      {
+        return a / b._numerator;
+      }
+      else
+      {
+        return new PolynomialDivision(a * b._denominator, b._numerator);
+      }
+    }
+
+    public static PolynomialDivision operator /(PolynomialDivision a, double b)
+    {
+      if (a.IsPolynomial)
+      {
+        return a._numerator / b;
+      }
+      else
+      {
+        return new PolynomialDivision(a._numerator, a._denominator * b);
+      }
+    }
+
+    public static PolynomialDivision operator /(double a, PolynomialDivision b)
+    {
+      if (b.IsPolynomial)
+      {
+        return a / b._numerator;
+      }
+      else
+      {
+        return new PolynomialDivision(a * b._denominator, b._numerator);
+      }
+    }
+
     /*
      * Other operators
      */
 
     public PolynomialDivision ToPower(uint power)
     {
-      if(IsPolynomial)
+      if (IsPolynomial)
       {
         return _numerator.ToPower(power);
       }
@@ -290,12 +356,16 @@ namespace Arnible.MathModeling
           numerator: _numerator.ToPower(power),
           denominator: _denominator.ToPower(power)
         );
-      }      
+      }
     }
+
+    /*
+     * Derivative
+     */
 
     public PolynomialDivision DerivativeBy(char name)
     {
-      if(IsPolynomial)
+      if (IsPolynomial)
       {
         return _numerator.DerivativeBy(name);
       }
@@ -314,14 +384,14 @@ namespace Arnible.MathModeling
           Polynomial denominator = _denominator * _denominator;
           return new PolynomialDivision(numerator, denominator);
         }
-      }      
+      }
     }
 
     public PolynomialDivision DerivativeBy(PolynomialTerm name) => DerivativeBy((char)name);
 
     public PolynomialDivision Derivative2By(char name)
     {
-      if(IsPolynomial)
+      if (IsPolynomial)
       {
         return _numerator.DerivativeBy(name).DerivativeBy(name);
       }
@@ -343,14 +413,18 @@ namespace Arnible.MathModeling
           Polynomial denominator2 = denominator1 * _denominator;
           return new PolynomialDivision(numerator2, denominator2);
         }
-      }      
+      }
     }
 
     public PolynomialDivision Derivative2By(PolynomialTerm name) => Derivative2By((char)name);
 
+    /*
+     * Composition
+     */
+
     public PolynomialDivision Composition(char variable, Polynomial replacement)
     {
-      if(IsPolynomial)
+      if (IsPolynomial)
       {
         return _numerator.Composition(variable, replacement);
       }
@@ -360,9 +434,9 @@ namespace Arnible.MathModeling
           numerator: _numerator.Composition(variable, replacement),
           denominator: _denominator.Composition(variable, replacement));
       }
-      
+
     }
-     
+
     public PolynomialDivision Composition(char variable, PolynomialDivision replacement)
     {
       if (IsPolynomial)
@@ -378,7 +452,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        if(replacement.IsPolynomial)
+        if (replacement.IsPolynomial)
         {
           return _numerator.Composition(variable, replacement._numerator) / _denominator.Composition(variable, replacement._numerator);
         }
@@ -386,8 +460,8 @@ namespace Arnible.MathModeling
         {
           return _numerator.Composition(variable, replacement) / _denominator.Composition(variable, replacement);
         }
-      }            
-    }        
+      }
+    }
 
     public PolynomialDivision Composition(PolynomialTerm variable, Polynomial replacement)
     {
@@ -407,10 +481,10 @@ namespace Arnible.MathModeling
 
     public double Value(IReadOnlyDictionary<char, double> x)
     {
-      if(IsPolynomial)
+      if (IsPolynomial)
       {
         return _numerator.Value(x);
-      }      
+      }
       else
       {
         return _numerator.Value(x) / _denominator.Value(x);

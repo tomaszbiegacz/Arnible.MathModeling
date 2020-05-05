@@ -12,15 +12,31 @@ namespace Arnible.MathModeling
 
     private readonly IEnumerable<PolynomialTerm> _terms;
 
-    internal Polynomial(params PolynomialTerm[] terms)
-      : this((IEnumerable<PolynomialTerm>)terms)
+    internal Polynomial(params PolynomialTerm[] terms)      
     {
-      // intentionally empty
+      _terms = PolynomialTerm.Simplify(terms);
     }
 
     private Polynomial(IEnumerable<PolynomialTerm> terms)
     {
-      _terms = PolynomialTerm.Simplify(terms).ToArray();
+      _terms = PolynomialTerm.Simplify(terms.ToArray());
+    }
+
+    private Polynomial(double v)
+    {
+      if(v == 0)
+      {
+        _terms = LinqEnumerable.Empty<PolynomialTerm>();
+      }
+      else
+      {
+        _terms = LinqEnumerable.Yield<PolynomialTerm>(v);
+      }
+    }
+
+    private Polynomial(char v)
+    {      
+      _terms = LinqEnumerable.Yield<PolynomialTerm>(v);      
     }
 
     public static implicit operator Polynomial(PolynomialTerm v) => new Polynomial(v);
@@ -116,15 +132,35 @@ namespace Arnible.MathModeling
 
     public static explicit operator double(Polynomial v) => (double)v.Terms.SingleOrDefault();
 
+    // +
+
     public static Polynomial operator +(Polynomial a, Polynomial b)
     {
       return new Polynomial(a.Terms.Concat(b.Terms));
     }
 
+    public static Polynomial operator +(Polynomial a, double b)
+    {
+      return new Polynomial(a.Terms.Append(b));
+    }
+
+    public static Polynomial operator +(double a, Polynomial b) => b + a;
+
+    // -
+
     public static Polynomial operator -(Polynomial a, Polynomial b)
     {
       return new Polynomial(a.Terms.Concat(b.Terms.Select(v => -1 * v)));
     }
+
+    public static Polynomial operator -(Polynomial a, double b)
+    {
+      return new Polynomial(a.Terms.Append(-1 * b));
+    }
+
+    public static Polynomial operator -(double a, Polynomial b) => -1 * b + a;
+
+    // *
 
     private static IEnumerable<PolynomialTerm> MultiplyVariables(Polynomial a, Polynomial b)
     {
@@ -149,35 +185,35 @@ namespace Arnible.MathModeling
 
     public static Polynomial operator *(Polynomial b, PolynomialTerm a) => a * b;
 
-    public Polynomial ToPower(uint power)
+    public static Polynomial operator *(double a, Polynomial b)
     {
-      switch (power)
-      {
-        case 0:
-          return 1;
-        case 1:
-          return this;
-        default:
-          {
-            uint power2 = power / 2;
-            var power2Item = this.ToPower(power2);
-            var power2Item2 = power2Item * power2Item;
-            if (power % 2 == 0)
-              return power2Item2;
-            else
-              return power2Item2 * this;
-          }
-      }
+      return new Polynomial(b.Terms.Select(t => a * t));
     }
+
+    public static Polynomial operator *(Polynomial b, double a) => a * b;
+
+    // /
 
     public static PolynomialDivision operator /(Polynomial a, Polynomial b)
     {
       return new PolynomialDivision(a, b);
     }
 
-    public static Polynomial operator /(Polynomial a, double denominator)
+    public static Polynomial operator /(Polynomial a, double denominator) => a * (1 / denominator);    
+
+    public static PolynomialDivision operator /(double a, Polynomial denominator)
     {
-      return new Polynomial(a.Terms.Select(t => t / denominator));
+      return new PolynomialDivision(a, denominator);
+    }
+
+    /*
+     * Other operators
+     */
+
+    public static Polynomial operator %(Polynomial a, Polynomial b)
+    {
+      a.ReduceBy(b, out Polynomial reminder);
+      return reminder;
     }
 
     private static Polynomial TryReduce(
@@ -208,6 +244,27 @@ namespace Arnible.MathModeling
       return a;
     }
 
+    public Polynomial ToPower(uint power)
+    {
+      switch (power)
+      {
+        case 0:
+          return 1;
+        case 1:
+          return this;
+        default:
+          {
+            uint power2 = power / 2;
+            var power2Item = this.ToPower(power2);
+            var power2Item2 = power2Item * power2Item;
+            if (power % 2 == 0)
+              return power2Item2;
+            else
+              return power2Item2 * this;
+          }
+      }
+    }
+
     public Polynomial ReduceBy(Polynomial b, out Polynomial reminder)
     {
       if (b.IsConstant)
@@ -228,12 +285,6 @@ namespace Arnible.MathModeling
       return new Polynomial(resultTerms);
     }
 
-    public static Polynomial operator %(Polynomial a, Polynomial b)
-    {
-      a.ReduceBy(b, out Polynomial reminder);
-      return reminder;
-    }
-
     public Polynomial ReduceBy(Polynomial b)
     {
       Polynomial result = ReduceBy(b, out Polynomial reminder);
@@ -244,12 +295,20 @@ namespace Arnible.MathModeling
       return result;
     }
 
+    /*
+     * Derivative
+     */
+
     public Polynomial DerivativeBy(char name)
     {
       return new Polynomial(Terms.SelectMany(v => v.DerivativeBy(name)));
     }
 
     public Polynomial DerivativeBy(PolynomialTerm name) => DerivativeBy((char)name);
+
+    /*
+     * Composition
+     */
 
     private IEnumerable<PolynomialTerm> CompositionIngredients(char variable, Polynomial replacement)
     {
@@ -258,10 +317,10 @@ namespace Arnible.MathModeling
       {
         if (term.Variables.Any(v => v == variable))
         {
-          foreach(var replacedTerm in term.Composition(variable, replacement))
+          foreach (var replacedTerm in term.Composition(variable, replacement))
           {
             yield return replacedTerm;
-          }          
+          }
         }
         else
         {

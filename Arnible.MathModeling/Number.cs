@@ -51,7 +51,7 @@ namespace Arnible.MathModeling
       return _value.GetHashCode();
     }
 
-    public override string ToString() => ToString(CultureInfo.InvariantCulture);    
+    public override string ToString() => ToString(CultureInfo.InvariantCulture);
 
     public string ToString(CultureInfo cultureInfo)
     {
@@ -62,31 +62,57 @@ namespace Arnible.MathModeling
     // Operators
     //
 
+    public bool Equals(Number other) => _value.NumericEquals(other._value);
+
     public static bool operator ==(Number a, Number b) => a.Equals(b);
     public static bool operator !=(Number a, Number b) => !a.Equals(b);
-    public bool Equals(Number other)
-    {
-      return _value.NumericEquals(other._value);
-    }
-
-    public static Number operator /(Number a, double b) => new Number(a._value / b);
-
-    public static Number operator +(Number a, Number b) => new Number(a._value + b._value);    
-
-    public static Number operator -(Number a, Number b) => new Number(a._value - b._value);    
-
-    public static Number operator *(Number a, Number b) => new Number(a._value * b._value);
-
-    //
-    // Number
-    //
 
     public static bool operator <(Number a, Number b) => a._value < b._value;
     public static bool operator >(Number a, Number b) => a._value > b._value;
+
     public static bool operator <=(Number a, Number b) => a._value < b._value || a.Equals(b);
     public static bool operator >=(Number a, Number b) => a._value > b._value || a.Equals(b);
 
+
+    public static Number operator /(Number a, Number b) => a._value / b._value;
+    public static Number operator /(Number a, double b) => a._value / b;
+    public static Number operator /(double a, Number b) => a / b._value;
+    public static Number operator /(Number a, int b) => a._value / b;
+    public static Number operator /(int a, Number b) => a / b._value;
+    public static Number operator /(Number a, uint b) => a._value / b;
+    public static Number operator /(uint a, Number b) => a / b._value;
+
+
+    public static Number operator +(Number a, Number b) => a._value + b._value;
+    public static Number operator +(Number a, double b) => a._value + b;
+    public static Number operator +(double a, Number b) => a + b._value;
+    public static Number operator +(Number a, int b) => a._value + b;
+    public static Number operator +(int a, Number b) => a + b._value;
+    public static Number operator +(Number a, uint b) => a._value + b;
+    public static Number operator +(uint a, Number b) => a + b._value;
+
+
+    public static Number operator -(Number a, Number b) => a._value - b._value;
+    public static Number operator -(Number a, double b) => a._value - b;
+    public static Number operator -(double a, Number b) => a - b._value;
+    public static Number operator -(Number a, int b) => a._value - b;
+    public static Number operator -(int a, Number b) => a - b._value;
+    public static Number operator -(Number a, uint b) => a._value - b;
+    public static Number operator -(uint a, Number b) => a - b._value;
+
+    public static Number operator *(Number a, Number b) => a._value * b._value;
+    public static Number operator *(Number a, double b) => a._value * b;
+    public static Number operator *(double a, Number b) => a * b._value;
+    public static Number operator *(Number a, int b) => a._value * b;
+    public static Number operator *(int a, Number b) => a * b._value;    
+    public static Number operator *(Number a, uint b) => a._value * b;
+    public static Number operator *(uint a, Number b) => a * b._value;    
+
     public Number ToPower(uint b) => DoubleExtension.ToPower(_value, b);
+
+    //
+    // IComparable
+    //
 
     public int CompareTo(Number other)
     {
