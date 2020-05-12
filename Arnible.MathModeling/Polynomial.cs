@@ -270,7 +270,7 @@ namespace Arnible.MathModeling
 
     public static Polynomial operator %(Polynomial a, Polynomial b)
     {
-      a.ReduceBy(b, out Polynomial reminder);
+      a.DivideBy(b, out Polynomial reminder);
       return reminder;
     }
 
@@ -302,7 +302,7 @@ namespace Arnible.MathModeling
       return a;
     }    
 
-    public Polynomial ReduceBy(Polynomial b, out Polynomial reminder)
+    public Polynomial DivideBy(Polynomial b, out Polynomial reminder)
     {
       if (b.IsConstant)
       {
@@ -322,15 +322,15 @@ namespace Arnible.MathModeling
       return new Polynomial(resultTerms);                                           // no need for simplification
     }
 
-    public bool TryReduceBy(Polynomial b, out Polynomial result)
+    public bool TryDivideBy(Polynomial b, out Polynomial result)
     {
-      result = ReduceBy(b, out Polynomial reminder);
+      result = DivideBy(b, out Polynomial reminder);
       return reminder.IsZero;
     }
 
-    public Polynomial ReduceBy(Polynomial b)
+    public Polynomial DivideBy(Polynomial b)
     {
-      Polynomial result = ReduceBy(b, out Polynomial reminder);
+      Polynomial result = DivideBy(b, out Polynomial reminder);
       if (!reminder.IsZero)
       {
         throw new InvalidOperationException($"Cannot reduce [{this}] with [{b}].");

@@ -1,7 +1,9 @@
-﻿namespace Arnible.MathModeling
+﻿using System;
+
+namespace Arnible.MathModeling
 {
-  public interface IDerivative1
+  public interface IDerivative1 : IEquatable<IDerivative1>
   {
-    Number First { get; }
+    Number First { get; }    
   }
 }

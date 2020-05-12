@@ -16,7 +16,7 @@ namespace Arnible.MathModeling
         {          
           double diff = Math.Abs(a - b);
           double denominator = Math.Min(Math.Abs(a), Math.Abs(b));
-          const double resolution = 1E-10;
+          const double resolution = 1E-9;
           if (denominator == 0)
           {
             return diff < resolution;

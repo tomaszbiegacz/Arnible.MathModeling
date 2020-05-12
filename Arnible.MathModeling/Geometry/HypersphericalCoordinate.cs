@@ -1,11 +1,15 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
-using System.Collections.Generic;
-using static Arnible.MathModeling.MetaMath;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public readonly struct HypersphericalCoordinate : ICoordinate<HypersphericalCoordinate>
+  public interface IHypersphericalCoordinate
+  {
+    Number R { get; }
+    HypersphericalAngleVector Angles { get; }
+  }
+
+  public readonly struct HypersphericalCoordinate : IEquatable<HypersphericalCoordinate>, IHypersphericalCoordinate, ICoordinate<HypersphericalCoordinate>
   {
     /// <summary>
     /// Angles:
@@ -35,67 +39,53 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public static implicit operator HypersphericalCoordinate(PolarCoordinate pc) => new HypersphericalCoordinate(pc.R, new NumberVector(pc.Φ));
+    public static implicit operator HypersphericalCoordinate(PolarCoordinate pc)
+    {
+      return new HypersphericalCoordinate(pc.R, new NumberVector(pc.Φ));
+    }
+
+    public bool Equals(HypersphericalCoordinate other)
+    {
+      return  other.R == R && other.Angles == Angles;
+    }
+
+    public override bool Equals(object obj)
+    {
+      if (obj is HypersphericalCoordinate typed)
+      {
+        return Equals(typed);
+      }
+      else
+      {
+        return false;
+      }
+    }
+
+    public override int GetHashCode()
+    {
+      return R.GetHashCode() ^ Angles.GetHashCode();
+    }
 
     public override string ToString()
     {
       return new NumberVector(R).Concat(Angles).ToVector().ToString();
     }
 
+    //
+    // Properties
+    //
+
     public uint DimensionsCount => Angles.Length + 1;
+
+    //
+    // Operations
+    //
 
     public HypersphericalCoordinate AddDimension()
     {
       return new HypersphericalCoordinate(R, Angles.AddDimension());
     }
 
-    public CartesianCoordinate ToCartesian()
-    {
-      var cartesianDimensions = new List<Number>();
-      var replacement = R;
-      foreach (var angle in Angles.Reverse())
-      {
-        cartesianDimensions.Add(replacement * Sin(angle));
-        replacement *= Cos(angle);
-      }
-      cartesianDimensions.Add(replacement);
-      cartesianDimensions.Reverse();
-
-      return new CartesianCoordinate(cartesianDimensions.ToVector());
-    }
-
-    public IEnumerable<IDerivative1> DerivativeByRForCartesianCoordinates()
-    {
-      return DerivativeByRForCartesianCoordinates(Angles);
-    }
-
-    public static IEnumerable<IDerivative1> DerivativeByRForCartesianCoordinates(HypersphericalAngleVector angles)
-    {
-      var result = new List<IDerivative1>();
-      Number replacement = 1;
-      foreach (var angle in angles.Reverse())
-      {
-        result.Add(new Derivative1Value(replacement * Sin(angle)));
-        replacement *= Cos(angle);
-      }
-      result.Add(new Derivative1Value(replacement));
-      result.Reverse();
-
-      return result;
-    }
-
-    public IEnumerable<HypersphericalAngleVector> CartesianCoordinatesAngles()
-    {
-      uint anglesCount = Angles.Length;
-      Number[] x = LinqEnumerable.Repeat<Number>(0, anglesCount).ToArray();
-
-      yield return new HypersphericalAngleVector(x.ToVector());
-      for (uint i = 0; i < anglesCount; ++i)
-      {
-        x[i] = Angle.RightAngle;
-        yield return new HypersphericalAngleVector(x.ToVector());
-        x[i] = 0;
-      }
-    }
+    public HypersphericalCoordinateOnAxisView ToCartesianView() => new HypersphericalCoordinateOnAxisView(this);    
   }
 }

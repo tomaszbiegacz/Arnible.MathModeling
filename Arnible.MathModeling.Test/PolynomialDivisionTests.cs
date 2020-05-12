@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Arnible.MathModeling.Test
@@ -286,6 +287,30 @@ namespace Arnible.MathModeling.Test
 
       // test
       Assert.Equal((x + 1) / (x + 2), expr.ReduceBy(x - 1));
+    }
+
+    [Fact]
+    public void TryDivideBy_Positive()
+    {
+      var numerator = x - 1;
+      var denominator = x + 2;
+      var expr = numerator / denominator;
+
+      // test
+      PolynomialDivision result;
+      Assert.True(expr.TryDivideBy(x - 1, out result));
+      Assert.Equal(1 / (x + 2), result);
+    }
+
+    [Fact]
+    public void TryDivideBy_Negative()
+    {
+      var numerator = x - 1;
+      var denominator = x  + 2;
+      var expr = numerator / denominator + 1;
+
+      // test
+      Assert.False(expr.TryDivideBy(x - 1, out _));
     }
 
     [Fact]

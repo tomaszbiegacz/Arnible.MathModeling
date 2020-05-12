@@ -3,7 +3,12 @@ using System;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public readonly struct CartesianCoordinate : ICoordinate<CartesianCoordinate>
+  public interface ICartesianCoordinate
+  {
+    NumberVector Coordinates { get; }
+  }
+
+  public readonly struct CartesianCoordinate : IEquatable<CartesianCoordinate>, ICartesianCoordinate, ICoordinate<CartesianCoordinate>
   {
     public static CartesianCoordinate ForAxis(uint dimensionsCount, uint axisNumber, Number value)
     {
@@ -35,16 +40,46 @@ namespace Arnible.MathModeling.Geometry
       return new CartesianCoordinate(new Number[] { rc.X, rc.Y }.ToVector());
     }
 
+    public bool Equals(CartesianCoordinate other)
+    {
+      return other.Coordinates == Coordinates;
+    }
+
+    public override bool Equals(object obj)
+    {
+      if(obj is CartesianCoordinate typed)
+      {
+        return Equals(typed);
+      }
+      else
+      {
+        return false;
+      }
+    }
+
+    public override int GetHashCode()
+    {
+      return Coordinates.GetHashCode();
+    }
+
     public override string ToString()
     {
       return Coordinates.ToString();
     }
 
+    //
+    // Properties
+    //
+
     public uint DimensionsCount => Coordinates.Length;
+
+    //
+    // Operations
+    //
 
     public CartesianCoordinate AddDimension()
     {
       return new CartesianCoordinate(Coordinates.Append(0).ToVector());
-    }
+    }    
   }
 }

@@ -172,19 +172,19 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ReduceBy_ByConstant()
     {      
-      Assert.Equal(2 * (x + 1), (x + 1).ReduceBy(0.5));
+      Assert.Equal(2 * (x + 1), (x + 1).DivideBy(0.5));
     }
 
     [Fact]
     public void ReduceBy_ByExpression()
     {     
-      Assert.Equal(x * x + 3 * x + 9, (x * x * x - 27).ReduceBy(x - 3));
+      Assert.Equal(x * x + 3 * x + 9, (x * x * x - 27).DivideBy(x - 3));
     }
 
     [Fact]
     public void ReduceBy_ByExpression_RemainderConstant()
     {     
-      Assert.Equal(x * x + 3 * x + 9, (x * x * x - 25).ReduceBy(x - 3, out Polynomial remainder));
+      Assert.Equal(x * x + 3 * x + 9, (x * x * x - 25).DivideBy(x - 3, out Polynomial remainder));
       Assert.Equal(2, remainder);
     }
 
@@ -192,7 +192,7 @@ namespace Arnible.MathModeling.Test
     public void ReduceBy_ByExpression_RemainderExpression()
     {     
       Polynomial toDivide = 5 * (x - 1) * (x - 1) * (x + 1) + 2 * x + 3;
-      Assert.Equal(x - 1, toDivide.ReduceBy(5 * (x * x - 1), out Polynomial remainder));
+      Assert.Equal(x - 1, toDivide.DivideBy(5 * (x * x - 1), out Polynomial remainder));
       Assert.Equal(2 * x + 3, remainder);
     }
 
@@ -207,13 +207,13 @@ namespace Arnible.MathModeling.Test
     public void ReduceBy_0ByExpression()
     {      
       Polynomial zero = 0;
-      Assert.Equal(0, zero.ReduceBy(x - 3));
+      Assert.Equal(0, zero.DivideBy(x - 3));
     }
 
     [Fact]
     public void Division_Simplification_x2_minus_1()
     {      
-      Assert.Equal(x + y, (x * x - y * y).ReduceBy(x - y));
+      Assert.Equal(x + y, (x * x - y * y).DivideBy(x - y));
     }
   }
 }

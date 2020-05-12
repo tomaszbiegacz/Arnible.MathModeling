@@ -36,7 +36,7 @@ namespace Arnible.MathModeling.Geometry
       {
         HypersphericalAngleVector anglePositive = direction.ToVector();
         var hcPositive = new HypersphericalCoordinate(deltaRange, anglePositive);
-        var deltaPositive = new NumberTranslationVector(hcPositive.ToCartesian().Coordinates);
+        var deltaPositive = new NumberTranslationVector(hcPositive.ToCartesianView().Coordinates);
         Number deltaPositiveRatio = domain.GetValidTranslationRatio(current, deltaPositive);
 
         if (deltaPositiveRatio != 0)
@@ -47,7 +47,7 @@ namespace Arnible.MathModeling.Geometry
         {
           HypersphericalAngleVector angleNegative = anglePositive.Mirror;
           var hcNegative = new HypersphericalCoordinate(deltaRange, angleNegative);
-          var deltaNegative = new NumberTranslationVector(hcNegative.ToCartesian().Coordinates);
+          var deltaNegative = new NumberTranslationVector(hcNegative.ToCartesianView().Coordinates);
           Number deltaNegativeRatio = domain.GetValidTranslationRatio(current, deltaNegative);
           if (deltaNegativeRatio != 0)
           {

@@ -65,7 +65,7 @@ namespace Arnible.MathModeling.Algebra
     // IReadOnlyList
     //
 
-    public Number this[int pos] => _values[pos];
+    Number IReadOnlyList<Number>.this[int pos] => _values[pos];
 
     private IEnumerable<Number> Values => _values ?? LinqEnumerable.Empty<Number>();
 

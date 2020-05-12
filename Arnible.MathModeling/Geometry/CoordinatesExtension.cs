@@ -40,12 +40,17 @@ namespace Arnible.MathModeling.Geometry
         angles.Add(GetFirstAngle(pc[0], pc[1]));
         angles.Reverse();
 
-        return new HypersphericalCoordinate(r, angles.ToVector());
+        return new HypersphericalCoordinate(r, angles.ToVector());        
       }
       else
       {
         return default;
       }
+    }
+
+    public static HypersphericalCoordinateOnAxisView ToSphericalView(this CartesianCoordinate p)
+    {
+      return new HypersphericalCoordinateOnAxisView(ToSpherical(p));
     }
 
     public static Number VectorLength(this CartesianCoordinate point)

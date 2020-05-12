@@ -33,7 +33,7 @@ namespace Arnible.MathModeling.Geometry
       {
         hc = new HypersphericalCoordinate(Math.Abs(rDelta), direction.Mirror);
       }
-      return new NumberTranslationVector(hc.ToCartesian().Coordinates);
+      return new NumberTranslationVector(hc.ToCartesianView().Coordinates);
     }
   }
 }

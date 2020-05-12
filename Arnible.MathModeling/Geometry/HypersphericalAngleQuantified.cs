@@ -82,9 +82,16 @@ namespace Arnible.MathModeling.Geometry
       public IEnumerable<HypersphericalAngleQuantified> Angles => WithRightAnglePrefix.Concat(WithoutRightAnglePrefix);
     }
 
-    public static IEnumerable<HypersphericalAngleQuantified> GetNonLinearDirections(byte anglesCount, byte resolution)
+    /// <summary>
+    /// Return non linear directions in given resolution (2 for 45 degres resolution).
+    /// </summary>    
+    public static IEnumerable<HypersphericalAngleQuantified> GetNonLinearDirections(uint anglesCount, uint resolution)
     {
-      var factory = new NonLinearDirectionsFactory(new InnerFactory(resolution), anglesCount);
+      if (resolution == 0 || resolution > byte.MaxValue)
+      {
+        throw new ArgumentException(nameof(resolution));
+      }
+      var factory = new NonLinearDirectionsFactory(new InnerFactory((byte)resolution), anglesCount);
       return factory.Angles;
     }
 
@@ -96,7 +103,7 @@ namespace Arnible.MathModeling.Geometry
       Id = id;
       _rightAngleResolution = rightAngleResolution;
       _angles = angles.ToArray();
-      if(_angles.Where(a => a == rightAngleResolution).Count() > 1)
+      if (_angles.Where(a => a == rightAngleResolution).Count() > 1)
       {
         throw new ArgumentException(nameof(angles));
       }
@@ -109,7 +116,7 @@ namespace Arnible.MathModeling.Geometry
       if (angles.Length > 0)
       {
         uint anglePos;
-        uint? firstAnglePos = angles.IndexOf(a => a == rightAngleResolution);        
+        uint? firstAnglePos = angles.IndexOf(a => a == rightAngleResolution);
         if (firstAnglePos > 0)
         {
           result = 1;
@@ -131,11 +138,11 @@ namespace Arnible.MathModeling.Geometry
         result += (byte)angles.SkipExactly(anglePos).Where(a => a != 0).Count();
       }
       return result;
-    }    
+    }
 
     public uint Id { get; }
 
-    public byte UsedCartesianDirectionsCount { get; }    
+    public byte UsedCartesianDirectionsCount { get; }
 
     public IEnumerable<sbyte> Angles => _angles ?? LinqEnumerable.Empty<sbyte>();
 
@@ -163,7 +170,7 @@ namespace Arnible.MathModeling.Geometry
     {
       if (!Angles.Any())
         return default;
-      
+
       Number step = Angle.RightAngle / _rightAngleResolution;
       return new HypersphericalAngleVector(new NumberVector(_angles.Select(v => v * step)));
     }

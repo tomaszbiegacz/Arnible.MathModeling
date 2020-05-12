@@ -92,7 +92,7 @@ namespace Arnible.MathModeling
 
     private static PolynomialDivision SimplifyByDividingNumeratorByDenominator(Polynomial numerator, Polynomial denominator)
     {
-      if (numerator.TryReduceBy(denominator, out Polynomial reducedNumerator))
+      if (numerator.TryDivideBy(denominator, out Polynomial reducedNumerator))
       {
         // let's simplify it if we can
         return new PolynomialDivision(reducedNumerator);
@@ -307,7 +307,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        if (a._denominator.TryReduceBy(b, out Polynomial reducedDenominator))
+        if (a._denominator.TryDivideBy(b, out Polynomial reducedDenominator))
         {
           return SimplifyPolynomialDivision(numerator: a._numerator, denominator: reducedDenominator);
         }
@@ -365,7 +365,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        if (a._numerator.TryReduceBy(b, out Polynomial reducedNumerator))
+        if (a._numerator.TryDivideBy(b, out Polynomial reducedNumerator))
         {
           return SimplifyPolynomialDivision(numerator: reducedNumerator, denominator: a._denominator);
         }
@@ -384,7 +384,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        if (b._numerator.TryReduceBy(a, out Polynomial reducedNumerator))
+        if (b._numerator.TryDivideBy(a, out Polynomial reducedNumerator))
         {
           return SimplifyPolynomialDivision(numerator: b._denominator, denominator: reducedNumerator);
         }
@@ -445,10 +445,24 @@ namespace Arnible.MathModeling
     {
       if (IsPolynomial)
       {
-        throw new InvalidOperationException("Cannot reduce polynomial");
+        throw new ArgumentException("Cannot reduce polynomial.");
       }
+      
+      return SimplifyPolynomialDivision(numerator: _numerator.DivideBy(pol), denominator: _denominator.DivideBy(pol));
+    }
 
-      return SimplifyPolynomialDivision(numerator: _numerator.ReduceBy(pol), denominator: _denominator.ReduceBy(pol));
+    public bool TryDivideBy(Polynomial b, out PolynomialDivision result)
+    {      
+      if(_numerator.TryDivideBy(b, out Polynomial reminder))
+      {
+        result = SimplifyPolynomialDivision(reminder, _denominator);
+        return true;
+      }  
+      else
+      {
+        result = default;
+        return false;
+      }
     }
 
     /*

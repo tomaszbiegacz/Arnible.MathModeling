@@ -49,23 +49,6 @@ namespace Arnible.MathModeling.Geometry.Test
     public void EqualityAfterTranformation_Linear() => EqualityAfterTranformation(Term.x + Term.y + Term.z);
 
     [Fact]
-    public void EqualityAfterTranformation_Polynomial3d() => EqualityAfterTranformation(1 + Term.x + 2 * Term.y * Term.z);
-
-    [Fact]
-    public void DerivativeByRForCartesianCoordinates()
-    {
-      var cartesianPoint = new CartesianCoordinate(new NumberVector(Term.x, Term.y, Term.z));
-      var sphericalPoint = new HypersphericalCoordinate(Term.r, new NumberVector(Term.θ, Term.φ));
-
-      var derivatives = sphericalPoint.DerivativeByRForCartesianCoordinates().ToArray();
-      Number r = Term.r;
-
-      Assert.Equal((int)cartesianPoint.DimensionsCount, derivatives.Length);
-      for (uint i = 0; i < cartesianPoint.DimensionsCount; ++i)
-      {
-        var symbol = (PolynomialDivision)cartesianPoint.Coordinates[i];
-        AssertFormal.Equal(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[i].First);
-      }
-    }
+    public void EqualityAfterTranformation_Polynomial3d() => EqualityAfterTranformation(1 + Term.x + 2 * Term.y * Term.z);    
   }
 }
