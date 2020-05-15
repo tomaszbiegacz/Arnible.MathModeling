@@ -40,6 +40,11 @@ namespace Arnible.MathModeling.Geometry
       return new CartesianCoordinate(new Number[] { rc.X, rc.Y }.ToVector());
     }
 
+    public static implicit operator CartesianCoordinate(NumberArray rc)
+    {
+      return new CartesianCoordinate(rc);
+    }
+
     public bool Equals(CartesianCoordinate other)
     {
       return other.Coordinates == Coordinates;

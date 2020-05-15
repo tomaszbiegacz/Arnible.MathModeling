@@ -2,7 +2,7 @@
 {
   public static class INumberRangeDomainExtensions
   {
-    public static void Validate(this INumberRangeDomain domain, NumberVector value)
+    public static void Validate(this INumberRangeDomain domain, NumberArray value)
     {
       foreach (Number v in value)
       {
@@ -12,7 +12,7 @@
 
     public static NumberVector Translate(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)
     {
-      return new NumberVector(value.ZipDefensive(delta, (v, t) => domain.Translate(v, t)));
+      return value.ZipDefensive(delta, (v, t) => domain.Translate(v, t)).ToVector();
     }
 
     public static bool IsValidTranslation(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)

@@ -7,12 +7,12 @@ namespace Arnible.MathModeling.Algebra
   {
     public static NumberVector ToVector(this IEnumerable<Number> numbers)
     {
-      return new NumberVector(numbers);
+      return NumberVector.Create(numbers);
     }
 
     public static NumberVector ToVector(this IEnumerable<double> numbers)
     {
-      return new NumberVector(numbers.Select(v => (Number)v));
+      return numbers.Select(v => (Number)v).ToVector();
     }
 
     private static (NumberVector, uint) SumWithCount(IEnumerable<NumberVector> vectors)

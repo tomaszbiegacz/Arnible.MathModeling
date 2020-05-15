@@ -51,6 +51,11 @@ namespace Arnible.MathModeling.Geometry
       return ToSpherical((PolynomialDivision)source, cartesianPoint, hypersphericalPoint);
     }
 
+    public static HypersphericalCoordinateOnAxisView ToSphericalView(this CartesianCoordinate p)
+    {
+      throw new NotImplementedException("Not yet supported");
+    }
+
     public static PolynomialDivision Composition(this Number source, CartesianCoordinate c1, CartesianCoordinate c2)
     {
       if(c1.DimensionsCount != c2.DimensionsCount)

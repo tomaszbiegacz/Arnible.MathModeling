@@ -150,10 +150,42 @@ namespace Arnible.MathModeling
     /// Applies a specified function to the corresponding elements of two sequences,
     /// producing a sequence of the results.
     /// </summary>
-    public static IEnumerable<TResult> Zip<T, TResult>(this IEnumerable<T> col1, IEnumerable<T> col2, Func<T, T, TResult> merge)
+    public static IEnumerable<TResult> Zip<T, TResult>(this IEnumerable<T> col1, IEnumerable<T> col2, Func<T, T, TResult> merge) where T : class
     {
       return System.Linq.Enumerable.Zip(col1, col2, merge);
     }
+
+    /// <summary>
+    /// Applies a specified function to the corresponding elements of two sequences,
+    /// producing a sequence of the results.
+    /// </summary>
+    public static IEnumerable<TResult> Zip<T, TResult>(this IEnumerable<T> col1, IEnumerable<T> col2, Func<T?, T?, TResult> merge) where T : struct
+    {
+      using (var col1Enum = col1.GetEnumerator())
+      using (var col2Enum = col2.GetEnumerator())
+      {
+        bool isCol1Valid = col1Enum.MoveNext();
+        bool isCol2Valid = col2Enum.MoveNext();
+        while (isCol1Valid || isCol2Valid)
+        {
+          T? col1Current = null;
+          if (isCol1Valid)
+          {
+            col1Current = col1Enum.Current;
+            isCol1Valid = col1Enum.MoveNext();
+          }
+
+          T? col2Current = null;
+          if (isCol2Valid)
+          {
+            col2Current = col2Enum.Current;
+            isCol2Valid = col2Enum.MoveNext();
+          }
+
+          yield return merge(col1Current, col2Current);
+        }
+      }
+    }    
 
     /// <summary>
     /// Applies a specified function to the corresponding elements of two sequences,
@@ -184,28 +216,32 @@ namespace Arnible.MathModeling
       }
     }
 
+    /// <summary>
+    /// Applies a specified function to the elements matched by common keys from dictionaries
+    /// producing a sequence of the results.
+    /// </summary>
     public static IDictionary<TKey, TMergeResult> ZipCommon<TKey, TResult, TMergeResult>(
       this IDictionary<TKey, TResult> source,
       IDictionary<TKey, TResult> other,
       Func<TResult, TResult, TMergeResult> merge)
     {
-      if(source == null)
+      if (source == null)
       {
         throw new ArgumentNullException(nameof(source));
       }
-      if(other == null)
+      if (other == null)
       {
         throw new ArgumentNullException(nameof(other));
       }
-      if(merge == null)
+      if (merge == null)
       {
         throw new ArgumentNullException(nameof(merge));
       }
 
       var result = new Dictionary<TKey, TMergeResult>();
-      foreach(TKey key in source.Keys)
+      foreach (TKey key in source.Keys)
       {
-        if(other.TryGetValue(key, out TResult otherValue))
+        if (other.TryGetValue(key, out TResult otherValue))
         {
           result.Add(key, merge(source[key], otherValue));
         }

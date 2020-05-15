@@ -11,7 +11,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Zip()
     {
-      Assert.Equal(new[] { 5, 7, 9 }, (new[] { 1, 2, 3 }).Zip(new[] { 4, 5, 6 }, (a, b) => a + b));
+      Assert.Equal(new[] { 5, 7, 9 }, (new[] { 1, 2 }).Zip(new[] { 4, 5, 9 }, (a, b) => (a ?? 0) + (b ?? 0)));
     }
 
     [Fact]

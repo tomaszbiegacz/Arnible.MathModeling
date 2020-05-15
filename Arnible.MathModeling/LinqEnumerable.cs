@@ -185,6 +185,17 @@ namespace Arnible.MathModeling
       }
     }
 
+    /// <summary>
+    /// Will try to cast all the elements into type x. if some of them are not from this type you will get InvalidCastException
+    /// </summary>
+    public static IEnumerable<TResult> Cast<TResult>(this IEnumerable source)
+    {
+      return System.Linq.Enumerable.Cast<TResult>(source);
+    }
+
+    /// <summary>
+    /// Return only the elements that can safely be cast to type x.
+    /// </summary>    
     public static IEnumerable<TResult> OfType<TResult>(this IEnumerable source)
     {
       return System.Linq.Enumerable.OfType<TResult>(source);

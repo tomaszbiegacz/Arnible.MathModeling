@@ -1,62 +1,45 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
+using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Geometry
 {
   public static class INumberRangeDomainExtensions
   {
-    public static Number GetValidTranslationRatio(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)
+    public static Number GetValidTranslationRatio(this INumberRangeDomain domain, IEnumerable<Number> value, NumberTranslationVector delta)
     {
-      return value.ZipDefensive(delta, (v, t) => domain.GetValidTranslationRatio(v, t)).MinDefensive();
+      return value.Zip(delta, (v, t) => domain.GetValidTranslationRatio(v ?? 0, t ?? 0)).MinDefensive();
     }
 
-    public static NumberTranslationVector GetValidTranslation(
-      this INumberRangeDomain domain,
-      NumberVector current,
-      HypersphericalAngleQuantified direction,
-      Number translationRangeRatio)
+    private static NumberTranslationVector GetValidTranslationEnum(INumberRangeDomain domain, IEnumerable<Number> value, NumberTranslationVector delta)
     {
-      if(!domain.Width.IsValidNumeric())
+      Number ratio = GetValidTranslationRatio(domain, value, delta);
+      if (ratio == 0)
       {
-        throw new InvalidOperationException("Supported only for finite domains.");
+        return default;
       }
-      if(translationRangeRatio > 1)
+      else if (ratio == 1)
       {
-        throw new ArgumentException(nameof(translationRangeRatio));
+        return delta;
       }
-
-      Number deltaRange = domain.Width * translationRangeRatio;
-      if (deltaRange < 0)
+      else
       {
-        throw new InvalidOperationException(nameof(translationRangeRatio));
+        return ratio * delta;
       }
+    }
 
-      NumberTranslationVector delta = default;
-      if (deltaRange > 0)
+    public static NumberTranslationVector GetValidTranslation(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)
+    {
+      return GetValidTranslationEnum(domain, value, delta);
+    }
+
+    public static NumberTranslationVector GetValidTranslation(this INumberRangeDomain domain, NumberArray value, NumberTranslationVector delta)
+    {
+      if (delta.Length > value.Length)
       {
-        HypersphericalAngleVector anglePositive = direction.ToVector();
-        var hcPositive = new HypersphericalCoordinate(deltaRange, anglePositive);
-        var deltaPositive = new NumberTranslationVector(hcPositive.ToCartesianView().Coordinates);
-        Number deltaPositiveRatio = domain.GetValidTranslationRatio(current, deltaPositive);
-
-        if (deltaPositiveRatio != 0)
-        {
-          delta = deltaPositiveRatio * deltaPositive;
-        }
-        else
-        {
-          HypersphericalAngleVector angleNegative = anglePositive.Mirror;
-          var hcNegative = new HypersphericalCoordinate(deltaRange, angleNegative);
-          var deltaNegative = new NumberTranslationVector(hcNegative.ToCartesianView().Coordinates);
-          Number deltaNegativeRatio = domain.GetValidTranslationRatio(current, deltaNegative);
-          if (deltaNegativeRatio != 0)
-          {
-            delta = deltaNegativeRatio * deltaNegative;
-          }
-        }
+        throw new ArgumentException(nameof(value));
       }
-
-      return delta;
+      return GetValidTranslationEnum(domain, value, delta);
     }
   }
 }

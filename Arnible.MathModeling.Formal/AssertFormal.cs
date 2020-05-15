@@ -12,12 +12,12 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static void VerifyDerivatives(PolynomialDivision value, Number term, IDerivative2 derivative)
+    public static void VerifyDerivatives(PolynomialDivision value, Number term, IDerivative1 derivative)
     {
       VerifyDerivativesInternal(value, (PolynomialTerm)term, derivative);
     }
 
-    private static void VerifyDerivativesInternal(PolynomialDivision value, PolynomialTerm term, IDerivative2 derivative)
+    private static void VerifyDerivativesInternal(PolynomialDivision value, PolynomialTerm term, IDerivative1 derivative)
     {
       var firstDerivative = value.DerivativeBy(term);
       Equal(firstDerivative, derivative.First);

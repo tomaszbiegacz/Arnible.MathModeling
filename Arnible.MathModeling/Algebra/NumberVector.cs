@@ -2,14 +2,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 
 namespace Arnible.MathModeling.Algebra
 {
   [Serializable]
   [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
-  public readonly struct NumberVector : IEquatable<NumberVector>, IReadOnlyList<Number>
+  public readonly struct NumberVector : IEquatable<NumberVector>, IEquatable<Number>, IReadOnlyList<Number>
   {
+    private readonly static IImmutableList<Number> Zero = ImmutableList<Number>.Empty.Add(0);
+
     class Serializer : ToStringSerializer<NumberVector>
     {
       public Serializer() : base(v => v.ToString(CultureInfo.InvariantCulture))
@@ -18,36 +21,77 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public static NumberVector Zero(uint length) => Repeat(0, length);
+    public static NumberVector Repeat(Number value, uint length)
+    {
+      if (value == 0)
+      {
+        return default;
+      }
+      else
+      {
+        return new NumberVector(LinqEnumerable.Repeat(value, length).ToImmutableArray());
+      }
+    }
 
-    public static NumberVector Repeat(Number value, uint length) => new NumberVector(LinqEnumerable.Repeat(value, length));
+    public static NumberVector FirstNonZeroValueAt(uint pos, Number value)
+    {
+      if (value == 0)
+      {
+        return default;
+      }
+      else
+      {
+        return new NumberVector(LinqEnumerable.Repeat<Number>(0, pos).Append(value).ToImmutableArray());
+      }
+    }
 
-    private readonly IReadOnlyList<Number> _values;
+    private readonly IImmutableList<Number> _values;
+
+    private static IImmutableList<Number> GetNormalizedVector(IEnumerable<Number> parameters)
+    {
+      List<Number> result = new List<Number>(parameters ?? LinqEnumerable.Empty<Number>());
+
+      while (result.Count > 0 && result[result.Count - 1] == 0)
+      {
+        result.RemoveAt(result.Count - 1);
+      }
+
+      if (result.Count > 0)
+      {
+        return result.ToImmutableList();
+      }
+      else
+      {
+        return null;
+      }
+    }
+
+    internal static NumberVector Create(IEnumerable<Number> parameters)
+    {
+      return new NumberVector(GetNormalizedVector(parameters));
+    }
 
     public NumberVector(params Number[] parameters)
+      : this(GetNormalizedVector(parameters))
     {
-      _values = parameters?.ToArray();
+      // intentionally empty
     }
 
-    public NumberVector(IEnumerable<Number> parameters)
+    private NumberVector(IImmutableList<Number> parameters)
     {
-      _values = parameters?.ToArray();
+      _values = parameters;
     }
+
+    public static implicit operator NumberVector(Number v) => new NumberVector(v);
+    public static implicit operator NumberVector(double v) => new NumberVector(v);
+
+    public static implicit operator NumberVector(NumberArray v) => Create(v);
 
     //
     // Properties
-    //
+    //    
 
-    public bool IsZero
-    {
-      get
-      {
-        if (Values.Any())
-          return Values.All(an => an == 0);
-        else
-          return true;
-      }
-    }
+    private IImmutableList<Number> Values => _values ?? Zero;
 
     public Number this[uint pos]
     {
@@ -55,25 +99,24 @@ namespace Arnible.MathModeling.Algebra
       {
         if (pos >= Length)
           throw new InvalidOperationException($"Invalid index: {pos}");
-        return _values[(int)pos];
+
+        return Values[(int)pos];
       }
     }
 
-    public uint Length => (uint)(_values?.Count ?? 0);
+    public uint Length => (uint)(Values.Count);
 
     //
     // IReadOnlyList
     //
 
-    Number IReadOnlyList<Number>.this[int pos] => _values[pos];
-
-    private IEnumerable<Number> Values => _values ?? LinqEnumerable.Empty<Number>();
+    Number IReadOnlyList<Number>.this[int pos] => Values[pos];
 
     public IEnumerator<Number> GetEnumerator() => Values.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => Values.GetEnumerator();
 
-    int IReadOnlyCollection<Number>.Count => (int)Length;
+    int IReadOnlyCollection<Number>.Count => Values.Count;
 
     //
     // IEquatable
@@ -81,11 +124,11 @@ namespace Arnible.MathModeling.Algebra
 
     public bool Equals(NumberVector other) => Values.SequenceEqual(other.Values);
 
-    public override bool Equals(object obj)
+    public bool Equals(Number other)
     {
-      if (obj is NumberVector v)
+      if (Length == 1)
       {
-        return Equals(v);
+        return Values[0] == other;
       }
       else
       {
@@ -93,14 +136,34 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public override string ToString()
+    public override bool Equals(object obj)
     {
-      return "[" + String.Join(" ", Values) + "]";
+      if (obj is NumberVector v)
+      {
+        return Equals(v);
+      }
+      if (obj is Number v2)
+      {
+        return Equals(v2);
+      }
+      else
+      {
+        return false;
+      }
     }
+
+    public override string ToString() => ToString(CultureInfo.InvariantCulture);
 
     public string ToString(CultureInfo cultureInfo)
     {
-      return "[" + String.Join(" ", Values.Select(v => v.ToString(cultureInfo))) + "]";
+      if (Values.Count == 1)
+      {
+        return Values[0].ToString(cultureInfo);
+      }
+      else
+      {
+        return "[" + string.Join(" ", Values.Select(v => v.ToString(cultureInfo))) + "]";
+      }
     }
 
     public override int GetHashCode()
@@ -116,34 +179,59 @@ namespace Arnible.MathModeling.Algebra
     public static bool operator ==(NumberVector a, NumberVector b) => a.Equals(b);
     public static bool operator !=(NumberVector a, NumberVector b) => !a.Equals(b);
 
+    public static bool operator ==(Number a, NumberVector b) => b.Equals(a);
+    public static bool operator !=(Number a, NumberVector b) => !b.Equals(a);
+
+    public static bool operator ==(NumberVector a, Number b) => a.Equals(b);
+    public static bool operator !=(NumberVector a, Number b) => !a.Equals(b);
+
     //
     // query operators
     //
 
     public NumberVector Transform(Func<Number, Number> transformation)
     {
-      return new NumberVector(Values.Select(transformation));
+      return Create(Values.Select(transformation));
     }
 
     public NumberVector Transform(Func<uint, Number, Number> transformation)
     {
-      return new NumberVector(Values.Select(transformation));
+      return Create(Values.Select(transformation));
     }
 
-    public NumberVector Reverse() => new NumberVector(Values.Reverse());
-
-    public IEnumerable<uint> Indexes() => LinqEnumerable.RangeUint(0, Length);
+    public NumberVector Reverse()
+    {
+      if (_values == null)
+      {
+        return this;
+      }
+      else
+      {
+        return new NumberVector(_values.Reverse().ToImmutableList());
+      }
+    }
 
     //
     // Arithmetic operators
     //
 
-    public static NumberVector operator +(NumberVector a, NumberVector b) => new NumberVector(a.Values.ZipDefensive(b.Values, (va, vb) => va + vb));
-    public static NumberVector operator -(NumberVector a, NumberVector b) => new NumberVector(a.Values.ZipDefensive(b.Values, (va, vb) => va - vb));
+    public static NumberVector operator +(NumberVector a, NumberVector b) => a.Values.Zip(b.Values, (va, vb) => (va ?? 0) + (vb ?? 0)).ToVector();
+    public static NumberVector operator -(NumberVector a, NumberVector b) => a.Values.Zip(b.Values, (va, vb) => (va ?? 0) - (vb ?? 0)).ToVector();
 
-    public static NumberVector operator /(NumberVector a, double b) => new NumberVector(a.Values.Select(v => v / b));
+    public static NumberVector operator /(NumberVector a, Number b) => new NumberVector(a.Values.Select(v => v / b).ToImmutableList());
 
-    public static NumberVector operator *(NumberVector a, double b) => new NumberVector(a.Values.Select(v => v * b));
-    public static NumberVector operator *(double a, NumberVector b) => new NumberVector(b.Values.Select(v => v * a));
+    public static NumberVector operator *(NumberVector a, Number b)
+    {
+      if (b == 0)
+      {
+        return default;
+      }
+      else
+      {
+        return new NumberVector(a.Values.Select(v => v * b).ToImmutableList());
+      }
+    }
+
+    public static NumberVector operator *(Number a, NumberVector b) => b * a;
   }
 }

@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Geometry
         φ: GetFirstAngle(p.X, p.Y));
     }
 
-    public static HypersphericalCoordinate ToSpherical(this CartesianCoordinate p)
+    private static HypersphericalCoordinate ToSpherical(this CartesianCoordinate p)
     {
       if (p.DimensionsCount == 1)
       {

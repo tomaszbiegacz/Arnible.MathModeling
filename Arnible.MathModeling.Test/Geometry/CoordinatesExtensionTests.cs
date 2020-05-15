@@ -35,7 +35,7 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = rc;
 
       var pc = rc.ToPolar();
-      var sc = cc.ToSpherical();
+      HypersphericalCoordinate sc = cc.ToSphericalView();
 
       Assert.Equal(2u, sc.DimensionsCount);
       AssertNumber.Equal(pc.R, sc.R);
@@ -50,7 +50,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var cc = new CartesianCoordinate(cartesian.ToVector());
 
-      var sc = cc.ToSpherical();
+      HypersphericalCoordinate sc = cc.ToSphericalView();
       AssertNumber.Equal(r, sc.R);
       AssertNumber.Equal(angles, sc.Angles);
     }
@@ -77,7 +77,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var sc = new HypersphericalCoordinate(r, angles.ToVector());
 
       Assert.Equal(cc.AddDimension(), sc.AddDimension().ToCartesianView());
-      Assert.Equal(sc.AddDimension(), cc.AddDimension().ToSpherical());
+      Assert.Equal(sc.AddDimension(), cc.AddDimension().ToSphericalView());
     }
   }
 }

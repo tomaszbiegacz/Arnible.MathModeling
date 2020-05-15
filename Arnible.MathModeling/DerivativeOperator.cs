@@ -75,7 +75,7 @@ namespace Arnible.MathModeling
     /// <summary>
     /// Calculate derivative as a sum of (value derivate and other values product) for each value.
     /// </summary>    
-    public static IDerivative1 ForProductByParameter(NumberVector productValues, IEnumerable<IDerivative1> valueDerrivativeByParameter)
+    public static IDerivative1 ForProductByParameter(NumberArray productValues, IEnumerable<IDerivative1> valueDerrivativeByParameter)
     {
       if (productValues.Length < 1)
       {

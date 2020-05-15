@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 
 namespace Arnible.MathModeling
@@ -13,7 +12,7 @@ namespace Arnible.MathModeling
 
     private readonly IEnumerable<PolynomialTerm> _terms;
 
-    internal Polynomial(params PolynomialTerm[] terms)      
+    internal Polynomial(params PolynomialTerm[] terms)
     {
       _terms = PolynomialTerm.Simplify(terms);
     }
@@ -25,19 +24,19 @@ namespace Arnible.MathModeling
 
     private Polynomial(double v)
     {
-      if(v == 0)
+      if (v == 0)
       {
         _terms = LinqEnumerable.Empty<PolynomialTerm>();
       }
       else
       {
-        _terms = LinqEnumerable.Yield<PolynomialTerm>(v);
+        _terms = new PolynomialTerm[] { v };
       }
     }
 
     private Polynomial(char v)
-    {      
-      _terms = LinqEnumerable.Yield<PolynomialTerm>(v);      
+    {
+      _terms = new PolynomialTerm[] { v };
     }
 
     private static Polynomial CreateSimplified(IEnumerable<PolynomialTerm> terms)
@@ -124,7 +123,7 @@ namespace Arnible.MathModeling
       get
       {
         if (HasOneTerm)
-          return Terms.SingleOrDefault().IsConstant; 
+          return Terms.SingleOrDefault().IsConstant;
         else
           return false;
       }
@@ -195,7 +194,7 @@ namespace Arnible.MathModeling
 
     public static Polynomial operator *(PolynomialTerm a, Polynomial b)
     {
-      if(a.IsZero)
+      if (a.IsZero)
       {
         return 0;
       }
@@ -203,14 +202,14 @@ namespace Arnible.MathModeling
       {
         // no need for simplification
         return new Polynomial(b.Terms.Select(t => a * t));
-      }      
+      }
     }
 
     public static Polynomial operator *(Polynomial b, PolynomialTerm a) => a * b;
 
     public static Polynomial operator *(double a, Polynomial b)
     {
-      if(a.NumericEquals(0))
+      if (a.NumericEquals(0))
       {
         return 0;
       }
@@ -218,7 +217,7 @@ namespace Arnible.MathModeling
       {
         // no need for simplification
         return new Polynomial(b.Terms.Select(t => a * t));
-      }      
+      }
     }
 
     public static Polynomial operator *(Polynomial b, double a) => a * b;
@@ -230,7 +229,7 @@ namespace Arnible.MathModeling
       return PolynomialDivision.SimplifyPolynomialDivision(a, b);
     }
 
-    public static Polynomial operator /(Polynomial a, double denominator) => a * (1 / denominator);    
+    public static Polynomial operator /(Polynomial a, double denominator) => a * (1 / denominator);
 
     public static PolynomialDivision operator /(double a, Polynomial denominator)
     {
@@ -300,7 +299,7 @@ namespace Arnible.MathModeling
 
       // we weren't able to reduce it
       return a;
-    }    
+    }
 
     public Polynomial DivideBy(Polynomial b, out Polynomial reminder)
     {

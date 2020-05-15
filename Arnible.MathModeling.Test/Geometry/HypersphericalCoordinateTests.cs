@@ -41,7 +41,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var cc = new CartesianCoordinate(1, Math.Sqrt(3));
 
-      var hc = cc.ToSpherical();
+      HypersphericalCoordinate hc = cc.ToSphericalView();
       Assert.Equal(2u, hc.DimensionsCount);
       Assert.Equal(2, hc.R);
 
@@ -64,8 +64,7 @@ namespace Arnible.MathModeling.Geometry.Test
 
       for (uint pos = 0; pos < cc.DimensionsCount; ++pos)
       {
-        var axisCc = new HypersphericalCoordinate(hc.R, cartesianCoordinatesAngles[pos]).ToCartesianView();
-        Assert.Equal(cc.DimensionsCount, axisCc.DimensionsCount);
+        var axisCc = new HypersphericalCoordinate(hc.R, cartesianCoordinatesAngles[pos]).ToCartesianView();        
         Assert.Equal(hc.R, axisCc.Coordinates[pos]);
         Assert.Equal(1u, axisCc.Coordinates.Where(v => v != 0).Count());
       }
@@ -76,7 +75,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var cc = new CartesianCoordinate(1, Math.Sqrt(2), 2 * Math.Sqrt(3));
 
-      var hc = cc.ToSpherical();
+      HypersphericalCoordinate hc = cc.ToSphericalView();
       Assert.Equal(3u, hc.DimensionsCount);
       Assert.Equal(cc.VectorLength(), hc.R);
 
@@ -101,7 +100,7 @@ namespace Arnible.MathModeling.Geometry.Test
       const double φ = Math.PI / 4;   // x to r(xy)
       const double θ = Math.PI / 3;   // xy to r
 
-      var hc = cc.ToSpherical();
+      HypersphericalCoordinate hc = cc.ToSphericalView();
       Assert.Equal(3u, hc.DimensionsCount);
       Assert.Equal(4, hc.R);
       Assert.Equal<Number>(φ, hc.Angles[0]);

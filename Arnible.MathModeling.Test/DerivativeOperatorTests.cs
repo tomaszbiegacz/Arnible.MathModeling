@@ -12,7 +12,7 @@ namespace Arnible.MathModeling.Test
       var v1d = new Derivative1Value(3);
 
       var d = DerivativeOperator.ForProductByParameter(
-        productValues: new NumberVector(v1),
+        productValues: new NumberArray(v1),
         valueDerrivativeByParameter: new IDerivative1[] { v1d });
 
       Assert.Equal(3, d.First);
@@ -28,7 +28,7 @@ namespace Arnible.MathModeling.Test
       var v2d = new Derivative1Value(11);
 
       var d = DerivativeOperator.ForProductByParameter(
-        productValues: new NumberVector(v1, v2),
+        productValues: new NumberArray(v1, v2),
         valueDerrivativeByParameter: new IDerivative1[] { v1d, v2d });
 
       Assert.Equal(3 * 7 + 2 * 11, d.First);

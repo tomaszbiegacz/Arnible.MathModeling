@@ -26,17 +26,17 @@ namespace Arnible.MathModeling.Geometry
 
     public HypersphericalCoordinate(Number r, NumberVector angles)
     {
-      R = r;
-      Angles = new HypersphericalAngleVector(angles);
-
       if (r < 0)
       {
         throw new ArgumentException($"Negative r: {r}");
       }
-      if (r == 0 && !angles.IsZero)
+      if (r == 0 && angles != 0)
       {
         throw new ArgumentException($"For zero r, angles also has to be empty, got {angles}");
       }
+
+      R = r;
+      Angles = new HypersphericalAngleVector(angles);
     }
 
     public static implicit operator HypersphericalCoordinate(PolarCoordinate pc)
@@ -46,7 +46,7 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(HypersphericalCoordinate other)
     {
-      return  other.R == R && other.Angles == Angles;
+      return other.R == R && other.Angles == Angles;
     }
 
     public override bool Equals(object obj)
@@ -86,6 +86,6 @@ namespace Arnible.MathModeling.Geometry
       return new HypersphericalCoordinate(R, Angles.AddDimension());
     }
 
-    public HypersphericalCoordinateOnAxisView ToCartesianView() => new HypersphericalCoordinateOnAxisView(this);    
+    public HypersphericalCoordinateOnAxisView ToCartesianView() => new HypersphericalCoordinateOnAxisView(this);
   }
-}
+ }

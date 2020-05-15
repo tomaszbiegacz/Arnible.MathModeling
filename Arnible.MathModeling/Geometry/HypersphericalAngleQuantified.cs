@@ -6,12 +6,12 @@ namespace Arnible.MathModeling.Geometry
 {
   public readonly struct HypersphericalAngleQuantified : IEquatable<HypersphericalAngleQuantified>
   {
-    class InnerFactory
+    internal class Factory
     {
       private uint _id = 0;
       private readonly byte _resolution;
 
-      public InnerFactory(byte resolution)
+      public Factory(byte resolution)
       {
         if (resolution == 0)
           throw new ArgumentException(nameof(resolution));
@@ -47,52 +47,25 @@ namespace Arnible.MathModeling.Geometry
       public HypersphericalAngleQuantified Create(IEnumerable<sbyte> angles) => new HypersphericalAngleQuantified(angles, _resolution, ++_id);
     }
 
-    class NonLinearDirectionsFactory
-    {
-      private readonly InnerFactory _factory;
-      private readonly uint _angleCount;
-
-      public NonLinearDirectionsFactory(InnerFactory factory, uint anglesCount)
-      {
-        if (anglesCount == 0)
-          throw new ArgumentException(nameof(anglesCount));
-
-        _angleCount = anglesCount;
-        _factory = factory;
-      }
-
-      private IEnumerable<HypersphericalAngleQuantified> WithRightAnglePrefix
-      {
-        get
-        {
-          for (uint axisAngle = 1; axisAngle < _angleCount; ++axisAngle)
-          {
-            var prefix = _factory.Axis(axisAngle);
-            foreach (var sequence in _factory.AnglesWithoutRightAngle().ToSequncesWithReturning(_angleCount - axisAngle))
-            {
-              yield return _factory.Create(prefix.Concat(sequence));
-            }
-          }
-          yield return _factory.Create(_factory.Axis(_angleCount));
-        }
-      }
-
-      private IEnumerable<HypersphericalAngleQuantified> WithoutRightAnglePrefix => _factory.AnglesWithoutRightAngle().ToSequncesWithReturning(_angleCount).Select(a => _factory.Create(a));
-
-      public IEnumerable<HypersphericalAngleQuantified> Angles => WithRightAnglePrefix.Concat(WithoutRightAnglePrefix);
-    }
-
     /// <summary>
-    /// Return non linear directions in given resolution (2 for 45 degres resolution).
+    /// Return possible directions in given resolution (2 for 45 degres resolution).
     /// </summary>    
-    public static IEnumerable<HypersphericalAngleQuantified> GetNonLinearDirections(uint anglesCount, uint resolution)
+    public static IEnumerable<HypersphericalAngleQuantified> GetQuantifiedDirections(uint anglesCount, uint resolution)
     {
       if (resolution == 0 || resolution > byte.MaxValue)
       {
         throw new ArgumentException(nameof(resolution));
       }
-      var factory = new NonLinearDirectionsFactory(new InnerFactory((byte)resolution), anglesCount);
+      var factory = new QuantifiedDirectionsFactory(new Factory((byte)resolution), anglesCount);
       return factory.Angles;
+    }
+
+    /// <summary>
+    /// Return possible directions in given resolution (2 for 45 degres resolution), but not along one cartesian axis.
+    /// </summary>    
+    public static IEnumerable<HypersphericalAngleQuantified> GetQuantifiedDirectionsNotOrthogonal(uint anglesCount, uint resolution)
+    {
+      return GetQuantifiedDirections(anglesCount, resolution).Where(a => a.UsedCartesianDirectionsCount > 1);
     }
 
     private readonly byte _rightAngleResolution;
@@ -168,11 +141,15 @@ namespace Arnible.MathModeling.Geometry
 
     public HypersphericalAngleVector ToVector()
     {
-      if (!Angles.Any())
+      if (Angles.Any())
+      {
+        Number step = Angle.RightAngle / _rightAngleResolution;
+        return new HypersphericalAngleVector(_angles.Select(v => v * step).ToVector());
+      }
+      else
+      {
         return default;
-
-      Number step = Angle.RightAngle / _rightAngleResolution;
-      return new HypersphericalAngleVector(new NumberVector(_angles.Select(v => v * step)));
+      }
     }
   }
 }

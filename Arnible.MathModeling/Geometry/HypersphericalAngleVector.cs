@@ -83,28 +83,31 @@ namespace Arnible.MathModeling.Geometry
     public static bool operator ==(HypersphericalAngleVector a, HypersphericalAngleVector b) => a.Equals(b);
     public static bool operator !=(HypersphericalAngleVector a, HypersphericalAngleVector b) => !a.Equals(b);
 
+    public HypersphericalAngleVector GetOrthogonalDirection(uint anglePos)
+    {
+      Number angle = _angles[anglePos];
+      return new HypersphericalAngleVector(NumberVector.FirstNonZeroValueAt(pos: anglePos, value: angle));
+    }
+  
     public HypersphericalAngleVector AddDimension() => new HypersphericalAngleVector(_angles.Append(0).ToVector());
 
     private IEnumerable<Number> MirrorAngles
     {
       get
       {
-        if(_angles.Length > 0)
+        Number firstAngle = _angles.First();
+        if (firstAngle > 0)
         {
-          Number firstAngle = _angles.First();
-          if(firstAngle > 0)
-          {
-            yield return -1 * Angle.HalfCycle + firstAngle;
-          }
-          else
-          {
-            yield return Angle.HalfCycle + firstAngle;
-          }
+          yield return -1 * Angle.HalfCycle + firstAngle;
+        }
+        else
+        {
+          yield return Angle.HalfCycle + firstAngle;
+        }
 
-          foreach(Number angle in _angles.SkipExactly(1))
-          {
-            yield return -1 * angle;
-          }
+        foreach (Number angle in _angles.SkipExactly(1))
+        {
+          yield return -1 * angle;
         }
       }
     }
