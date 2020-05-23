@@ -186,11 +186,14 @@ namespace Arnible.MathModeling
     }
 
     /// <summary>
-    /// Will try to cast all the elements into type x. if some of them are not from this type you will get InvalidCastException
+    /// Type safe casting
     /// </summary>
-    public static IEnumerable<TResult> Cast<TResult>(this IEnumerable source)
+    public static IEnumerable<TResult> Cast<TSource, TResult>(this IEnumerable<TSource> source) where TSource: TResult
     {
-      return System.Linq.Enumerable.Cast<TResult>(source);
+      foreach(TSource item in source)
+      {
+        yield return item;
+      }
     }
 
     /// <summary>

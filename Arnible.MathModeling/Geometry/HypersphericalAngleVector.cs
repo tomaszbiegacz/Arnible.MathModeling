@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using static Arnible.MathModeling.MetaMath;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -88,7 +89,7 @@ namespace Arnible.MathModeling.Geometry
       Number angle = _angles[anglePos];
       return new HypersphericalAngleVector(NumberVector.FirstNonZeroValueAt(pos: anglePos, value: angle));
     }
-  
+
     public HypersphericalAngleVector AddDimension() => new HypersphericalAngleVector(_angles.Append(0).ToVector());
 
     private IEnumerable<Number> MirrorAngles
@@ -113,6 +114,21 @@ namespace Arnible.MathModeling.Geometry
     }
 
     public HypersphericalAngleVector Mirror => new HypersphericalAngleVector(MirrorAngles.ToVector());
+
+    public NumberVector GetCartesianAxisViewsRatios()
+    {
+      var cartesianDimensions = new List<Number>();
+      Number replacement = 1;
+      foreach (var angle in this.Reverse())
+      {
+        cartesianDimensions.Add(replacement * Sin(angle));
+        replacement *= Cos(angle);
+      }
+      cartesianDimensions.Add(replacement);
+      cartesianDimensions.Reverse();
+
+      return cartesianDimensions.ToVector();
+    }
 
     //
     // arithmetic

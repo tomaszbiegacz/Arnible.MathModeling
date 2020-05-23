@@ -8,13 +8,13 @@ namespace Arnible.MathModeling.Geometry.Test
   {
     private static void AssertDirection(List<HypersphericalAngleQuantified> directions, params sbyte[] expected)
     {
-      uint? pos = directions.IndexOf(d => expected.SequenceEqual(d.Angles));      
+      uint? pos = directions.IndexOf(d => expected.SequenceEqual(d.Angles));
       directions.RemoveAt((int)pos.Value);
     }
 
     private static HypersphericalAngleQuantified GetDirection(List<HypersphericalAngleQuantified> directions, params sbyte[] expected)
     {
-      uint? pos = directions.IndexOf(d => expected.SequenceEqual(d.Angles));      
+      uint? pos = directions.IndexOf(d => expected.SequenceEqual(d.Angles));
       return directions[(int)pos.Value];
     }
 
@@ -43,6 +43,15 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, 1);        //   45    + +    xy
 
       Assert.Empty(directions);
+      
+    }
+
+    [Fact]
+    public void GetAllDirectionChangePositive_OneAngle()
+    {
+      var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetQuantifiedDirections(anglesCount: 1, resolution: 2));
+      var allChanged = GetDirection(directions, 1);
+      Assert.Equal(allChanged, HypersphericalAngleQuantified.GetAllDirectionChangePositive(anglesCount: 1));
     }
 
     [Fact]
@@ -70,6 +79,14 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, 1, 1);     //  45  45       + + +      xyz     - - -
 
       Assert.Empty(directions);
+    }
+
+    [Fact]
+    public void GetAllDirectionChangePositive_TwoAngle()
+    {
+      var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetQuantifiedDirections(anglesCount: 2, resolution: 2));
+      var allChanged = GetDirection(directions, 1, 1);
+      Assert.Equal(allChanged, HypersphericalAngleQuantified.GetAllDirectionChangePositive(anglesCount: 2));
     }
 
     [Fact]
@@ -173,7 +190,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void GetQuantifiedDirectionsNotOrthogonal_OneAngle()
     {
-      var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetQuantifiedDirectionsNotOrthogonal(anglesCount: 1, resolution: 2));      
+      var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetQuantifiedDirectionsNotOrthogonal(anglesCount: 1, resolution: 2));
 
       // remaining directions 2d, 1 variation: 4 = 2^2
       AssertDirection(directions, -1);       //  -45    + -    xy

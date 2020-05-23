@@ -19,6 +19,8 @@ namespace Arnible.MathModeling.Algebra.Test
       Assert.Equal(default, new NumberVector(new Number[0]));
       Assert.Equal(default, NumberVector.Repeat(value: 0, length: 5));
       Assert.Equal(default, NumberVector.FirstNonZeroValueAt(pos: 5, value: 0));
+
+      Assert.Equal(0, v.GetOrDefault(1));
     }
 
     [Fact]
@@ -30,7 +32,10 @@ namespace Arnible.MathModeling.Algebra.Test
       Assert.False(v != 2);
       Assert.Equal(2, v[0]);
       Assert.Equal(1u, v.Length);
-      Assert.Equal("2", v.ToString());      
+      Assert.Equal("2", v.ToString());
+
+      Assert.Equal(2, v.GetOrDefault(0));
+      Assert.Equal(0, v.GetOrDefault(1));
     }
 
     [Fact]

@@ -35,6 +35,11 @@ namespace Arnible.MathModeling.Geometry
       // intentionally empty
     }
 
+    public static CartesianCoordinate Concat(NumberArray c1, NumberArray c2)
+    {
+      return new CartesianCoordinate(c1.Concat(c2).ToVector());
+    }
+
     public static implicit operator CartesianCoordinate(RectangularCoordianate rc)
     {
       return new CartesianCoordinate(new Number[] { rc.X, rc.Y }.ToVector());

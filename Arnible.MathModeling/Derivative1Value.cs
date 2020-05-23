@@ -1,7 +1,9 @@
 ﻿namespace Arnible.MathModeling
 {
-  public class Derivative1Value : IDerivative1
+  public readonly struct Derivative1Value : IDerivative1
   {
+    public static readonly Derivative1Value Zero = new Derivative1Value(0);
+
     public Derivative1Value(Number first)
     {
       First = first;

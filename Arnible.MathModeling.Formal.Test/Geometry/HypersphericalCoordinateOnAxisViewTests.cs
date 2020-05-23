@@ -28,11 +28,11 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var sphericalPoint = new HypersphericalCoordinate(r, new NumberVector(α, β, γ, δ));      
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
-
+      
       for(uint anglePos = 0; anglePos < sphericalPoint.Angles.Length; ++anglePos)
       {
         PolynomialTerm angleTerm = (PolynomialTerm)sphericalPoint.Angles[anglePos];
-        var derivatives = view.GetCartesianAxisViewsRatiosDerivativesByAngle(anglePos).ToArray();
+        var derivatives = view.GetCartesianAxisViewsRatiosDerivativesByAngle(anglesCount: 4, anglePos: anglePos).ToArray();
         Assert.Equal(view.DimensionsCount, (uint)derivatives.Length);
         for(uint coordinatePos = 0; coordinatePos < view.Coordinates.Length; ++coordinatePos)
         {
@@ -49,7 +49,9 @@ namespace Arnible.MathModeling.Geometry.Test
       var sphericalPoint = new HypersphericalCoordinate(r, new NumberVector(α, β, γ));
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 
-      HypersphericalCoordinateOnRectangularViewWithDerivative recView = view.GetRectangularViewDerivativeByAngle(axisA: 0, axisB: 2, anglePos: 2);
+      HypersphericalCoordinateOnRectangularViewWithDerivative recView = view
+        .GetAngleDerivativesView(anglesCount: 3, anglePos: 2)
+        .GetRectangularViewDerivativeByAngle(axisA: 0, axisB: 2);
       Assert.Equal(r, recView.R);
 
       Assert.Equal(Cos(γ) * Cos(β) * Cos(α), recView.RatioX);
@@ -59,6 +61,26 @@ namespace Arnible.MathModeling.Geometry.Test
       Assert.Equal(Sin(β)*Cos(γ), recView.RatioY);
       Assert.Equal(r * Sin(β)*Cos(γ), recView.Y);
       Assert.Equal(-1 * Sin(γ) * Sin(β), recView.RatioYDerivative.First);
+    }
+
+    [Fact]
+    public void GetRectangularViewDerivativeByAngle_Zero()
+    {
+      var sphericalPoint = new HypersphericalCoordinate(r, new NumberVector(α, β, γ));
+      HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
+
+      HypersphericalCoordinateOnRectangularViewWithDerivative recView = view
+        .GetAngleDerivativesView(anglesCount: 8, anglePos: 2)
+        .GetRectangularViewDerivativeByAngle(axisA: 0, axisB: 8);
+      Assert.Equal(r, recView.R);
+
+      Assert.Equal(Cos(γ) * Cos(β) * Cos(α), recView.RatioX);
+      Assert.Equal(r * Cos(γ) * Cos(β) * Cos(α), recView.X);
+      Assert.Equal(-1 * Sin(γ) * Cos(β) * Cos(α), recView.RatioXDerivative.First);
+
+      Assert.Equal(0, recView.RatioY);
+      Assert.Equal(0, recView.Y);
+      Assert.Equal(0, recView.RatioYDerivative.First);
     }
   }
 }

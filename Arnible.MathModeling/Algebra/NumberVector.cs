@@ -106,6 +106,14 @@ namespace Arnible.MathModeling.Algebra
 
     public uint Length => (uint)(Values.Count);
 
+    public Number GetOrDefault(uint pos)
+    {
+      if (pos >= Length)
+        return 0;
+      else
+        return Values[(int)pos];
+    }
+
     //
     // IReadOnlyList
     //

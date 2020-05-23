@@ -40,7 +40,7 @@ namespace Arnible.MathModeling
       this IEnumerable<IDerivative1> valueDerrivativeByParameters,
       IEnumerable<IDerivative1> parametersDerivatives)
     {
-      return valueDerrivativeByParameters.ZipDefensive(parametersDerivatives, (a, b) => new Derivative1Value(a.First * b.First));
+      return valueDerrivativeByParameters.ZipDefensive<IDerivative1, IDerivative1>(parametersDerivatives, (a, b) => new Derivative1Value(a.First * b.First));
     }
 
     /// <summary>

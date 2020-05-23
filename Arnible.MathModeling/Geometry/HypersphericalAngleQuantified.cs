@@ -68,6 +68,14 @@ namespace Arnible.MathModeling.Geometry
       return GetQuantifiedDirections(anglesCount, resolution).Where(a => a.UsedCartesianDirectionsCount > 1);
     }
 
+    /// <summary>
+    /// Return direciton where coordiantes for each cartesian axis will change.
+    /// </summary>
+    public static HypersphericalAngleQuantified GetAllDirectionChangePositive(uint anglesCount)    
+    {
+      return GetQuantifiedDirections(anglesCount, 2).Where(d => d.Angles.All(a => a == 1)).Single();
+    }
+
     private readonly byte _rightAngleResolution;
     private readonly sbyte[] _angles;
 

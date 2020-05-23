@@ -37,7 +37,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ForComposition2_OneValue()
     {
-      var d = (new[] { new Derivative2Value(2, 3) }).ForComposition();
+      var d = (new IDerivative2[] { new Derivative2Value(2, 3) }).ForComposition();
       Assert.Equal(2, d.First);
       Assert.Equal(3, d.Second);
     }
@@ -45,7 +45,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ForComposition2_TwoValues()
     {
-      var d = (new[] {
+      var d = (new IDerivative2[] {
         new Derivative2Value(2, 3),
         new Derivative2Value(5, 7) }).ForComposition();
       Assert.Equal(2 * 5, d.First);
@@ -55,7 +55,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ForComposition2_ThreeValues()
     {
-      var d = (new[] {
+      var d = (new IDerivative2[] {
         new Derivative2Value(2, 3),
         new Derivative2Value(5, 7),
         new Derivative2Value(11, 13)
@@ -67,14 +67,14 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ForComposition1_OneValue()
     {
-      var d = (new[] { new Derivative1Value(2) }).ForComposition();
+      var d = (new IDerivative1[] { new Derivative1Value(2) }).ForComposition();
       Assert.Equal(2, d.First);      
     }
 
     [Fact]
     public void ForComposition1_TwoValues()
     {
-      var d = (new[] {
+      var d = (new IDerivative1[] {
         new Derivative1Value(2),
         new Derivative1Value(5) }).ForComposition();
       Assert.Equal(2 * 5, d.First);      
@@ -84,8 +84,8 @@ namespace Arnible.MathModeling.Test
     public void ForEachElementComposition_OneValue()
     {
       Assert.Equal(6, 
-        new[] { new Derivative1Value(2) }
-        .ForEachElementComposition(new[] { new Derivative1Value(3) })
+        new IDerivative1[] { new Derivative1Value(2) }
+        .ForEachElementComposition(new IDerivative1[] { new Derivative1Value(3) })
         .Select(v => v.First).Single());
     }
   }

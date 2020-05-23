@@ -2,13 +2,9 @@
 
 namespace Arnible.MathModeling.Geometry
 {
-  public interface IHypersphericalCoordinateOnRectangularView : IRectangularCoordianate
+  public interface IHypersphericalCoordinateOnRectangularView : IRectangularCoordianate, IHypersphericalDirectionOnRectangularView
   {
-    Number R { get; }
-
-    Number RatioX { get; }
-
-    Number RatioY { get; }
+    Number R { get; }    
   }
 
   public readonly struct HypersphericalCoordinateOnRectangularView :
@@ -26,17 +22,26 @@ namespace Arnible.MathModeling.Geometry
       }
       R = r;
 
-      if (ratioX < 0 || ratioX > 1)
+      if (ratioX < -1 || ratioX > 1)
       {
         throw new ArgumentException(nameof(ratioX));
       }
       RatioX = ratioX;
 
-      if (ratioY < 0 || ratioY > 1 || ratioX == ratioY)
+      if (ratioY < -1 || ratioY > 1)
       {
         throw new ArgumentException(nameof(ratioY));
       }
       RatioY = ratioY;
+
+      if(r == 0 && (ratioX != 0 || ratioY != 0))
+      {
+        throw new ArgumentException("r cannot be zero with non-zero ratios");
+      }
+      if(r != 0 && ratioX == 0 && ratioY == 0)
+      {
+        throw new ArgumentException("r cannot be non zero with zero ratios");
+      }
     }
 
     public override bool Equals(object obj)

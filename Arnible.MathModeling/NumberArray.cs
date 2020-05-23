@@ -21,10 +21,6 @@ namespace Arnible.MathModeling
 
     public static NumberArray Repeat(Number value, uint length)
     {
-      if (value == 0)
-      {
-        throw new ArgumentException(nameof(value));
-      }
       return new NumberArray(LinqEnumerable.Repeat(value, length).ToImmutableArray());
     }
 
@@ -44,7 +40,7 @@ namespace Arnible.MathModeling
     private NumberArray(IImmutableList<Number> parameters)
     {
       _values = parameters.Count > 0 ? parameters : null;
-    }    
+    }
 
     //
     // Properties
