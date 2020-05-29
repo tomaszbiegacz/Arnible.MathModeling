@@ -61,7 +61,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [InlineData(new [] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4,      new[] { π_4, π_3 })]
     public void Cast_ToCartesian(double[] cartesian, double r, double[] angles)
     {
-      var sc = new HypersphericalCoordinate(r, angles.ToVector());
+      var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
 
       var cc = sc.ToCartesianView();
       AssertNumber.Equal(cartesian, cc.Coordinates);
@@ -74,7 +74,7 @@ namespace Arnible.MathModeling.Geometry.Test
     public void AddDimension(double[] cartesian, double r, double[] angles)
     {
       var cc = new CartesianCoordinate(cartesian.ToVector());
-      var sc = new HypersphericalCoordinate(r, angles.ToVector());
+      var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
 
       Assert.Equal(cc.AddDimension(), sc.AddDimension().ToCartesianView());
       Assert.Equal(sc.AddDimension(), cc.AddDimension().ToSphericalView());

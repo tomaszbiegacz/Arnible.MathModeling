@@ -152,7 +152,27 @@ foreach(string typeName in generatedTypes)
         throw new ArgumentException("Empty enumerator");
       }
       return result.Value;
-    }    
+    }
+
+    /// <summary>
+    /// Finds median value or throw ArgumentException if passed enumerable is empty
+    /// </summary>
+    public static <#= typeName #> MedianDefensive(this IEnumerable<<#= typeName #>> x)
+    {
+      if (x == null)
+      {
+        throw new ArgumentNullException(nameof(x));
+      }
+
+      <#= typeName #>[] items = x.ToArray();
+      if(items.Length == 0)
+      {
+        throw new ArgumentNullException(nameof(x));
+      }
+      Array.Sort(items);
+      return items[items.Length / 2];
+    }
+
 <#
 
 }

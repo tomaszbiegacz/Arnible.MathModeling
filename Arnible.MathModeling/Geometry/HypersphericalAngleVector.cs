@@ -9,9 +9,14 @@ namespace Arnible.MathModeling.Geometry
   /// <summary>
   /// Hyperspherical angle vector, where first coordinate angle range over [-π, π] and others range over [-π/2, π/2].
   /// </summary>
-  public readonly struct HypersphericalAngleVector : IEquatable<HypersphericalAngleVector>, IReadOnlyCollection<Number>
+  public readonly struct HypersphericalAngleVector : IEquatable<HypersphericalAngleVector>, IEquatable<Number>, IReadOnlyList<Number>
   {
     private readonly NumberVector _angles;
+
+    public static HypersphericalAngleVector CreateOrthogonalDirection(uint anglePos, Number value)
+    {
+      return new HypersphericalAngleVector(NumberVector.FirstNonZeroValueAt(pos: anglePos, value: value));
+    }    
 
     public HypersphericalAngleVector(params Number[] angles)
       : this(new NumberVector(angles))
@@ -37,23 +42,8 @@ namespace Arnible.MathModeling.Geometry
       _angles = angles;
     }
 
-    public override string ToString() => _angles.ToString();
-
-    public override int GetHashCode() => _angles.GetHashCode();
-
-    public override bool Equals(object obj)
-    {
-      if (obj is HypersphericalAngleVector v)
-      {
-        return Equals(v);
-      }
-      else
-      {
-        return false;
-      }
-    }
-
-    public bool Equals(HypersphericalAngleVector other) => other._angles == _angles;
+    public static implicit operator HypersphericalAngleVector(Number v) => new HypersphericalAngleVector(v);
+    public static implicit operator HypersphericalAngleVector(double v) => new HypersphericalAngleVector(v);
 
     public static implicit operator NumberVector(HypersphericalAngleVector v) => v._angles;
 
@@ -61,15 +51,17 @@ namespace Arnible.MathModeling.Geometry
     // Properties
     //    
 
+    public Number this[uint pos] => _angles[pos];
+
     public uint Length => _angles.Length;
 
-    public bool IsEmpty => Length == 0;
+    public Number GetOrDefault(uint pos) => _angles.GetOrDefault(pos);
 
     //
-    // IReadonlyCollection
-    //
+    // IReadOnlyList
+    //    
 
-    public Number this[uint pos] => _angles[pos];
+    Number IReadOnlyList<Number>.this[int pos] => _angles[(uint)pos];
 
     public IEnumerator<Number> GetEnumerator() => _angles.GetEnumerator();
 
@@ -78,11 +70,45 @@ namespace Arnible.MathModeling.Geometry
     int IReadOnlyCollection<Number>.Count => (int)Length;
 
     //
-    // Operators
-    //
+    // IEquatable
+    //    
+
+    public bool Equals(HypersphericalAngleVector other) => other._angles == _angles;
+
+    public bool Equals(Number other) => other == _angles;
+
+    public override bool Equals(object obj)
+    {
+      if (obj is HypersphericalAngleVector v)
+      {
+        return Equals(v);
+      }
+      else if (obj is Number v2)
+      {
+        return Equals(v2);
+      }
+      else
+      {
+        return false;
+      }
+    }
+
+    public override string ToString() => _angles.ToString();
+
+    public override int GetHashCode() => _angles.GetHashCode();
 
     public static bool operator ==(HypersphericalAngleVector a, HypersphericalAngleVector b) => a.Equals(b);
     public static bool operator !=(HypersphericalAngleVector a, HypersphericalAngleVector b) => !a.Equals(b);
+
+    public static bool operator ==(Number a, HypersphericalAngleVector b) => b.Equals(a);
+    public static bool operator !=(Number a, HypersphericalAngleVector b) => !b.Equals(a);
+
+    public static bool operator ==(HypersphericalAngleVector a, Number b) => a.Equals(b);
+    public static bool operator !=(HypersphericalAngleVector a, Number b) => !a.Equals(b);
+
+    //
+    // query operators
+    //        
 
     public HypersphericalAngleVector GetOrthogonalDirection(uint anglePos)
     {
@@ -131,7 +157,7 @@ namespace Arnible.MathModeling.Geometry
     }
 
     //
-    // arithmetic
+    // Arithmetic operators
     //
 
     private static Number RoundAngleFullCycle(Number v)
@@ -157,16 +183,13 @@ namespace Arnible.MathModeling.Geometry
     }
 
     private static IEnumerable<Number> AddAngles(NumberVector a, NumberVector b)
-    {
-      if (a.Length != b.Length)
-      {
-        throw new ArgumentException(nameof(a));
-      }
-
+    {      
       yield return RoundAngleFullCycle(a[0] + b[0]);
-      for (uint i = 1; i < a.Length; ++i)
+
+      uint resultLength = Math.Max(a.Length, b.Length);
+      for (uint i = 1; i < resultLength; ++i)
       {
-        yield return RoundAngleHalfCycle(a[i] + b[i]);
+        yield return RoundAngleHalfCycle(a.GetOrDefault(i) + b.GetOrDefault(i));
       }
     }
 

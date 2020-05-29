@@ -4,7 +4,7 @@ namespace Arnible.MathModeling.Geometry
 {
   public interface IHypersphericalCoordinateOnRectangularView : IRectangularCoordianate, IHypersphericalDirectionOnRectangularView
   {
-    Number R { get; }    
+    Number R { get; }
   }
 
   public readonly struct HypersphericalCoordinateOnRectangularView :
@@ -34,13 +34,9 @@ namespace Arnible.MathModeling.Geometry
       }
       RatioY = ratioY;
 
-      if(r == 0 && (ratioX != 0 || ratioY != 0))
+      if (r == 0 && (ratioX != 0 || ratioY != 0))
       {
         throw new ArgumentException("r cannot be zero with non-zero ratios");
-      }
-      if(r != 0 && ratioX == 0 && ratioY == 0)
-      {
-        throw new ArgumentException("r cannot be non zero with zero ratios");
       }
     }
 

@@ -8,5 +8,6 @@ namespace Arnible.MathModeling
     public const double HalfCycle = Math.PI;
 
     public const double RightAngle = Math.PI / 2;
+    public const double HalfRightAngle = Math.PI / 4;
   }
 }

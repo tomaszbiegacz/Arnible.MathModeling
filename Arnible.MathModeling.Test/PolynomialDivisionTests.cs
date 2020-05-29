@@ -314,6 +314,17 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
+    public void TryDivideBy_Polynomial()
+    {
+      PolynomialDivision numerator = (x - 1)*(x + 2);      
+
+      // test
+      PolynomialDivision result;
+      Assert.True(numerator.TryDivideBy(x - 1, out result));
+      Assert.Equal(x + 2, result);
+    }
+
+    [Fact]
     public void Power_By_2()
     {
       var expr = (x + 1) / (x - 3);

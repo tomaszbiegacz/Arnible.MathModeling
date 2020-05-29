@@ -117,10 +117,17 @@ namespace Arnible.MathModeling.Geometry
         throw new ArgumentException("axis a and b are the same.");
       }
 
-      return new HypersphericalCoordinateOnRectangularView(
-        r: R,
-        ratioX: _viewRatio.GetOrDefault(axisA),
-        ratioY: _viewRatio.GetOrDefault(axisB));
+      if (R == 0)
+      {
+        return new HypersphericalCoordinateOnRectangularView(0, 0, 0);
+      }
+      else
+      {
+        return new HypersphericalCoordinateOnRectangularView(
+          r: R,
+          ratioX: _viewRatio.GetOrDefault(axisA),
+          ratioY: _viewRatio.GetOrDefault(axisB));
+      }
     }
 
     public HypersphericalCoordinateOnAxisViewForAngleDerivatives GetAngleDerivativesView(uint anglesCount, uint anglePos)

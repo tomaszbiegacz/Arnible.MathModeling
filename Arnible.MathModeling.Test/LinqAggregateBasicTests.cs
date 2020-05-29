@@ -45,5 +45,23 @@ namespace Arnible.MathModeling.Test
       }).WithMaximum(v => v.V);
       Assert.Equal(4d, r.V);
     }
+
+    [Fact]
+    public void Median_OfThree_Defensive()
+    {
+      Assert.Equal(3d, (new[] { 4d, 2d, 3d }).MedianDefensive());
+    }
+
+    [Fact]
+    public void Median_OfFive_Defensive()
+    {
+      Assert.Equal(3d, (new[] { 1d, 3d, 4d, 2d, 3d }).MedianDefensive());
+    }
+
+    [Fact]
+    public void Median_OfOne_Defensive()
+    {
+      Assert.Equal(2d, (new[] { 2d }).MedianDefensive());
+    }
   }
 }

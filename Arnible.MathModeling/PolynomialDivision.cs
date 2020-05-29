@@ -66,7 +66,7 @@ namespace Arnible.MathModeling
       else
       {
         var commonVariables = GetCommonIdentityVariables(numerator: numerator, denominator: denominator);
-        if(commonVariables.Any())
+        if (commonVariables.Any())
         {
           numerator = numerator.ReduceByCommon(commonVariables);
           denominator = denominator.ReduceByCommon(commonVariables);
@@ -78,14 +78,14 @@ namespace Arnible.MathModeling
     private static IEnumerable<VariableTerm> GetCommonIdentityVariables(Polynomial numerator, Polynomial denominator)
     {
       var numeratorVariables = numerator.GetIdentityVariableTerms();
-      if(numeratorVariables.Count > 0)
+      if (numeratorVariables.Count > 0)
       {
         var denominatorVariables = denominator.GetIdentityVariableTerms();
-        if(denominatorVariables.Count > 0)
+        if (denominatorVariables.Count > 0)
         {
           var commonVariables = numeratorVariables.ZipCommon(denominatorVariables, Math.Min);
           return commonVariables.Select(kv => new VariableTerm(variable: kv.Key, power: kv.Value)).ToArray();
-        }        
+        }
       }
       return LinqEnumerable.Empty<VariableTerm>();
     }
@@ -447,17 +447,24 @@ namespace Arnible.MathModeling
       {
         throw new ArgumentException("Cannot reduce polynomial.");
       }
-      
+
       return SimplifyPolynomialDivision(numerator: _numerator.DivideBy(pol), denominator: _denominator.DivideBy(pol));
     }
 
     public bool TryDivideBy(Polynomial b, out PolynomialDivision result)
-    {      
-      if(_numerator.TryDivideBy(b, out Polynomial reminder))
+    {
+      if (_numerator.TryDivideBy(b, out Polynomial reminder))
       {
-        result = SimplifyPolynomialDivision(reminder, _denominator);
+        if (IsPolynomial)
+        {
+          result = reminder;
+        }
+        else
+        {
+          result = SimplifyPolynomialDivision(reminder, _denominator);
+        }
         return true;
-      }  
+      }
       else
       {
         result = default;

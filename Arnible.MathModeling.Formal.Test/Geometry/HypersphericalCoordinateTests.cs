@@ -10,7 +10,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var cartesianInputs = Number.Terms(inputCount);
       var cartesianPoint = new CartesianCoordinate(cartesianInputs.ToVector());
-      var sphericalPoint = new HypersphericalCoordinate((PolynomialTerm)'R', Number.GreekTerms(inputCount - 1).ToVector());
+      var sphericalPoint = new HypersphericalCoordinate((PolynomialTerm)'R', Number.GreekTerms(inputCount - 1).ToAngleVector());
 
       Number product = cartesianInputs.SumDefensive();
       return product.ToSpherical(cartesianPoint, sphericalPoint);
@@ -34,7 +34,7 @@ namespace Arnible.MathModeling.Geometry.Test
     private static void EqualityAfterTranformation(PolynomialDivision polynomial)
     {
       var cartesianPoint = new CartesianCoordinate(new NumberVector(Term.x, Term.y, Term.z));
-      var sphericalPoint = new HypersphericalCoordinate(Term.r, new NumberVector(Term.θ, Term.φ));
+      var sphericalPoint = new HypersphericalCoordinate(Term.r, new HypersphericalAngleVector(Term.θ, Term.φ));
 
       PolynomialDivision sphericalPolynomial = polynomial.ToSpherical(cartesianPoint, sphericalPoint);
 

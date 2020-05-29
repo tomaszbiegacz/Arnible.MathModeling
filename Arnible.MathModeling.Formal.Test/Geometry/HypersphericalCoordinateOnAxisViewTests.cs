@@ -11,7 +11,7 @@ namespace Arnible.MathModeling.Geometry.Test
     public void DerivativeByR()
     {
       var cartesianPoint = new CartesianCoordinate(new NumberVector(x, y, z));
-      var sphericalPoint = new HypersphericalCoordinate(r, new NumberVector(θ, φ));
+      var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(θ, φ));
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 
       var derivatives = view.DerivativeByR().ToArray();      
@@ -26,7 +26,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void GetCartesianAxisViewsRatiosDerivativesByAngle()
     {
-      var sphericalPoint = new HypersphericalCoordinate(r, new NumberVector(α, β, γ, δ));      
+      var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(α, β, γ, δ));      
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
       
       for(uint anglePos = 0; anglePos < sphericalPoint.Angles.Length; ++anglePos)
@@ -46,7 +46,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void GetRectangularViewDerivativeByAngle()
     {
-      var sphericalPoint = new HypersphericalCoordinate(r, new NumberVector(α, β, γ));
+      var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(α, β, γ));
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 
       HypersphericalCoordinateOnRectangularViewWithDerivative recView = view
@@ -66,7 +66,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void GetRectangularViewDerivativeByAngle_Zero()
     {
-      var sphericalPoint = new HypersphericalCoordinate(r, new NumberVector(α, β, γ));
+      var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(α, β, γ));
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 
       HypersphericalCoordinateOnRectangularViewWithDerivative recView = view

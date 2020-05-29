@@ -21,7 +21,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void Constructor_3d()
     {
-      var hc = new HypersphericalCoordinate(3, new NumberVector(1, 0.5));
+      var hc = new HypersphericalCoordinate(3, new HypersphericalAngleVector(1, 0.5));
 
       Assert.Equal(3u, hc.DimensionsCount);
       AssertNumber.Equal(3, hc.R);
@@ -32,8 +32,8 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Equal_Rounding_Angle()
     {
       Assert.Equal(
-        new HypersphericalCoordinate(2, new NumberVector(1, 0)),
-        new HypersphericalCoordinate(2, new NumberVector(1, 8.65956056235496E-17)));
+        new HypersphericalCoordinate(2, new HypersphericalAngleVector(1, 0)),
+        new HypersphericalCoordinate(2, new HypersphericalAngleVector(1, 8.65956056235496E-17)));
     }
 
     [Fact]
@@ -113,6 +113,13 @@ namespace Arnible.MathModeling.Geometry.Test
       Assert.Equal<Number>(Math.Sqrt(3) / 2, derrivatives[2].First);      // z
 
       Assert.Equal(cc, hc.ToCartesianView());
+    }
+
+    [Fact]
+    public void TranslateByAngle()
+    {
+      HypersphericalCoordinate coordinate = new HypersphericalCoordinate(2, new HypersphericalAngleVector(2, 1, -1));
+      Assert.Equal(new HypersphericalCoordinate(2, new HypersphericalAngleVector(2, 1.5, -1)), coordinate.TranslateByAngle(1, 0.5));
     }
   }
 }

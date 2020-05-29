@@ -32,6 +32,7 @@
     <Compile Include="..\Arnible.MathModeling\Geometry\CartesianCoordinate.cs" Link="Geometry\CartesianCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleQuantified.cs" Link="Geometry\HypersphericalAngleQuantified.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleVector.cs" Link="Geometry\HypersphericalAngleVector.cs" />
+    <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleVectorExtensions.cs" Link="Geometry\HypersphericalAngleVectorExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinate.cs" Link="Geometry\HypersphericalCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinateOnAxisView.cs" Link="Geometry\HypersphericalCoordinateOnAxisView.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinateOnAxisViewForAngleDerivatives.cs" Link="Geometry\HypersphericalCoordinateOnAxisViewForAngleDerivatives.cs" />

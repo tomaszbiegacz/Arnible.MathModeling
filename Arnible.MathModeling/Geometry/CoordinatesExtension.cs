@@ -18,11 +18,6 @@ namespace Arnible.MathModeling.Geometry
 
     private static HypersphericalCoordinate ToSpherical(this CartesianCoordinate p)
     {
-      if (p.DimensionsCount == 1)
-      {
-        throw new ArgumentException($"Invalid dimensions count");
-      }
-
       NumberVector pc = p.Coordinates;
       NumberVector pc2 = pc.Transform(c => c * c);
 
@@ -40,7 +35,7 @@ namespace Arnible.MathModeling.Geometry
         angles.Add(GetFirstAngle(pc[0], pc[1]));
         angles.Reverse();
 
-        return new HypersphericalCoordinate(r, angles.ToVector());        
+        return new HypersphericalCoordinate(r, angles.ToAngleVector());        
       }
       else
       {

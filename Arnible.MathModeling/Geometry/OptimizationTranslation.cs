@@ -28,7 +28,7 @@ namespace Arnible.MathModeling.Geometry
     }
 
     /// <summary>
-    /// Estimated change to reach minimum in given direction
+    /// Estimated change to reach minimum in the axis direction
     /// </summary>
     public static NumberTranslationVector ForMinimumEquals0(
       Number value,
@@ -36,12 +36,11 @@ namespace Arnible.MathModeling.Geometry
       IDerivative1 derivative)
     {
       Number rDelta = ForMinimumEquals0(value, derivative);
-      NumberVector direction = NumberVector.FirstNonZeroValueAt(pos: cartesiaxAxisNumber, value: 1);
-      return new NumberTranslationVector(rDelta * direction);
+      return new NumberTranslationVector(NumberVector.FirstNonZeroValueAt(pos: cartesiaxAxisNumber, value: rDelta));
     }
 
     /// <summary>
-    /// Estimated change to reach minimum in given direction
+    /// Estimated change to reach minimum in the angle vector direction
     /// </summary>
     public static NumberTranslationVector ForMinimumEquals0(
       Number value,
@@ -61,6 +60,33 @@ namespace Arnible.MathModeling.Geometry
       }
 
       return new NumberTranslationVector(hc.ToCartesianView().Coordinates);
-    }    
+    }
+
+    /// <summary>
+    /// Estimated change to reach minimum in direction of an angle
+    /// </summary>
+    public static NumberTranslationVector ForMinimumEquals0(
+      Number value,
+      HypersphericalCoordinateOnAxisView currentHcView,
+      uint anglePos,
+      IDerivative1 derivative)
+    {
+      Number angleDelta = ForMinimumEquals0(value, derivative);
+
+      if(angleDelta < -1 * Angle.RightAngle)
+      {
+        angleDelta = -1 * Angle.RightAngle;
+      }
+      else if(angleDelta > Angle.RightAngle)
+      {
+        angleDelta = Angle.RightAngle;
+      }
+
+      HypersphericalCoordinate currentHc = currentHcView;
+      HypersphericalCoordinate newHc = currentHc.TranslateByAngle(anglePos, angleDelta);
+      CartesianCoordinate newCartesian = newHc.ToCartesianView();
+
+      return new NumberTranslationVector(newCartesian.Coordinates - currentHcView.Coordinates);
+    }
   }
 }

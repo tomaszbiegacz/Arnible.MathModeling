@@ -57,5 +57,17 @@ namespace Arnible.MathModeling.Test
     {
       Assert.Equal(new[] { 2d }, (new[] { 2d, 1d, 3d }).TakeExactly(1));
     }
+
+    [Fact]
+    public void TakeAtMost_Subset()
+    {
+      Assert.Equal(new[] { 2d, 1d }, (new[] { 2d, 1d, 3d }).TakeAtMost(2));
+    }
+
+    [Fact]
+    public void TakeAtMost_All()
+    {
+      Assert.Equal(new[] { 2d, 1d }, (new[] { 2d, 1d }).TakeAtMost(3));
+    }
   }
 }

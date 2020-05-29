@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Arnible.MathModeling
 {
   public static class LinqEnumerable
-  {    
+  {
     /*
      * Extraction
      */
@@ -90,9 +90,9 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static IEnumerable<T> Repeat<T>(T item, uint length) where T: struct
+    public static IEnumerable<T> Repeat<T>(T item, uint length) where T : struct
     {
-      for(uint i=0; i<length; ++i)
+      for (uint i = 0; i < length; ++i)
       {
         yield return item;
       }
@@ -125,7 +125,7 @@ namespace Arnible.MathModeling
       {
         yield return srcItem;
       }
-    }    
+    }
 
     public static IEnumerable<T> DuplicateAt<T>(this IEnumerable<T> x, uint pos)
     {
@@ -188,9 +188,9 @@ namespace Arnible.MathModeling
     /// <summary>
     /// Type safe casting
     /// </summary>
-    public static IEnumerable<TResult> Cast<TSource, TResult>(this IEnumerable<TSource> source) where TSource: TResult
+    public static IEnumerable<TResult> Cast<TSource, TResult>(this IEnumerable<TSource> source) where TSource : TResult
     {
-      foreach(TSource item in source)
+      foreach (TSource item in source)
       {
         yield return item;
       }
@@ -206,15 +206,15 @@ namespace Arnible.MathModeling
 
     public static IEnumerable<T> SkipExactly<T>(this IEnumerable<T> x, uint length)
     {
-      if(x == null)
+      if (x == null)
       {
         throw new ArgumentNullException(nameof(x));
       }
       uint i = 0;
       foreach (T item in x)
-      {        
+      {
         if (i >= length)
-        {          
+        {
           yield return item;
         }
         i++;
@@ -238,11 +238,28 @@ namespace Arnible.MathModeling
         {
           yield return item;
         }
-        i++;        
+        i++;
       }
       if (i < count)
       {
         throw new ArgumentException($"Enumerator length {i}, hence I can't take exactly {count}");
+      }
+    }
+
+    public static IEnumerable<T> TakeAtMost<T>(this IEnumerable<T> x, uint count)
+    {
+      if (x == null)
+      {
+        throw new ArgumentNullException(nameof(x));
+      }
+      uint i = 0;
+      foreach (T item in x)
+      {
+        if (i < count)
+        {
+          yield return item;
+        }
+        i++;
       }
     }
   }

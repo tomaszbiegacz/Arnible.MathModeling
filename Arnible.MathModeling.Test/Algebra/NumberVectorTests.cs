@@ -18,7 +18,6 @@ namespace Arnible.MathModeling.Algebra.Test
       Assert.Equal(default, new NumberVector());
       Assert.Equal(default, new NumberVector(new Number[0]));
       Assert.Equal(default, NumberVector.Repeat(value: 0, length: 5));
-      Assert.Equal(default, NumberVector.FirstNonZeroValueAt(pos: 5, value: 0));
 
       Assert.Equal(0, v.GetOrDefault(1));
     }

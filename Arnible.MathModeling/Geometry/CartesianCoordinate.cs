@@ -47,7 +47,7 @@ namespace Arnible.MathModeling.Geometry
 
     public static implicit operator CartesianCoordinate(NumberArray rc)
     {
-      return new CartesianCoordinate(rc);
+      return new CartesianCoordinate(NumberVector.Create(rc));
     }
 
     public bool Equals(CartesianCoordinate other)

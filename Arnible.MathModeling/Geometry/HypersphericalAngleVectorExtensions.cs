@@ -5,6 +5,16 @@ namespace Arnible.MathModeling.Geometry
 {
   public static class HypersphericalAngleVectorExtensions
   {
+    public static HypersphericalAngleVector ToAngleVector(this IEnumerable<Number> numbers)
+    {
+      return new HypersphericalAngleVector(numbers.ToVector());
+    }
+
+    public static HypersphericalAngleVector ToAngleVector(this IEnumerable<double> numbers)
+    {
+      return new HypersphericalAngleVector(numbers.ToVector());
+    }
+
     public static HypersphericalAngleVector Sum(this IEnumerable<HypersphericalAngleVector> x)
     {
       HypersphericalAngleVector? current = null;

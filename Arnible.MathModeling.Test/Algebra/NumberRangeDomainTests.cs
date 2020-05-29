@@ -42,5 +42,69 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       Assert.Equal(2, _strategy.Width);
     }
+
+    [Fact]
+    public void Vector_IsValid_True()
+    {
+      NumberVector src = new NumberVector(0.1, 0.2, 0.3);
+      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3);
+      Assert.True(_strategy.IsValidTranslation(src, delta));
+    }
+
+    [Fact]
+    public void Vector_IsValid_False()
+    {
+      NumberVector src = new NumberVector(0.1, 0.2, 0.3);
+      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
+      Assert.False(_strategy.IsValidTranslation(src, delta));
+    }
+
+    [Fact]
+    public void Vector_Translate_Subset()
+    {
+      NumberVector src = new NumberVector(0.1, 0.2, 0.3);
+      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
+      Assert.Equal(new NumberVector(0.3, 1, 0.3), _strategy.Translate(src, delta));
+    }
+
+    [Fact]
+    public void Vector_Translate_Superset()
+    {
+      NumberVector src = new NumberVector(0.1);
+      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
+      Assert.Equal(new NumberVector(0.3, 0.9), _strategy.Translate(src, delta));
+    }
+
+    [Fact]
+    public void Array_IsValid_True()
+    {
+      NumberArray src = new NumberArray(0.1, 0.2);
+      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3);
+      Assert.True(_strategy.IsValidTranslation(src, delta));
+    }
+
+    [Fact]
+    public void Array_IsValid_False()
+    {
+      NumberArray src = new NumberArray(0.1, 0.2);
+      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3, 0.1);
+      Assert.False(_strategy.IsValidTranslation(src, delta));
+    }
+
+    [Fact]
+    public void Array_IsValid_False_Overflow()
+    {
+      NumberArray src = new NumberArray(0.1, 0.9);
+      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3);
+      Assert.False(_strategy.IsValidTranslation(src, delta));
+    }
+
+    [Fact]
+    public void Array_Translate_Superset()
+    {
+      NumberArray src = new NumberArray(0.1, 0.2, 0.1);
+      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
+      Assert.Equal(new NumberArray(0.3, 1, 0.1), _strategy.Translate(src, delta));
+    }
   }
 }

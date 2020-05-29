@@ -37,12 +37,10 @@ namespace Arnible.MathModeling.Algebra
     {
       if (value == 0)
       {
-        return default;
+        throw new ArgumentException(nameof(value));
       }
-      else
-      {
-        return new NumberVector(LinqEnumerable.Repeat<Number>(0, pos).Append(value).ToImmutableArray());
-      }
+      
+      return new NumberVector(LinqEnumerable.Repeat<Number>(0, pos).Append(value).ToImmutableArray());      
     }
 
     private readonly IImmutableList<Number> _values;
@@ -84,8 +82,6 @@ namespace Arnible.MathModeling.Algebra
 
     public static implicit operator NumberVector(Number v) => new NumberVector(v);
     public static implicit operator NumberVector(double v) => new NumberVector(v);
-
-    public static implicit operator NumberVector(NumberArray v) => Create(v);
 
     //
     // Properties
@@ -150,7 +146,7 @@ namespace Arnible.MathModeling.Algebra
       {
         return Equals(v);
       }
-      if (obj is Number v2)
+      else if (obj is Number v2)
       {
         return Equals(v2);
       }

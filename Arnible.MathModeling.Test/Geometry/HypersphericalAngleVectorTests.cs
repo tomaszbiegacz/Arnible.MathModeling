@@ -10,11 +10,72 @@ namespace Arnible.MathModeling.Geometry.Test
     const double π = Math.PI;
 
     [Fact]
+    public void Constructor_Default()
+    {
+      HypersphericalAngleVector v = default;
+      Assert.True(v == 0);
+      Assert.Equal(1u, v.Length);
+      Assert.Equal(0, v[0]);
+      Assert.Equal("0", v.ToString());
+
+      Assert.Equal(default, v);
+      Assert.Equal(default, new HypersphericalAngleVector());
+      Assert.Equal(default, new HypersphericalAngleVector(new Number[0]));      
+
+      Assert.Equal(0, v.GetOrDefault(1));
+    }
+
+    [Fact]
+    public void Constructor_Single()
+    {
+      HypersphericalAngleVector v = 2;
+      Assert.False(v == 0);
+      Assert.True(v == 2);
+      Assert.False(v != 2);
+      Assert.Equal(2, v[0]);
+      Assert.Equal(1u, v.Length);
+      Assert.Equal("2", v.ToString());
+
+      Assert.Equal(2, v.GetOrDefault(0));
+      Assert.Equal(0, v.GetOrDefault(1));
+    }
+
+    [Fact]
+    public void Constructor_Explicit()
+    {
+      HypersphericalAngleVector v = new HypersphericalAngleVector(2, -1, 1);
+      Assert.False(v == 0);
+      Assert.Equal(v, new Number[] { 2, -1, 1 });
+      Assert.Equal(3u, v.Length);
+      Assert.Equal("[2 -1 1]", v.ToString());
+    }
+
+    [Fact]
+    public void NotEqual_Values()
+    {
+      Assert.NotEqual(new HypersphericalAngleVector(1, 1), new HypersphericalAngleVector(1, -1));
+    }
+
+    [Fact]
+    public void NotEqual_Dimensions()
+    {
+      Assert.NotEqual(default, new HypersphericalAngleVector(1));
+    }
+
+    [Fact]
     public void Add_NoRound_Positive()
     {
       var a = new HypersphericalAngleVector(π_4, π_4);
       var b = new HypersphericalAngleVector(π_2, π_4);
       Assert.Equal(new HypersphericalAngleVector(3 * π_4, π_2), a + b);
+    }
+
+    [Fact]
+    public void Add_Superset()
+    {
+      var a = new HypersphericalAngleVector(π_4);
+      var b = new HypersphericalAngleVector(π_2, π_4);
+      Assert.Equal(new HypersphericalAngleVector(3 * π_4, π_4), a + b);
     }
 
     [Fact]
