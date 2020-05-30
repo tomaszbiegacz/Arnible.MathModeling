@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Arnible.MathModelling.xunit;
+using Xunit;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
@@ -14,7 +15,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [InlineData(1.00000000002, 1)]
     public void Validate(double currentValue, double valid)
     {
-      Assert.Equal<Number>(valid, _strategy.Validate(currentValue));
+      AssertNumber.Equal(valid, _strategy.Validate(currentValue));
     }
 
     [Theory]
@@ -28,7 +29,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [InlineData(-1, -0.6, -1)]
     public void Translate(double currentValue, double evaluatedDelta, double expectedValue)
     {
-      Assert.Equal<Number>(expectedValue, _strategy.Translate(currentValue, evaluatedDelta));
+      AssertNumber.Equal(expectedValue, _strategy.Translate(currentValue, evaluatedDelta));
     }
 
     [Theory]
@@ -45,7 +46,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [InlineData(0.4, -2.8, 0.5)]
     public void GetValidTranslationRatio(double currentValue, double evaluatedDelta, double expectedValue)
     {
-      Assert.Equal<Number>(expectedValue, _strategy.GetValidTranslationRatio(currentValue, evaluatedDelta));
+      AssertNumber.Equal(expectedValue, _strategy.GetValidTranslationRatio(currentValue, evaluatedDelta));
     }
 
     [Fact]

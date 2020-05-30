@@ -1,5 +1,6 @@
 ﻿using Arnible.MathModeling.Algebra;
 using Arnible.MathModeling.Test;
+using Arnible.MathModelling.xunit;
 using System;
 using Xunit;
 
@@ -46,12 +47,12 @@ namespace Arnible.MathModeling.Geometry.Test
       Assert.Equal(2, hc.R);
 
       const double φ = Math.PI / 3;                           // x to r
-      Assert.Equal<Number>(φ, hc.Angles.Single());
+      AssertNumber.Equal(φ, hc.Angles.Single());
 
       var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
       Assert.Equal(2, derrivatives.Length);
-      Assert.Equal<Number>(0.5, derrivatives[0].First);                 // x
-      Assert.Equal<Number>(Math.Sqrt(3) / 2, derrivatives[1].First);    // y
+      AssertNumber.Equal(0.5, derrivatives[0].First);                 // x
+      AssertNumber.Equal(Math.Sqrt(3) / 2, derrivatives[1].First);    // y
 
       Assert.Equal(cc, hc.ToCartesianView());
       VerifyCartesianCoordinateAngle(hc, cc);
@@ -84,9 +85,9 @@ namespace Arnible.MathModeling.Geometry.Test
 
       var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
       Assert.Equal(3, derrivatives.Length);
-      Assert.Equal<Number>(Math.Cos(θ) * Math.Cos(φ), derrivatives[0].First);   // x
-      Assert.Equal<Number>(Math.Cos(θ) * Math.Sin(φ), derrivatives[1].First);   // y
-      Assert.Equal<Number>(Math.Sin(θ), derrivatives[2].First);                 // z
+      AssertNumber.Equal(Math.Cos(θ) * Math.Cos(φ), derrivatives[0].First);   // x
+      AssertNumber.Equal(Math.Cos(θ) * Math.Sin(φ), derrivatives[1].First);   // y
+      AssertNumber.Equal(Math.Sin(θ), derrivatives[2].First);                 // z
 
       Assert.Equal(cc, hc.ToCartesianView());
       VerifyCartesianCoordinateAngle(hc, cc);
@@ -103,14 +104,14 @@ namespace Arnible.MathModeling.Geometry.Test
       HypersphericalCoordinate hc = cc.ToSphericalView();
       Assert.Equal(3u, hc.DimensionsCount);
       Assert.Equal(4, hc.R);
-      Assert.Equal<Number>(φ, hc.Angles[0]);
-      Assert.Equal<Number>(θ, hc.Angles[1]);
+      AssertNumber.Equal(φ, hc.Angles[0]);
+      AssertNumber.Equal(θ, hc.Angles[1]);
 
       var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
       Assert.Equal(3, derrivatives.Length);
-      Assert.Equal<Number>(Math.Sqrt(2) / 4, derrivatives[0].First);      // x
-      Assert.Equal<Number>(Math.Sqrt(2) / 4, derrivatives[1].First);      // y
-      Assert.Equal<Number>(Math.Sqrt(3) / 2, derrivatives[2].First);      // z
+      AssertNumber.Equal(Math.Sqrt(2) / 4, derrivatives[0].First);      // x
+      AssertNumber.Equal(Math.Sqrt(2) / 4, derrivatives[1].First);      // y
+      AssertNumber.Equal(Math.Sqrt(3) / 2, derrivatives[2].First);      // z
 
       Assert.Equal(cc, hc.ToCartesianView());
     }

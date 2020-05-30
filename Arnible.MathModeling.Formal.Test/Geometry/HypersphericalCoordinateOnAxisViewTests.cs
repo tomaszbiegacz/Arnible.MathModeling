@@ -2,6 +2,7 @@
 using Xunit;
 using static Arnible.MathModeling.Term;
 using static Arnible.MathModeling.MetaMath;
+using Arnible.MathModelling.xunit;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -19,7 +20,7 @@ namespace Arnible.MathModeling.Geometry.Test
       for (uint dimensionPos = 0; dimensionPos < cartesianPoint.DimensionsCount; ++dimensionPos)
       {
         var symbol = (PolynomialDivision)cartesianPoint.Coordinates[dimensionPos];
-        AssertFormal.Equal(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[dimensionPos].First);
+        AssertNumber.Equal(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[dimensionPos].First);
       }
     }
 
@@ -38,7 +39,7 @@ namespace Arnible.MathModeling.Geometry.Test
         {
           PolynomialDivision coordinate = view.Coordinates[coordinatePos];
           PolynomialDivision expected = coordinate.DerivativeBy(angleTerm) / r;
-          Assert.Equal<PolynomialDivision>(expected, derivatives[coordinatePos].First);
+          AssertNumber.Equal(expected, derivatives[coordinatePos].First);
         }
       }      
     }

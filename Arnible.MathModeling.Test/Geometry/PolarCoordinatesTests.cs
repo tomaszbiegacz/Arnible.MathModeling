@@ -1,4 +1,5 @@
 ﻿using Arnible.MathModeling.Test;
+using Arnible.MathModelling.xunit;
 using System;
 using Xunit;
 

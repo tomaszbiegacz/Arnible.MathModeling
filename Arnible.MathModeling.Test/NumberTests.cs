@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Arnible.MathModelling.xunit;
+using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
@@ -7,12 +8,12 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Basic()
     {
-      Assert.Equal<Number>(default, 0);
-      Assert.Equal<Number>(2, 2);
-      Assert.Equal<Number>(-2, -2);
+      AssertNumber.Equal(default, 0);
+      AssertNumber.Equal(2, 2);
+      AssertNumber.Equal(-2, -2);
 
-      Assert.NotEqual<Number>(2, 0);
-      Assert.NotEqual<Number>(0, -2);
+      AssertNumber.NotEqual(2, 0);
+      AssertNumber.NotEqual(0, -2);
     }
 
     [Theory]
@@ -22,8 +23,8 @@ namespace Arnible.MathModeling.Test
     [InlineData(0.8660254037844386, 0.86602540378443871)]
     public void Equal_Rounding(double first, double second)
     {
-      Assert.NotEqual(first, second);
-      Assert.Equal<Number>(first, second);
+      AssertNumber.NotEqualExact(first, second);
+      AssertNumber.Equal(first, second);
     }
 
     [Fact]
