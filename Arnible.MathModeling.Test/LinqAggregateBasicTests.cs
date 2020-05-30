@@ -31,6 +31,16 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
+    public void WithMinimumAt_OfThree()
+    {
+      uint r = (new[]
+      {
+        new Value(4), new Value(6), new Value(3)
+      }).WithMinimumAt(v => v.V);
+      Assert.Equal(2u, r);
+    }
+
+    [Fact]
     public void Max_OfThree_Defensive()
     {
       Assert.Equal(4d, (new[] { 4d, 2d, 3d }).MaxDefensive());
@@ -44,6 +54,16 @@ namespace Arnible.MathModeling.Test
         new Value(4), new Value(2), new Value(3)
       }).WithMaximum(v => v.V);
       Assert.Equal(4d, r.V);
+    }
+
+    [Fact]
+    public void WithMaximumAt_OfThree()
+    {
+      uint r = (new[]
+      {
+        new Value(4), new Value(6), new Value(3)
+      }).WithMaximumAt(v => v.V);
+      Assert.Equal(1u, r);
     }
 
     [Fact]

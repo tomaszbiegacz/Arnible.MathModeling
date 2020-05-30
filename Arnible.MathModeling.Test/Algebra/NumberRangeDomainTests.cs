@@ -7,6 +7,17 @@ namespace Arnible.MathModeling.Algebra.Test
     private readonly INumberRangeDomain _strategy = new NumberRangeDomain(-1, 1);
 
     [Theory]
+    [InlineData(-1, -1)]
+    [InlineData(-1.00000000002, -1)]
+    [InlineData(0, 0)]
+    [InlineData(1, 1)]
+    [InlineData(1.00000000002, 1)]
+    public void Validate(double currentValue, double valid)
+    {
+      Assert.Equal<Number>(valid, _strategy.Validate(currentValue));
+    }
+
+    [Theory]
     [InlineData(1, 0, 1)]
     [InlineData(0, 0, 0)]
     [InlineData(0.5, 0.5, 1)]

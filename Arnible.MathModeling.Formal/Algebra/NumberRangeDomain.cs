@@ -19,10 +19,7 @@ namespace Arnible.MathModeling.Algebra
 
     public double Width => (double)(Maximum - Minimum);
 
-    public void Validate(Number value)
-    {
-      // intentionally empty
-    }
+    public Number Validate(Number value) => value;
 
     public Number Translate(Number value, Number delta) => value + delta;    
 

@@ -23,6 +23,11 @@ namespace Arnible.MathModeling.Geometry.Test
     /// </summary>
     const double π_3 = Math.PI / 3;
 
+    /// <summary>
+    /// 90 degrees
+    /// </summary>
+    const double π_2 = Math.PI / 2;
+
     [Theory]
     [InlineData(1, 1)]
     [InlineData(2, 3)]
@@ -46,11 +51,27 @@ namespace Arnible.MathModeling.Geometry.Test
     [InlineData(new [] { 1d, 1d },                  Sqrt2,  new[] { π_4 })]
     [InlineData(new [] { one_Sqrt2, one_Sqrt2, 1 }, Sqrt2,  new[] { π_4, π_4 })]
     [InlineData(new [] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4,      new[] { π_4, π_3 })]
-    public void Cast_ToHyperspherical(double[] cartesian, double r, double[] angles)
+    public void Cast_ToHypersphericalView(double[] cartesian, double r, double[] angles)
     {
       var cc = new CartesianCoordinate(cartesian.ToVector());
 
       HypersphericalCoordinate sc = cc.ToSphericalView();
+      AssertNumber.Equal(r, sc.R);
+      AssertNumber.Equal(angles, sc.Angles);
+    }
+
+    [Theory]
+    [InlineData(new[] { 0d }, 0, new[] { 0d })]
+    [InlineData(new[] { 0d, 1d }, 1, new[] { π_2 })]
+    [InlineData(new[] { 0d, 0d, 1d }, 1, new[] { 0, π_2 })]
+    [InlineData(new[] { 0d, 0d, 0d, 1d }, 1, new[] { 0, 0, π_2 })]
+    [InlineData(new[] { 0d, 0d, 0d, 0, 1d }, 1, new[] { 0, 0, 0, π_2 })]
+    [InlineData(new[] { 0d, 0d, 0d, 0, -1d }, 1, new[] { 0, 0, 0, -1 * π_2 })]
+    public void Cast_ToHyperspherical(double[] cartesian, double r, double[] angles)
+    {
+      var cc = new CartesianCoordinate(cartesian.ToVector());
+
+      HypersphericalCoordinate sc = cc.ToSpherical();
       AssertNumber.Equal(r, sc.R);
       AssertNumber.Equal(angles, sc.Angles);
     }
@@ -78,6 +99,6 @@ namespace Arnible.MathModeling.Geometry.Test
 
       Assert.Equal(cc.AddDimension(), sc.AddDimension().ToCartesianView());
       Assert.Equal(sc.AddDimension(), cc.AddDimension().ToSphericalView());
-    }
+    }    
   }
 }

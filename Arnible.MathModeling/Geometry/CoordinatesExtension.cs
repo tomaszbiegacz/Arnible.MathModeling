@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Geometry
         φ: GetFirstAngle(p.X, p.Y));
     }
 
-    private static HypersphericalCoordinate ToSpherical(this CartesianCoordinate p)
+    public static HypersphericalCoordinate ToSpherical(this CartesianCoordinate p)
     {
       NumberVector pc = p.Coordinates;
       NumberVector pc2 = pc.Transform(c => c * c);
@@ -28,11 +28,18 @@ namespace Arnible.MathModeling.Geometry
         for (uint i = p.DimensionsCount; i > 2; i--)
         {
           double radius2 = pc2.TakeExactly(i).SumDefensive();
-          double angleSin = pc[i - 1] / Sqrt(radius2);
-          double angle = Asin(angleSin);
-          angles.Add(angle);
+          if(radius2.NumericEquals(0))
+          {
+            angles.Add(0);
+          }
+          else
+          {
+            double angleSin = pc.GetOrDefault(i - 1) / Sqrt(radius2);
+            double angle = Asin(angleSin);
+            angles.Add(angle);
+          }
         }
-        angles.Add(GetFirstAngle(pc[0], pc[1]));
+        angles.Add(GetFirstAngle(pc.GetOrDefault(0), pc.GetOrDefault(1)));
         angles.Reverse();
 
         return new HypersphericalCoordinate(r, angles.ToAngleVector());        

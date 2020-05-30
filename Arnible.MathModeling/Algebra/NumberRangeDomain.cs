@@ -20,11 +20,25 @@ namespace Arnible.MathModeling.Algebra
 
     public double Width => Maximum - Minimum;
 
-    public void Validate(Number value)
+    public Number Validate(Number value)
     {
+      if (value == Minimum)
+      {
+        return Minimum;
+      }
+
+      if (value == Maximum)
+      {
+        return Maximum;
+      }
+
       if (value < Minimum || value > Maximum)
       {
         throw new ArgumentException($"Invalid value: {value}");
+      }
+      else
+      {
+        return value;
       }
     }
 

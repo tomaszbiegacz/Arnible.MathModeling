@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Algebra
 {
   public static class INumberRangeDomainExtensions
   {
-    public static void Validate(this INumberRangeDomain domain, NumberArray value)
+    public static IEnumerable<Number> ValidateEnum(INumberRangeDomain domain, IEnumerable<Number> value)
     {
-      foreach (Number v in value)
-      {
-        domain.Validate(v);
-      }
+      return value.Select(v => domain.Validate(v));
+    }
+
+    public static NumberArray Validate(this INumberRangeDomain domain, NumberArray value)
+    {
+      return ValidateEnum(domain, value).ToNumberArray();
     }
 
     public static NumberVector Translate(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)
