@@ -1,4 +1,4 @@
-﻿# Arnible.MathModelling
+﻿# Arnible.MathModeling
 
 Usage for basic operations over polynomials can be shown via example
 

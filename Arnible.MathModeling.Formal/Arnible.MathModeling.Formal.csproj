@@ -25,6 +25,7 @@
     <Compile Include="..\Arnible.MathModeling\DerivativeOperator.cs" Link="DerivativeOperator.cs" />
     <Compile Include="..\Arnible.MathModeling\DoubleExtension.cs" Link="DoubleExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\ElementaryUnaryOperation.cs" Link="ElementaryUnaryOperation.cs" />
+    <Compile Include="..\Arnible.MathModeling\Export\IMathModelingLogger.cs" Link="Export\IMathModelingLogger.cs" />
     <Compile Include="..\Arnible.MathModeling\Export\MediaTypeSpecificationAttribute.cs" Link="Export\MediaTypeSpecificationAttribute.cs" />
     <Compile Include="..\Arnible.MathModeling\Export\RecordSerializerAttribute.cs" Link="Export\RecordSerializerAttribute.cs" />
     <Compile Include="..\Arnible.MathModeling\Export\SerializationMediaType.cs" Link="Export\SerializationMediaType.cs" />
@@ -73,7 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.7.1" />
   </ItemGroup>
 
 </Project>
