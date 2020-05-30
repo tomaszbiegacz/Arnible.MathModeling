@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Arnible.MathModelling.xunit\AssertNumberCommon.cs" Link="AssertNumberCommon.cs" />
+    <Compile Include="..\Arnible.MathModeling.xunit\AssertNumberCommon.cs" Link="AssertNumberCommon.cs" />
   </ItemGroup>
 
   <ItemGroup>

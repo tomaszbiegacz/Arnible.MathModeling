@@ -1,8 +1,7 @@
-﻿using Arnible.MathModeling;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Xunit;
 
-namespace Arnible.MathModelling.xunit
+namespace Arnible.MathModeling.xunit
 {
   public static class AssertNumber
   {

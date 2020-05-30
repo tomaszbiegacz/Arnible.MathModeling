@@ -1,5 +1,5 @@
 ﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModelling.xunit;
+using Arnible.MathModeling.xunit;
 using System;
 using Xunit;
 

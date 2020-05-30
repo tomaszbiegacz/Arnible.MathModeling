@@ -1,8 +1,8 @@
 ﻿using Arnible.MathModeling.Algebra;
+using Arnible.MathModeling.xunit;
 using Xunit;
-using static Arnible.MathModeling.Term;
 using static Arnible.MathModeling.MetaMath;
-using Arnible.MathModelling.xunit;
+using static Arnible.MathModeling.Term;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -15,7 +15,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(θ, φ));
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 
-      var derivatives = view.DerivativeByR().ToArray();      
+      var derivatives = view.DerivativeByR().ToArray();
       Assert.Equal((int)cartesianPoint.DimensionsCount, derivatives.Length);
       for (uint dimensionPos = 0; dimensionPos < cartesianPoint.DimensionsCount; ++dimensionPos)
       {
@@ -27,21 +27,21 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void GetCartesianAxisViewsRatiosDerivativesByAngle()
     {
-      var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(α, β, γ, δ));      
+      var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(α, β, γ, δ));
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
-      
-      for(uint anglePos = 0; anglePos < sphericalPoint.Angles.Length; ++anglePos)
+
+      for (uint anglePos = 0; anglePos < sphericalPoint.Angles.Length; ++anglePos)
       {
         PolynomialTerm angleTerm = (PolynomialTerm)sphericalPoint.Angles[anglePos];
         var derivatives = view.GetCartesianAxisViewsRatiosDerivativesByAngle(anglesCount: 4, anglePos: anglePos).ToArray();
         Assert.Equal(view.DimensionsCount, (uint)derivatives.Length);
-        for(uint coordinatePos = 0; coordinatePos < view.Coordinates.Length; ++coordinatePos)
+        for (uint coordinatePos = 0; coordinatePos < view.Coordinates.Length; ++coordinatePos)
         {
           PolynomialDivision coordinate = view.Coordinates[coordinatePos];
           PolynomialDivision expected = coordinate.DerivativeBy(angleTerm) / r;
           AssertNumber.Equal(expected, derivatives[coordinatePos].First);
         }
-      }      
+      }
     }
 
     [Fact]
@@ -59,8 +59,8 @@ namespace Arnible.MathModeling.Geometry.Test
       Assert.Equal(r * Cos(γ) * Cos(β) * Cos(α), recView.X);
       Assert.Equal(-1 * Sin(γ) * Cos(β) * Cos(α), recView.RatioXDerivative.First);
 
-      Assert.Equal(Sin(β)*Cos(γ), recView.RatioY);
-      Assert.Equal(r * Sin(β)*Cos(γ), recView.Y);
+      Assert.Equal(Sin(β) * Cos(γ), recView.RatioY);
+      Assert.Equal(r * Sin(β) * Cos(γ), recView.Y);
       Assert.Equal(-1 * Sin(γ) * Sin(β), recView.RatioYDerivative.First);
     }
 

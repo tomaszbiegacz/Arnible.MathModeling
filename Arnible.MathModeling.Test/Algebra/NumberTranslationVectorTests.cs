@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
+﻿using Xunit;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
@@ -40,7 +37,7 @@ namespace Arnible.MathModeling.Algebra.Test
       Assert.False(v == 0);
       Assert.Equal(v, new Number[] { 2, 3, 4 });
       Assert.Equal(3u, v.Length);
-      Assert.Equal("[2 3 4]", v.ToString());      
+      Assert.Equal("[2 3 4]", v.ToString());
     }
 
     [Fact]

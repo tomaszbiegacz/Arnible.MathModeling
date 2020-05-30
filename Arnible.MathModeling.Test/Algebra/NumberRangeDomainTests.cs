@@ -1,4 +1,4 @@
-﻿using Arnible.MathModelling.xunit;
+﻿using Arnible.MathModeling.xunit;
 using Xunit;
 
 namespace Arnible.MathModeling.Algebra.Test

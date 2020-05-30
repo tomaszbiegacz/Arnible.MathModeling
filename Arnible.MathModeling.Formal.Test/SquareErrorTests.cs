@@ -1,5 +1,5 @@
 ﻿using Arnible.MathModeling.Geometry;
-using Arnible.MathModelling.xunit;
+using Arnible.MathModeling.xunit;
 using Xunit;
 using static Arnible.MathModeling.Term;
 

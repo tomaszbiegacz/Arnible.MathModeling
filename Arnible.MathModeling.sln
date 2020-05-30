@@ -16,9 +16,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arnible.MathModeling.Formal
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arnible.MathModeling.Formal.Test", "Arnible.MathModeling.Formal.Test\Arnible.MathModeling.Formal.Test.csproj", "{FB715C29-D260-488B-AE5D-DA4F612A7200}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arnible.MathModelling.xunit", "Arnible.MathModelling.xunit\Arnible.MathModelling.xunit.csproj", "{CD8527E9-799B-43C1-9905-448521D86F8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arnible.MathModeling.xunit", "Arnible.MathModeling.xunit\Arnible.MathModeling.xunit.csproj", "{CD8527E9-799B-43C1-9905-448521D86F8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arnible.MathModelling.Formal.xunit", "Arnible.MathModelling.Formal.xunit\Arnible.MathModelling.Formal.xunit.csproj", "{30A7258E-C318-4374-91B6-D69FEB7E0AC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arnible.MathModeling.Formal.xunit", "Arnible.MathModeling.Formal.xunit\Arnible.MathModeling.Formal.xunit.csproj", "{30A7258E-C318-4374-91B6-D69FEB7E0AC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

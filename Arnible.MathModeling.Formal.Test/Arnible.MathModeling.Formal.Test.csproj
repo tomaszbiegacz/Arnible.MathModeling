@@ -26,8 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Arnible.MathModeling.Formal.xunit\Arnible.MathModeling.Formal.xunit.csproj" />
     <ProjectReference Include="..\Arnible.MathModeling.Formal\Arnible.MathModeling.Formal.csproj" />
-    <ProjectReference Include="..\Arnible.MathModelling.Formal.xunit\Arnible.MathModelling.Formal.xunit.csproj" />
   </ItemGroup>
 
 </Project>
