@@ -8,8 +8,8 @@ namespace Arnible.MathModeling.Export
   {
     SerializationMediaType MediaType { get; }
 
-    ValueTask SerializeHeader(Stream output, CancellationToken cancellationToken);
+    Task SerializeHeader(Stream output, CancellationToken cancellationToken);
 
-    ValueTask SerializeRecord(T record, Stream output, CancellationToken cancellationToken);
+    Task SerializeRecord(T record, Stream output, CancellationToken cancellationToken);
   }
 }

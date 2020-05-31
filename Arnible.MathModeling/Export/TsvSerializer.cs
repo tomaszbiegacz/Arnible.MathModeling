@@ -30,7 +30,7 @@ namespace Arnible.MathModeling.Export
 
     public SerializationMediaType MediaType => SerializationMediaType.TabSeparatedValues;
 
-    public async ValueTask SerializeHeader(Stream output, CancellationToken cancellationToken)
+    public async Task SerializeHeader(Stream output, CancellationToken cancellationToken)
     {
       // stream should be dispose with "output"
       TextWriter writer = CreateTextWriter(output);
@@ -40,7 +40,7 @@ namespace Arnible.MathModeling.Export
       await writer.FlushAsync();
     }
 
-    public async ValueTask SerializeRecord(T record, Stream output, CancellationToken cancellationToken)
+    public async Task SerializeRecord(T record, Stream output, CancellationToken cancellationToken)
     {
       // stream should be disposed with "output"
       TextWriter writer = CreateTextWriter(output);

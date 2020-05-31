@@ -7,7 +7,7 @@ namespace Arnible.MathModeling.Export
 {
   public interface IRecordSerializerStream<T> : IAsyncDisposable where T: struct
   {
-    ValueTask Serialize(T record, CancellationToken cancellationToken);
+    Task Serialize(T record, CancellationToken cancellationToken);
   }
 
   public class RecordSerializerStream<T> : IRecordSerializerStream<T> where T : struct
@@ -25,7 +25,7 @@ namespace Arnible.MathModeling.Export
 
     public uint RecordNumber { get; private set; } = 0;
 
-    public async ValueTask Serialize(T record, CancellationToken cancellationToken)
+    public async Task Serialize(T record, CancellationToken cancellationToken)
     {
       if (!_isHeaderPrinted)
       {

@@ -7,7 +7,7 @@ namespace Arnible.MathModeling.Export
 {
   public static class IRecordSerializerExtension
   {
-    public static async ValueTask Serialize<T>(
+    public static async Task Serialize<T>(
       this IRecordSerializer<T> serializer,
       IEnumerable<T> records,
       Stream output,

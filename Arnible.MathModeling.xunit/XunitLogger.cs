@@ -1,6 +1,7 @@
 ﻿using Arnible.MathModeling.Export;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using Xunit.Abstractions;
 
 namespace Arnible.MathModeling
@@ -21,6 +22,7 @@ namespace Arnible.MathModeling
     public void Log(string message)
     {
       _output.WriteLine(message);
+      Debug.WriteLine(message);
     }
 
     //
@@ -29,7 +31,7 @@ namespace Arnible.MathModeling
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
     {
-      _output.WriteLine(state.ToString());
+      Log(state.ToString());
     }
 
     public bool IsEnabled(LogLevel logLevel) => true;

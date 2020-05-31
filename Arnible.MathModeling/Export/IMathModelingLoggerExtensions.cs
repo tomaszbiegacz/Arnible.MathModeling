@@ -13,7 +13,7 @@ namespace Arnible.MathModeling.Export
       return result;
     }
 
-    public static async ValueTask LogDataSet<T>(
+    public static async Task LogDataSet<T>(
       this IMathModelingLogger logger,
       string name, IEnumerable<T> records,
       CancellationToken cancellationToken = default) where T : struct
