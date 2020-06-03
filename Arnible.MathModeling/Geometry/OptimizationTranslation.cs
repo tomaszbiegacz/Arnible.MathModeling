@@ -4,7 +4,7 @@ using System;
 namespace Arnible.MathModeling.Geometry
 {
   public static class OptimizationTranslation
-  {
+  {    
     /// <summary>
     /// Estimated change to reach minimum in 1 dimentional case
     /// </summary>
@@ -25,12 +25,12 @@ namespace Arnible.MathModeling.Geometry
           throw new InvalidOperationException($"Value {value}, derivative {derivative}");
         }
       }
-    }
+    }    
 
     /// <summary>
     /// Estimated change to reach minimum in the axis direction
     /// </summary>
-    public static NumberTranslationVector ForMinimumEquals0(
+    public static NumberTranslationVector CartesianForMinimumEquals0(
       Number value,
       uint cartesiaxAxisNumber,
       IDerivative1 derivative)
@@ -40,9 +40,21 @@ namespace Arnible.MathModeling.Geometry
     }
 
     /// <summary>
+    /// Estimated change to reach minimum in direction of an angle
+    /// </summary>
+    public static HypersphericalAngleTranslationVector HypersphericalForMinimumEquals0(
+      Number value,
+      uint anglePos,
+      IDerivative1 derivative)
+    {
+      Number rDelta = ForMinimumEquals0(value, derivative);
+      return new HypersphericalAngleTranslationVector(NumberVector.FirstNonZeroValueAt(pos: anglePos, value: rDelta).ToAngleVector());
+    }
+
+    /// <summary>
     /// Estimated change to reach minimum in the angle vector direction
     /// </summary>
-    public static NumberTranslationVector ForMinimumEquals0(
+    public static NumberTranslationVector CartesianForMinimumEquals0(
       Number value,
       HypersphericalAngleVector direction,
       IDerivative1 derivative)
@@ -62,10 +74,11 @@ namespace Arnible.MathModeling.Geometry
       return new NumberTranslationVector(hc.ToCartesianView().Coordinates);
     }
 
+    
     /// <summary>
     /// Estimated change to reach minimum in direction of an angle
     /// </summary>
-    public static NumberTranslationVector ForMinimumEquals0(
+    public static NumberTranslationVector CartesianForMinimumEquals0(
       Number value,
       HypersphericalCoordinateOnAxisView currentHcView,
       uint anglePos,
@@ -87,6 +100,6 @@ namespace Arnible.MathModeling.Geometry
       CartesianCoordinate newCartesian = newHc.ToCartesianView();
 
       return new NumberTranslationVector(newCartesian.Coordinates - currentHcView.Coordinates);
-    }
+    }    
   }
 }

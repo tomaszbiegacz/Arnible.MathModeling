@@ -152,7 +152,7 @@ namespace Arnible.MathModeling.Geometry
       if (Angles.Any())
       {
         Number step = Angle.RightAngle / _rightAngleResolution;
-        return new HypersphericalAngleVector(_angles.Select(v => v * step).ToVector());
+        return _angles.Select(v => v * step).ToAngleVector();
       }
       else
       {

@@ -1,7 +1,9 @@
 ﻿using Arnible.MathModeling.Algebra;
+using Arnible.MathModeling.Export;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using static Arnible.MathModeling.MetaMath;
 
 namespace Arnible.MathModeling.Geometry
@@ -9,14 +11,46 @@ namespace Arnible.MathModeling.Geometry
   /// <summary>
   /// Hyperspherical angle vector, where first coordinate angle range over [-π, π] and others range over [-π/2, π/2].
   /// </summary>
+  [Serializable]
+  [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
   public readonly struct HypersphericalAngleVector : IEquatable<HypersphericalAngleVector>, IEquatable<Number>, IReadOnlyList<Number>
   {
     private readonly NumberVector _angles;
+
+    class Serializer : ToStringSerializer<HypersphericalAngleVector>
+    {
+      public Serializer() : base(v => v.ToString(CultureInfo.InvariantCulture))
+      {
+        // intentionally empty
+      }
+    }
 
     public static HypersphericalAngleVector CreateOrthogonalDirection(uint anglePos, Number value)
     {
       return new HypersphericalAngleVector(NumberVector.FirstNonZeroValueAt(pos: anglePos, value: value));
     }    
+
+    private static IEnumerable<Number> Normalize(IEnumerable<Number> values)
+    {
+      bool isFirst = true;
+      foreach (Number v in values)
+      {
+        if (isFirst)
+        {
+          yield return RoundAngleFullCycle(v);
+          isFirst = false;
+        }
+        else
+        {
+          yield return RoundAngleHalfCycle(v);
+        }
+      }
+    }
+
+    internal static HypersphericalAngleVector Create(IEnumerable<Number> parameters)
+    {
+      return new HypersphericalAngleVector(Normalize(parameters).ToVector());
+    }
 
     public HypersphericalAngleVector(params Number[] angles)
       : this(new NumberVector(angles))
@@ -24,7 +58,7 @@ namespace Arnible.MathModeling.Geometry
       // intentionally empty
     }
 
-    public HypersphericalAngleVector(NumberVector angles)
+    private HypersphericalAngleVector(NumberVector angles)
     {
       if (angles.Any())
       {
@@ -95,6 +129,8 @@ namespace Arnible.MathModeling.Geometry
 
     public override string ToString() => _angles.ToString();
 
+    public string ToString(CultureInfo culture) => _angles.ToString(culture);
+
     public override int GetHashCode() => _angles.GetHashCode();
 
     public static bool operator ==(HypersphericalAngleVector a, HypersphericalAngleVector b) => a.Equals(b);
@@ -108,7 +144,7 @@ namespace Arnible.MathModeling.Geometry
 
     //
     // query operators
-    //        
+    //
 
     public HypersphericalAngleVector GetOrthogonalDirection(uint anglePos)
     {
@@ -180,22 +216,31 @@ namespace Arnible.MathModeling.Geometry
         return Angle.HalfCycle + v;
 
       return v;
-    }
+    }    
 
     private static IEnumerable<Number> AddAngles(NumberVector a, NumberVector b)
-    {      
-      yield return RoundAngleFullCycle(a[0] + b[0]);
+    {
+      return Normalize(a.Zip(b, (v1, v2) => (v1 ?? 0) + (v2 ?? 0)));      
+    }
 
-      uint resultLength = Math.Max(a.Length, b.Length);
-      for (uint i = 1; i < resultLength; ++i)
-      {
-        yield return RoundAngleHalfCycle(a.GetOrDefault(i) + b.GetOrDefault(i));
-      }
+    private static IEnumerable<Number> ScaleAngles(NumberVector a, Number b)
+    {
+      return Normalize(a * b);
     }
 
     public static HypersphericalAngleVector operator +(HypersphericalAngleVector a, HypersphericalAngleVector b)
     {
       return new HypersphericalAngleVector(AddAngles(a, b).ToVector());
+    }
+
+    public static HypersphericalAngleVector operator *(HypersphericalAngleVector a, Number b)
+    {
+      return new HypersphericalAngleVector(ScaleAngles(a, b).ToVector());
+    }
+
+    public static HypersphericalAngleVector operator *(Number a, HypersphericalAngleVector b)
+    {
+      return new HypersphericalAngleVector(ScaleAngles(b, a).ToVector());
     }
   }
 }

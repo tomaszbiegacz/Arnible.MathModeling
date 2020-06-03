@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Export
     public static async Task LogDataSet<T>(
       this IMathModelingLogger logger,
       string name, IEnumerable<T> records,
-      CancellationToken cancellationToken = default) where T : struct
+      CancellationToken cancellationToken) where T : struct
     {
       await using RecordSerializerFileStream<T> result = TsvSerializer<T>.ToTempFile();
       logger.Log($"Data set {name}: {result.Destination}");

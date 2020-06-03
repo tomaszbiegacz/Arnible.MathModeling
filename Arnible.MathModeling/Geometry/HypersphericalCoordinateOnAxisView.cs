@@ -99,11 +99,11 @@ namespace Arnible.MathModeling.Geometry
       uint anglesCount = _p.Angles.Length;
       Number[] x = LinqEnumerable.Repeat<Number>(0, anglesCount).ToArray();
 
-      yield return new HypersphericalAngleVector(x.ToVector());
+      yield return x.ToAngleVector();
       for (uint i = 0; i < anglesCount; ++i)
       {
         x[i] = Angle.RightAngle;
-        yield return new HypersphericalAngleVector(x.ToVector());
+        yield return x.ToAngleVector();
         x[i] = 0;
       }
     }
