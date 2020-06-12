@@ -1,19 +1,50 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
-using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Geometry
 {
   public static class INumberRangeDomainExtensions
   {
-    public static Number GetValidTranslationRatio(this INumberRangeDomain domain, IEnumerable<Number> value, NumberTranslationVector delta)
+    //
+    // IsValidTranslation
+    //
+
+    public static bool IsValidTranslation(
+      this INumberRangeDomain domain,
+      HypersphericalCoordinate value,
+      HypersphericalAngleTranslationVector delta)
     {
-      return value.Zip(delta, (v, t) => domain.GetValidTranslationRatio(v ?? 0, t ?? 0)).MinDefensive();
+      domain.Validate(value.ToCartesianView().Coordinates);
+      NumberVector coordinates = delta.Translate(value).ToCartesianView().Coordinates;
+      return coordinates.All(v => domain.IsValid(v));
     }
 
-    private static NumberTranslationVector GetValidTranslationEnum(INumberRangeDomain domain, IEnumerable<Number> value, NumberTranslationVector delta)
+    //
+    // GetValidTranslation
+    //    
+
+    public static HypersphericalAngleTranslationVector GetValidTranslation(
+      this INumberRangeDomain domain,
+      HypersphericalCoordinate value,
+      HypersphericalAngleTranslationVector delta)
     {
-      Number ratio = GetValidTranslationRatio(domain, value, delta);
+      domain.Validate(value.ToCartesianView().Coordinates);
+      uint[] nonZeroAngles = LinqEnumerable.RangeUint(0, delta.Length).Where(i => delta[i] != 0).ToArray();
+      if (nonZeroAngles.Length != 1)
+      {
+        throw new ArgumentException("Exactly one angle has to be non-negative. Other options are not yet supported.");
+      }
+      if (nonZeroAngles[0] != delta.Length - 1)
+      {
+        throw new InvalidOperationException($"Something went wrong, only last angle should be not empty, in {delta}");
+      }
+
+      uint anglePos = delta.Length - 1;
+      Number ratio = domain.GetValidTranslationRatioForLastAngle(
+        radius: value.R,
+        currentAngle: value.Angles.GetOrDefault(anglePos),
+        angleDelta: delta[anglePos]);
+
       if (ratio == 0)
       {
         return default;
@@ -28,18 +59,17 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public static NumberTranslationVector GetValidTranslation(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)
-    {
-      return GetValidTranslationEnum(domain, value, delta);
-    }
+    //
+    // Translate
+    //
 
-    public static NumberTranslationVector GetValidTranslation(this INumberRangeDomain domain, NumberArray value, NumberTranslationVector delta)
+    public static HypersphericalCoordinate Translate(
+      this INumberRangeDomain domain,
+      HypersphericalCoordinate value,
+      HypersphericalAngleTranslationVector delta)
     {
-      if (delta.Length > value.Length)
-      {
-        throw new ArgumentException(nameof(value));
-      }
-      return GetValidTranslationEnum(domain, value, delta);
+      HypersphericalAngleTranslationVector tr = domain.GetValidTranslation(value, delta);
+      return new HypersphericalCoordinate(value.R, tr.Translate(value.Angles));
     }
   }
 }

@@ -1,7 +1,7 @@
 ﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.xunit;
 using Xunit;
 using static Arnible.MathModeling.Term;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var hc = new HypersphericalCoordinate(r, new HypersphericalAngleVector(φ));
       var actual = expression.ToSpherical(cc, hc);
 
-      AssertNumber.Equal(expected, actual);
+      AreEqual(expected, actual);
     }
   }
 }

@@ -19,34 +19,36 @@ namespace Arnible.MathModeling
       }
     }
 
+    private static IReadOnlyList<Number> Empty = ImmutableList<Number>.Empty;
+
     public static NumberArray Repeat(Number value, uint length)
     {
       return new NumberArray(LinqEnumerable.Repeat(value, length).ToImmutableArray());
     }
 
-    private readonly IImmutableList<Number> _values;
+    private readonly ImmutableArray<Number> _values;
 
     internal static NumberArray Create(IEnumerable<Number> src)
     {
-      return new NumberArray(src?.ToImmutableList());
+      return new NumberArray(src?.ToImmutableArray() ?? ImmutableArray<Number>.Empty);
     }
 
     public NumberArray(params Number[] parameters)
-      : this(parameters.ToImmutableList())
+      : this(parameters.ToImmutableArray())
     {
       // intentionally empty
     }
 
-    private NumberArray(IImmutableList<Number> parameters)
+    private NumberArray(ImmutableArray<Number> parameters)
     {
-      _values = parameters.Count > 0 ? parameters : null;
+      _values = parameters;
     }
 
     //
     // Properties
     //        
 
-    private IImmutableList<Number> Values => _values ?? ImmutableList<Number>.Empty;
+    private IReadOnlyList<Number> Values => _values.IsDefaultOrEmpty ? Empty : _values;
 
     public Number this[uint pos]
     {
@@ -61,7 +63,7 @@ namespace Arnible.MathModeling
 
     public uint Length => (uint)(Values.Count);
 
-    public bool IsZero => _values == null || _values.All(v => v == 0);
+    public bool IsZero => _values.IsDefaultOrEmpty || _values.All(v => v == 0);
 
     //
     // IReadOnlyList
@@ -120,12 +122,12 @@ namespace Arnible.MathModeling
 
     public NumberArray Transform(Func<Number, Number> transformation)
     {
-      return new NumberArray(Values.Select(transformation).ToImmutableList());
+      return new NumberArray(Values.Select(transformation).ToImmutableArray());
     }
 
     public NumberArray Transform(Func<uint, Number, Number> transformation)
     {
-      return new NumberArray(Values.Select(transformation).ToImmutableList());
+      return new NumberArray(Values.Select(transformation).ToImmutableArray());
     }
 
     public IEnumerable<uint> Indexes() => LinqEnumerable.RangeUint(0, Length);

@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics;
 using Xunit.Abstractions;
 
-namespace Arnible.MathModeling
+namespace Arnible.MathModeling.xunit
 {
   public sealed class XunitLogger : IMathModelingLogger, ILogger, IDisposable
   {

@@ -1,4 +1,5 @@
 ﻿using Xunit;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Test
 {
@@ -7,19 +8,19 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Product_OfThree_Defensive()
     {
-      Assert.Equal(24d, (new[] { 4d, 2d, 3d }).ProductDefensive());
+      AreEqual(24d, (new[] { 4d, 2d, 3d }).ProductDefensive());
     }
 
     [Fact]
     public void Product_OfThree_Default()
     {
-      Assert.Equal(24d, (new[] { 4d, 2d, 3d }).ProductWithDefault());
+      AreEqual(24d, (new[] { 4d, 2d, 3d }).ProductWithDefault());
     }
 
     [Fact]
     public void Product_Default()
     {
-      Assert.Equal(1d, LinqEnumerable.Empty<double>().ProductWithDefault());
+      AreEqual(1d, LinqEnumerable.Empty<double>().ProductWithDefault());
     }
   }
 }

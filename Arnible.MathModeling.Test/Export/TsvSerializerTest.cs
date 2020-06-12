@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Export.Test
 {
@@ -40,11 +41,11 @@ namespace Arnible.MathModeling.Export.Test
         result = Encoding.UTF8.GetString(bytes);
       }
 
-      string[] lines = result.Split(Environment.NewLine);
-      Assert.Equal(3, lines.Length);
-      Assert.Equal(new[] { "ByteValue", "SbyteValue", "UShortValue", "ShortValue", "UIntValue", "IntValue", "ULongValue", "LongValue", "StringValue", "DoubleValue", "NumberValue", "NumberVectorValue" }, lines[0].Split('\t'));
-      Assert.Equal("1\t-1\t2\t-2\t3\t-3\t4\t-4\tvalue\t1.1\t1.2\t[1 2]", lines[1]);
-      Assert.Empty(lines[2]);
+      string[] lines = result.Split('\n');
+      AreEqual(3, lines.Length);
+      AreEquals(new[] { "ByteValue", "SbyteValue", "UShortValue", "ShortValue", "UIntValue", "IntValue", "ULongValue", "LongValue", "StringValue", "DoubleValue", "NumberValue", "NumberVectorValue" }, lines[0].Split('\t'));
+      AreEqual("1\t-1\t2\t-2\t3\t-3\t4\t-4\tvalue\t1.1\t1.2\t[1 2]", lines[1]);
+      IsEmpty(lines[2]);
     }
 
     [Fact]
@@ -69,11 +70,11 @@ namespace Arnible.MathModeling.Export.Test
         result = Encoding.UTF8.GetString(bytes);
       }
 
-      string[] lines = result.Split(Environment.NewLine);
-      Assert.Equal(3, lines.Length);
-      Assert.Equal(new[] { "RootValue", "Record_Value", "Nullable_NotPresentValue", "Nullable_NotPresentOther", "OtherValue" }, lines[0].Split('\t'));
-      Assert.Equal("1\t2\t\t\t3", lines[1]);
-      Assert.Empty(lines[2]);
+      string[] lines = result.Split('\n');
+      AreEqual(3, lines.Length);
+      AreEquals(new[] { "RootValue", "Record_Value", "Nullable_NotPresentValue", "Nullable_NotPresentOther", "OtherValue" }, lines[0].Split('\t'));
+      AreEqual("1\t2\t\t\t3", lines[1]);
+      IsEmpty(lines[2]);
     }
 
     [Fact]
@@ -98,12 +99,12 @@ namespace Arnible.MathModeling.Export.Test
         var bytes = stream.ToArray();
         result = Encoding.UTF8.GetString(bytes);
       }
-
-      string[] lines = result.Split(Environment.NewLine);
-      Assert.Equal(3, lines.Length);
-      Assert.Equal(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
-      Assert.Equal("\t\t2\t3\t\t", lines[1]);
-      Assert.Empty(lines[2]);
+      
+      string[] lines = result.Split('\n');
+      AreEqual(3, lines.Length);
+      AreEquals(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
+      AreEqual("\t\t2\t3\t\t", lines[1]);
+      IsEmpty(lines[2]);
     }
 
     [Fact]
@@ -128,11 +129,11 @@ namespace Arnible.MathModeling.Export.Test
         result = Encoding.UTF8.GetString(bytes);
       }
 
-      string[] lines = result.Split(Environment.NewLine);
-      Assert.Equal(3, lines.Length);
-      Assert.Equal(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
-      Assert.Equal("\t\t2\t3\t\t", lines[1]);
-      Assert.Empty(lines[2]);
+      string[] lines = result.Split('\n');
+      AreEqual(3, lines.Length);
+      AreEquals(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
+      AreEqual("\t\t2\t3\t\t", lines[1]);
+      IsEmpty(lines[2]);
     }
 
     [Fact]
@@ -154,11 +155,11 @@ namespace Arnible.MathModeling.Export.Test
         result = Encoding.UTF8.GetString(bytes);
       }
 
-      string[] lines = result.Split(Environment.NewLine);
-      Assert.Equal(3, lines.Length);
-      Assert.Equal(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
-      Assert.Equal("\t\t\t\t\t", lines[1]);
-      Assert.Empty(lines[2]);
+      string[] lines = result.Split('\n');
+      AreEqual(3, lines.Length);
+      AreEquals(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
+      AreEqual("\t\t\t\t\t", lines[1]);
+      IsEmpty(lines[2]);
     }
 
     [Fact]
@@ -182,11 +183,11 @@ namespace Arnible.MathModeling.Export.Test
         var bytes = stream.ToArray();
         string result = Encoding.UTF8.GetString(bytes);
 
-        string[] lines = result.Split(Environment.NewLine);
-        Assert.Equal(3, lines.Length);
-        Assert.Equal(new[] { "Output", "Error", "ErrorVector", "SubOutput_Property" }, lines[0].Split('\t'));
-        Assert.Equal("1\t2\t[1 2]\t5", lines[1]);
-        Assert.Empty(lines[2]);
+        string[] lines = result.Split('\n');
+        AreEqual(3, lines.Length);
+        AreEquals(new[] { "Output", "Error", "ErrorVector", "SubOutput_Property" }, lines[0].Split('\t'));
+        AreEqual("1\t2\t[1 2]\t5", lines[1]);
+        IsEmpty(lines[2]);
       }
 
       var recordVector = new TestGenericRecord<NumberVector>
@@ -204,11 +205,11 @@ namespace Arnible.MathModeling.Export.Test
         var bytes = stream.ToArray();
         string result = Encoding.UTF8.GetString(bytes);
 
-        string[] lines = result.Split(Environment.NewLine);
-        Assert.Equal(3, lines.Length);
-        Assert.Equal(new[] { "Output", "Error", "ErrorVector", "SubOutput_Property" }, lines[0].Split('\t'));
-        Assert.Equal("[1 2]\t2\t[1 2]\t[3 5]", lines[1]);
-        Assert.Empty(lines[2]);
+        string[] lines = result.Split('\n');
+        AreEqual(3, lines.Length);
+        AreEquals(new[] { "Output", "Error", "ErrorVector", "SubOutput_Property" }, lines[0].Split('\t'));
+        AreEqual("[1 2]\t2\t[1 2]\t[3 5]", lines[1]);
+        IsEmpty(lines[2]);
       }
     }
   }

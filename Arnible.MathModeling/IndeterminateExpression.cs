@@ -5,14 +5,14 @@ namespace Arnible.MathModeling
 {
   public readonly struct IndeterminateExpression : IEquatable<IndeterminateExpression>, IComparable<IndeterminateExpression>, IPolynomialOperation
   {
-    private readonly ElementaryUnaryOperation _modifier;    
+    private readonly ElementaryUnaryOperation _modifier;
 
     private IndeterminateExpression(char name, ElementaryUnaryOperation modifier, uint power)
     {
       _modifier = modifier;
       Variable = name;
       Power = power;
-    }    
+    }
 
     public static implicit operator IndeterminateExpression(char name) => new IndeterminateExpression(name, ElementaryUnaryOperation.Identity, 1);
     public static IndeterminateExpression Sin(char name) => new IndeterminateExpression(name, ElementaryUnaryOperation.Sine, 1);
@@ -98,7 +98,21 @@ namespace Arnible.MathModeling
 
     public bool HasUnaryModifier => _modifier != ElementaryUnaryOperation.Identity;
 
-    public double SimplifyForConstant(double value) => SimplifyForConstant(_modifier, value);    
+    public double SimplifyForConstant(double value) => SimplifyForConstant(_modifier, value);
+
+    private static double RoundedSin(double value)
+    {
+      if (value.NumericEquals(0)) return 0;
+      else if (value.NumericEquals(Angle.RightAngle)) return 1;
+      else return Math.Sin(value);
+    }
+
+    private static double RoundedCos(double value)
+    {
+      if (value.NumericEquals(0)) return 1;
+      else if (value.NumericEquals(Angle.RightAngle)) return 0;
+      else return Math.Cos(value);
+    }
 
     private static double SimplifyForConstant(ElementaryUnaryOperation modifier, double value)
     {
@@ -107,13 +121,9 @@ namespace Arnible.MathModeling
         case ElementaryUnaryOperation.Identity:
           return value;
         case ElementaryUnaryOperation.Sine:
-          if (value.NumericEquals(0)) return 0;
-          else if (value.NumericEquals(Angle.RightAngle)) return 1;
-          else return Math.Sin(value);
+          return RoundedSin(value);
         case ElementaryUnaryOperation.Cosine:
-          if (value.NumericEquals(0)) return 1;
-          else if (value.NumericEquals(Angle.RightAngle)) return 0;
-          else return Math.Cos(value);
+          return RoundedCos(value);
         default:
           throw new InvalidOperationException("Unknown modifier: " + modifier);
       }
@@ -190,7 +200,7 @@ namespace Arnible.MathModeling
           yield return ei2.Current;
           isEi2Valid = ei2.MoveNext();
         }
-      }      
+      }
     }
 
     public IndeterminateExpression ToPower(uint power)
@@ -207,7 +217,7 @@ namespace Arnible.MathModeling
       if (power == 0 || power > Power)
       {
         throw new ArgumentException(nameof(power));
-      }      
+      }
       return new IndeterminateExpression(Variable, _modifier, Power - power);
     }
 
@@ -262,14 +272,15 @@ namespace Arnible.MathModeling
       }
       else
       {
+        double value = x[Variable];
         switch (_modifier)
         {
           case ElementaryUnaryOperation.Identity:
-            return x[Variable].ToPower(Power);
+            return value.ToPower(Power);
           case ElementaryUnaryOperation.Sine:
-            return Math.Sin(x[Variable]).ToPower(Power);
+            return RoundedSin(value).ToPower(Power);
           case ElementaryUnaryOperation.Cosine:
-            return Math.Cos(x[Variable]).ToPower(Power);
+            return RoundedCos(value).ToPower(Power);
           default:
             throw new InvalidOperationException("Unknown modifier: " + _modifier);
         }

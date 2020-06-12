@@ -18,7 +18,7 @@ namespace Arnible.MathModeling
 
     private PolynomialDivision(Polynomial numerator, Polynomial denominator)
     {
-      if (denominator.IsZero)
+      if (denominator == 0)
       {
         throw new DivideByZeroException();
       }
@@ -31,7 +31,7 @@ namespace Arnible.MathModeling
       else if (numerator.IsConstant)
       {
         // denominator is polynomial
-        if (numerator.IsZero)
+        if (numerator == 0)
         {
           _numerator = 0;
           _denominator = default;
@@ -39,7 +39,7 @@ namespace Arnible.MathModeling
         else
         {
           _numerator = numerator;
-          _denominator = _numerator.IsZero ? default : denominator;
+          _denominator = _numerator == 0 ? default : denominator;
         }
       }
       else
@@ -65,8 +65,8 @@ namespace Arnible.MathModeling
       }
       else
       {
-        var commonVariables = GetCommonIdentityVariables(numerator: numerator, denominator: denominator);
-        if (commonVariables.Any())
+        var commonVariables = GetCommonIdentityVariables(numerator: numerator, denominator: denominator).ToArray();
+        if (commonVariables.Length > 0)
         {
           numerator = numerator.ReduceByCommon(commonVariables);
           denominator = denominator.ReduceByCommon(commonVariables);
@@ -84,7 +84,7 @@ namespace Arnible.MathModeling
         if (denominatorVariables.Count > 0)
         {
           var commonVariables = numeratorVariables.ZipCommon(denominatorVariables, Math.Min);
-          return commonVariables.Select(kv => new VariableTerm(variable: kv.Key, power: kv.Value)).ToArray();
+          return commonVariables.Select(kv => new VariableTerm(variable: kv.Key, power: kv.Value));
         }
       }
       return LinqEnumerable.Empty<VariableTerm>();
@@ -156,8 +156,8 @@ namespace Arnible.MathModeling
         return _numerator.ToString(cultureInfo);
       else
       {
-        string numerator = _numerator.HasOneTerm ? _numerator.ToString(cultureInfo) : $"({ _numerator.ToString(cultureInfo) })";
-        string denominator = _denominator.HasOneTerm ? _denominator.ToString(cultureInfo) : $"({ _denominator.ToString(cultureInfo) })";
+        string numerator = _numerator.IsSingleTerm ? _numerator.ToString(cultureInfo) : $"({ _numerator.ToString(cultureInfo) })";
+        string denominator = _denominator.IsSingleTerm ? _denominator.ToString(cultureInfo) : $"({ _denominator.ToString(cultureInfo) })";
         return $"{numerator}/{denominator}";
       }
     }
@@ -177,9 +177,7 @@ namespace Arnible.MathModeling
      * Properties
      */
 
-    public bool IsZero => IsPolynomial && _numerator.IsZero;
-
-    public bool IsPolynomial => _denominator.IsZero;
+    public bool IsPolynomial => _denominator == 0;
 
     public bool IsConstant
     {
@@ -486,7 +484,7 @@ namespace Arnible.MathModeling
       {
         Polynomial denominatorDerivative = _denominator.DerivativeBy(name);
         Polynomial numeratorDerivative = _numerator.DerivativeBy(name);
-        if (denominatorDerivative.IsZero)
+        if (denominatorDerivative == 0)
         {
           // this is necessary, since library doesn't support yet polynomials reduction/division
           return SimplifyPolynomialDivision(numeratorDerivative, _denominator);
@@ -512,7 +510,7 @@ namespace Arnible.MathModeling
       {
         Polynomial denominatorDerivative = _denominator.DerivativeBy(name);
         Polynomial numeratorDerivative = _numerator.DerivativeBy(name);
-        if (denominatorDerivative.IsZero)
+        if (denominatorDerivative == 0)
         {
           // this is necessary, since library doesn't support yet polynomials reduction/division
           return SimplifyPolynomialDivision(numeratorDerivative, _denominator).DerivativeBy(name);

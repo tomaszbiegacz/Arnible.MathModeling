@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Arnible.MathModeling.Algebra
+﻿namespace Arnible.MathModeling.Algebra
 {
   /// <summary>
   /// Dump number range domain without validation for formal tests
@@ -12,22 +10,19 @@ namespace Arnible.MathModeling.Algebra
     public Number Maximum { get; }
 
     public NumberRangeDomain(Number minimum, Number maximum)
-    {      
+    {
       Minimum = minimum;
       Maximum = maximum;
     }
 
     public double Width => (double)(Maximum - Minimum);
 
-    public Number Validate(Number value) => value;
+    public Number Translate(Number value, Number delta) => value + delta;
 
-    public Number Translate(Number value, Number delta) => value + delta;    
+    public Number GetValidTranslationRatio(Number value, Number delta) => 1;
 
-    public bool IsValidTranslation(Number value, Number delta)
-    {
-      return true;
-    }
+    public bool IsValid(Number value) => true;
 
-    public Number GetValidTranslationRatio(Number value, Number delta) => 1;    
+    public Number GetValidTranslationRatioForLastAngle(Number radius, Number currentAngle, Number angleDelta) => 1;
   }
 }

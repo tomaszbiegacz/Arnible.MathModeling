@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Text;
 
@@ -10,47 +11,69 @@ namespace Arnible.MathModeling
   {
     const char InPlaceVariableReplacement = '$';
 
-    private readonly IEnumerable<PolynomialTerm> _terms;
+    private readonly ImmutableArray<PolynomialTerm> _terms;
 
     internal Polynomial(params PolynomialTerm[] terms)
     {
-      _terms = PolynomialTerm.Simplify(terms);
+      _terms = PolynomialTerm.Simplify(terms).ToImmutableArray();
     }
 
-    private Polynomial(IEnumerable<PolynomialTerm> terms)
+    private Polynomial(ImmutableArray<PolynomialTerm> terms)
     {
-      _terms = terms ?? throw new ArgumentNullException(nameof(terms));
+      _terms = terms;
     }
 
     private Polynomial(double v)
     {
       if (v == 0)
       {
-        _terms = LinqEnumerable.Empty<PolynomialTerm>();
+        _terms = default;
       }
       else
       {
-        _terms = new PolynomialTerm[] { v };
+        _terms = ImmutableArray<PolynomialTerm>.Empty.Add(v);
       }
     }
 
     private Polynomial(char v)
     {
-      _terms = new PolynomialTerm[] { v };
+      _terms = ImmutableArray<PolynomialTerm>.Empty.Add(v);
     }
 
     private static Polynomial CreateSimplified(IEnumerable<PolynomialTerm> terms)
     {
-      return new Polynomial(PolynomialTerm.Simplify(terms.ToArray()));
+      return new Polynomial(PolynomialTerm.Simplify(terms.ToArray()).ToImmutableArray());
     }
 
     public static implicit operator Polynomial(PolynomialTerm v) => new Polynomial(v);
     public static implicit operator Polynomial(double value) => new Polynomial(value);
-    public static implicit operator Polynomial(char name) => new Polynomial(name);
+    public static implicit operator Polynomial(char name) => new Polynomial(name);    
 
-    private IEnumerable<PolynomialTerm> Terms => _terms ?? LinqEnumerable.Empty<PolynomialTerm>();
+    public bool Equals(Polynomial other)
+    {
+      if(IsConstant && other.IsConstant)
+      {
+        double a = (double)this;
+        double b = (double)other;
+        return a.NumericEquals(b);
+      }
+      
+      if(IsSingleTerm != other.IsSingleTerm)
+      {
+        return false;
+      }
 
-    public bool Equals(Polynomial other) => (other - this).IsZero;
+      Polynomial result = this - other;
+      if(!result.IsConstant)
+      {
+        return false;
+      }
+      else
+      {
+        double comparisionResult = (double)result;
+        return comparisionResult.NumericEquals(0);
+      }
+    }
 
     public bool Equals(PolynomialDivision other) => other.IsPolynomial ? Equals((Polynomial)other) : false;
 
@@ -82,7 +105,7 @@ namespace Arnible.MathModeling
 
     public string ToString(CultureInfo cultureInfo)
     {
-      if (IsZero)
+      if (_terms.IsDefaultOrEmpty)
       {
         return "0";
       }
@@ -90,7 +113,7 @@ namespace Arnible.MathModeling
       {
         var result = new StringBuilder();
         bool printOperator = false;
-        foreach (var variable in Terms)
+        foreach (var variable in _terms)
         {
           if (printOperator && variable.HasPositiveCoefficient)
           {
@@ -114,20 +137,28 @@ namespace Arnible.MathModeling
      * Properties
      */
 
-    public bool IsZero => !Terms.Any();
+    private IEnumerable<PolynomialTerm> Terms => _terms.IsDefaultOrEmpty ? LinqEnumerable.Empty<PolynomialTerm>() : _terms;
 
-    public bool HasOneTerm => Terms.Count() < 2;
+    public bool IsSingleTerm
+    {
+      get
+      {
+        return _terms.IsDefaultOrEmpty || _terms.Length <= 1;
+      }
+    }
 
     public bool IsConstant
     {
       get
       {
-        if (HasOneTerm)
-          return Terms.SingleOrDefault().IsConstant;
+        if (_terms.IsDefaultOrEmpty)
+          return true;
+        else if (_terms.Length == 1)
+          return _terms[0].IsConstant;
         else
           return false;
       }
-    }
+    }    
 
     /*
      * Query
@@ -194,14 +225,14 @@ namespace Arnible.MathModeling
 
     public static Polynomial operator *(PolynomialTerm a, Polynomial b)
     {
-      if (a.IsZero)
+      if (a == 0)
       {
         return 0;
       }
       else
       {
         // no need for simplification
-        return new Polynomial(b.Terms.Select(t => a * t));
+        return new Polynomial(b.Terms.Select(t => a * t).ToImmutableArray());
       }
     }
 
@@ -216,7 +247,7 @@ namespace Arnible.MathModeling
       else
       {
         // no need for simplification
-        return new Polynomial(b.Terms.Select(t => a * t));
+        return new Polynomial(b.Terms.Select(t => a * t).ToImmutableArray());
       }
     }
 
@@ -264,7 +295,7 @@ namespace Arnible.MathModeling
     internal Polynomial ReduceByCommon(IEnumerable<VariableTerm> terms)
     {
       // no need to simplify
-      return new Polynomial(Terms.Select(t => t.ReduceByCommon(terms)));
+      return new Polynomial(Terms.Select(t => t.ReduceByCommon(terms)).ToImmutableArray());
     }
 
     public static Polynomial operator %(Polynomial a, Polynomial b)
@@ -308,29 +339,29 @@ namespace Arnible.MathModeling
         reminder = default;
         return this / (double)b;
       }
-      if (IsZero)
+      if (_terms.IsDefaultOrEmpty)
       {
         reminder = default;
         return 0;
       }
 
-      PolynomialTerm denominator = b.Terms.First();
-      Polynomial denominatorSuffix = new Polynomial(b.Terms.SkipExactly(1));        // no need for simplification
+      PolynomialTerm denominator = b._terms.First();
+      Polynomial denominatorSuffix = new Polynomial(b._terms.SkipExactly(1).ToImmutableArray());        // no need for simplification
       var resultTerms = new List<PolynomialTerm>();
       reminder = TryReduce(this, denominator, denominatorSuffix, resultTerms);
-      return new Polynomial(resultTerms);                                           // no need for simplification
+      return new Polynomial(resultTerms.ToImmutableArray());                                           // no need for simplification
     }
 
     public bool TryDivideBy(Polynomial b, out Polynomial result)
     {
       result = DivideBy(b, out Polynomial reminder);
-      return reminder.IsZero;
+      return reminder == 0;
     }
 
     public Polynomial DivideBy(Polynomial b)
     {
       Polynomial result = DivideBy(b, out Polynomial reminder);
-      if (!reminder.IsZero)
+      if (reminder != 0)
       {
         throw new InvalidOperationException($"Cannot reduce [{this}] with [{b}].");
       }
@@ -408,7 +439,7 @@ namespace Arnible.MathModeling
       if (remaining.Count > 0)
       {
         // no need for simplification
-        result += new Polynomial(remaining);
+        result += new Polynomial(remaining.ToImmutableArray());
       }
 
       return result;
@@ -426,7 +457,7 @@ namespace Arnible.MathModeling
 
     public double Value(IReadOnlyDictionary<char, double> x)
     {
-      if (IsZero)
+      if (_terms.IsDefaultOrEmpty)
       {
         return 0;
       }

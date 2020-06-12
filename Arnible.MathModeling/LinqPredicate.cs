@@ -22,9 +22,16 @@ namespace Arnible.MathModeling
       return System.Linq.Enumerable.All(source, predicate);
     }
 
-    public static bool Any<T>(this IEnumerable<T> source)
+    public static bool Any(this IEnumerable<bool> source)
     {
-      return System.Linq.Enumerable.Any(source);
+      foreach (bool item in source)
+      {
+        if (item)
+        {
+          return true;
+        }
+      }
+      return false;
     }
 
     public static bool Any<T>(this IEnumerable<T> source, Func<T, bool> predicate)

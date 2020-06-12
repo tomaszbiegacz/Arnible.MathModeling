@@ -1,7 +1,7 @@
 ﻿using Arnible.MathModeling.Geometry;
-using Arnible.MathModeling.xunit;
 using Xunit;
 using static Arnible.MathModeling.Term;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Test
 {
@@ -12,21 +12,21 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Value()
     {
-      AssertNumber.Equal((x - y).ToPower(2), _error.Value(x, y));
+      AreEqual((x - y).ToPower(2), _error.Value(x, y));
     }
 
     [Fact]
     public void DerivativeByX()
     {
       var p = new RectangularCoordianate(x, y);
-      AssertNumber.EqualDerivatives(_error.Value(x, y), x, _error.DerivativeByX(p));
+      AreDerivativesEqual(_error.Value(x, y), x, _error.DerivativeByX(p));
     }
 
     [Fact]
     public void DerivativeByY()
     {
       var p = new RectangularCoordianate(x, y);
-      AssertNumber.EqualDerivatives(_error.Value(x, y), y, _error.DerivativeByY(p));
+      AreDerivativesEqual(_error.Value(x, y), y, _error.DerivativeByY(p));
     }
 
     [Fact]
@@ -35,7 +35,7 @@ namespace Arnible.MathModeling.Test
       var cartesianPoint = new RectangularCoordianate(x, y);
       var polarPoint = new PolarCoordinate(r, φ);
       var valueInPolar = _error.Value(x, y).ToPolar(cartesianPoint, polarPoint);
-      AssertNumber.EqualDerivatives(valueInPolar, r, _error.DerivativeByR(polarPoint));
+      AreDerivativesEqual(valueInPolar, r, _error.DerivativeByR(polarPoint));
     }
 
     [Fact]
@@ -44,7 +44,7 @@ namespace Arnible.MathModeling.Test
       var cartesianPoint = new RectangularCoordianate(x, y);
       var polarPoint = new PolarCoordinate(r, φ);
       var valueInPolar = _error.Value(x, y).ToPolar(cartesianPoint, polarPoint);
-      AssertNumber.EqualDerivatives(valueInPolar, φ, _error.DerivativeByΦ(polarPoint));
+      AreDerivativesEqual(valueInPolar, φ, _error.DerivativeByΦ(polarPoint));
     }
   }
 }

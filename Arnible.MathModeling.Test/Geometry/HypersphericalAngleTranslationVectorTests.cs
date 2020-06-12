@@ -1,4 +1,5 @@
 ﻿using Xunit;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -8,36 +9,36 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Constructor_Default()
     {
       HypersphericalAngleTranslationVector v = default;
-      Assert.True(v == 0);
-      Assert.Equal(1u, v.Length);
-      Assert.Equal(0, v[0]);
-      Assert.Equal("0", v.ToString());
+      IsTrue(v == 0);
+      AreEqual(1u, v.Length);
+      AreExactlyEqual(0, v[0]);
+      AreEqual("0", v.ToString());
 
-      Assert.Equal(default, v);
-      Assert.Equal(default, new HypersphericalAngleTranslationVector());
-      Assert.Equal(default, new HypersphericalAngleTranslationVector(new Number[0]));
+      AreEqual(default, v);
+      AreEqual(default, new HypersphericalAngleTranslationVector());
+      AreEqual(default, new HypersphericalAngleTranslationVector(new Number[0]));
     }
 
     [Fact]
     public void Constructor_Single()
     {
       HypersphericalAngleTranslationVector v = 2;
-      Assert.False(v == 0);
-      Assert.True(v == 2);
-      Assert.False(v != 2);
-      Assert.Equal(2, v[0]);
-      Assert.Equal(1u, v.Length);
-      Assert.Equal("2", v.ToString());
+      IsFalse(v == 0);
+      IsTrue(v == 2);
+      IsFalse(v != 2);
+      AreExactlyEqual(2, v[0]);
+      AreEqual(1u, v.Length);
+      AreEqual("2", v.ToString());
     }
 
     [Fact]
     public void Constructor_Explicit()
     {
       HypersphericalAngleTranslationVector v = new HypersphericalAngleTranslationVector(2, 1, -1);
-      Assert.False(v == 0);
-      Assert.Equal(v, new Number[] { 2, 1, -1 });
-      Assert.Equal(3u, v.Length);
-      Assert.Equal("[2 1 -1]", v.ToString());
+      IsFalse(v == 0);
+      AreEquals(v, new Number[] { 2, 1, -1 });
+      AreEqual(3u, v.Length);
+      AreEqual("[2 1 -1]", v.ToString());
     }
 
     [Fact]
@@ -45,7 +46,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var t = new HypersphericalAngleTranslationVector(Angle.HalfCycle, 0, -1 * Angle.HalfRightAngle);
       var v = new HypersphericalAngleVector(Angle.RightAngle, 1, Angle.HalfRightAngle);
-      Assert.Equal(new HypersphericalAngleVector(-1 * Angle.RightAngle, 1, 0), t.Translate(v));
+      AreEqual(new HypersphericalAngleVector(-1 * Angle.RightAngle, 1, 0), t.Translate(v));
     }
 
     [Fact]
@@ -53,7 +54,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var t = new HypersphericalAngleTranslationVector(Angle.HalfCycle);
       var v = new HypersphericalAngleVector(Angle.RightAngle, 1, Angle.HalfRightAngle);
-      Assert.Equal(new HypersphericalAngleVector(-1 * Angle.RightAngle, 1, Angle.HalfRightAngle), t.Translate(v));
+      AreEqual(new HypersphericalAngleVector(-1 * Angle.RightAngle, 1, Angle.HalfRightAngle), t.Translate(v));
     }
 
     [Fact]
@@ -61,7 +62,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var t = new HypersphericalAngleTranslationVector(Angle.HalfCycle, 0, -1 * Angle.HalfRightAngle);
       var v = new HypersphericalAngleVector(Angle.RightAngle, 1);
-      Assert.Equal(new HypersphericalAngleVector(-1 * Angle.RightAngle, 1, -1 * Angle.HalfRightAngle), t.Translate(v));
+      AreEqual(new HypersphericalAngleVector(-1 * Angle.RightAngle, 1, -1 * Angle.HalfRightAngle), t.Translate(v));
     }
   }
 }

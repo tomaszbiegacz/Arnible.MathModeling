@@ -1,4 +1,5 @@
 ﻿using Xunit;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Test
 {
@@ -11,7 +12,7 @@ namespace Arnible.MathModeling.Test
       Polynomial y = 'y';
       Polynomial z = 'z';
 
-      Assert.Equal(3 * x + y + z, (new[] { 4 * x, y - x, z }).Sum());
+      AreEqual(3 * x + y + z, (new[] { 4 * x, y - x, z }).Sum());
     }
 
     [Fact]
@@ -20,7 +21,7 @@ namespace Arnible.MathModeling.Test
       Polynomial x = 'x';
       Polynomial z = 'z';
 
-      Assert.Equal(z * (x * x - 1), (new[] { x - 1, x + 1, z }).Product());
+      AreEqual(z * (x * x - 1), (new[] { x - 1, x + 1, z }).Product());
     }
   }
 }

@@ -59,19 +59,16 @@ namespace Arnible.MathModeling.Geometry
     }
 
     private HypersphericalAngleVector(NumberVector angles)
-    {
-      if (angles.Any())
+    {      
+      var first = angles.First();
+      if (first > Angle.HalfCycle || first <= -1 * Angle.HalfCycle)
       {
-        var first = angles.First();
-        if (first > Angle.HalfCycle || first <= -1 * Angle.HalfCycle)
-        {
-          throw new ArgumentException($"Invalid first angualr coordinate: {first}");
-        }
-        if (angles.SkipExactly(1).Any(a => a > Angle.RightAngle || a < -1 * Angle.RightAngle))
-        {
-          throw new ArgumentException($"Invalid angular coordinates: {angles}");
-        }
+        throw new ArgumentException($"Invalid first angualr coordinate: {first}");
       }
+      if (angles.SkipExactly(1).Any(a => a > Angle.RightAngle || a < -1 * Angle.RightAngle))
+      {
+        throw new ArgumentException($"Invalid angular coordinates: {angles}");
+      }      
 
       _angles = angles;
     }

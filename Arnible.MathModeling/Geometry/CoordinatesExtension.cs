@@ -1,5 +1,4 @@
 ﻿using Arnible.MathModeling.Algebra;
-using System;
 using System.Collections.Generic;
 using static System.Math;
 
@@ -28,7 +27,7 @@ namespace Arnible.MathModeling.Geometry
         for (uint i = p.DimensionsCount; i > 2; i--)
         {
           double radius2 = pc2.TakeExactly(i).SumDefensive();
-          if(radius2.NumericEquals(0))
+          if (radius2.NumericEquals(0))
           {
             angles.Add(0);
           }
@@ -42,7 +41,7 @@ namespace Arnible.MathModeling.Geometry
         angles.Add(GetFirstAngle(pc.GetOrDefault(0), pc.GetOrDefault(1)));
         angles.Reverse();
 
-        return new HypersphericalCoordinate(r, angles.ToAngleVector());        
+        return new HypersphericalCoordinate(r, angles.ToAngleVector());
       }
       else
       {
@@ -52,7 +51,7 @@ namespace Arnible.MathModeling.Geometry
 
     public static HypersphericalCoordinateOnAxisView ToSphericalView(this CartesianCoordinate p)
     {
-      return new HypersphericalCoordinateOnAxisView(ToSpherical(p));
+      return new HypersphericalCoordinateOnAxisView(p);
     }
 
     public static Number VectorLength(this CartesianCoordinate point)

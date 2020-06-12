@@ -1,4 +1,5 @@
 ﻿using Xunit;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Test
 {
@@ -17,7 +18,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Min_OfThree_Defensive()
     {
-      Assert.Equal(2d, (new[] { 4d, 2d, 3d }).MinDefensive());
+      AreEqual(2d, (new[] { 4d, 2d, 3d }).MinDefensive());
     }
 
     [Fact]
@@ -27,7 +28,7 @@ namespace Arnible.MathModeling.Test
       {
         new Value(4), new Value(2), new Value(3)
       }).WithMinimum(v => v.V);
-      Assert.Equal(2d, r.V);
+      AreEqual(2d, r.V);
     }
 
     [Fact]
@@ -37,13 +38,13 @@ namespace Arnible.MathModeling.Test
       {
         new Value(4), new Value(6), new Value(3)
       }).WithMinimumAt(v => v.V);
-      Assert.Equal(2u, r);
+      AreEqual(2u, r);
     }
 
     [Fact]
     public void Max_OfThree_Defensive()
     {
-      Assert.Equal(4d, (new[] { 4d, 2d, 3d }).MaxDefensive());
+      AreEqual(4d, (new[] { 4d, 2d, 3d }).MaxDefensive());
     }
 
     [Fact]
@@ -53,7 +54,7 @@ namespace Arnible.MathModeling.Test
       {
         new Value(4), new Value(2), new Value(3)
       }).WithMaximum(v => v.V);
-      Assert.Equal(4d, r.V);
+      AreEqual(4d, r.V);
     }
 
     [Fact]
@@ -63,25 +64,25 @@ namespace Arnible.MathModeling.Test
       {
         new Value(4), new Value(6), new Value(3)
       }).WithMaximumAt(v => v.V);
-      Assert.Equal(1u, r);
+      AreEqual(1u, r);
     }
 
     [Fact]
     public void Median_OfThree_Defensive()
     {
-      Assert.Equal(3d, (new[] { 4d, 2d, 3d }).MedianDefensive());
+      AreEqual(3d, (new[] { 4d, 2d, 3d }).MedianDefensive());
     }
 
     [Fact]
     public void Median_OfFive_Defensive()
     {
-      Assert.Equal(3d, (new[] { 1d, 3d, 4d, 2d, 3d }).MedianDefensive());
+      AreEqual(3d, (new[] { 1d, 3d, 4d, 2d, 3d }).MedianDefensive());
     }
 
     [Fact]
     public void Median_OfOne_Defensive()
     {
-      Assert.Equal(2d, (new[] { 2d }).MedianDefensive());
+      AreEqual(2d, (new[] { 2d }).MedianDefensive());
     }
   }
 }

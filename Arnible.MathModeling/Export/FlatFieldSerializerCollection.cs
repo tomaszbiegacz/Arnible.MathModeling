@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Export
   {
     protected static IEnumerable<PropertyInfo> GetProperties(Type t) => t
       .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty)
-      .Where(p => !p.GetCustomAttributes<RecordSerializerIgnoreAttribute>().Any())
+      .Where(p => p.GetCustomAttributes<RecordSerializerIgnoreAttribute>().Count() == 0)
       .ToArray();
 
     protected readonly IEnumerable<FlatFieldSerializer> _fields;

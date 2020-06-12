@@ -2,6 +2,7 @@
 using Arnible.MathModeling.xunit;
 using System;
 using Xunit;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -41,9 +42,9 @@ namespace Arnible.MathModeling.Geometry.Test
       var pc = rc.ToPolar();
       HypersphericalCoordinate sc = cc.ToSphericalView();
 
-      Assert.Equal(2u, sc.DimensionsCount);
-      AssertNumber.Equal(pc.R, sc.R);
-      AssertNumber.Equal(pc.Φ, sc.Angles.Single());
+      AreEqual(2u, sc.DimensionsCount);
+      AreExactlyEqual(pc.R, sc.R);
+      AreExactlyEqual(pc.Φ, sc.Angles.Single());
     }
 
     [Theory]
@@ -55,8 +56,8 @@ namespace Arnible.MathModeling.Geometry.Test
       var cc = new CartesianCoordinate(cartesian.ToVector());
 
       HypersphericalCoordinate sc = cc.ToSphericalView();
-      AssertNumber.Equal(r, sc.R);
-      AssertNumber.Equal(angles, sc.Angles);
+      AreEqual(r, sc.R);
+      AreEquals(angles, sc.Angles);
     }
 
     [Theory]
@@ -71,8 +72,8 @@ namespace Arnible.MathModeling.Geometry.Test
       var cc = new CartesianCoordinate(cartesian.ToVector());
 
       HypersphericalCoordinate sc = cc.ToSpherical();
-      AssertNumber.Equal(r, sc.R);
-      AssertNumber.Equal(angles, sc.Angles);
+      AreEqual(r, sc.R);
+      AreEquals(angles, sc.Angles);
     }
 
     [Theory]
@@ -84,7 +85,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
 
       var cc = sc.ToCartesianView();
-      AssertNumber.Equal(cartesian, cc.Coordinates);
+      AreEquals(cartesian, cc.Coordinates);
     }
 
     [Theory]
@@ -96,8 +97,8 @@ namespace Arnible.MathModeling.Geometry.Test
       var cc = new CartesianCoordinate(cartesian.ToVector());
       var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
 
-      Assert.Equal(cc.AddDimension(), sc.AddDimension().ToCartesianView());
-      Assert.Equal(sc.AddDimension(), cc.AddDimension().ToSphericalView());
+      AreEqual(cc.AddDimension(), sc.AddDimension().ToCartesianView());
+      AreEqual(sc.AddDimension(), cc.AddDimension().ToSphericalView());
     }
   }
 }

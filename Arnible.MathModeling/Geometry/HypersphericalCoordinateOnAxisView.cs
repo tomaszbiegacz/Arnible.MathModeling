@@ -12,7 +12,6 @@ namespace Arnible.MathModeling.Geometry
     IHypersphericalCoordinate
   {
     private readonly HypersphericalCoordinate _p;
-    private readonly NumberVector _viewRatio;
 
     public static IEnumerable<IDerivative1> DerivativeByR(HypersphericalAngleVector angles)
     {
@@ -22,13 +21,13 @@ namespace Arnible.MathModeling.Geometry
     public HypersphericalCoordinateOnAxisView(HypersphericalCoordinate p)
     {
       _p = p;
-      _viewRatio = p.Angles.GetCartesianAxisViewsRatios();
-      Coordinates = _viewRatio.Select(v => p.R * v).ToVector();
+      Coordinates = p.Angles.GetCartesianAxisViewsRatios().Select(v => p.R * v).ToVector();
+    }
 
-      if (_viewRatio.Length != Coordinates.Length)
-      {
-        throw new InvalidOperationException($"Something is wrong: view ration card {_viewRatio.Length}, coordinates card {Coordinates.Length}");
-      }
+    public HypersphericalCoordinateOnAxisView(CartesianCoordinate p)
+    {
+      Coordinates = p.Coordinates;
+      _p = p.ToSpherical();
     }
 
     public static implicit operator CartesianCoordinate(HypersphericalCoordinateOnAxisView rc)
@@ -55,7 +54,7 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(HypersphericalCoordinateOnAxisView other)
     {
-      return R == other.R && _viewRatio == other._viewRatio;
+      return Coordinates == other.Coordinates;
     }
 
     public bool Equals(CartesianCoordinate other)
@@ -70,12 +69,12 @@ namespace Arnible.MathModeling.Geometry
 
     public override int GetHashCode()
     {
-      return R.GetHashCode() ^ _viewRatio.GetHashCode();
+      return Coordinates.GetHashCode();
     }
 
     public override string ToString()
     {
-      return $"{_viewRatio} on {R}";
+      return Coordinates.ToString();
     }
 
     //
@@ -119,14 +118,14 @@ namespace Arnible.MathModeling.Geometry
 
       if (R == 0)
       {
-        return new HypersphericalCoordinateOnRectangularView(0, 0, 0);
+        return default;
       }
       else
       {
-        return new HypersphericalCoordinateOnRectangularView(
+        return HypersphericalCoordinateOnRectangularView.FromCartesian(
           r: R,
-          ratioX: _viewRatio.GetOrDefault(axisA),
-          ratioY: _viewRatio.GetOrDefault(axisB));
+          x: Coordinates.GetOrDefault(axisA),
+          y: Coordinates.GetOrDefault(axisB));
       }
     }
 

@@ -11,10 +11,56 @@ namespace Arnible.MathModeling.Geometry
     IEquatable<HypersphericalCoordinateOnRectangularView>,
     IHypersphericalCoordinateOnRectangularView
   {
-    public HypersphericalCoordinateOnRectangularView(
+    public static HypersphericalCoordinateOnRectangularView FromCartesian(Number r, Number x, Number y)
+    {
+      if (r == 0)
+      {
+        if (x != 0 || y != 0)
+        {
+          throw new ArgumentException("when r is zero, cartesian coordiantes should be too");
+        }
+        return default;
+      }
+      else
+      {
+        return new HypersphericalCoordinateOnRectangularView(
+          r: r,
+          ratioX: x / r,
+          x: x,
+          ratioY: y / r,
+          y: y
+          );
+      }
+    }
+
+    public static HypersphericalCoordinateOnRectangularView FromRatios(Number r, Number ratioX, Number ratioY)
+    {
+      if (r == 0)
+      {
+        if (ratioX != 0 || ratioX != 0)
+        {
+          throw new ArgumentException("when r is zero, cartesian coordiantes should be too");
+        }
+        return default;
+      }
+      else
+      {
+        return new HypersphericalCoordinateOnRectangularView(
+          r: r,
+          ratioX: ratioX,
+          x: r * ratioX,
+          ratioY: ratioY,
+          y: r * ratioY
+          );
+      }
+    }
+
+    private HypersphericalCoordinateOnRectangularView(
       Number r,
       Number ratioX,
-      Number ratioY)
+      Number x,
+      Number ratioY,
+      Number y)
     {
       if (r < 0)
       {
@@ -22,19 +68,12 @@ namespace Arnible.MathModeling.Geometry
       }
       R = r;
 
-      if (ratioX < -1 || ratioX > 1)
-      {
-        throw new ArgumentException(nameof(ratioX));
-      }
+      X = x;
+      Y = y;
       RatioX = ratioX;
-
-      if (ratioY < -1 || ratioY > 1)
-      {
-        throw new ArgumentException(nameof(ratioY));
-      }
       RatioY = ratioY;
 
-      if (r == 0 && (ratioX != 0 || ratioY != 0))
+      if (r == 0 && (X != 0 || Y != 0))
       {
         throw new ArgumentException("r cannot be zero with non-zero ratios");
       }
@@ -54,15 +93,15 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(HypersphericalCoordinateOnRectangularView other)
     {
-      return R == other.R && RatioX == other.RatioX && RatioY == other.RatioY;
+      return R == other.R && X == other.X && Y == other.Y;
     }
 
     public override int GetHashCode()
     {
       int hash = 17;
       hash = hash * 23 + R.GetHashCode();
-      hash = hash * 23 + RatioX.GetHashCode();
-      hash = hash * 23 + RatioY.GetHashCode();
+      hash = hash * 23 + X.GetHashCode();
+      hash = hash * 23 + Y.GetHashCode();
       return hash;
     }
 
@@ -85,8 +124,8 @@ namespace Arnible.MathModeling.Geometry
     // IRectangularCoordianate
     //
 
-    public Number X => R * RatioX;
+    public Number X { get; }
 
-    public Number Y => R * RatioY;
+    public Number Y { get; }
   }
 }

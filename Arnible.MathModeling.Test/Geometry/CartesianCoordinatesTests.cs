@@ -1,5 +1,6 @@
 ﻿using Arnible.MathModeling.Algebra;
 using Xunit;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -11,10 +12,10 @@ namespace Arnible.MathModeling.Geometry.Test
       var rc = new RectangularCoordianate(3, 4);
       CartesianCoordinate cc = rc;
 
-      Assert.Equal(2u, cc.DimensionsCount);
-      Assert.Equal(2u, cc.Coordinates.Count());
-      Assert.Equal(3, cc.Coordinates[0]);
-      Assert.Equal(4, cc.Coordinates[1]);
+      AreEqual(2u, cc.DimensionsCount);
+      AreEqual(2u, cc.Coordinates.Count());
+      AreExactlyEqual(3, cc.Coordinates[0]);
+      AreExactlyEqual(4, cc.Coordinates[1]);
     }
 
     [Fact]
@@ -22,10 +23,10 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var cc = new CartesianCoordinate(new NumberVector(2, 3, 4));
 
-      Assert.Equal(3u, cc.DimensionsCount);
-      Assert.Equal(2, cc.Coordinates[0]);
-      Assert.Equal(3, cc.Coordinates[1]);
-      Assert.Equal(4, cc.Coordinates[2]);
+      AreEqual(3u, cc.DimensionsCount);
+      AreExactlyEqual(2, cc.Coordinates[0]);
+      AreExactlyEqual(3, cc.Coordinates[1]);
+      AreExactlyEqual(4, cc.Coordinates[2]);
     }
 
     [Fact]
@@ -33,7 +34,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var v1 = new CartesianCoordinate(new NumberVector(1, 1, 0));
       var v2 = new CartesianCoordinate(new NumberVector(1, 1, 8.65956056235496E-17));
-      Assert.Equal(v1, v2);
+      AreEqual(v1, v2);
     }
   }
 }

@@ -67,12 +67,53 @@ namespace Arnible.MathModeling
     public static bool operator ==(Number a, Number b) => a.Equals(b);
     public static bool operator !=(Number a, Number b) => !a.Equals(b);
 
-    public static bool operator <(Number a, Number b) => a._value < b._value;
-    public static bool operator >(Number a, Number b) => a._value > b._value;
+    public static bool operator <(Number a, Number b)
+    {
+      if(a.Equals(b))
+      {
+        return false;
+      }
+      else
+      {
+        return a._value < b._value;
+      }
+    }
 
-    public static bool operator <=(Number a, Number b) => a._value < b._value || a.Equals(b);
-    public static bool operator >=(Number a, Number b) => a._value > b._value || a.Equals(b);
+    public static bool operator >(Number a, Number b)
+    {
+      if (a.Equals(b))
+      {
+        return false;
+      }
+      else
+      {
+        return a._value > b._value;
+      }
+    }
 
+    public static bool operator <=(Number a, Number b)
+    {
+      if(a.Equals(b))
+      {
+        return true;
+      }
+      else
+      {
+        return a._value < b._value;
+      }
+    }
+
+    public static bool operator >=(Number a, Number b)
+    {
+      if (a.Equals(b))
+      {
+        return true;
+      }
+      else
+      {
+        return a._value > b._value;
+      }
+    }
 
     public static Number operator /(Number a, Number b) => a._value / b._value;
     public static Number operator /(Number a, double b) => a._value / b;

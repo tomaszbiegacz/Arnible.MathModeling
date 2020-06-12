@@ -101,5 +101,7 @@ namespace Arnible.MathModeling.Geometry
     public static HypersphericalAngleTranslationVector operator *(Number a, HypersphericalAngleTranslationVector b) => new HypersphericalAngleTranslationVector(a * b._change);
 
     public HypersphericalAngleVector Translate(HypersphericalAngleVector src) => src + _change;
+
+    public HypersphericalCoordinate Translate(HypersphericalCoordinate src) => new HypersphericalCoordinate(src.R,  src.Angles + _change);
   }
 }

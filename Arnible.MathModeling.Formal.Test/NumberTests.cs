@@ -1,4 +1,5 @@
 ﻿using Xunit;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Test
 {
@@ -9,34 +10,34 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Equality()
     {
-      Assert.True(0 == a - a);
-      Assert.False(0 != a - a);
+      IsTrue(0 == a - a);
+      IsFalse(0 != a - a);
 
-      Assert.True(1 == a + 1 - a);
-      Assert.False(1 != a + 1 - a);
+      IsTrue(1 == a + 1 - a);
+      IsFalse(1 != a + 1 - a);
 
-      Assert.False(1 == a - a);
-      Assert.True(1 != a - a);      
+      IsFalse(1 == a - a);
+      IsTrue(1 != a - a);      
     }
 
     [Fact]
     public void Greater()
     {
-      Assert.False(0 > a + 1 - a);
-      Assert.True(0 < a + 1 - a);
+      IsFalse(0 > a + 1 - a);
+      IsTrue(0 < a + 1 - a);
 
-      Assert.True(2 > a + 1 - a);
-      Assert.False(2 < a + 1 - a);
+      IsTrue(2 > a + 1 - a);
+      IsFalse(2 < a + 1 - a);
 
-      Assert.False(2 * a > a);
-      Assert.False(2 * a < a);
-      Assert.False(2 * a >= a);
-      Assert.False(2 * a <= a);
+      IsFalse(2 * a > a);
+      IsFalse(2 * a < a);
+      IsFalse(2 * a >= a);
+      IsFalse(2 * a <= a);
 
-      Assert.False(a > Term.a);
-      Assert.False(a < Term.a);
-      Assert.True(a <= Term.a);
-      Assert.True(a >= Term.a);
+      IsFalse(a > Term.a);
+      IsFalse(a < Term.a);
+      IsTrue(a <= Term.a);
+      IsTrue(a >= Term.a);
     }
   }
 }

@@ -1,4 +1,5 @@
 ﻿using Xunit;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
@@ -8,36 +9,36 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Constructor_Default()
     {
       NumberTranslationVector v = default;
-      Assert.True(v == 0);
-      Assert.Equal(1u, v.Length);
-      Assert.Equal(0, v[0]);
-      Assert.Equal("0", v.ToString());
+      IsTrue(v == 0);
+      AreEqual(1u, v.Length);
+      AreExactlyEqual(0, v[0]);
+      AreEqual("0", v.ToString());
 
-      Assert.Equal(default, v);
-      Assert.Equal(default, new NumberTranslationVector());
-      Assert.Equal(default, new NumberTranslationVector(new Number[0]));
+      AreEqual(default, v);
+      AreEqual(default, new NumberTranslationVector());
+      AreEqual(default, new NumberTranslationVector(new Number[0]));
     }
 
     [Fact]
     public void Constructor_Single()
     {
       NumberTranslationVector v = 2;
-      Assert.False(v == 0);
-      Assert.True(v == 2);
-      Assert.False(v != 2);
-      Assert.Equal(2, v[0]);
-      Assert.Equal(1u, v.Length);
-      Assert.Equal("2", v.ToString());
+      IsFalse(v == 0);
+      IsTrue(v == 2);
+      IsFalse(v != 2);
+      AreExactlyEqual(2d, v[0]);
+      AreEqual(1u, v.Length);
+      AreEqual("2", v.ToString());
     }
 
     [Fact]
     public void Constructor_Explicit()
     {
       NumberTranslationVector v = new NumberTranslationVector(2, 3, 4);
-      Assert.False(v == 0);
-      Assert.Equal(v, new Number[] { 2, 3, 4 });
-      Assert.Equal(3u, v.Length);
-      Assert.Equal("[2 3 4]", v.ToString());
+      IsFalse(v == 0);
+      AreEquals(v, new Number[] { 2, 3, 4 });
+      AreEqual(3u, v.Length);
+      AreEqual("[2 3 4]", v.ToString());
     }
 
     [Fact]
@@ -45,7 +46,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var t = new NumberTranslationVector(2, 3, 4);
       var v = new NumberVector(1, 2, 3);
-      Assert.Equal(new NumberVector(3, 5, 7), t.Translate(v));
+      AreEqual(new NumberVector(3, 5, 7), t.Translate(v));
     }
 
     [Fact]
@@ -53,7 +54,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var t = new NumberTranslationVector(2, 3);
       var v = new NumberVector(1, 2, 3);
-      Assert.Equal(new NumberVector(3, 5, 3), t.Translate(v));
+      AreEqual(new NumberVector(3, 5, 3), t.Translate(v));
     }
 
     [Fact]
@@ -61,7 +62,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var t = new NumberTranslationVector(2, 3, 4);
       var v = new NumberVector(1, 2);
-      Assert.Equal(new NumberVector(3, 5, 4), t.Translate(v));
+      AreEqual(new NumberVector(3, 5, 4), t.Translate(v));
     }
 
     [Fact]
@@ -69,7 +70,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var t = new NumberTranslationVector(2, 3, 4);
       var v = new NumberArray(1, 2, 3);
-      Assert.Equal(new NumberArray(3, 5, 7), t.Translate(v));
+      AreEqual(new NumberArray(3, 5, 7), t.Translate(v));
     }
 
     [Fact]
@@ -77,7 +78,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var t = new NumberTranslationVector(2, 3);
       var v = new NumberArray(1, 2, 3);
-      Assert.Equal(new NumberArray(3, 5, 3), t.Translate(v));
+      AreEqual(new NumberArray(3, 5, 3), t.Translate(v));
     }
   }
 }

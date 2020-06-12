@@ -1,22 +1,12 @@
-﻿using Arnible.MathModeling.xunit;
+﻿using System;
 using Xunit;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
   public class NumberRangeDomainTests
   {
-    private readonly INumberRangeDomain _strategy = new NumberRangeDomain(-1, 1);
-
-    [Theory]
-    [InlineData(-1, -1)]
-    [InlineData(-1.00000000002, -1)]
-    [InlineData(0, 0)]
-    [InlineData(1, 1)]
-    [InlineData(1.00000000002, 1)]
-    public void Validate(double currentValue, double valid)
-    {
-      AssertNumber.Equal(valid, _strategy.Validate(currentValue));
-    }
+    private readonly INumberRangeDomain _range = new NumberRangeDomain(-1, 1);
 
     [Theory]
     [InlineData(1, 0, 1)]
@@ -29,7 +19,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [InlineData(-1, -0.6, -1)]
     public void Translate(double currentValue, double evaluatedDelta, double expectedValue)
     {
-      AssertNumber.Equal(expectedValue, _strategy.Translate(currentValue, evaluatedDelta));
+      AreEqual(expectedValue, _range.Translate(currentValue, evaluatedDelta));
     }
 
     [Theory]
@@ -46,13 +36,13 @@ namespace Arnible.MathModeling.Algebra.Test
     [InlineData(0.4, -2.8, 0.5)]
     public void GetValidTranslationRatio(double currentValue, double evaluatedDelta, double expectedValue)
     {
-      AssertNumber.Equal(expectedValue, _strategy.GetValidTranslationRatio(currentValue, evaluatedDelta));
+      AreEqual(expectedValue, _range.GetValidTranslationRatio(currentValue, evaluatedDelta));
     }
 
     [Fact]
     public void Width()
     {
-      Assert.Equal(2, _strategy.Width);
+      AreEqual(2, _range.Width);
     }
 
     [Fact]
@@ -60,7 +50,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       NumberVector src = new NumberVector(0.1, 0.2, 0.3);
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3);
-      Assert.True(_strategy.IsValidTranslation(src, delta));
+      IsTrue(_range.IsValidTranslation(src, delta));
     }
 
     [Fact]
@@ -68,7 +58,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       NumberVector src = new NumberVector(0.1, 0.2, 0.3);
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
-      Assert.False(_strategy.IsValidTranslation(src, delta));
+      IsFalse(_range.IsValidTranslation(src, delta));
     }
 
     [Fact]
@@ -76,7 +66,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       NumberVector src = new NumberVector(0.1, 0.2, 0.3);
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
-      Assert.Equal(new NumberVector(0.3, 1, 0.3), _strategy.Translate(src, delta));
+      AreEqual(new NumberVector(0.3, 1, 0.3), _range.Translate(src, delta));
     }
 
     [Fact]
@@ -84,7 +74,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       NumberVector src = new NumberVector(0.1);
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
-      Assert.Equal(new NumberVector(0.3, 0.9), _strategy.Translate(src, delta));
+      AreEqual(new NumberVector(0.3, 0.9), _range.Translate(src, delta));
     }
 
     [Fact]
@@ -92,7 +82,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       NumberArray src = new NumberArray(0.1, 0.2);
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3);
-      Assert.True(_strategy.IsValidTranslation(src, delta));
+      IsTrue(_range.IsValidTranslation(src, delta));
     }
 
     [Fact]
@@ -100,7 +90,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       NumberArray src = new NumberArray(0.1, 0.2);
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3, 0.1);
-      Assert.False(_strategy.IsValidTranslation(src, delta));
+      IsFalse(_range.IsValidTranslation(src, delta));
     }
 
     [Fact]
@@ -108,7 +98,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       NumberArray src = new NumberArray(0.1, 0.9);
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3);
-      Assert.False(_strategy.IsValidTranslation(src, delta));
+      IsFalse(_range.IsValidTranslation(src, delta));
     }
 
     [Fact]
@@ -116,7 +106,60 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       NumberArray src = new NumberArray(0.1, 0.2, 0.1);
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
-      Assert.Equal(new NumberArray(0.3, 1, 0.1), _strategy.Translate(src, delta));
+      AreEqual(new NumberArray(0.3, 1, 0.1), _range.Translate(src, delta));
+    }
+
+    [Fact]
+    public void GetValidTranslation_Passthrough()
+    {
+      var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.2), new NumberTranslationVector(0.2, 0.3));
+      AreEqual(new NumberTranslationVector(0.2, 0.3), translation);
+    }
+
+    [Fact]
+    public void GetValidTranslation_PassthroughDefault()
+    {
+      var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.2), default);
+      AreEqual(default, translation);
+    }
+
+    [Fact]
+    public void GetValidTranslation_Default()
+    {
+      var translation = _range.GetValidTranslation(new NumberVector(1, 0.2), new NumberTranslationVector(0.2, 0.3));
+      AreEqual(0, translation);
+    }
+
+    [Fact]
+    public void GetValidTranslation_Half()
+    {
+      var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.8), new NumberTranslationVector(0.2, 0.4));
+      AreEqual(new NumberTranslationVector(0.1, 0.2), translation);
+    }
+
+    [Fact]
+    public void GetValidTranslationRatioForLastAngle_Full()
+    {
+      INumberRangeDomain range = new NumberRangeDomain(0, 1);
+      Number ratio = range.GetValidTranslationRatioForLastAngle(radius: 1, currentAngle: Angle.HalfRightAngle, angleDelta: Angle.HalfRightAngle);
+      AreExactlyEqual(1, ratio);
+    }
+
+    [Fact]
+    public void GetValidTranslationRatioForLastAngle_cutAngle()
+    {
+      INumberRangeDomain range = new NumberRangeDomain(0, 1);
+      Number ratio = range.GetValidTranslationRatioForLastAngle(radius: 1, currentAngle: Angle.HalfRightAngle, angleDelta: Angle.RightAngle);
+      AreEqual(0.5, ratio);
+    }
+
+    [Fact]
+    public void GetValidTranslationRatioForLastAngle_cutRadius()
+    {
+      double r = 2 * Math.Sqrt(3) / 3;
+      INumberRangeDomain range = new NumberRangeDomain(0, 1);
+      Number ratio = range.GetValidTranslationRatioForLastAngle(radius: r, currentAngle: Angle.HalfRightAngle, angleDelta: Angle.RightAngle);
+      AreEqual(1d / 6, ratio);
     }
   }
 }

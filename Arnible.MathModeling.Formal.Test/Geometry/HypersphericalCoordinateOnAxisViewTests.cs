@@ -1,8 +1,8 @@
 ﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.xunit;
 using Xunit;
 using static Arnible.MathModeling.MetaMath;
 using static Arnible.MathModeling.Term;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -16,11 +16,11 @@ namespace Arnible.MathModeling.Geometry.Test
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 
       var derivatives = view.DerivativeByR().ToArray();
-      Assert.Equal((int)cartesianPoint.DimensionsCount, derivatives.Length);
+      AreEqual(cartesianPoint.DimensionsCount, derivatives.Length);
       for (uint dimensionPos = 0; dimensionPos < cartesianPoint.DimensionsCount; ++dimensionPos)
       {
         var symbol = (PolynomialDivision)cartesianPoint.Coordinates[dimensionPos];
-        AssertNumber.Equal(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[dimensionPos].First);
+        AreEqual(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[dimensionPos].First);
       }
     }
 
@@ -34,12 +34,12 @@ namespace Arnible.MathModeling.Geometry.Test
       {
         PolynomialTerm angleTerm = (PolynomialTerm)sphericalPoint.Angles[anglePos];
         var derivatives = view.GetCartesianAxisViewsRatiosDerivativesByAngle(anglesCount: 4, anglePos: anglePos).ToArray();
-        Assert.Equal(view.DimensionsCount, (uint)derivatives.Length);
+        AreEqual(view.DimensionsCount, derivatives.Length);
         for (uint coordinatePos = 0; coordinatePos < view.Coordinates.Length; ++coordinatePos)
         {
           PolynomialDivision coordinate = view.Coordinates[coordinatePos];
           PolynomialDivision expected = coordinate.DerivativeBy(angleTerm) / r;
-          AssertNumber.Equal(expected, derivatives[coordinatePos].First);
+          AreEqual(expected, derivatives[coordinatePos].First);
         }
       }
     }
@@ -53,15 +53,15 @@ namespace Arnible.MathModeling.Geometry.Test
       HypersphericalCoordinateOnRectangularViewWithDerivative recView = view
         .GetAngleDerivativesView(anglesCount: 3, anglePos: 2)
         .GetRectangularViewDerivativeByAngle(axisA: 0, axisB: 2);
-      Assert.Equal(r, recView.R);
+      AreEqual(r, recView.R);
 
-      Assert.Equal(Cos(γ) * Cos(β) * Cos(α), recView.RatioX);
-      Assert.Equal(r * Cos(γ) * Cos(β) * Cos(α), recView.X);
-      Assert.Equal(-1 * Sin(γ) * Cos(β) * Cos(α), recView.RatioXDerivative.First);
+      AreEqual(Cos(γ) * Cos(β) * Cos(α), recView.RatioX);
+      AreEqual(r * Cos(γ) * Cos(β) * Cos(α), recView.X);
+      AreEqual(-1 * Sin(γ) * Cos(β) * Cos(α), recView.RatioXDerivative.First);
 
-      Assert.Equal(Sin(β) * Cos(γ), recView.RatioY);
-      Assert.Equal(r * Sin(β) * Cos(γ), recView.Y);
-      Assert.Equal(-1 * Sin(γ) * Sin(β), recView.RatioYDerivative.First);
+      AreEqual(Sin(β) * Cos(γ), recView.RatioY);
+      AreEqual(r * Sin(β) * Cos(γ), recView.Y);
+      AreEqual(-1 * Sin(γ) * Sin(β), recView.RatioYDerivative.First);
     }
 
     [Fact]
@@ -73,15 +73,15 @@ namespace Arnible.MathModeling.Geometry.Test
       HypersphericalCoordinateOnRectangularViewWithDerivative recView = view
         .GetAngleDerivativesView(anglesCount: 8, anglePos: 2)
         .GetRectangularViewDerivativeByAngle(axisA: 0, axisB: 8);
-      Assert.Equal(r, recView.R);
+      AreEqual(r, recView.R);
 
-      Assert.Equal(Cos(γ) * Cos(β) * Cos(α), recView.RatioX);
-      Assert.Equal(r * Cos(γ) * Cos(β) * Cos(α), recView.X);
-      Assert.Equal(-1 * Sin(γ) * Cos(β) * Cos(α), recView.RatioXDerivative.First);
+      AreEqual(Cos(γ) * Cos(β) * Cos(α), recView.RatioX);
+      AreEqual(r * Cos(γ) * Cos(β) * Cos(α), recView.X);
+      AreEqual(-1 * Sin(γ) * Cos(β) * Cos(α), recView.RatioXDerivative.First);
 
-      Assert.Equal(0, recView.RatioY);
-      Assert.Equal(0, recView.Y);
-      Assert.Equal(0, recView.RatioYDerivative.First);
+      AreEqual(0, recView.RatioY);
+      AreEqual(0, recView.Y);
+      AreEqual(0, recView.RatioYDerivative.First);
     }
   }
 }

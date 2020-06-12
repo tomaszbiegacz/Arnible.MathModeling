@@ -1,12 +1,12 @@
 ﻿using Arnible.MathModeling.Geometry;
 using Xunit;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Test
 {
   public class SquareErrorTests
   {
-    private const double Sqrt2 = 1.41421356237;
-    private const int Precision = 10;
+    private const double Sqrt2 = 1.41421356237;    
 
     private readonly SquareError _error = new SquareError();
 
@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Test
     [InlineData(-1, 1, 4)]
     public void Value(double x, double y, double expected)
     {
-      Assert.Equal(expected, _error.Value(x, y), Precision);
+      AreEqual(expected, _error.Value(x, y));
     }
 
     [Theory]
@@ -26,8 +26,8 @@ namespace Arnible.MathModeling.Test
     public void DerivativeByX(double x, double y, double first, double second)
     {
       var derivative = _error.DerivativeByX(new RectangularCoordianate(x, y));
-      Assert.Equal(first, derivative.First, Precision);
-      Assert.Equal(second, derivative.Second, Precision);
+      AreEqual(first, derivative.First);
+      AreEqual(second, derivative.Second);
     }
 
     [Theory]
@@ -37,8 +37,8 @@ namespace Arnible.MathModeling.Test
     public void DerivativeByY(double x, double y, double first, double second)
     {
       var derivative = _error.DerivativeByY(new RectangularCoordianate(x, y));
-      Assert.Equal(first, derivative.First, Precision);
-      Assert.Equal(second, derivative.Second, Precision);
+      AreEqual(first, derivative.First);
+      AreEqual(second, derivative.Second);
     }    
 
     [Theory]
@@ -49,8 +49,8 @@ namespace Arnible.MathModeling.Test
     {
       PolarCoordinate p = new RectangularCoordianate(x, y).ToPolar();
       var derivative = _error.DerivativeByR(p);
-      Assert.Equal(first, derivative.First, Precision);
-      Assert.Equal(second, derivative.Second, Precision);
+      AreEqual(first, derivative.First);
+      AreEqual(second, derivative.Second);
     }
 
     [Theory]
@@ -61,8 +61,8 @@ namespace Arnible.MathModeling.Test
     {
       PolarCoordinate p = new RectangularCoordianate(x, y).ToPolar();
       var derivative = _error.DerivativeByΦ(p);
-      Assert.Equal(first, derivative.First, Precision);
-      Assert.Equal(second, derivative.Second, Precision);
+      AreEqual(first, derivative.First);
+      AreEqual(second, derivative.Second);
     }
   }
 }

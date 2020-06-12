@@ -1,6 +1,6 @@
-﻿using Arnible.MathModeling.Algebra;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -71,19 +71,19 @@ namespace Arnible.MathModeling.Geometry
     /// <summary>
     /// Return direciton where coordiantes for each cartesian axis will change.
     /// </summary>
-    public static HypersphericalAngleQuantified GetAllDirectionChangePositive(uint anglesCount)    
+    public static HypersphericalAngleQuantified GetAllDirectionChangePositive(uint anglesCount)
     {
       return GetQuantifiedDirections(anglesCount, 2).Where(d => d.Angles.All(a => a == 1)).Single();
     }
 
     private readonly byte _rightAngleResolution;
-    private readonly sbyte[] _angles;
+    private readonly ImmutableArray<sbyte> _angles;
 
     private HypersphericalAngleQuantified(IEnumerable<sbyte> angles, byte rightAngleResolution, uint id)
     {
       Id = id;
       _rightAngleResolution = rightAngleResolution;
-      _angles = angles.ToArray();
+      _angles = angles.ToImmutableArray();
       if (_angles.Where(a => a == rightAngleResolution).Count() > 1)
       {
         throw new ArgumentException(nameof(angles));
@@ -91,7 +91,7 @@ namespace Arnible.MathModeling.Geometry
       UsedCartesianDirectionsCount = GetUsedCartesianDirectionsCount(_angles, rightAngleResolution);
     }
 
-    private static byte GetUsedCartesianDirectionsCount(sbyte[] angles, byte rightAngleResolution)
+    private static byte GetUsedCartesianDirectionsCount(ImmutableArray<sbyte> angles, byte rightAngleResolution)
     {
       byte result = 0;
       if (angles.Length > 0)
@@ -125,7 +125,7 @@ namespace Arnible.MathModeling.Geometry
 
     public byte UsedCartesianDirectionsCount { get; }
 
-    public IEnumerable<sbyte> Angles => _angles ?? LinqEnumerable.Empty<sbyte>();
+    public IEnumerable<sbyte> Angles => _angles.IsDefaultOrEmpty ? LinqEnumerable.Empty<sbyte>() : _angles;
 
     public bool Equals(HypersphericalAngleQuantified other) => Id == other.Id;
 
@@ -147,9 +147,9 @@ namespace Arnible.MathModeling.Geometry
       return "[" + string.Join(" ", Angles) + "]";
     }
 
-    public HypersphericalAngleVector ToVector()
+    public HypersphericalAngleVector ToAngleVector()
     {
-      if (Angles.Any())
+      if (!_angles.IsDefaultOrEmpty)
       {
         Number step = Angle.RightAngle / _rightAngleResolution;
         return _angles.Select(v => v * step).ToAngleVector();

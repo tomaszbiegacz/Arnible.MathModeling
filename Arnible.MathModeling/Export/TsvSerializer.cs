@@ -14,10 +14,11 @@ namespace Arnible.MathModeling.Export
   /// </remarks>
   public class TsvSerializer<T> : IRecordSerializer<T> where T: struct
   {
+    static readonly Encoding EncodingUtf8WithoutBom = new UTF8Encoding(false);
     static readonly ReadOnlyMemory<char> Separator = new[] { TsvConst.SeparatorChar };
-    static readonly ReadOnlyMemory<char> NewLine = Environment.NewLine.AsMemory();
+    static readonly ReadOnlyMemory<char> NewLine = "\n".AsMemory();
 
-    static TextWriter CreateTextWriter(Stream output) => new StreamWriter(output, Encoding.UTF8);
+    static TextWriter CreateTextWriter(Stream output) => new StreamWriter(output, EncodingUtf8WithoutBom);
 
     public static RecordSerializerFileStream<T> ToTempFile() => RecordSerializerFileStream<T>.ToTempFile(new TsvSerializer<T>());
 

@@ -20,76 +20,44 @@ namespace Arnible.MathModeling.Algebra
 
     public double Width => Maximum - Minimum;
 
-    public Number Validate(Number value)
+    public bool IsValid(Number value)
     {
-      if (value == Minimum)
+      if (value == Minimum || value == Maximum)
       {
-        return Minimum;
-      }
-
-      if (value == Maximum)
-      {
-        return Maximum;
-      }
-
-      if (value < Minimum || value > Maximum)
-      {
-        throw new ArgumentException($"Invalid value: {value}");
+        return true;
       }
       else
       {
-        return value;
+        return Minimum < value && value < Maximum;
       }
     }
 
     private Number GetTranslationDelta(Number value, Number delta)
     {
-      Validate(value);
-
-      if (delta != 0)
+      Number minimum = Minimum - value;
+      if (delta < minimum)
       {
-        Number minimum = Minimum - value;
-        if (delta < minimum)
-        {
-          return minimum;
-        }
+        return minimum;
+      }
 
-        Number maximum = Maximum - value;
-        if (delta > maximum)
-        {
-          return maximum;
-        }
+      Number maximum = Maximum - value;
+      if (delta > maximum)
+      {
+        return maximum;
       }
 
       return delta;
-    }
-
-    public bool IsValidTranslation(Number value, Number delta)
-    {
-      Validate(value);
-
-      if (delta != 0)
-      {
-        Number minimum = Minimum - value;
-        if (delta < minimum)
-        {
-          return false;
-        }
-
-        Number maximum = Maximum - value;
-        if (delta > maximum)
-        {
-          return false;
-        }
-      }
-
-      return true;
     }
 
     public Number Translate(Number value, Number delta) => value + GetTranslationDelta(value, delta);
 
     public Number GetValidTranslationRatio(Number value, Number delta)
     {
+      if (!IsValid(value))
+      {
+        throw new ArgumentException(nameof(value));
+      }
+
       if (delta == 0)
       {
         return 1;
@@ -97,7 +65,68 @@ namespace Arnible.MathModeling.Algebra
       else
       {
         Number validDelta = GetTranslationDelta(value, delta);
-        return validDelta / delta;
+        if (validDelta == delta)
+        {
+          return 1;
+        }
+        else
+        {
+          return validDelta / delta;
+        }
+      }
+    }
+
+    private Number GetTranslationDeltaForLastAngle(Number radius, Number currentAngle, Number angleDelta)
+    {
+      if (radius == 0)
+      {
+        throw new ArgumentException(nameof(radius));
+      }
+
+      Number angleMin = Math.Asin(Minimum / radius);
+      if (currentAngle < angleMin)
+      {
+        throw new ArgumentException(nameof(currentAngle));
+      }
+
+      Number angleMax = Math.Asin(Maximum / radius);
+      if (currentAngle > angleMax)
+      {
+        throw new ArgumentException(nameof(currentAngle));
+      }
+
+      Number minimum = angleMin - currentAngle;
+      if (angleDelta < minimum)
+      {
+        return minimum;
+      }
+
+      Number maximum = angleMax - currentAngle;
+      if (angleDelta > maximum)
+      {
+        return maximum;
+      }
+
+      return angleDelta;
+    }
+
+    public Number GetValidTranslationRatioForLastAngle(Number radius, Number currentAngle, Number angleDelta)
+    {
+      if (angleDelta == 0)
+      {
+        return 1;
+      }
+      else
+      {
+        Number validDelta = GetTranslationDeltaForLastAngle(radius: radius, currentAngle: currentAngle, angleDelta: angleDelta);
+        if (validDelta == angleDelta)
+        {
+          return 1;
+        }
+        else
+        {
+          return validDelta / angleDelta;
+        }
       }
     }
   }

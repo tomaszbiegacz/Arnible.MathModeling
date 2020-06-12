@@ -6,10 +6,12 @@
 
     public Number GetValidTranslationRatio(Number value, Number delta) => 1;
 
+    public bool IsValid(Number value) => true;    
+
     public bool IsValidTranslation(Number value, Number delta) => true;
 
-    public Number Translate(Number value, Number delta) => value + delta;
+    public Number Translate(Number value, Number delta) => value + delta;    
 
-    public Number Validate(Number value) => value;
+    public Number GetValidTranslationRatioForLastAngle(Number radius, Number currentAngle, Number angleDelta) => angleDelta;
   }
 }

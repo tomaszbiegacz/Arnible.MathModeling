@@ -17,6 +17,11 @@ namespace Arnible.MathModeling.Geometry
       return source.Composition(x, r * Cos(φ)).Composition(y, r * Sin(φ));
     }
 
+    public static HypersphericalCoordinate ToSpherical(this CartesianCoordinate p)
+    {
+      throw new NotImplementedException("Roots are not yet supported");
+    }
+
     public static Number ToPolar(this Number source, RectangularCoordianate cartesianPoint, PolarCoordinate polarPoint)
     {
       return ToPolar((Polynomial)source, cartesianPoint, polarPoint);
@@ -29,11 +34,12 @@ namespace Arnible.MathModeling.Geometry
         throw new ArgumentException($"Invalid dimensions count");
       }
 
+      uint dimensionsCount = cartesianPoint.DimensionsCount;
       var replacement = hypersphericalPoint.R;
       PolynomialDivision result = source;
 
-      NumberVector cd = cartesianPoint.Coordinates.Reverse();
-      NumberVector ad = hypersphericalPoint.Angles.Reverse().ToVector();
+      NumberArray cd = cartesianPoint.Coordinates.Reverse().ToNumberArray();
+      NumberArray ad = hypersphericalPoint.Angles.Reverse().ToNumberArray();
       for (uint i = 0; i < ad.Length; ++i)
       {
         var cartesianDimension = (PolynomialTerm)cd[i];
