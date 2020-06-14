@@ -129,6 +129,18 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
+    public HypersphericalCoordianteOnLineView GetLineView(uint axis)
+    {
+      if (R == 0)
+      {
+        return default;
+      }
+      else
+      {
+        return new HypersphericalCoordianteOnLineView(r: R, ratioX: Coordinates.GetOrDefault(axis) / R);
+      }
+    }
+
     public HypersphericalCoordinateOnAxisViewForAngleDerivatives GetAngleDerivativesView(uint anglesCount, uint anglePos)
     {
       return new HypersphericalCoordinateOnAxisViewForAngleDerivatives(view: this, anglesCount: anglesCount, anglePos: anglePos);

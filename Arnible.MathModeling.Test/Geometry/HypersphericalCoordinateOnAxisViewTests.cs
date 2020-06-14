@@ -40,5 +40,16 @@ namespace Arnible.MathModeling.Geometry.Test
       AreExactlyEqual(2, rcView.X);
       AreExactlyEqual(4, rcView.Y);
     }
+
+    [Fact]
+    public void GetLineView()
+    {
+      CartesianCoordinate cc = new CartesianCoordinate(1, 2, 3, 4);
+      HypersphericalCoordinateOnAxisView view = cc.ToSphericalView();
+
+      var rcView = view.GetLineView(1);
+      AreEqual(view.R, rcView.R);
+      AreEqual(2d, rcView.X);
+    }
   }
 }

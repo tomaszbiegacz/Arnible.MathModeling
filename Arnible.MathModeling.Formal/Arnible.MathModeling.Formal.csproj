@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <Compile Include="..\Arnible.MathModeling\Algebra\INumberRangeDomain.cs" Link="Algebra\INumberRangeDomain.cs" />
+    <Compile Include="..\Arnible.MathModeling\Algebra\INumberRangeDomainExtensions.cs" Link="Algebra\INumberRangeDomainExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberTranslationVector.cs" Link="Algebra\NumberTranslationVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVector.cs" Link="Algebra\NumberVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVectorExtensions.cs" Link="Algebra\NumberVectorExtensions.cs" />
@@ -34,6 +35,7 @@
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleTranslationVector.cs" Link="Geometry\HypersphericalAngleTranslationVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleVector.cs" Link="Geometry\HypersphericalAngleVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleVectorExtensions.cs" Link="Geometry\HypersphericalAngleVectorExtensions.cs" />
+    <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordianteOnLineView.cs" Link="Geometry\HypersphericalCoordianteOnLineView.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinate.cs" Link="Geometry\HypersphericalCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinateOnAxisView.cs" Link="Geometry\HypersphericalCoordinateOnAxisView.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinateOnAxisViewForAngleDerivatives.cs" Link="Geometry\HypersphericalCoordinateOnAxisViewForAngleDerivatives.cs" />

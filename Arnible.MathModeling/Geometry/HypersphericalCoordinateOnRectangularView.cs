@@ -35,6 +35,15 @@ namespace Arnible.MathModeling.Geometry
 
     public static HypersphericalCoordinateOnRectangularView FromRatios(Number r, Number ratioX, Number ratioY)
     {
+      if (ratioX < -1 || ratioX > 1)
+      {
+        throw new ArgumentException(nameof(ratioX));
+      }
+      if (ratioY < -1 || ratioY > 1)
+      {
+        throw new ArgumentException(nameof(ratioY));
+      }
+
       if (r == 0)
       {
         if (ratioX != 0 || ratioX != 0)

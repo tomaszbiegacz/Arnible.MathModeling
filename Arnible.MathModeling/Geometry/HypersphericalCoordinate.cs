@@ -68,7 +68,7 @@ namespace Arnible.MathModeling.Geometry
 
     public override string ToString()
     {
-      return new NumberVector(R).Concat(Angles).ToVector().ToString();
+      return $"{{{R}, {Angles}}}";
     }
 
     //
