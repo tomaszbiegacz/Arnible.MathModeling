@@ -13,7 +13,7 @@ namespace Arnible.MathModeling.Test
 
       var d = DerivativeOperator.ForProductByParameter(
         productValues: new NumberArray(v1),
-        valueDerrivativeByParameter: new IDerivative1[] { v1d });
+        valueDerrivativeByParameter: new[] { v1d });
 
       AreEqual(3d, d.First);
     }
@@ -29,7 +29,7 @@ namespace Arnible.MathModeling.Test
 
       var d = DerivativeOperator.ForProductByParameter(
         productValues: new NumberArray(v1, v2),
-        valueDerrivativeByParameter: new IDerivative1[] { v1d, v2d });
+        valueDerrivativeByParameter: new[] { v1d, v2d });
 
       AreEqual(3d * 7 + 2 * 11, d.First);
     }
@@ -37,7 +37,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ForComposition2_OneValue()
     {
-      var d = (new IDerivative2[] { new Derivative2Value(2, 3) }).ForComposition();
+      var d = (new[] { new Derivative2Value(2, 3) }).ForComposition();
       AreExactlyEqual(2, d.First);
       AreExactlyEqual(3, d.Second);
     }
@@ -45,7 +45,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ForComposition2_TwoValues()
     {
-      var d = (new IDerivative2[] {
+      var d = (new[] {
         new Derivative2Value(2, 3),
         new Derivative2Value(5, 7) }).ForComposition();
       AreEqual(2d * 5, d.First);
@@ -55,7 +55,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ForComposition2_ThreeValues()
     {
-      var d = (new IDerivative2[] {
+      var d = (new[] {
         new Derivative2Value(2, 3),
         new Derivative2Value(5, 7),
         new Derivative2Value(11, 13)
@@ -67,14 +67,14 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ForComposition1_OneValue()
     {
-      var d = (new IDerivative1[] { new Derivative1Value(2) }).ForComposition();
+      var d = (new[] { new Derivative1Value(2) }).ForComposition();
       AreExactlyEqual(2, d.First);
     }
 
     [Fact]
     public void ForComposition1_TwoValues()
     {
-      var d = (new IDerivative1[] {
+      var d = (new[] {
         new Derivative1Value(2),
         new Derivative1Value(5) }).ForComposition();
       AreEqual(2d * 5, d.First);
@@ -84,8 +84,8 @@ namespace Arnible.MathModeling.Test
     public void ForEachElementComposition_OneValue()
     {
       AreEqual(6d,
-        new IDerivative1[] { new Derivative1Value(2) }
-        .ForEachElementComposition(new IDerivative1[] { new Derivative1Value(3) })
+        new[] { new Derivative1Value(2) }
+        .ForEachElementComposition(new[] { new Derivative1Value(3) })
         .Select(v => v.First).Single());
     }
   }

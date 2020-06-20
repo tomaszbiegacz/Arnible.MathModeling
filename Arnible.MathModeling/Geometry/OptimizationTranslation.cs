@@ -8,7 +8,7 @@ namespace Arnible.MathModeling.Geometry
     /// <summary>
     /// Estimated change to reach minimum in 1 dimentional case
     /// </summary>
-    public static Number ForMinimumEquals0(Number value, IDerivative1 derivative)
+    public static Number ForMinimumEquals0(Number value, Derivative1Value derivative)
     {
       if (derivative.First != 0 && value != 0)
       {
@@ -33,7 +33,7 @@ namespace Arnible.MathModeling.Geometry
     public static NumberTranslationVector CartesianForMinimumEquals0(
       Number value,
       uint cartesiaxAxisNumber,
-      IDerivative1 derivative)
+      Derivative1Value derivative)
     {
       Number rDelta = ForMinimumEquals0(value, derivative);
       return new NumberTranslationVector(NumberVector.FirstNonZeroValueAt(pos: cartesiaxAxisNumber, value: rDelta));
@@ -45,7 +45,7 @@ namespace Arnible.MathModeling.Geometry
     public static HypersphericalAngleTranslationVector HypersphericalForMinimumEquals0(
       Number value,
       uint anglePos,
-      IDerivative1 derivative)
+      Derivative1Value derivative)
     {
       Number rDelta = ForMinimumEquals0(value, derivative);
       return new HypersphericalAngleTranslationVector(NumberVector.FirstNonZeroValueAt(pos: anglePos, value: rDelta).ToAngleVector());
@@ -57,7 +57,7 @@ namespace Arnible.MathModeling.Geometry
     public static NumberTranslationVector CartesianForMinimumEquals0(
       Number value,
       HypersphericalAngleVector direction,
-      IDerivative1 derivative)
+      Derivative1Value derivative)
     {
       HypersphericalCoordinate hc;
       Number rDelta = ForMinimumEquals0(value, derivative);
@@ -82,7 +82,7 @@ namespace Arnible.MathModeling.Geometry
       Number value,
       HypersphericalCoordinateOnAxisView currentHcView,
       uint anglePos,
-      IDerivative1 derivative)
+      Derivative1Value derivative)
     {
       Number angleDelta = ForMinimumEquals0(value, derivative);
 

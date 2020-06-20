@@ -3,7 +3,7 @@ using System;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public interface ICartesianCoordinate
+  interface ICartesianCoordinate
   {
     NumberVector Coordinates { get; }
   }

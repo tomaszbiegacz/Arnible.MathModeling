@@ -2,7 +2,7 @@
 
 namespace Arnible.MathModeling.Export
 {
-  public interface IRecordLabels
+  interface IRecordLabels
   {
     IEnumerable<string> Labels { get; }
   }

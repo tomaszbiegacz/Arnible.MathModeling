@@ -1,19 +1,24 @@
-﻿namespace Arnible.MathModeling
+﻿using System;
+
+namespace Arnible.MathModeling
 {
-  public readonly struct Derivative1Value : IDerivative1
+  interface IDerivative1
+  {
+    Number First { get; }
+  }
+
+  public readonly struct Derivative1Value : IDerivative1, IEquatable<Derivative1Value>
   {
     public static readonly Derivative1Value Zero = new Derivative1Value(0);
 
     public Derivative1Value(Number first)
     {
       First = first;
-    }
-
-    public Number First { get; }
+    }    
 
     public override bool Equals(object obj)
     {
-      if(obj is IDerivative1 typed)
+      if (obj is IDerivative1 typed)
       {
         return Equals(typed);
       }
@@ -23,9 +28,9 @@
       }
     }
 
-    public bool Equals(IDerivative1 other)
+    public bool Equals(Derivative1Value other)
     {
-      return First == other?.First;
+      return First == other.First;
     }
 
     public override int GetHashCode()
@@ -37,5 +42,14 @@
     {
       return $"[{First}]";
     }
+
+    public static bool operator ==(Derivative1Value a, Derivative1Value b) => a.Equals(b);
+    public static bool operator !=(Derivative1Value a, Derivative1Value b) => !a.Equals(b);
+
+    //
+    // Properties
+    //
+
+    public Number First { get; }    
   }
 }

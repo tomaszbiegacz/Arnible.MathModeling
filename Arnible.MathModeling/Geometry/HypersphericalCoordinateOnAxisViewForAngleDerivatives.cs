@@ -79,7 +79,7 @@ namespace Arnible.MathModeling.Geometry
 
     public uint AnglePos { get; }
 
-    public IEnumerable<IDerivative1> CartesianAxisViewsRatiosDerivatives => _angleDerivatives.Select<Number, IDerivative1>(v => new Derivative1Value(v));
+    public IEnumerable<Derivative1Value> CartesianAxisViewsRatiosDerivatives => _angleDerivatives.Select(v => new Derivative1Value(v));
 
     //
     // Operations

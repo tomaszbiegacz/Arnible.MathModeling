@@ -1,6 +1,6 @@
 ﻿namespace Arnible.MathModeling.Geometry
 {
-  public interface IRectangularCoordianate
+  interface IRectangularCoordianate
   {
     Number X { get; }
     Number Y { get; }

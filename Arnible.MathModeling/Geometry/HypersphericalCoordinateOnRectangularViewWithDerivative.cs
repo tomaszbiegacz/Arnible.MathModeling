@@ -11,12 +11,12 @@ namespace Arnible.MathModeling.Geometry
 
     public HypersphericalCoordinateOnRectangularViewWithDerivative(
       HypersphericalCoordinateOnRectangularView view,
-      IDerivative1 xDerivative,
-      IDerivative1 yDerivative)
+      Derivative1Value xDerivative,
+      Derivative1Value yDerivative)
     {
       _view = view;
-      RatioXDerivative = xDerivative ?? throw new ArgumentNullException(nameof(xDerivative));
-      RatioYDerivative = yDerivative ?? throw new ArgumentNullException(nameof(yDerivative));
+      RatioXDerivative = xDerivative;
+      RatioYDerivative = yDerivative;
     }
 
     public static implicit operator HypersphericalCoordinateOnRectangularView(HypersphericalCoordinateOnRectangularViewWithDerivative v) => v._view;
@@ -65,9 +65,9 @@ namespace Arnible.MathModeling.Geometry
     // Properties
     //
 
-    public IDerivative1 RatioXDerivative { get; }
+    public Derivative1Value RatioXDerivative { get; }
 
-    public IDerivative1 RatioYDerivative { get; }
+    public Derivative1Value RatioYDerivative { get; }
 
     //
     // IHypersphericalCoordinateOnRectangularView

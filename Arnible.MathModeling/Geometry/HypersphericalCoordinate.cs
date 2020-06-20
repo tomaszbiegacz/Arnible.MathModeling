@@ -1,9 +1,8 @@
-﻿using Arnible.MathModeling.Algebra;
-using System;
+﻿using System;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public interface IHypersphericalCoordinate
+  interface IHypersphericalCoordinate
   {
     Number R { get; }
     HypersphericalAngleVector Angles { get; }
@@ -95,4 +94,4 @@ namespace Arnible.MathModeling.Geometry
       return new HypersphericalCoordinate(R, angles);
     }
   }
- }
+}
