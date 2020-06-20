@@ -38,7 +38,7 @@ namespace Arnible.MathModeling.Geometry.Test
         for (uint coordinatePos = 0; coordinatePos < view.Coordinates.Length; ++coordinatePos)
         {
           PolynomialDivision coordinate = view.Coordinates[coordinatePos];
-          PolynomialDivision expected = coordinate.DerivativeBy(angleTerm) / r;
+          PolynomialDivision expected = coordinate.DerivativeBy(angleTerm);
           AreEqual(expected, derivatives[coordinatePos].First);
         }
       }
@@ -57,11 +57,11 @@ namespace Arnible.MathModeling.Geometry.Test
 
       AreEqual(Cos(γ) * Cos(β) * Cos(α), recView.RatioX);
       AreEqual(r * Cos(γ) * Cos(β) * Cos(α), recView.X);
-      AreEqual(-1 * Sin(γ) * Cos(β) * Cos(α), recView.RatioXDerivative.First);
+      AreEqual(-1 * r * Sin(γ) * Cos(β) * Cos(α), recView.DerivativeForX.First);
 
       AreEqual(Sin(β) * Cos(γ), recView.RatioY);
       AreEqual(r * Sin(β) * Cos(γ), recView.Y);
-      AreEqual(-1 * Sin(γ) * Sin(β), recView.RatioYDerivative.First);
+      AreEqual(-1 * r * Sin(γ) * Sin(β), recView.DerivativeForY.First);
     }
 
     [Fact]
@@ -77,11 +77,11 @@ namespace Arnible.MathModeling.Geometry.Test
 
       AreEqual(Cos(γ) * Cos(β) * Cos(α), recView.RatioX);
       AreEqual(r * Cos(γ) * Cos(β) * Cos(α), recView.X);
-      AreEqual(-1 * Sin(γ) * Cos(β) * Cos(α), recView.RatioXDerivative.First);
+      AreEqual(-1 * r * Sin(γ) * Cos(β) * Cos(α), recView.DerivativeForX.First);
 
       AreEqual(0, recView.RatioY);
       AreEqual(0, recView.Y);
-      AreEqual(0, recView.RatioYDerivative.First);
+      AreEqual(0, recView.DerivativeForY.First);
     }
   }
 }

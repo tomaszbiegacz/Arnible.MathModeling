@@ -128,8 +128,6 @@ namespace Arnible.MathModeling
     public NumberArray Transform(Func<uint, Number, Number> transformation)
     {
       return new NumberArray(Values.Select(transformation).ToImmutableArray());
-    }
-
-    public IEnumerable<uint> Indexes() => LinqEnumerable.RangeUint(0, Length);
+    }    
   }
 }

@@ -156,9 +156,10 @@ namespace Arnible.MathModeling
         return _numerator.ToString(cultureInfo);
       else
       {
-        string numerator = _numerator.IsSingleTerm ? _numerator.ToString(cultureInfo) : $"({ _numerator.ToString(cultureInfo) })";
-        string denominator = _denominator.IsSingleTerm ? _denominator.ToString(cultureInfo) : $"({ _denominator.ToString(cultureInfo) })";
-        return $"{numerator}/{denominator}";
+        string numerator = _numerator.ToString(cultureInfo);
+        string denominator = _denominator.ToString(cultureInfo);
+        string separator = new string('-', Math.Max(numerator.Length, denominator.Length));
+        return $"{numerator} \n{separator} \n{denominator} ";
       }
     }
 

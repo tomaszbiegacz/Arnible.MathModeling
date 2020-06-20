@@ -150,5 +150,11 @@ namespace Arnible.MathModeling.Geometry
     {
       return GetAngleDerivativesView(anglesCount: anglesCount, anglePos: anglePos).CartesianAxisViewsRatiosDerivatives;
     }
+
+    public IEnumerable<Number> GetCoordinatesRatios()
+    {
+      Number r = R;
+      return Coordinates.Select(c => c / r);
+    }
   }
 }

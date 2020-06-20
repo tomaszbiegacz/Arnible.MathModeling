@@ -6,7 +6,7 @@ namespace Arnible.MathModeling.Geometry
 {
   public class HypersphericalCoordinateOnAxisViewForAngleDerivatives
   {
-    private static NumberArray GetCartesianAxisViewsRatiosDerivativesByAngle(HypersphericalAngleVector anglesVector, uint anglesCount, uint pos)
+    private static NumberArray GetCartesianAxisViewsRatiosDerivativesByAngle(Number r, HypersphericalAngleVector anglesVector, uint anglesCount, uint pos)
     {
       if (anglesCount < anglesVector.Length)
       {
@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Geometry
       Number[] angles = anglesVector.Concat(LinqEnumerable.Repeat<Number>(0, anglesCount - anglesVector.Length)).ToArray();
 
       var cartesianDimensions = new List<Number>();
-      Number replacement = 1;
+      Number replacement = r;
       int currentAnglePos = angles.Length;
       foreach (var angle in angles.Reverse())
       {
@@ -63,7 +63,7 @@ namespace Arnible.MathModeling.Geometry
     {
       View = view;
       AnglePos = anglePos;
-      _angleDerivatives = GetCartesianAxisViewsRatiosDerivativesByAngle(view.Angles, anglesCount: anglesCount, pos: anglePos);
+      _angleDerivatives = GetCartesianAxisViewsRatiosDerivativesByAngle(view.R, view.Angles, anglesCount: anglesCount, pos: anglePos);
 
       if(_angleDerivatives.Length != anglesCount + 1)
       {

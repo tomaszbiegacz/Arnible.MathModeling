@@ -12,6 +12,12 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
+    public void IndexesWhere()
+    {
+      AreEquals(new[] { 0u, 2u }, (new[] { 1, 2, 3 }).IndexesWhere(v => v != 2));
+    }
+
+    [Fact]
     public void ToJaggedArray()
     {
       AreEquals(new int[][] { new[] { 0, 1, 2 }, new[] { 1, 2, 3 } }, new int[,] { { 0, 1, 2 }, { 1, 2, 3 } }.ToArrayJagged());

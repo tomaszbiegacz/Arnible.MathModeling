@@ -5,7 +5,21 @@ namespace Arnible.MathModeling
 {
   public static class LinqArray
   {
-    public static IEnumerable<uint> Indexes<T>(this T[] arg) => LinqEnumerable.RangeUint((uint)arg.Length);
+    public static IEnumerable<uint> Indexes<T>(this T[] arg)
+    {
+      return LinqEnumerable.RangeUint((uint)arg.Length);
+    }
+
+    public static IEnumerable<uint> IndexesWhere<T>(this T[] arg, Func<T, bool> predicate)
+    {
+      for(uint i=0; i<arg.Length; ++i)
+      {
+        if(predicate(arg[i]))
+        {
+          yield return i;
+        }
+      }
+    }
 
     public static T[][] ToArrayJagged<T>(this T[,] twoDimensionalArray)
     {

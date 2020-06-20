@@ -26,5 +26,15 @@ namespace Arnible.MathModeling.xunit
       PolynomialDivision firstDerivative = value.DerivativeBy(termSingle);
       AreEqual<Number>(firstDerivative, actual.First);
     }
+
+    public static void IsZero(Polynomial value)
+    {      
+      AreEqual<Polynomial>(0, value);
+    }
+
+    public static void IsZero(PolynomialDivision value)
+    {      
+      AreEqual<PolynomialDivision>(0, value);
+    }
   }
 }

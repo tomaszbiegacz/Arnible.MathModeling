@@ -363,7 +363,7 @@ namespace Arnible.MathModeling
       Polynomial result = DivideBy(b, out Polynomial reminder);
       if (reminder != 0)
       {
-        throw new InvalidOperationException($"Cannot reduce [{this}] with [{b}].");
+        throw new InvalidOperationException($"Cannot divide [{this}] by [{b}].");
       }
       return result;
     }

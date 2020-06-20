@@ -15,7 +15,7 @@ void Print_Equatable()
         throw new InvalidOperationException("Something went wrong.");
       }
 
-      Assert.True(expected.Equals(actual), $"{expected} is not equal to {actual}");
+      Assert.True(expected.Equals(actual), $"{expected}\n\nis not equal to\n\n{actual}\n");
     }
 
     public static void AreEqual(double expected, double actual)
@@ -30,12 +30,12 @@ void Print_Equatable()
 
     public static void AreEqual(uint expected, int actual)
     {
-      Assert.True(expected == actual, $"{expected} is not equal to {actual}");
+      Assert.True(expected == actual, $"{expected}\n\nis not equal to\n\n{actual}\n");
     }
 
     public static void AreEqual(int expected, uint actual)
     {
-      Assert.True(expected == actual, $"{expected} is not equal to {actual}");
+      Assert.True(expected == actual, $"{expected}\n\nis not equal to\n\n{actual}\n");
     }
 
     //
@@ -50,7 +50,7 @@ void Print_Equatable()
         throw new InvalidOperationException("Something went wrong.");
       }
       
-      Assert.False(expected.Equals(actual), $"{expected} is equal to {actual}");      
+      Assert.False(expected.Equals(actual), $"{expected}\n\nis equal to\n\n{actual}\n");      
     }
 
     public static void AreNotEqual(double expected, double actual)
@@ -122,14 +122,18 @@ void Print_Equatable()
 void Print_AreExactlyEqual()
 {
 #>
+    //
+    // AreExactlyEqual
+    //
+
     public static void AreExactlyEqual(double expected, double actual)
     {
-      Assert.True(expected == actual, $"{expected} is not equal to {actual}");
+      Assert.True(expected == actual, $"{expected} is not equal to {actual}\n");
     }
 
     public static void AreExactlyNotEqual(double expected, double actual)
     {
-      Assert.False(expected == actual, $"{expected} is equal to {actual}");
+      Assert.False(expected == actual, $"{expected} is equal to {actual}\n");
     }    
 
     public static void IsExactlyZero(double actual)

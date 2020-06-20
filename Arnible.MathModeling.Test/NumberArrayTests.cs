@@ -33,5 +33,23 @@ namespace Arnible.MathModeling.Test
     {
       AreEquals(LinqEnumerable.RangeUint(0, 3), new NumberArray(1, 2, 3).Indexes());
     }
+
+    [Fact]
+    public void ToArray_All()
+    {
+      AreEqual(new NumberArray(1, 2, 3), new Number[] { 1d, 2d, 3d }.ToNumberArray());
+    }
+
+    [Fact]
+    public void ToArray_WithDefaults()
+    {
+      AreEqual(new NumberArray(1, 2, 3, 0, 0), new Number[] { 1d, 2d, 3d }.ToNumberArray(5));
+    }
+
+    [Fact]
+    public void IndexesWhere()
+    {
+      AreEquals(new[] { 0u, 2u }, (new NumberArray(1, 2, 3)).IndexesWhere(v => v != 2));
+    }
   }
 }

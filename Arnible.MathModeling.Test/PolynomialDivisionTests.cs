@@ -86,17 +86,9 @@ namespace Arnible.MathModeling.Test
       IsFalse(v == 0);
       IsFalse(v.IsPolynomial);
       IsFalse(v.IsConstant);
-      AreEqual("x/y", v.ToString());
 
       AreEqual(5, v.GetOperation('x', 'y').Value(10, 2));
-    }
-
-    [Fact]
-    public void ToString_Common()
-    {
-      AreEqual("(x+1)/y", ((x + 1) / y).ToString());
-      AreEqual("x/(y+1)", (x / (y + 1)).ToString());
-    }
+    }    
 
     [Fact]
     public void Equality_Equals()

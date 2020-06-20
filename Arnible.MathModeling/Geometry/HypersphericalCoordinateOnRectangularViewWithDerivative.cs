@@ -15,8 +15,8 @@ namespace Arnible.MathModeling.Geometry
       Derivative1Value yDerivative)
     {
       _view = view;
-      RatioXDerivative = xDerivative;
-      RatioYDerivative = yDerivative;
+      DerivativeForX = xDerivative;
+      DerivativeForY = yDerivative;
     }
 
     public static implicit operator HypersphericalCoordinateOnRectangularView(HypersphericalCoordinateOnRectangularViewWithDerivative v) => v._view;
@@ -39,7 +39,7 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(HypersphericalCoordinateOnRectangularViewWithDerivative other)
     {
-      return _view.Equals(other._view) && RatioXDerivative.Equals(other.RatioXDerivative) && RatioYDerivative.Equals(other.RatioYDerivative);
+      return _view.Equals(other._view) && DerivativeForX.Equals(other.DerivativeForX) && DerivativeForY.Equals(other.DerivativeForY);
     }
 
     public bool Equals(HypersphericalCoordinateOnRectangularView other)
@@ -51,8 +51,8 @@ namespace Arnible.MathModeling.Geometry
     {
       int hash = 17;
       hash = hash * 23 + _view.GetHashCode();
-      hash = hash * 23 + RatioXDerivative.GetHashCode();
-      hash = hash * 23 + RatioYDerivative.GetHashCode();
+      hash = hash * 23 + DerivativeForX.GetHashCode();
+      hash = hash * 23 + DerivativeForY.GetHashCode();
       return hash;
     }
 
@@ -65,9 +65,9 @@ namespace Arnible.MathModeling.Geometry
     // Properties
     //
 
-    public Derivative1Value RatioXDerivative { get; }
+    public Derivative1Value DerivativeForX { get; }
 
-    public Derivative1Value RatioYDerivative { get; }
+    public Derivative1Value DerivativeForY { get; }
 
     //
     // IHypersphericalCoordinateOnRectangularView
