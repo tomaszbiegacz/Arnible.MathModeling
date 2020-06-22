@@ -21,6 +21,10 @@ namespace Arnible.MathModeling.Geometry
       {
         throw new ArgumentException(nameof(r));
       }
+      if(r == 0 && ratioX != 0)
+      {
+        throw new ArgumentException("when r is zero, cartesian coordiantes should be too");
+      }
       R = r;
 
       if (ratioX < -1 || ratioX > 1)
