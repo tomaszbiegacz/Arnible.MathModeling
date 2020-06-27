@@ -1,10 +1,11 @@
 ﻿using Arnible.MathModeling.Algebra;
+using Arnible.MathModeling.Logic;
 using System;
 
 namespace Arnible.MathModeling.Geometry
 {
   public static class OptimizationTranslation
-  {    
+  {
     /// <summary>
     /// Estimated change to reach minimum in 1 dimentional case
     /// </summary>
@@ -25,7 +26,7 @@ namespace Arnible.MathModeling.Geometry
           throw new InvalidOperationException($"Value {value}, derivative {derivative}");
         }
       }
-    }    
+    }
 
     /// <summary>
     /// Estimated change to reach minimum in the axis direction
@@ -36,7 +37,19 @@ namespace Arnible.MathModeling.Geometry
       Derivative1Value derivative)
     {
       Number rDelta = ForMinimumEquals0(value, derivative);
-      return new NumberTranslationVector(NumberVector.FirstNonZeroValueAt(pos: cartesiaxAxisNumber, value: rDelta));
+      return new NumberTranslationVector(NumberVector.NonZeroValueAt(pos: cartesiaxAxisNumber, value: rDelta));
+    }
+
+    /// <summary>
+    /// Estimated change to reach minimum in the selected axis direction
+    /// </summary>
+    public static NumberTranslationVector CartesianForMinimumEquals0(
+      Number value,
+      IBitArray axis,
+      Derivative1Value derivative)
+    {
+      Number rDelta = ForMinimumEquals0(value, derivative);
+      return new NumberTranslationVector(NumberVector.NonZeroValueAt(pos: axis, value: rDelta));
     }
 
     /// <summary>
@@ -48,7 +61,7 @@ namespace Arnible.MathModeling.Geometry
       Derivative1Value derivative)
     {
       Number rDelta = ForMinimumEquals0(value, derivative);
-      return new HypersphericalAngleTranslationVector(NumberVector.FirstNonZeroValueAt(pos: anglePos, value: rDelta).ToAngleVector());
+      return new HypersphericalAngleTranslationVector(NumberVector.NonZeroValueAt(pos: anglePos, value: rDelta).ToAngleVector());
     }
 
     /// <summary>
@@ -74,7 +87,7 @@ namespace Arnible.MathModeling.Geometry
       return new NumberTranslationVector(hc.ToCartesianView().Coordinates);
     }
 
-    
+
     /// <summary>
     /// Estimated change to reach minimum in direction of an angle
     /// </summary>
@@ -86,11 +99,11 @@ namespace Arnible.MathModeling.Geometry
     {
       Number angleDelta = ForMinimumEquals0(value, derivative);
 
-      if(angleDelta < -1 * Angle.RightAngle)
+      if (angleDelta < -1 * Angle.RightAngle)
       {
         angleDelta = -1 * Angle.RightAngle;
       }
-      else if(angleDelta > Angle.RightAngle)
+      else if (angleDelta > Angle.RightAngle)
       {
         angleDelta = Angle.RightAngle;
       }
@@ -100,6 +113,6 @@ namespace Arnible.MathModeling.Geometry
       CartesianCoordinate newCartesian = newHc.ToCartesianView();
 
       return new NumberTranslationVector(newCartesian.Coordinates - currentHcView.Coordinates);
-    }    
+    }
   }
 }

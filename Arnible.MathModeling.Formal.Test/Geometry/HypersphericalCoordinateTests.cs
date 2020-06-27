@@ -14,7 +14,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var sphericalPoint = new HypersphericalCoordinate((PolynomialTerm)'R', Number.GreekTerms(inputCount - 1).ToAngleVector());
 
       Number product = cartesianInputs.SumDefensive();
-      return product.ToSpherical(cartesianPoint, sphericalPoint);
+      return (PolynomialDivision)product.ToSpherical(cartesianPoint, sphericalPoint);
     }
 
     [Fact]

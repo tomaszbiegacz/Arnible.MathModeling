@@ -18,7 +18,7 @@ namespace Arnible.MathModeling.Algebra
       Maximum = maximum;
     }
 
-    public double Width => Maximum - Minimum;
+    public double Width => (double)(Maximum - Minimum);
 
     public bool IsValid(Number value)
     {
@@ -76,6 +76,11 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
+    private static double Asin(Number x)
+    {
+      return Math.Asin((double)x);
+    }
+
     private Number GetTranslationDeltaForLastAngle(Number radius, Number currentAngle, Number angleDelta)
     {
       if (radius == 0)
@@ -83,13 +88,13 @@ namespace Arnible.MathModeling.Algebra
         throw new ArgumentException(nameof(radius));
       }
 
-      Number angleMin = Math.Asin(Minimum / radius);
+      Number angleMin = Asin(Minimum / radius);
       if (currentAngle < angleMin)
       {
         throw new ArgumentException(nameof(currentAngle));
       }
 
-      Number angleMax = Math.Asin(Maximum / radius);
+      Number angleMax = Asin(Maximum / radius);
       if (currentAngle > angleMax)
       {
         throw new ArgumentException(nameof(currentAngle));

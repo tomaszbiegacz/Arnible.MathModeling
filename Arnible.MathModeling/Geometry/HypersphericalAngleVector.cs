@@ -27,7 +27,7 @@ namespace Arnible.MathModeling.Geometry
 
     public static HypersphericalAngleVector CreateOrthogonalDirection(uint anglePos, Number value)
     {
-      return new HypersphericalAngleVector(NumberVector.FirstNonZeroValueAt(pos: anglePos, value: value));
+      return new HypersphericalAngleVector(NumberVector.NonZeroValueAt(pos: anglePos, value: value));
     }    
 
     private static IEnumerable<Number> Normalize(IEnumerable<Number> values)
@@ -50,6 +50,24 @@ namespace Arnible.MathModeling.Geometry
     internal static HypersphericalAngleVector Create(IEnumerable<Number> parameters)
     {
       return new HypersphericalAngleVector(Normalize(parameters).ToVector());
+    }
+
+    public static HypersphericalAngleVector GetIdentityVector(uint dimensionsCount)
+    {
+      switch (dimensionsCount)
+      {
+        case 0:
+        case 1:
+          throw new ArgumentException(nameof(dimensionsCount));
+      }
+
+      List<double> angles = new List<double> { Angle.HalfRightAngle };
+      for (uint anglePos = 2; anglePos < dimensionsCount; ++anglePos)
+      {
+        double angle = Math.Atan(Math.Sin(angles[angles.Count - 1]));
+        angles.Add(angle);
+      }
+      return new HypersphericalAngleVector(angles.ToVector());
     }
 
     public HypersphericalAngleVector(params Number[] angles)
@@ -146,7 +164,7 @@ namespace Arnible.MathModeling.Geometry
     public HypersphericalAngleVector GetOrthogonalDirection(uint anglePos)
     {
       Number angle = _angles[anglePos];
-      return new HypersphericalAngleVector(NumberVector.FirstNonZeroValueAt(pos: anglePos, value: angle));
+      return new HypersphericalAngleVector(NumberVector.NonZeroValueAt(pos: anglePos, value: angle));
     }
 
     public HypersphericalAngleVector AddDimension() => new HypersphericalAngleVector(_angles.Append(0).ToVector());

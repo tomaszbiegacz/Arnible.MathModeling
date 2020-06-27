@@ -37,7 +37,7 @@ namespace Arnible.MathModeling.Geometry.Test
         AreEqual(view.DimensionsCount, derivatives.Length);
         for (uint coordinatePos = 0; coordinatePos < view.Coordinates.Length; ++coordinatePos)
         {
-          PolynomialDivision coordinate = view.Coordinates[coordinatePos];
+          PolynomialDivision coordinate = (PolynomialDivision)view.Coordinates[coordinatePos];
           PolynomialDivision expected = coordinate.DerivativeBy(angleTerm);
           AreEqual(expected, derivatives[coordinatePos].First);
         }

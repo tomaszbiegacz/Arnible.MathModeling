@@ -61,7 +61,7 @@ void Print_Equatable()
     public static void AreNotEqual(string expected, string actual)
     {
       Assert.NotEqual(expected, actual);
-    }    
+    }        
 
     //
     // AreEquals
@@ -131,14 +131,29 @@ void Print_AreExactlyEqual()
       Assert.True(expected == actual, $"{expected} is not equal to {actual}\n");
     }
 
+    public static void AreExactlyEqual(Number expected, Number actual)
+    {
+      AreExactlyEqual((double)expected, (double)actual);
+    }
+
     public static void AreExactlyNotEqual(double expected, double actual)
     {
       Assert.False(expected == actual, $"{expected} is equal to {actual}\n");
     }    
 
+    public static void AreExactlyNotEqual(Number expected, Number actual)
+    {
+      AreExactlyNotEqual((double)expected, (double)actual);
+    }
+
     public static void IsExactlyZero(double actual)
     {
       Assert.True(0 == actual, $"{actual} is not zero");
+    }
+
+    public static void IsExactlyZero(Number actual)
+    {
+      IsExactlyZero((double)actual);
     }
 
     public static void AreExactlyEquals(IEnumerable<double> expected, IEnumerable<double> actual)
@@ -153,6 +168,46 @@ void Print_AreExactlyEqual()
     }
 
 <#+
+}
+
+void Print_IsZero(string typeName)
+{    
+#>   
+    //
+    // IsZero
+    //
+
+    public static void IsZero(<#= typeName #> value)
+    {
+      AreEqual<<#= typeName #>>(0, value);
+    }
+
+    public static void IsNotZero(<#= typeName #> value)
+    {
+      AreNotEqual<<#= typeName #>>(0, value);
+    }
+
+<#+    
+}
+
+void Print_NumberExtensionCommon()
+{    
+#>   
+    //
+    // Number extensions
+    //
+
+    public static void IsZero(Number value)
+    {
+      AreEqual<Number>(0d, value);
+    }
+
+    public static void IsNotZero(Number value)
+    {
+      AreNotEqual<Number>(0d, value);
+    }
+
+<#+    
 }
 
 void Print_NumberExtension(string typeName)
@@ -222,12 +277,7 @@ void Print_Comparision(string typeName)
     public static void IsPositive(<#= typeName #> value)
     {
       Assert.True(value > 0, $"{value} is not positive");
-    }
-
-    public static void IsZero(<#= typeName #> value)
-    {
-      AreEqual<<#= typeName #>>(0, value);
-    }
+    }    
 
 <#+    
 }
@@ -295,8 +345,10 @@ void PrintCommon()
     foreach(string typeName in new[] {"int", "uint", "long", "ulong"})
     {
         Print_Comparision(typeName);
+        Print_IsZero(typeName);
     }
     Print_AreExactlyEqual();
+    Print_NumberExtensionCommon();
 
     Print_Logical(); 
     Print_Enumerable();

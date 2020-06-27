@@ -28,7 +28,7 @@ namespace Arnible.MathModeling
     }
 
     public static implicit operator Number(double v) => new Number(v);
-    public static implicit operator double(Number v) => v._value;
+    public static explicit operator double(Number v) => v._value;
 
     //
     // Object

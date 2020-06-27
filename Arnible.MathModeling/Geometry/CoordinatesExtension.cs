@@ -1,12 +1,25 @@
 ﻿using Arnible.MathModeling.Algebra;
+using System;
 using System.Collections.Generic;
-using static System.Math;
 
 namespace Arnible.MathModeling.Geometry
 {
   public static class CoordinatesExtension
   {
-    private static double GetFirstAngle(double x, double y) => Atan2(y, x);
+    private static double Sqrt(Number x)
+    {
+      return Math.Sqrt((double)x);
+    }
+
+    private static double Asin(Number x)
+    {
+      return Math.Asin((double)x);
+    }
+
+    private static double GetFirstAngle(Number x, Number y)
+    {
+      return Math.Atan2((double)y, (double)x);
+    }
 
     public static PolarCoordinate ToPolar(this RectangularCoordianate p)
     {
@@ -26,14 +39,14 @@ namespace Arnible.MathModeling.Geometry
         var angles = new List<Number>();
         for (uint i = p.DimensionsCount; i > 2; i--)
         {
-          double radius2 = pc2.TakeExactly(i).SumDefensive();
-          if (radius2.NumericEquals(0))
+          Number radius2 = pc2.TakeExactly(i).SumDefensive();
+          if (radius2 == 0)
           {
             angles.Add(0);
           }
           else
           {
-            double angleSin = pc.GetOrDefault(i - 1) / Sqrt(radius2);
+            Number angleSin = pc.GetOrDefault(i - 1) / Sqrt(radius2);
             double angle = Asin(angleSin);
             angles.Add(angle);
           }

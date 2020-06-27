@@ -46,6 +46,16 @@ namespace Arnible.MathModeling
           yield return i;
         }
       }
+    }    
+
+    public static Number DistanceSquareTo(this NumberArray arg, NumberArray other)
+    {
+      if(arg.Length != other.Length)
+      {
+        throw new ArgumentException(nameof(other));
+      }
+
+      return arg.ZipDefensive(other, (a, b) => (a - b).ToPower(2)).SumWithDefault();
     }
   }
 }

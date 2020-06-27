@@ -33,9 +33,8 @@ namespace Arnible.MathModeling.Geometry
       {
         throw new ArgumentException($"Invalid dimensions count");
       }
-
-      uint dimensionsCount = cartesianPoint.DimensionsCount;
-      var replacement = hypersphericalPoint.R;
+      
+      PolynomialDivision replacement = (PolynomialDivision)hypersphericalPoint.R;
       PolynomialDivision result = source;
 
       NumberArray cd = cartesianPoint.Coordinates.Reverse().ToNumberArray();
@@ -69,11 +68,11 @@ namespace Arnible.MathModeling.Geometry
         throw new ArgumentException("Coordinates are with different dimensions");
       }
 
-      PolynomialDivision result = source;
+      PolynomialDivision result = (PolynomialDivision)source;
       for(uint i=0; i<c1.Coordinates.Length; ++i)
       {
         var cartesianDimension = (PolynomialTerm)c1.Coordinates[i];
-        result = result.Composition(cartesianDimension, c2.Coordinates[i]);
+        result = result.Composition(cartesianDimension, (PolynomialDivision)c2.Coordinates[i]);
       }
       return result;
     }

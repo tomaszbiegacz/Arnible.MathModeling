@@ -65,6 +65,23 @@ namespace Arnible.MathModeling
       return System.Linq.Enumerable.OrderByDescending(collection, i => i, new BuildinComparerStruct<TSource>());
     }
 
+    public static System.Linq.IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(
+      this IEnumerable<TSource> source,
+      params Func<TSource, TKey>[] keySelector)
+    {
+      if (keySelector.Length == 0)
+      {
+        throw new ArgumentException(nameof(keySelector));
+      }
+
+      System.Linq.IOrderedEnumerable<TSource> result = System.Linq.Enumerable.OrderBy(source, keySelector[0]);
+      for (uint i = 1; i < keySelector.Length; ++i)
+      {
+        result = System.Linq.Enumerable.ThenBy(result, keySelector[i]);
+      }
+      return result;
+    }
+
     public static System.Linq.IOrderedEnumerable<TSource> OrderByDescending<TSource, TKey>(
       this IEnumerable<TSource> source,
       params Func<TSource, TKey>[] keySelector)

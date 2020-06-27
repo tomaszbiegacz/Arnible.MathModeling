@@ -18,6 +18,34 @@ namespace Arnible.MathModeling.Geometry
       return angles.GetCartesianAxisViewsRatios().Select(v => new Derivative1Value(v));
     }
 
+    public static NumberVector GetIdentityVector(uint dimensionsCount)
+    {
+      switch(dimensionsCount)
+      {
+        case 0:
+          throw new ArgumentException(nameof(dimensionsCount));
+        case 1:
+          return new NumberVector(1);
+      }
+
+      return HypersphericalAngleVector.GetIdentityVector(dimensionsCount).GetCartesianAxisViewsRatios();
+    }
+
+    public static Number GetIdentityVectorRatio(uint dimensionsCount)
+    {
+      switch (dimensionsCount)
+      {
+        case 0:
+          throw new ArgumentException(nameof(dimensionsCount));
+        case 1:
+          return 1;
+      }
+
+      var angles = HypersphericalAngleVector.GetIdentityVector(dimensionsCount);
+      double lastAngle = (double)angles[angles.Length - 1];
+      return Math.Sin(lastAngle);
+    }
+
     public HypersphericalCoordinateOnAxisView(HypersphericalCoordinate p)
     {
       _p = p;

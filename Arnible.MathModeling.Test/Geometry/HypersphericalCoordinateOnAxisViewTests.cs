@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Arnible.MathModeling.Algebra;
+using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
@@ -50,6 +51,25 @@ namespace Arnible.MathModeling.Geometry.Test
       var rcView = view.GetLineView(1);
       AreEqual(view.R, rcView.R);
       AreEqual(2d, rcView.X);
+    }
+
+    [Theory]
+    [InlineData(1u)]
+    [InlineData(2u)]
+    [InlineData(3u)]
+    [InlineData(4u)]
+    [InlineData(5u)]
+    [InlineData(6u)]
+    [InlineData(7u)]
+    [InlineData(8u)]
+    public void GetIdentityVector(uint dimensionsCount)
+    {
+      var vector = HypersphericalCoordinateOnAxisView.GetIdentityVector(dimensionsCount);
+      AreEqual(dimensionsCount, vector.Length);
+
+      IsTrue(vector.All(v => v > 0));
+      AreEquals(NumberVector.Repeat(HypersphericalCoordinateOnAxisView.GetIdentityVectorRatio(dimensionsCount), dimensionsCount), vector);      
+      AreEqual(1d, vector.Select(v => v * v).SumDefensive());
     }
   }
 }

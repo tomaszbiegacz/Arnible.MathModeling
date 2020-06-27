@@ -55,7 +55,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void FirstNonZeroValueAt()
     {
-      AreEqual(new NumberVector(0, 0, 5), NumberVector.FirstNonZeroValueAt(pos: 2, value: 5));
+      AreEqual(new NumberVector(0, 0, 5), NumberVector.NonZeroValueAt(pos: 2, value: 5));
     }
 
     [Fact]

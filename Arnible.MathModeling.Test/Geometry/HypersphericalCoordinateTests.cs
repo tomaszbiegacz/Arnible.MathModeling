@@ -78,8 +78,8 @@ namespace Arnible.MathModeling.Geometry.Test
       AreEqual(3u, hc.DimensionsCount);
       AreEqual(cc.VectorLength(), hc.R);
 
-      double φ = hc.Angles[0];    // r to y
-      double θ = hc.Angles[1];    // r to xy
+      double φ = (double)hc.Angles[0];    // r to y
+      double θ = (double)hc.Angles[1];    // r to xy
 
       var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
       AreEqual(3, derrivatives.Length);

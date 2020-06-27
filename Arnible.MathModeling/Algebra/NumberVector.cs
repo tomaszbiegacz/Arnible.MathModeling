@@ -1,4 +1,5 @@
 ﻿using Arnible.MathModeling.Export;
+using Arnible.MathModeling.Logic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,14 +34,24 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public static NumberVector FirstNonZeroValueAt(uint pos, Number value)
+    public static NumberVector NonZeroValueAt(uint pos, Number value)
     {
       if (value == 0)
       {
         throw new ArgumentException(nameof(value));
       }
       
-      return new NumberVector(LinqEnumerable.Repeat<Number>(0, pos).Append(value).ToImmutableArray());      
+      return new NumberVector (LinqEnumerable.Repeat<Number>(0, pos).Append(value).ToImmutableArray());      
+    }
+
+    public static NumberVector NonZeroValueAt(IBitArray pos, Number value)
+    {
+      if (value == 0)
+      {
+        throw new ArgumentException(nameof(value));
+      }
+
+      return Create(pos.Select(v => v ? value : 0));
     }
 
     private readonly ImmutableArray<Number> _values;

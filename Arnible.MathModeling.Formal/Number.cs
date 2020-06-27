@@ -28,7 +28,7 @@ namespace Arnible.MathModeling
     public static explicit operator Polynomial(Number v) => (Polynomial)v._value;
 
     public static implicit operator Number(PolynomialDivision v) => new Number(v);
-    public static implicit operator PolynomialDivision(Number v) => v._value;
+    public static explicit operator PolynomialDivision(Number v) => v._value;
 
     //
     // Object
