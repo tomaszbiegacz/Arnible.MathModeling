@@ -15,7 +15,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(θ, φ));
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 
-      var derivatives = view.DerivativeByR().ToArray();
+      var derivatives = view.DerivativeByR().ToValueArray();
       AreEqual(cartesianPoint.DimensionsCount, derivatives.Length);
       for (uint dimensionPos = 0; dimensionPos < cartesianPoint.DimensionsCount; ++dimensionPos)
       {
@@ -33,7 +33,7 @@ namespace Arnible.MathModeling.Geometry.Test
       for (uint anglePos = 0; anglePos < sphericalPoint.Angles.Length; ++anglePos)
       {
         PolynomialTerm angleTerm = (PolynomialTerm)sphericalPoint.Angles[anglePos];
-        var derivatives = view.GetCartesianAxisViewsRatiosDerivativesByAngle(anglesCount: 4, anglePos: anglePos).ToArray();
+        var derivatives = view.GetCartesianAxisViewsRatiosDerivativesByAngle(anglesCount: 4, anglePos: anglePos).ToValueArray();
         AreEqual(view.DimensionsCount, derivatives.Length);
         for (uint coordinatePos = 0; coordinatePos < view.Coordinates.Length; ++coordinatePos)
         {

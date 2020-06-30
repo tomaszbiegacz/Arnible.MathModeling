@@ -2,14 +2,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Globalization;
 
 namespace Arnible.MathModeling
 {
   [Serializable]
   [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
-  public readonly struct NumberArray : IEquatable<NumberArray>, IReadOnlyList<Number>
+  public readonly struct NumberArray : IEquatable<NumberArray>, IArray<Number>
   {
     class Serializer : ToStringSerializer<NumberArray>
     {
@@ -19,69 +18,52 @@ namespace Arnible.MathModeling
       }
     }
 
-    private static IReadOnlyList<Number> Empty = ImmutableList<Number>.Empty;
-
     public static NumberArray Repeat(Number value, uint length)
     {
-      return new NumberArray(LinqEnumerable.Repeat(value, length).ToImmutableArray());
+      return new NumberArray(LinqEnumerable.Repeat(value, length).ToValueArray());
     }
 
-    private readonly ImmutableArray<Number> _values;
+    private readonly ValueArray<Number> _values;
 
     internal static NumberArray Create(IEnumerable<Number> src)
     {
-      return new NumberArray(src?.ToImmutableArray() ?? ImmutableArray<Number>.Empty);
+      return new NumberArray(src.ToValueArray());
     }
 
     public NumberArray(params Number[] parameters)
-      : this(parameters.ToImmutableArray())
+      : this(parameters.ToValueArray())
     {
       // intentionally empty
     }
 
-    private NumberArray(ImmutableArray<Number> parameters)
+    private NumberArray(ValueArray<Number> parameters)
     {
       _values = parameters;
     }
 
     //
     // Properties
-    //        
+    //                
 
-    private IReadOnlyList<Number> Values => _values.IsDefaultOrEmpty ? Empty : _values;
-
-    public Number this[uint pos]
-    {
-      get
-      {
-        if (pos >= Length)
-          throw new InvalidOperationException($"Invalid index: {pos}");
-
-        return _values[(int)pos];
-      }
-    }
-
-    public uint Length => (uint)(Values.Count);
-
-    public bool IsZero => _values.IsDefaultOrEmpty || _values.All(v => v == 0);
+    public bool IsZero => _values.All(v => v == 0);
 
     //
-    // IReadOnlyList
-    //
+    // IArray
+    //    
 
-    Number IReadOnlyList<Number>.this[int pos] => Values[pos];
+    public Number this[uint pos] => _values[pos];
 
-    public IEnumerator<Number> GetEnumerator() => Values.GetEnumerator();
+    public uint Length => _values.Length;
 
-    IEnumerator IEnumerable.GetEnumerator() => Values.GetEnumerator();
+    public IEnumerator<Number> GetEnumerator() => _values.GetEnumerator();
 
-    int IReadOnlyCollection<Number>.Count => Values.Count;
+    IEnumerator IEnumerable.GetEnumerator() => _values.GetEnumerator();
 
     //
     // IEquatable
     //
 
-    public bool Equals(NumberArray other) => Values.SequenceEqual(other.Values);
+    public bool Equals(NumberArray other) => _values.SequenceEqual(other._values);
 
 
     public override bool Equals(object obj)
@@ -100,13 +82,13 @@ namespace Arnible.MathModeling
 
     public string ToString(CultureInfo cultureInfo)
     {
-      return "[" + string.Join(" ", Values.Select(v => v.ToString(cultureInfo))) + "]";
+      return "[" + string.Join(" ", _values.Select(v => v.ToString(cultureInfo))) + "]";
     }
 
     public override int GetHashCode()
     {
       int hc = Length.GetHashCode();
-      foreach (var v in Values)
+      foreach (var v in _values)
       {
         hc = unchecked(hc * 314159 + v.GetHashCode());
       }
@@ -122,12 +104,12 @@ namespace Arnible.MathModeling
 
     public NumberArray Transform(Func<Number, Number> transformation)
     {
-      return new NumberArray(Values.Select(transformation).ToImmutableArray());
+      return new NumberArray(_values.Select(transformation).ToValueArray());
     }
 
     public NumberArray Transform(Func<uint, Number, Number> transformation)
     {
-      return new NumberArray(Values.Select(transformation).ToImmutableArray());
-    }    
+      return new NumberArray(_values.Select(transformation).ToValueArray());
+    }
   }
 }

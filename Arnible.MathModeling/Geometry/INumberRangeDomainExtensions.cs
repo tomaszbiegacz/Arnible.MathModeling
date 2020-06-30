@@ -29,7 +29,7 @@ namespace Arnible.MathModeling.Geometry
       HypersphericalAngleTranslationVector delta)
     {
       domain.Validate(value.ToCartesianView().Coordinates);
-      uint[] nonZeroAngles = LinqEnumerable.RangeUint(0, delta.Length).Where(i => delta[i] != 0).ToArray();
+      ValueArray<uint> nonZeroAngles = LinqEnumerable.RangeUint(0, delta.Length).Where(i => delta[i] != 0).ToValueArray();
       if (nonZeroAngles.Length != 1)
       {
         throw new ArgumentException("Exactly one angle has to be non-negative. Other options are not yet supported.");

@@ -45,6 +45,7 @@
     <Compile Include="..\Arnible.MathModeling\Geometry\PolarCoordinate.cs" Link="Geometry\PolarCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\QuantifiedDirectionsFactory.cs" Link="Geometry\QuantifiedDirectionsFactory.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\RectangularCoordianate.cs" Link="Geometry\RectangularCoordianate.cs" />
+    <Compile Include="..\Arnible.MathModeling\IArray.cs" Link="IArray.cs" />
     <Compile Include="..\Arnible.MathModeling\IBinaryOperation.cs" Link="IBinaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IFinitaryOperation.cs" Link="IFinitaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IndeterminateExpression.cs" Link="IndeterminateExpression.cs" />
@@ -60,8 +61,6 @@
     <Compile Include="..\Arnible.MathModeling\LinqSum.tt.cs" Link="LinqSum.tt.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqTransformation.cs" Link="LinqTransformation.cs" />
     <Compile Include="..\Arnible.MathModeling\Logic\BitArrayEnumerable.cs" Link="Logic\BitArrayEnumerable.cs" />
-    <Compile Include="..\Arnible.MathModeling\Logic\IBitArray.cs" Link="Logic\IBitArray.cs" />
-    <Compile Include="..\Arnible.MathModeling\Logic\IBitArrayExtentions.cs" Link="Logic\IBitArrayExtentions.cs" />
     <Compile Include="..\Arnible.MathModeling\MetaMath.cs" Link="MetaMath.cs" />
     <Compile Include="..\Arnible.MathModeling\NumberArray.cs" Link="NumberArray.cs" />
     <Compile Include="..\Arnible.MathModeling\NumberArrayExtensions.cs" Link="NumberArrayExtensions.cs" />
@@ -72,11 +71,8 @@
     <Compile Include="..\Arnible.MathModeling\PolynomialFinitaryOperation.cs" Link="PolynomialFinitaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\PolynomialTerm.cs" Link="PolynomialTerm.cs" />
     <Compile Include="..\Arnible.MathModeling\Term.cs" Link="Term.cs" />
+    <Compile Include="..\Arnible.MathModeling\ValueArray.cs" Link="ValueArray.cs" />
     <Compile Include="..\Arnible.MathModeling\VariableTerm.cs" Link="VariableTerm.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Collections.Immutable" Version="1.7.1" />
   </ItemGroup>
 
   <ItemGroup>

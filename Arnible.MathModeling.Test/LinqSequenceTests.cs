@@ -13,7 +13,7 @@ namespace Arnible.MathModeling.Test
 
     private static IEnumerable<IEnumerable<int>> Materialize(IEnumerable<IEnumerable<int>> enumerator)
     {
-      return enumerator.Select(e => e.ToArray()).ToArray();
+      return enumerator.Select(e => e.ToReadOnlyList()).ToReadOnlyList();
     }
 
     [Fact]

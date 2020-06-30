@@ -16,7 +16,7 @@ namespace Arnible.MathModeling
       {
         throw new ArgumentException(nameof(items));
       }
-      return ToSequncesWithReturningInternal(items.ToArray(), length);
+      return ToSequncesWithReturningInternal(items.ToReadOnlyList(), length);
     }
 
     public static IEnumerable<IEnumerable<T>> ToSequncesWithReturning<T>(this IEnumerable<T> items)
@@ -25,11 +25,11 @@ namespace Arnible.MathModeling
       {
         throw new ArgumentException(nameof(items));
       }
-      var x = items.ToArray();
-      return ToSequncesWithReturningInternal(x, (uint)x.Length);
+      var x = items.ToReadOnlyList();
+      return ToSequncesWithReturningInternal(x, (uint)x.Count);
     }
 
-    private static IEnumerable<IEnumerable<T>> ToSequncesWithReturningInternal<T>(T[] items, uint length)
+    private static IEnumerable<IEnumerable<T>> ToSequncesWithReturningInternal<T>(IReadOnlyList<T> items, uint length)
     {
       if (length > 0)
       {
@@ -42,7 +42,7 @@ namespace Arnible.MathModeling
         }
         else
         {
-          for (int i = 0; i < items.Length; ++i)
+          for (int i = 0; i < items.Count; ++i)
           {
             var e = items[i];
             foreach (IEnumerable<T> combination in ToSequncesWithReturningInternal(items, length - 1))

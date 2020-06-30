@@ -65,7 +65,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        var commonVariables = GetCommonIdentityVariables(numerator: numerator, denominator: denominator).ToArray();
+        var commonVariables = GetCommonIdentityVariables(numerator: numerator, denominator: denominator).ToValueArray();
         if (commonVariables.Length > 0)
         {
           numerator = numerator.ReduceByCommon(commonVariables);

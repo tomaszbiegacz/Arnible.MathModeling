@@ -8,7 +8,7 @@ namespace Arnible.MathModeling.Algebra
 {
   [Serializable]
   [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
-  public readonly struct NumberTranslationVector : IEquatable<NumberTranslationVector>, IEquatable<Number>, IReadOnlyList<Number>
+  public readonly struct NumberTranslationVector : IEquatable<NumberTranslationVector>, IEquatable<Number>, IArray<Number>
   {
     private readonly NumberVector _change;
 
@@ -82,16 +82,12 @@ namespace Arnible.MathModeling.Algebra
     public static bool operator !=(Number a, NumberTranslationVector b) => !b.Equals(a);
 
     /*
-     * IReadOnlyList
-     */
-
-    Number IReadOnlyList<Number>.this[int pos] => _change[(uint)pos];
+     * IArray
+     */    
 
     public IEnumerator<Number> GetEnumerator() => _change.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator() => _change.GetEnumerator();
-
-    int IReadOnlyCollection<Number>.Count => (int)_change.Length;
+    IEnumerator IEnumerable.GetEnumerator() => _change.GetEnumerator();    
 
     /*
      * Operations

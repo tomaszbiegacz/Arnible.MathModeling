@@ -32,12 +32,12 @@ foreach(var kv in generatedTypes)
       {
         throw new ArgumentNullException(nameof(x));
       }
-      <#= kv.Key #>[] items = x.ToArray();
-      if (items.Length == 0)
+      IReadOnlyList<<#= kv.Key #>> items = x.ToReadOnlyList();
+      if (items.Count == 0)
       {
         throw new ArgumentNullException(nameof(x));
       }
-      return items.SumDefensive() / items.Length;
+      return items.SumDefensive() / items.Count;
     }
     
 <#

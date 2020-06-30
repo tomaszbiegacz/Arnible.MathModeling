@@ -12,13 +12,13 @@ namespace Arnible.MathModeling
 
     public static NumberArray ToNumberArray(this IEnumerable<Number> numbers, uint length)
     {
-      Number[] items = numbers.ToArray();
+      ValueArray<Number> items = numbers.ToValueArray();
       if(items.Length > length)
       {
         throw new ArgumentException(nameof(length));
       }
 
-      uint toAdd = (uint)(length - items.Length);
+      uint toAdd = length - items.Length;
       return NumberArray.Create(items.Concat(LinqEnumerable.Repeat<Number>(0, toAdd)));
     }
 

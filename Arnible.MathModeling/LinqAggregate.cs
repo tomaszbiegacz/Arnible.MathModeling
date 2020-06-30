@@ -59,7 +59,7 @@ namespace Arnible.MathModeling
       return groupByKey.Where(kv => kv.Value.Count == sequenceCount).ToDictionary(kv => kv.Key, kv => aggregator(kv.Value));
     }
 
-    private static IEnumerable<T> AggregateCombinations<T>(T[] x, uint i, uint groupCount, Func<IEnumerable<T>, T> aggregator, Stack<T> combination)
+    private static IEnumerable<T> AggregateCombinations<T>(IReadOnlyList<T> x, uint i, uint groupCount, Func<IEnumerable<T>, T> aggregator, Stack<T> combination)
     {
       if (groupCount == combination.Count)
       {
@@ -68,9 +68,9 @@ namespace Arnible.MathModeling
       else
       {
         uint combinationLength = (uint)combination.Count;
-        for (uint j = i; j < x.Length; ++j)
+        for (uint j = i; j < x.Count; ++j)
         {
-          combination.Push(x[j]);
+          combination.Push(x[(int)j]);
           foreach (T v in AggregateCombinations(x, j + 1, groupCount, aggregator, combination))
           {
             yield return v;
@@ -99,10 +99,10 @@ namespace Arnible.MathModeling
       {
         throw new ArgumentException(nameof(items));
       }
-      var x = items.ToArray();
-      if (x.Length < groupSize)
+      IReadOnlyList<T> x = items.ToReadOnlyList();
+      if (x.Count < groupSize)
       {
-        throw new ArgumentException($"x.Length: {x.Length} where groupCount: {groupSize}");
+        throw new ArgumentException($"x.Length: {x.Count} where groupCount: {groupSize}");
       }
       if (aggregator == null)
       {
@@ -122,14 +122,14 @@ namespace Arnible.MathModeling
       {
         throw new ArgumentException(nameof(items));
       }
-      var x = items.ToArray();
+      IReadOnlyList<T> x = items.ToReadOnlyList();
       if (aggregator == null)
       {
         throw new ArgumentException(nameof(aggregator));
       }
 
       var combination = new Stack<T>();
-      for (uint groupCount = 1; groupCount <= x.Length; ++groupCount)
+      for (uint groupCount = 1; groupCount <= x.Count; ++groupCount)
       {
         foreach (T item in AggregateCombinations(x, 0, groupCount, aggregator, combination))
         {

@@ -6,7 +6,7 @@ namespace Arnible.MathModeling
   class PolynomialFinitaryOperation : IFinitaryOperation<double>
   {
     private readonly IPolynomialOperation _polynomial;
-    private readonly char[] _variables;
+    private readonly ValueArray<char> _variables;
 
     public PolynomialFinitaryOperation(IPolynomialOperation polynomial, IEnumerable<char> variables)
     {
@@ -17,7 +17,7 @@ namespace Arnible.MathModeling
       {
         throw new ArgumentException($"variables are not equal to polynomial variables");
       }
-      _variables = variables.ToArray();
+      _variables = variables.ToValueArray();
     }
 
     public double Value(IEnumerable<double> x)
@@ -35,9 +35,9 @@ namespace Arnible.MathModeling
           {
             throw new ArgumentException($"Too many arguments, expected {_variables.Length}, got {i}.");
           }
-          args[_variables[i]] = xEnum.Current;
+          args[_variables[(uint)i]] = xEnum.Current;
         }
-        if (i < _variables.Length - 1)
+        if (i + 1 < _variables.Length)
         {
           throw new ArgumentException($"too few arguments, expected {_variables.Length}, got {i}.");
         }

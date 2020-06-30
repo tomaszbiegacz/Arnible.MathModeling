@@ -8,13 +8,13 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Indexes()
     {
-      AreEquals(new[] { 0u, 1u, 2u }, (new[] { 1, 2, 3 }).Indexes());
+      AreEquals(new[] { 0, 1, 2 }, (new[] { 1, 2, 3 }).Indexes());
     }
 
     [Fact]
     public void IndexesWhere()
     {
-      AreEquals(new[] { 0u, 2u }, (new[] { 1, 2, 3 }).IndexesWhere(v => v != 2));
+      AreEquals(new[] { 0, 2 }, (new[] { 1, 2, 3 }).IndexesWhere(v => v != 2));
     }
 
     [Fact]

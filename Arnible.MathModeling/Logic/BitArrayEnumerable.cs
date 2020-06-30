@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Logic
 {
-  public class BitArrayEnumerable : IBitArray, IReadOnlyList<bool>
+  public class BitArrayEnumerable : IArray<bool>
   {
     private readonly BitArray _bits;
 
@@ -19,7 +19,7 @@ namespace Arnible.MathModeling.Logic
 
     private BitArrayEnumerable(IEnumerable<bool> bits)
     {
-      _bits = new BitArray(bits.ToArray());
+      _bits = new BitArray(System.Linq.Enumerable.ToArray(bits));
     }
 
     private static IEnumerable<bool> EnumerableFromNumber(uint value)
@@ -42,20 +42,12 @@ namespace Arnible.MathModeling.Logic
     }
 
     /*
-     * IBitArray
+     * IArray
      */
 
     public bool this[uint index] => _bits[(int)index];
 
-    public uint Length => (uint)_bits.Length;
-
-    /*
-     * IReadOnlyList
-     */
-
-    bool IReadOnlyList<bool>.this[int index] => _bits[index];
-
-    int IReadOnlyCollection<bool>.Count => _bits.Length;
+    public uint Length => (uint)_bits.Length;    
 
     public IEnumerator<bool> GetEnumerator()
     {

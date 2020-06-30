@@ -47,7 +47,7 @@ namespace Arnible.MathModeling.Geometry.Test
       const double φ = Math.PI / 3;                           // x to r
       AreEqual(φ, hc.Angles.Single());
 
-      var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
+      var derrivatives = hc.ToCartesianView().DerivativeByR().ToValueArray();
       AreEqual(2, derrivatives.Length);
       AreEqual(0.5, derrivatives[0].First);                 // x
       AreEqual(Math.Sqrt(3) / 2, derrivatives[1].First);    // y
@@ -58,7 +58,7 @@ namespace Arnible.MathModeling.Geometry.Test
 
     private static void VerifyCartesianCoordinateAngle(HypersphericalCoordinate hc, CartesianCoordinate cc)
     {
-      var cartesianCoordinatesAngles = hc.ToCartesianView().CartesianCoordinatesAngles().ToArray();
+      var cartesianCoordinatesAngles = hc.ToCartesianView().CartesianCoordinatesAngles().ToValueArray();
       AreEqual((uint)cartesianCoordinatesAngles.Length, cc.DimensionsCount);
 
       for (uint pos = 0; pos < cc.DimensionsCount; ++pos)
@@ -81,7 +81,7 @@ namespace Arnible.MathModeling.Geometry.Test
       double φ = (double)hc.Angles[0];    // r to y
       double θ = (double)hc.Angles[1];    // r to xy
 
-      var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
+      var derrivatives = hc.ToCartesianView().DerivativeByR().ToValueArray();
       AreEqual(3, derrivatives.Length);
       AreEqual(Math.Cos(θ) * Math.Cos(φ), derrivatives[0].First);   // x
       AreEqual(Math.Cos(θ) * Math.Sin(φ), derrivatives[1].First);   // y
@@ -105,7 +105,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AreEqual(φ, hc.Angles[0]);
       AreEqual(θ, hc.Angles[1]);
 
-      var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
+      ValueArray<Derivative1Value> derrivatives = hc.ToCartesianView().DerivativeByR().ToValueArray();
       AreEqual(3, derrivatives.Length);
       AreEqual(Math.Sqrt(2) / 4, derrivatives[0].First);      // x
       AreEqual(Math.Sqrt(2) / 4, derrivatives[1].First);      // y

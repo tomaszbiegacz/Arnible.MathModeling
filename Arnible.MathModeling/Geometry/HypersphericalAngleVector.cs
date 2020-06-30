@@ -13,7 +13,7 @@ namespace Arnible.MathModeling.Geometry
   /// </summary>
   [Serializable]
   [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
-  public readonly struct HypersphericalAngleVector : IEquatable<HypersphericalAngleVector>, IEquatable<Number>, IReadOnlyList<Number>
+  public readonly struct HypersphericalAngleVector : IEquatable<HypersphericalAngleVector>, IEquatable<Number>, IArray<Number>
   {
     private readonly NumberVector _angles;
 
@@ -107,16 +107,12 @@ namespace Arnible.MathModeling.Geometry
     public Number GetOrDefault(uint pos) => _angles.GetOrDefault(pos);
 
     //
-    // IReadOnlyList
+    // IArray
     //    
-
-    Number IReadOnlyList<Number>.this[int pos] => _angles[(uint)pos];
 
     public IEnumerator<Number> GetEnumerator() => _angles.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator() => _angles.GetEnumerator();
-
-    int IReadOnlyCollection<Number>.Count => (int)Length;
+    IEnumerator IEnumerable.GetEnumerator() => _angles.GetEnumerator();    
 
     //
     // IEquatable

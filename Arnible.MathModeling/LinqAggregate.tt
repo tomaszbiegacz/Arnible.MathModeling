@@ -255,13 +255,13 @@ void Print_MedianDefensive(string typeName)
         throw new ArgumentNullException(nameof(x));
       }
 
-      <#= typeName #>[] items = x.ToArray();
-      if(items.Length == 0)
+      List<<#= typeName #>> items = x.ToList();
+      if(items.Count == 0)
       {
         throw new ArgumentNullException(nameof(x));
       }
-      Array.Sort(items);
-      return items[items.Length / 2];
+      items.Sort();
+      return items[items.Count / 2];
     }
 
 <#+

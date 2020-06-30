@@ -13,7 +13,7 @@ namespace Arnible.MathModeling
       return terms.SelectMany(t => t.DerivativeBy(name));
     }
 
-    private static Number Derivative2Ingredient(Derivative2Value[] args, uint pos)
+    private static Number Derivative2Ingredient(IArray<Derivative2Value> args, uint pos)
     {
       Number result = args[pos].Second;
       for (uint i = 0; i < pos; ++i)
@@ -47,7 +47,7 @@ namespace Arnible.MathModeling
     /// </summary>    
     public static Derivative2Value ForComposition(this IEnumerable<Derivative2Value> derivatives)
     {
-      var args = derivatives.ToArray();
+      var args = derivatives.ToValueArray();
       return new Derivative2Value(
         first: args.Select(d => d.First).ProductDefensive(),
         second: args.Indexes().Select(pos => Derivative2Ingredient(args, pos)).SumDefensive());
@@ -74,13 +74,13 @@ namespace Arnible.MathModeling
     /// <summary>
     /// Calculate derivative as a sum of (value derivate and other values product) for each value.
     /// </summary>    
-    public static Derivative1Value ForProductByParameter(NumberArray productValues, IEnumerable<Derivative1Value> valueDerrivativeByParameter)
+    public static Derivative1Value ForProductByParameter(IArray<Number> productValues, IEnumerable<Derivative1Value> valueDerrivativeByParameter)
     {
       if (productValues.Length < 1)
       {
         throw new ArgumentException(nameof(productValues));
       }
-      var valueDerivatives = valueDerrivativeByParameter.ToArray();
+      var valueDerivatives = valueDerrivativeByParameter.ToValueArray();
       if (valueDerivatives.Length != productValues.Length)
       {
         throw new ArgumentException(nameof(valueDerrivativeByParameter));

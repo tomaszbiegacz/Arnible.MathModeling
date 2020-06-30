@@ -5,16 +5,32 @@ namespace Arnible.MathModeling
 {
   public static class LinqArray
   {
-    public static IEnumerable<uint> Indexes<T>(this T[] arg)
+    public static IEnumerable<int> Indexes<T>(this IReadOnlyList<T> arg)
     {
-      return LinqEnumerable.RangeUint((uint)arg.Length);
+      return LinqEnumerable.RangeInt(arg.Count);
     }
 
-    public static IEnumerable<uint> IndexesWhere<T>(this T[] arg, Func<T, bool> predicate)
+    public static IEnumerable<uint> Indexes<T>(this IArray<T> arg)
     {
-      for(uint i=0; i<arg.Length; ++i)
+      return LinqEnumerable.RangeUint(arg.Length);
+    }
+
+    public static IEnumerable<int> IndexesWhere<T>(this IReadOnlyList<T> arg, Func<T, bool> predicate)
+    {
+      for(int i=0; i<arg.Count; ++i)
       {
         if(predicate(arg[i]))
+        {
+          yield return i;
+        }
+      }
+    }
+
+    public static IEnumerable<uint> IndexesWhere<T>(this IArray<T> arg, Func<T, bool> predicate)
+    {
+      for (uint i = 0; i < arg.Length; ++i)
+      {
+        if (predicate(arg[i]))
         {
           yield return i;
         }

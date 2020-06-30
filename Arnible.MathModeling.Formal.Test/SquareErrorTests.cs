@@ -19,14 +19,14 @@ namespace Arnible.MathModeling.Test
     public void DerivativeByX()
     {
       var p = new RectangularCoordianate(x, y);
-      AreDerivativesEqual(_error.Value(x, y), x, _error.DerivativeByX(p));
+      AreDerivativesEqual((PolynomialDivision)_error.Value(x, y), x, _error.DerivativeByX(p));
     }
 
     [Fact]
     public void DerivativeByY()
     {
       var p = new RectangularCoordianate(x, y);
-      AreDerivativesEqual(_error.Value(x, y), y, _error.DerivativeByY(p));
+      AreDerivativesEqual((PolynomialDivision)_error.Value(x, y), y, _error.DerivativeByY(p));
     }
 
     [Fact]
@@ -35,7 +35,7 @@ namespace Arnible.MathModeling.Test
       var cartesianPoint = new RectangularCoordianate(x, y);
       var polarPoint = new PolarCoordinate(r, φ);
       var valueInPolar = _error.Value(x, y).ToPolar(cartesianPoint, polarPoint);
-      AreDerivativesEqual(valueInPolar, r, _error.DerivativeByR(polarPoint));
+      AreDerivativesEqual((PolynomialDivision)valueInPolar, r, _error.DerivativeByR(polarPoint));
     }
 
     [Fact]
@@ -44,7 +44,7 @@ namespace Arnible.MathModeling.Test
       var cartesianPoint = new RectangularCoordianate(x, y);
       var polarPoint = new PolarCoordinate(r, φ);
       var valueInPolar = _error.Value(x, y).ToPolar(cartesianPoint, polarPoint);
-      AreDerivativesEqual(valueInPolar, φ, _error.DerivativeByΦ(polarPoint));
+      AreDerivativesEqual((PolynomialDivision)valueInPolar, φ, _error.DerivativeByΦ(polarPoint));
     }
   }
 }

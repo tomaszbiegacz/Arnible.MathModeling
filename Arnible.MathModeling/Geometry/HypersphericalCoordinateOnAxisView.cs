@@ -124,10 +124,10 @@ namespace Arnible.MathModeling.Geometry
     public IEnumerable<HypersphericalAngleVector> CartesianCoordinatesAngles()
     {
       uint anglesCount = _p.Angles.Length;
-      Number[] x = LinqEnumerable.Repeat<Number>(0, anglesCount).ToArray();
+      List<Number> x = LinqEnumerable.Repeat<Number>(0, anglesCount).ToList();
 
       yield return x.ToAngleVector();
-      for (uint i = 0; i < anglesCount; ++i)
+      for (int i = 0; i < anglesCount; ++i)
       {
         x[i] = Angle.RightAngle;
         yield return x.ToAngleVector();

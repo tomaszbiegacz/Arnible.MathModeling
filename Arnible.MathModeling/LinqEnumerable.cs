@@ -53,9 +53,19 @@ namespace Arnible.MathModeling
      * Materialization
      */
 
-    public static T[] ToArray<T>(this IEnumerable<T> source)
+    public static ValueArray<T> ToValueArray<T>(this IEnumerable<T> source) where T: struct
+    {
+      return new ValueArray<T>(source);
+    }
+
+    public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
     {
       return System.Linq.Enumerable.ToArray(source);
+    }
+
+    public static List<T> ToList<T>(this IEnumerable<T> source)
+    {
+      return System.Linq.Enumerable.ToList(source);
     }
 
     public static IDictionary<TKey, TSource> ToDictionary<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
@@ -78,6 +88,16 @@ namespace Arnible.MathModeling
     public static IEnumerable<T> Yield<T>(T src)
     {
       yield return src;
+    }
+
+    public static IEnumerable<int> RangeInt(int length) => RangeInt(0, length);
+
+    public static IEnumerable<int> RangeInt(int start, int length)
+    {
+      for (int i = start; i < start + length; ++i)
+      {
+        yield return i;
+      }
     }
 
     public static IEnumerable<uint> RangeUint(uint length) => RangeUint(0, length);

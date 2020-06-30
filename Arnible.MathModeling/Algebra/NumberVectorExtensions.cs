@@ -17,25 +17,25 @@ namespace Arnible.MathModeling.Algebra
 
     private static (NumberVector, uint) SumWithCount(IEnumerable<NumberVector> vectors)
     {
-      Number[] result = null;
+      List<Number> result = null;
       uint itemsCount = 0;
       foreach (var item in vectors)
       {
         itemsCount++;
         if (result == null)
         {
-          result = item.ToArray();
+          result = item.ToList();
         }
         else
         {
-          if (item.Length != result.Length)
+          if (item.Length != result.Count)
           {
             throw new ArgumentException(nameof(vectors));
           }
 
           using (var itemEnumerator = item.GetEnumerator())
           {
-            for (int i = 0; i < result.Length; ++i)
+            for (int i = 0; i < result.Count; ++i)
             {
               if (!itemEnumerator.MoveNext())
               {
@@ -46,7 +46,7 @@ namespace Arnible.MathModeling.Algebra
           }            
         }
       }
-      return (result != null ? new NumberVector(result) : default, itemsCount);
+      return (result != null ? result.ToVector() : default, itemsCount);
     }
 
     public static NumberVector Sum(this IEnumerable<NumberVector> vectors)

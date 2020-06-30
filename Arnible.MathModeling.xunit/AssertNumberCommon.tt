@@ -69,10 +69,10 @@ void Print_Equatable()
 
     public static void AreEquals<T>(IEnumerable<T> expected, IEnumerable<T> actual)  where T: IEquatable<T>
     {
-      T[] expectedArray = expected.ToArray();
-      T[] actualArray = actual.ToArray();
-      AreEqual(expectedArray.Length, actualArray.Length);
-      for (int i = 0; i < expectedArray.Length; i++)
+      IReadOnlyList<T> expectedArray = expected.ToReadOnlyList();
+      IReadOnlyList<T> actualArray = actual.ToReadOnlyList();
+      AreEqual(expectedArray.Count, actualArray.Count);
+      for (int i = 0; i < expectedArray.Count; i++)
       {
         AreEqual<T>(expectedArray[i], actualArray[i]);
       }
@@ -80,10 +80,10 @@ void Print_Equatable()
 
     public static void AreEquals<T>(IEnumerable<IEnumerable<T>> expected, IEnumerable<IEnumerable<T>> actual) where T : IEquatable<T>
     {
-      IEnumerable<T>[] expectedArray = expected.ToArray();
-      IEnumerable<T>[] actualArray = actual.ToArray();
-      AreEqual(expectedArray.Length, actualArray.Length);
-      for (int i = 0; i < expectedArray.Length; i++)
+      IReadOnlyList<IEnumerable<T>> expectedArray = expected.ToReadOnlyList();
+      IReadOnlyList<IEnumerable<T>> actualArray = actual.ToReadOnlyList();
+      AreEqual(expectedArray.Count, actualArray.Count);
+      for (int i = 0; i < expectedArray.Count; i++)
       {
         AreEquals<T>(expectedArray[i], actualArray[i]);
       }
@@ -95,10 +95,10 @@ void Print_Equatable()
 #>
     public static void AreEquals(IEnumerable<<#= typeName #>> expected, IEnumerable<<#= typeName #>> actual)
     {
-      <#= typeName #>[] expectedArray = expected.ToArray();
-      <#= typeName #>[] actualArray = actual.ToArray();
-      AreEqual(expectedArray.Length, actualArray.Length);
-      for (int i = 0; i < expectedArray.Length; i++)
+      IReadOnlyList<<#= typeName #>> expectedArray = expected.ToReadOnlyList();
+      IReadOnlyList<<#= typeName #>> actualArray = actual.ToReadOnlyList();
+      AreEqual(expectedArray.Count, actualArray.Count);
+      for (int i = 0; i < expectedArray.Count; i++)
       {
         AreEqual(expectedArray[i], actualArray[i]);
       }
@@ -106,10 +106,10 @@ void Print_Equatable()
 
     public static void AreEquals(IEnumerable<IEnumerable<<#= typeName #>>> expected, IEnumerable<IEnumerable<<#= typeName #>>> actual)
     {
-      IEnumerable<<#= typeName #>>[] expectedArray = expected.ToArray();
-      IEnumerable<<#= typeName #>>[] actualArray = actual.ToArray();
-      AreEqual(expectedArray.Length, actualArray.Length);
-      for (int i = 0; i < expectedArray.Length; i++)
+      IReadOnlyList<IEnumerable<<#= typeName #>>> expectedArray = expected.ToReadOnlyList();
+      IReadOnlyList<IEnumerable<<#= typeName #>>> actualArray = actual.ToReadOnlyList();
+      AreEqual(expectedArray.Count, actualArray.Count);
+      for (int i = 0; i < expectedArray.Count; i++)
       {
         AreEquals(expectedArray[i], actualArray[i]);
       }
@@ -158,10 +158,10 @@ void Print_AreExactlyEqual()
 
     public static void AreExactlyEquals(IEnumerable<double> expected, IEnumerable<double> actual)
     {
-      double[] expectedArray = expected.ToArray();
-      double[] actualArray = actual.ToArray();
-      AreEqual(expectedArray.Length, actualArray.Length);
-      for (int i = 0; i < expectedArray.Length; i++)
+      IReadOnlyList<double> expectedArray = expected.ToReadOnlyList();
+      IReadOnlyList<double> actualArray = actual.ToReadOnlyList();
+      AreEqual(expectedArray.Count, actualArray.Count);
+      for (int i = 0; i < expectedArray.Count; i++)
       {
         AreExactlyEqual(expectedArray[i], actualArray[i]);
       }

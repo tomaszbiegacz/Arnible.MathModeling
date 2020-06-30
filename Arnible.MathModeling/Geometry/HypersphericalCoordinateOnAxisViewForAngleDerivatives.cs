@@ -17,11 +17,11 @@ namespace Arnible.MathModeling.Geometry
         throw new ArgumentException(nameof(pos));
       }
 
-      Number[] angles = anglesVector.Concat(LinqEnumerable.Repeat<Number>(0, anglesCount - anglesVector.Length)).ToArray();
+      ValueArray<Number> angles = anglesVector.Concat(LinqEnumerable.Repeat<Number>(0, anglesCount - anglesVector.Length)).ToValueArray();
 
       var cartesianDimensions = new List<Number>();
       Number replacement = r;
-      int currentAnglePos = angles.Length;
+      uint currentAnglePos = angles.Length;
       foreach (var angle in angles.Reverse())
       {
         currentAnglePos--;

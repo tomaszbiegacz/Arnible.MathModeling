@@ -1,18 +1,16 @@
 ﻿using Arnible.MathModeling.Export;
-using Arnible.MathModeling.Logic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Globalization;
 
 namespace Arnible.MathModeling.Algebra
 {
   [Serializable]
   [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
-  public readonly struct NumberVector : IEquatable<NumberVector>, IEquatable<Number>, IReadOnlyList<Number>
+  public readonly struct NumberVector : IEquatable<NumberVector>, IEquatable<Number>, IArray<Number>
   {
-    private readonly static IReadOnlyList<Number> Zero = ImmutableList<Number>.Empty.Add(0);
+    private readonly static IEnumerable<Number> Zero = new ValueArray<Number>(0d);
 
     class Serializer : ToStringSerializer<NumberVector>
     {
@@ -30,7 +28,7 @@ namespace Arnible.MathModeling.Algebra
       }
       else
       {
-        return new NumberVector(LinqEnumerable.Repeat(value, length).ToImmutableArray());
+        return new NumberVector(LinqEnumerable.Repeat(value, length).ToValueArray());
       }
     }
 
@@ -40,11 +38,11 @@ namespace Arnible.MathModeling.Algebra
       {
         throw new ArgumentException(nameof(value));
       }
-      
-      return new NumberVector (LinqEnumerable.Repeat<Number>(0, pos).Append(value).ToImmutableArray());      
+
+      return new NumberVector(LinqEnumerable.Repeat<Number>(0, pos).Append(value).ToValueArray());
     }
 
-    public static NumberVector NonZeroValueAt(IBitArray pos, Number value)
+    public static NumberVector NonZeroValueAt(IArray<bool> pos, Number value)
     {
       if (value == 0)
       {
@@ -54,16 +52,16 @@ namespace Arnible.MathModeling.Algebra
       return Create(pos.Select(v => v ? value : 0));
     }
 
-    private readonly ImmutableArray<Number> _values;
+    private readonly ValueArray<Number> _values;
 
-    private static ImmutableArray<Number> GetNormalizedVector(IEnumerable<Number> parameters)
+    private static ValueArray<Number> GetNormalizedVector(IEnumerable<Number> parameters)
     {
       List<Number> result = new List<Number>(parameters ?? LinqEnumerable.Empty<Number>());
       while (result.Count > 0 && result[result.Count - 1] == 0)
       {
         result.RemoveAt(result.Count - 1);
       }
-      return result.ToImmutableArray();
+      return result.ToValueArray();
     }
 
     internal static NumberVector Create(IEnumerable<Number> parameters)
@@ -77,7 +75,7 @@ namespace Arnible.MathModeling.Algebra
       // intentionally empty
     }
 
-    private NumberVector(ImmutableArray<Number> parameters)
+    private NumberVector(ValueArray<Number> parameters)
     {
       _values = parameters;
     }
@@ -87,54 +85,64 @@ namespace Arnible.MathModeling.Algebra
 
     //
     // Properties
-    //    
-
-    private IReadOnlyList<Number> Values => _values.IsDefaultOrEmpty ? Zero : _values;
-
-    public Number this[uint pos]
-    {
-      get
-      {
-        if (pos >= Length)
-          throw new InvalidOperationException($"Invalid index: {pos}");
-
-        return Values[(int)pos];
-      }
-    }
-
-    public uint Length => (uint)(Values.Count);
+    //            
 
     public Number GetOrDefault(uint pos)
     {
       if (pos >= Length)
         return 0;
       else
-        return Values[(int)pos];
+        return _values[pos];
     }
 
     //
-    // IReadOnlyList
+    // IArray
     //
 
-    Number IReadOnlyList<Number>.this[int pos] => Values[pos];
+    private IEnumerable<Number> GetInternalEnumerator()
+    {
+      if(_values.Length == 0)
+      {
+        return Zero;
+      }
+      else
+      {
+        return _values;
+      }
+    }
 
-    public IEnumerator<Number> GetEnumerator() => Values.GetEnumerator();
+    public Number this[uint pos]
+    {
+      get
+      {
+        if(pos == 0 && _values.Length == 0)
+        {
+          return 0;
+        }
+        else
+        {
+          return _values[pos];
+        }
+      }
+    }
 
-    IEnumerator IEnumerable.GetEnumerator() => Values.GetEnumerator();
+    public uint Length => Math.Max(1, _values.Length);
 
-    int IReadOnlyCollection<Number>.Count => Values.Count;
+    public IEnumerator<Number> GetEnumerator() => GetInternalEnumerator().GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => GetInternalEnumerator().GetEnumerator();
 
     //
     // IEquatable
     //
 
-    public bool Equals(NumberVector other) => Values.SequenceEqual(other.Values);
+    public bool Equals(NumberVector other) => _values.SequenceEqual(other._values);
 
     public bool Equals(Number other)
     {
       if (Length == 1)
       {
-        return Values[0] == other;
+        return this[0] == other;
       }
       else
       {
@@ -162,20 +170,20 @@ namespace Arnible.MathModeling.Algebra
 
     public string ToString(CultureInfo cultureInfo)
     {
-      if (Values.Count == 1)
+      if (Length == 1)
       {
-        return Values[0].ToString(cultureInfo);
+        return this[0].ToString(cultureInfo);
       }
       else
       {
-        return "[" + string.Join(" ", Values.Select(v => v.ToString(cultureInfo))) + "]";
+        return "[" + string.Join(" ", GetInternalEnumerator().Select(v => v.ToString(cultureInfo))) + "]";
       }
     }
 
     public override int GetHashCode()
     {
       int hc = Length.GetHashCode();
-      foreach (var v in Values)
+      foreach (var v in _values)
       {
         hc = unchecked(hc * 314159 + v.GetHashCode());
       }
@@ -197,17 +205,17 @@ namespace Arnible.MathModeling.Algebra
 
     public NumberVector Transform(Func<Number, Number> transformation)
     {
-      return Create(Values.Select(transformation));
+      return Create(GetInternalEnumerator().Select(transformation));
     }
 
     public NumberVector Transform(Func<uint, Number, Number> transformation)
     {
-      return Create(Values.Select(transformation));
-    }    
+      return Create(GetInternalEnumerator().Select(transformation));
+    }
 
     public NumberArray ToArray(uint size)
     {
-      if(size < Length)
+      if (size < Length)
       {
         throw new ArgumentException(nameof(size), $"requested {size} whereas minimum is {Length}");
       }
@@ -219,10 +227,10 @@ namespace Arnible.MathModeling.Algebra
     // Arithmetic operators
     //
 
-    public static NumberVector operator +(NumberVector a, NumberVector b) => a.Values.Zip(b.Values, (va, vb) => (va ?? 0) + (vb ?? 0)).ToVector();
-    public static NumberVector operator -(NumberVector a, NumberVector b) => a.Values.Zip(b.Values, (va, vb) => (va ?? 0) - (vb ?? 0)).ToVector();
+    public static NumberVector operator +(NumberVector a, NumberVector b) => a.Zip(b, (va, vb) => (va ?? 0) + (vb ?? 0)).ToVector();
+    public static NumberVector operator -(NumberVector a, NumberVector b) => a.Zip(b, (va, vb) => (va ?? 0) - (vb ?? 0)).ToVector();
 
-    public static NumberVector operator /(NumberVector a, Number b) => new NumberVector(a.Values.Select(v => v / b).ToImmutableArray());
+    public static NumberVector operator /(NumberVector a, Number b) => new NumberVector(a.Select(v => v / b).ToValueArray());
 
     public static NumberVector operator *(NumberVector a, Number b)
     {
@@ -232,7 +240,7 @@ namespace Arnible.MathModeling.Algebra
       }
       else
       {
-        return new NumberVector(a.Values.Select(v => v * b).ToImmutableArray());
+        return new NumberVector(a.Select(v => v * b).ToValueArray());
       }
     }
 
