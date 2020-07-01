@@ -30,13 +30,13 @@ namespace Arnible.MathModeling
       }
       else
       {
-        _terms = new ValueArray<PolynomialTerm>(v);
+        _terms = new PolynomialTerm[] { v };
       }
     }
 
     private Polynomial(char v)
     {
-      _terms = new ValueArray<PolynomialTerm>(v);
+      _terms = new PolynomialTerm[] { v };
     }
 
     private static Polynomial CreateSimplified(IEnumerable<PolynomialTerm> terms)

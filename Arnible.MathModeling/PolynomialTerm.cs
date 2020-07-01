@@ -29,7 +29,7 @@ namespace Arnible.MathModeling
       }
       else
       {
-        _indeterminates = new ValueArray<IndeterminateExpression>(term);
+        _indeterminates = term;
         _indeterminatesSignature = _indeterminates.Single().ToString();
         GreatestPowerIndeterminate = term;
       }
@@ -408,10 +408,10 @@ namespace Arnible.MathModeling
 
     public IEnumerable<PolynomialTerm> DerivativeBy(char name)
     {
-      IReadOnlyList<IndeterminateExpression> notConstant = _indeterminates.Where(kv => kv.Variable == name).ToReadOnlyList();
-      if (notConstant.Count > 0)
+      ValueArray<IndeterminateExpression> notConstant = _indeterminates.Where(kv => kv.Variable == name).ToValueArray();
+      if (notConstant.Length > 0)
       {
-        IReadOnlyList<IndeterminateExpression> constantIndeterminates = _indeterminates.Where(kv => kv.Variable != name).ToReadOnlyList();
+        ValueArray<IndeterminateExpression> constantIndeterminates = _indeterminates.Where(kv => kv.Variable != name).ToValueArray();
         foreach (IndeterminateExpression toDerivative in notConstant)
         {
           yield return (new PolynomialTerm(_coefficient, notConstant.Where(nc => nc != toDerivative).Concat(constantIndeterminates))) * toDerivative.DerivativeBy(name);

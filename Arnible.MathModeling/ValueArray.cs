@@ -13,11 +13,9 @@ namespace Arnible.MathModeling
       _values = System.Linq.Enumerable.ToArray(items);
     }
 
-    public ValueArray(params T[] items)
-      : this((IEnumerable<T>)items)
-    {
-      // intentionally empty
-    }
+    public static implicit operator ValueArray<T>(T[] v) => new ValueArray<T>(v);
+
+    public static implicit operator ValueArray<T>(T v) => new ValueArray<T>(new[] { v });
 
     //
     // IArray
@@ -27,7 +25,7 @@ namespace Arnible.MathModeling
     {
       get
       {
-        if(_values == null || index >= _values.Length)
+        if (_values == null || index >= _values.Length)
         {
           throw new ArgumentException(nameof(index));
         }
@@ -45,7 +43,7 @@ namespace Arnible.MathModeling
 
     private IEnumerator<T> GetInternalEnumerator()
     {
-      if(_values == null)
+      if (_values == null)
       {
         return LinqEnumerable.Empty<T>().GetEnumerator();
       }

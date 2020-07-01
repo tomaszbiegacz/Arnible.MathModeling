@@ -10,7 +10,7 @@ namespace Arnible.MathModeling.Algebra
   [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
   public readonly struct NumberVector : IEquatable<NumberVector>, IEquatable<Number>, IArray<Number>
   {
-    private readonly static IEnumerable<Number> Zero = new ValueArray<Number>(0d);
+    private readonly static IEnumerable<Number> Zero = new Number[] { 0 }.ToValueArray();
 
     class Serializer : ToStringSerializer<NumberVector>
     {
@@ -50,6 +50,16 @@ namespace Arnible.MathModeling.Algebra
       }
 
       return Create(pos.Select(v => v ? value : 0));
+    }
+
+    public static NumberVector NonZeroValueAt(IArray<Sign> pos, Number value)
+    {
+      if (value == 0)
+      {
+        throw new ArgumentException(nameof(value));
+      }
+
+      return Create(pos.Select(v => v == Sign.None ? 0 : (int)v*value));
     }
 
     private readonly ValueArray<Number> _values;

@@ -45,7 +45,7 @@ namespace Arnible.MathModeling.Geometry
     /// </summary>
     public static NumberTranslationVector CartesianForMinimumEquals0(
       Number value,
-      IArray<bool> axis,
+      IArray<Sign> axis,
       Derivative1Value derivative)
     {
       Number rDelta = ForMinimumEquals0(value, derivative);
