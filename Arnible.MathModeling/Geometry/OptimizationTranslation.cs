@@ -1,5 +1,4 @@
 ﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Logic;
 using System;
 
 namespace Arnible.MathModeling.Geometry

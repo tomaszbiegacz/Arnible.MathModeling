@@ -97,19 +97,5 @@ namespace Arnible.MathModeling
 
     public static bool operator ==(NumberArray a, NumberArray b) => a.Equals(b);
     public static bool operator !=(NumberArray a, NumberArray b) => !a.Equals(b);
-
-    //
-    // query operators
-    //
-
-    public NumberArray Transform(Func<Number, Number> transformation)
-    {
-      return new NumberArray(_values.Select(transformation).ToValueArray());
-    }
-
-    public NumberArray Transform(Func<uint, Number, Number> transformation)
-    {
-      return new NumberArray(_values.Select(transformation).ToValueArray());
-    }
   }
 }

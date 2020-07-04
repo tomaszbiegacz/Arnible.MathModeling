@@ -10,9 +10,9 @@ namespace Arnible.MathModeling.Algebra
 
     public SignArray(IEnumerable<sbyte> sings)
     {
-      Signs = sings.ToValueArray();
-      _valueAbsCount = sings.Where(s => s != 0).Count();
-      _valueNegativeCount = sings.Where(s => s < 0).Count();
+      Values = sings.ToValueArray();
+      _valueAbsCount = Values.Where(s => s != 0).Count();
+      _valueNegativeCount = Values.Where(s => s < 0).Count();
     }
 
     /*
@@ -33,15 +33,15 @@ namespace Arnible.MathModeling.Algebra
         return byNegativeCount;
       }
 
-      int byLength = Signs.Length.CompareTo(other.Signs.Length);
+      int byLength = Values.Length.CompareTo(other.Values.Length);
       if (byLength != 0)
       {
         return byLength;
       }
 
-      for (uint i = Signs.Length - 1; i >= 0; --i)
+      for (uint i = Values.Length - 1; i >= 0; --i)
       {
-        int byValue = Signs[i].CompareTo(other.Signs[i]);
+        int byValue = Values[i].CompareTo(other.Values[i]);
         if (byValue != 0)
         {
           return byValue;
@@ -63,6 +63,6 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public ValueArray<sbyte> Signs { get; }
+    public ValueArray<sbyte> Values { get; }
   }
 }

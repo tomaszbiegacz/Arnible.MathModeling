@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Algebra
 {
-  public class OrthogonalSignArrayEnumerable : IArray<Sign>
+  public class OrthogonalSignArrayEnumerable : IArrayEnumerable<Sign>
   {
     static ConcurrentDictionary<uint, ValueArray<ValueArray<sbyte>>> _collections = new ConcurrentDictionary<uint, ValueArray<ValueArray<sbyte>>>();
 
     private static ValueArray<ValueArray<sbyte>> BuildOrthogonalSignCollection(uint length)
     {
       var values = new[] { (sbyte)Sign.Negative, (sbyte)Sign.None, (sbyte)Sign.Positive };
-      return values.ToSequncesWithReturning(length).Select(s => new SignArray(s)).Where(s => s.IsOrthogonal).Order().Select(s => s.Signs).ToValueArray();
+      return values.ToSequncesWithReturning(length).Select(s => new SignArray(s)).Where(s => s.IsOrthogonal).Order().Select(s => s.Values).ToValueArray();
     }
 
     private static ValueArray<ValueArray<sbyte>> GetOrthogonalSignCollection(uint length)

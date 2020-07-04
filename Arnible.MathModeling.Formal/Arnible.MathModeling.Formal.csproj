@@ -61,7 +61,6 @@
     <Compile Include="..\Arnible.MathModeling\LinqSequence.cs" Link="LinqSequence.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqSum.tt.cs" Link="LinqSum.tt.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqTransformation.cs" Link="LinqTransformation.cs" />
-    <Compile Include="..\Arnible.MathModeling\Logic\BitArrayEnumerable.cs" Link="Logic\BitArrayEnumerable.cs" />
     <Compile Include="..\Arnible.MathModeling\MetaMath.cs" Link="MetaMath.cs" />
     <Compile Include="..\Arnible.MathModeling\NumberArray.cs" Link="NumberArray.cs" />
     <Compile Include="..\Arnible.MathModeling\NumberArrayExtensions.cs" Link="NumberArrayExtensions.cs" />
@@ -74,10 +73,6 @@
     <Compile Include="..\Arnible.MathModeling\Term.cs" Link="Term.cs" />
     <Compile Include="..\Arnible.MathModeling\ValueArray.cs" Link="ValueArray.cs" />
     <Compile Include="..\Arnible.MathModeling\VariableTerm.cs" Link="VariableTerm.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Logic\" />
   </ItemGroup>
 
 </Project>

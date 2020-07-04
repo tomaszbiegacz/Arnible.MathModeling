@@ -32,12 +32,12 @@ namespace Arnible.MathModeling
       return numbers.Select(v => (Number)v).ToNumberArray(length);
     }
 
-    public static IEnumerable<uint> Indexes(this NumberArray arg)
+    public static IEnumerable<uint> Indexes(this IArray<Number> arg)
     {
       return LinqEnumerable.RangeUint(arg.Length);
     }
 
-    public static IEnumerable<uint> IndexesWhere(this NumberArray arg, Func<Number, bool> predicate)
+    public static IEnumerable<uint> IndexesWhere(this IArray<Number> arg, Func<Number, bool> predicate)
     {
       for (uint i = 0; i < arg.Length; ++i)
       {
@@ -48,7 +48,7 @@ namespace Arnible.MathModeling
       }
     }    
 
-    public static Number DistanceSquareTo(this NumberArray arg, NumberArray other)
+    public static Number DistanceSquareTo(this IArray<Number> arg, IArray<Number> other)
     {
       if(arg.Length != other.Length)
       {

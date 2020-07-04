@@ -1,32 +1,9 @@
 ﻿using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
-  public class OrthogonalSignReadOnlyListEnumerableTests
-  {
-    private static void Verify(OrthogonalSignArrayEnumerable list, params Sign[] signs)
-    {
-      AreEqual(signs.Length, list.Length);
-      for (uint i = 0; i < signs.Length; ++i)
-      {
-        IsTrue(signs[i] == list[i]);
-      }
-    }
-
-    private static void VerifyAndMove(OrthogonalSignArrayEnumerable list, params Sign[] signs)
-    {
-      Verify(list, signs);
-      IsTrue(list.MoveNext());
-    }
-
-    private static void VerifyAndFinish(OrthogonalSignArrayEnumerable list, params Sign[] signs)
-    {
-      Verify(list, signs);
-      IsFalse(list.MoveNext());
-      Verify(list, signs);
-    }
-
+  public class OrthogonalSignArrayEnumerableTests : ArrayEnumerableTests<OrthogonalSignArrayEnumerable, Sign>
+  {    
     [Fact]
     public void Collection_1()
     {
