@@ -2,7 +2,7 @@
 
 namespace Arnible.MathModeling.Algebra.Test
 {
-  public class BitArrayEnumerableTests : ArrayEnumerableTests<BoolArrayEnumerable, bool>
+  public class BitArrayEnumerableTests : UnmanagedArrayEnumerableTests<BoolArrayEnumerable, bool>
   {
     [Fact]
     public void Collection_1()

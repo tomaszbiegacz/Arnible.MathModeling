@@ -8,20 +8,19 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Constructor_Default()
     {
-      NumberArray v = default;
+      ValueArray<Number> v = default;
       AreEqual(0u, v.Length);
-      AreEqual("[]", v.ToString());
-      IsTrue(v.IsZero);
+      AreEqual("[]", v.ToString());      
 
       AreEqual(default, v);
-      AreEqual(default, new NumberArray());
-      AreEqual(default, new NumberArray(new Number[0]));
+      AreEqual(default, new ValueArray<Number>());
+      AreEqual(default, new ValueArray<Number>(new Number[0]));      
     }
 
     [Fact]
     public void Constructor_Explicit()
     {
-      NumberArray v = new NumberArray(2, 3, 4);
+      ValueArray<Number> v = new Number[] { 2, 3, 4 };
       AreEquals(v, new Number[] { 2, 3, 4 });
       AreEqual(3u, v.Length);
       AreExactlyEqual(3, v[1]);
@@ -31,32 +30,32 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Indexes()
     {
-      AreEquals(LinqEnumerable.RangeUint(0, 3), new NumberArray(1, 2, 3).Indexes());
+      AreEquals(LinqEnumerable.RangeUint(0, 3), new Number[] { 1, 2, 3 }.ToValueArray().Indexes());
     }
 
     [Fact]
     public void ToArray_All()
     {
-      AreEqual(new NumberArray(1, 2, 3), new Number[] { 1d, 2d, 3d }.ToNumberArray());
+      AreEqual(new ValueArray<Number>(new Number[] { 1, 2, 3 }), new Number[] { 1d, 2d, 3d }.ToValueArray());
     }
 
     [Fact]
     public void ToArray_WithDefaults()
     {
-      AreEqual(new NumberArray(1, 2, 3, 0, 0), new Number[] { 1d, 2d, 3d }.ToNumberArray(5));
+      AreEqual(new Number[] { 1, 2, 3, 0, 0 }.ToValueArray(), new Number[] { 1d, 2d, 3d }.ToValueArray(5));
     }
 
     [Fact]
     public void IndexesWhere()
     {
-      AreEquals(new[] { 0u, 2u }, (new NumberArray(1, 2, 3)).IndexesWhere(v => v != 2));
+      AreEquals(new[] { 0u, 2u }, new Number[] { 1, 2, 3 }.ToValueArray().IndexesWhere(v => v != 2));
     }
 
     [Fact]
     public void DistanceSquareTo()
     {
-      var a1 = new NumberArray(1, 2, 3);
-      var a2 = new NumberArray(2, 1, 1);
+      var a1 = new Number[] { 1, 2, 3 }.ToValueArray();
+      var a2 = new Number[] { 2, 1, 1 }.ToValueArray();
       AreEqual(6d, a1.DistanceSquareTo(a2));
     }
   }

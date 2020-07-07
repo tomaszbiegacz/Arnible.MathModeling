@@ -6,21 +6,25 @@ using System.Globalization;
 
 namespace Arnible.MathModeling.Algebra
 {
+  /// <summary>
+  /// Immmutable number vector.
+  /// Last dimension in the vector is always either non-zero or zero for 1d vector.
+  /// </summary>
+  /// <remarks> 
+  /// Features:
+  /// * Equals returns true only if both arrays have the same size, and elements in each arrays are the same.
+  /// * GetHashCode is calculated from array length and each element's hash.
+  /// Usage considerations:
+  /// * Structure size is equal to IntPtr.Size, hence there is no need to return/receive structure instance by reference
+  /// </remarks>  
   [Serializable]
-  [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
-  public readonly struct NumberVector : IEquatable<NumberVector>, IEquatable<Number>, IArray<Number>
+  [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
+  public readonly struct NumberVector : IEquatable<NumberVector>, IEquatable<Number>, IValueArray<Number>
   {
-    private readonly static IEnumerable<Number> Zero = new Number[] { 0 }.ToValueArray();
+    readonly static Number ZeroValue = 0d;
+    readonly static ValueArray<Number> ZeroVector = new Number[] { 0 }.ToValueArray();        
 
-    class Serializer : ToStringSerializer<NumberVector>
-    {
-      public Serializer() : base(v => v.ToString(CultureInfo.InvariantCulture))
-      {
-        // intentionally empty
-      }
-    }
-
-    public static NumberVector Repeat(Number value, uint length)
+    public static NumberVector Repeat(in Number value, in uint length)
     {
       if (value == 0)
       {
@@ -32,7 +36,7 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public static NumberVector NonZeroValueAt(uint pos, Number value)
+    public static NumberVector NonZeroValueAt(in uint pos, in Number value)
     {
       if (value == 0)
       {
@@ -42,7 +46,7 @@ namespace Arnible.MathModeling.Algebra
       return new NumberVector(LinqEnumerable.Repeat<Number>(0, pos).Append(value).ToValueArray());
     }
 
-    public static NumberVector NonZeroValueAt(IArray<bool> pos, Number value)
+    public static NumberVector NonZeroValueAt(in IUnmanagedArray<bool> pos, Number value)
     {
       if (value == 0)
       {
@@ -52,7 +56,7 @@ namespace Arnible.MathModeling.Algebra
       return Create(pos.Select(v => v ? value : 0));
     }
 
-    public static NumberVector NonZeroValueAt(IArray<Sign> pos, Number value)
+    public static NumberVector NonZeroValueAt(in IUnmanagedArray<Sign> pos, Number value)
     {
       if (value == 0)
       {
@@ -64,17 +68,17 @@ namespace Arnible.MathModeling.Algebra
 
     private readonly ValueArray<Number> _values;
 
-    private static ValueArray<Number> GetNormalizedVector(IEnumerable<Number> parameters)
+    private static ValueArray<Number> GetNormalizedVector(in IEnumerable<Number> parameters)
     {
       List<Number> result = new List<Number>(parameters ?? LinqEnumerable.Empty<Number>());
-      while (result.Count > 0 && result[result.Count - 1] == 0)
+      while (result.Count > 0 && result[^1] == 0)
       {
         result.RemoveAt(result.Count - 1);
       }
       return result.ToValueArray();
     }
 
-    internal static NumberVector Create(IEnumerable<Number> parameters)
+    internal static NumberVector Create(in IEnumerable<Number> parameters)
     {
       return new NumberVector(GetNormalizedVector(parameters));
     }
@@ -90,14 +94,14 @@ namespace Arnible.MathModeling.Algebra
       _values = parameters;
     }
 
-    public static implicit operator NumberVector(Number v) => new NumberVector(v);
-    public static implicit operator NumberVector(double v) => new NumberVector(v);
+    public static implicit operator NumberVector(in Number v) => new NumberVector(v);
+    public static implicit operator NumberVector(in double v) => new NumberVector(v);
 
     //
     // Properties
     //            
 
-    public Number GetOrDefault(uint pos)
+    public Number GetOrDefault(in uint pos)
     {
       if (pos >= Length)
         return 0;
@@ -113,7 +117,7 @@ namespace Arnible.MathModeling.Algebra
     {
       if(_values.Length == 0)
       {
-        return Zero;
+        return ZeroVector;
       }
       else
       {
@@ -121,17 +125,17 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public Number this[uint pos]
+    public ref readonly Number this[in uint pos]
     {
       get
       {
         if(pos == 0 && _values.Length == 0)
         {
-          return 0;
+          return ref ZeroValue;
         }
         else
         {
-          return _values[pos];
+          return ref _values[pos];
         }
       }
     }
@@ -146,9 +150,11 @@ namespace Arnible.MathModeling.Algebra
     // IEquatable
     //
 
-    public bool Equals(NumberVector other) => _values.SequenceEqual(other._values);
+    public bool Equals(in NumberVector other) => _values.SequenceEqual(other._values);
 
-    public bool Equals(Number other)
+    public bool Equals(NumberVector other) => Equals(in other);
+
+    public bool Equals(in Number other)
     {
       if (Length == 1)
       {
@@ -160,6 +166,8 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
+    public bool Equals(Number other) => Equals(in other);    
+
     public override bool Equals(object obj)
     {
       if (obj is NumberVector v)
@@ -168,7 +176,7 @@ namespace Arnible.MathModeling.Algebra
       }
       else if (obj is Number v2)
       {
-        return Equals(v2);
+        return Equals(in v2);
       }
       else
       {
@@ -192,57 +200,42 @@ namespace Arnible.MathModeling.Algebra
 
     public override int GetHashCode()
     {
-      int hc = Length.GetHashCode();
-      foreach (var v in _values)
-      {
-        hc = unchecked(hc * 314159 + v.GetHashCode());
-      }
-      return hc;
+      return _values.GetHashCode();
     }
 
-    public static bool operator ==(NumberVector a, NumberVector b) => a.Equals(b);
-    public static bool operator !=(NumberVector a, NumberVector b) => !a.Equals(b);
+    public static bool operator ==(in NumberVector a, in NumberVector b) => a.Equals(in b);
+    public static bool operator !=(in NumberVector a, in NumberVector b) => !a.Equals(in b);
 
-    public static bool operator ==(Number a, NumberVector b) => b.Equals(a);
-    public static bool operator !=(Number a, NumberVector b) => !b.Equals(a);
+    public static bool operator ==(in Number a, in NumberVector b) => b.Equals(in a);
+    public static bool operator !=(in Number a, in NumberVector b) => !b.Equals(in a);
 
-    public static bool operator ==(NumberVector a, Number b) => a.Equals(b);
-    public static bool operator !=(NumberVector a, Number b) => !a.Equals(b);
+    public static bool operator ==(in NumberVector a, in Number b) => a.Equals(in b);
+    public static bool operator !=(in NumberVector a, in Number b) => !a.Equals(in b);
 
     //
     // query operators
     //
 
-    public NumberVector Transform(Func<Number, Number> transformation)
+    public NumberVector Transform(in Func<Number, Number> transformation)
     {
       return Create(GetInternalEnumerator().Select(transformation));
     }
 
-    public NumberVector Transform(Func<uint, Number, Number> transformation)
+    public NumberVector Transform(in Func<uint, Number, Number> transformation)
     {
       return Create(GetInternalEnumerator().Select(transformation));
     }
-
-    public NumberArray ToArray(uint size)
-    {
-      if (size < Length)
-      {
-        throw new ArgumentException(nameof(size), $"requested {size} whereas minimum is {Length}");
-      }
-      NumberTranslationVector translation = new NumberTranslationVector(this);
-      return translation.Translate(NumberArray.Repeat(0, size));
-    }
-
+    
     //
     // Arithmetic operators
     //
 
-    public static NumberVector operator +(NumberVector a, NumberVector b) => a.Zip(b, (va, vb) => (va ?? 0) + (vb ?? 0)).ToVector();
-    public static NumberVector operator -(NumberVector a, NumberVector b) => a.Zip(b, (va, vb) => (va ?? 0) - (vb ?? 0)).ToVector();
+    public static NumberVector operator +(in NumberVector a, in NumberVector b) => a.Zip(b, (va, vb) => (va ?? 0) + (vb ?? 0)).ToVector();
+    public static NumberVector operator -(in NumberVector a, in NumberVector b) => a.Zip(b, (va, vb) => (va ?? 0) - (vb ?? 0)).ToVector();
 
-    public static NumberVector operator /(NumberVector a, Number b) => new NumberVector(a.Select(v => v / b).ToValueArray());
+    public static NumberVector operator /(in NumberVector a, Number b) => new NumberVector(a.Select(v => v / b).ToValueArray());
 
-    public static NumberVector operator *(NumberVector a, Number b)
+    public static NumberVector operator *(in NumberVector a, Number b)
     {
       if (b == 0)
       {
@@ -254,6 +247,6 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public static NumberVector operator *(Number a, NumberVector b) => b * a;
+    public static NumberVector operator *(in Number a, in NumberVector b) => b * a;
   }
 }

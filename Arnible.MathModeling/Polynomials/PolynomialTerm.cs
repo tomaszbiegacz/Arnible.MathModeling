@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Arnible.MathModeling
+namespace Arnible.MathModeling.Polynomials
 {
   public readonly struct PolynomialTerm : IEquatable<PolynomialTerm>, IPolynomialOperation
   {
@@ -343,7 +343,7 @@ namespace Arnible.MathModeling
     {
       if (name.IsConstant)
       {
-        return IndeterminateExpression.Sin((double)name);
+        return DoubleExtension.RoundedSin((double)name);
       }
       else
       {
@@ -355,7 +355,7 @@ namespace Arnible.MathModeling
     {
       if (name.IsConstant)
       {
-        return IndeterminateExpression.Cos((double)name);
+        return DoubleExtension.RoundedCos((double)name);
       }
       else
       {

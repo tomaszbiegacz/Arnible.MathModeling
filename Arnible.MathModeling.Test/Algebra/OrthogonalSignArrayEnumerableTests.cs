@@ -2,7 +2,7 @@
 
 namespace Arnible.MathModeling.Algebra.Test
 {
-  public class OrthogonalSignArrayEnumerableTests : ArrayEnumerableTests<OrthogonalSignArrayEnumerable, Sign>
+  public class OrthogonalSignArrayEnumerableTests : UnmanagedArrayEnumerableTests<OrthogonalSignArrayEnumerable, Sign>
   {    
     [Fact]
     public void Collection_1()

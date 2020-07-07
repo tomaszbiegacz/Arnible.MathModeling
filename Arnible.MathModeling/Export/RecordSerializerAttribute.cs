@@ -7,21 +7,11 @@ namespace Arnible.MathModeling.Export
   {
     private readonly Func<object, ReadOnlyMemory<char>> _serializator;
 
-    public SerializationMediaType MediaType { get; }
+    public SerializationMediaType MediaType { get; }    
 
-    public RecordSerializerAttribute(SerializationMediaType mediaType, Func<object, ReadOnlyMemory<char>> serializator)
-    {
-      MediaType = mediaType;
-      _serializator = serializator ?? throw new ArgumentNullException(nameof(serializator));
-    }
-
-    public RecordSerializerAttribute(SerializationMediaType mediaType, IToStringSerializer serializator)
-    {
-      MediaType = mediaType;
-      _serializator = serializator?.Serializator ?? throw new ArgumentNullException(nameof(serializator));
-    }
-
-    public RecordSerializerAttribute(SerializationMediaType mediaType, Type serializatorType)
+    public RecordSerializerAttribute(
+      SerializationMediaType mediaType, 
+      Type serializatorType)
     {
       MediaType = mediaType;
       object serializator = Activator.CreateInstance(serializatorType);
@@ -35,6 +25,16 @@ namespace Arnible.MathModeling.Export
       }
     }
 
-    public ReadOnlyMemory<char> Serialize(object value) => _serializator(value);
+    public RecordSerializerAttribute(SerializationMediaType mediaType)
+    {
+      MediaType = mediaType;
+      var objectSerializator = new ToStringSerializer<object>();
+      _serializator = objectSerializator.Serializator;
+    }
+
+    public ReadOnlyMemory<char> Serialize(object value)
+    {
+      return _serializator(value);
+    }
   }
 }

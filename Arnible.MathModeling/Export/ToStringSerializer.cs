@@ -9,7 +9,7 @@ namespace Arnible.MathModeling.Export
 
   public class ToStringSerializer<T> : IToStringSerializer
   {
-    private static ReadOnlyMemory<char> ReadOnlyMemorySerializator(Func<T, string> serializator, object obj)
+    private static ReadOnlyMemory<char> ReadOnlyMemorySerializator(in Func<T, string> serializator, in object obj)
     {
       if (obj is T v)
         return serializator(v).AsMemory();
@@ -17,7 +17,7 @@ namespace Arnible.MathModeling.Export
         throw new InvalidOperationException($"Expected instance of type {typeof(T)} got {obj?.GetType()}");
     }
 
-    private static ReadOnlyMemory<char> ReadOnlyMemorySerializator(Func<T, ReadOnlyMemory<char>> serializator, object obj)
+    private static ReadOnlyMemory<char> ReadOnlyMemorySerializator(in Func<T, ReadOnlyMemory<char>> serializator, in object obj)
     {
       if (obj is T v)
         return serializator(v);
@@ -32,6 +32,12 @@ namespace Arnible.MathModeling.Export
         throw new ArgumentNullException(nameof(serializator));
       }
       Serializator = v => ReadOnlyMemorySerializator(serializator, v);
+    }
+
+    public ToStringSerializer()
+      : this(v => v.ToString())
+    {
+      // intentionally empty
     }
 
     public ToStringSerializer(Func<T, ReadOnlyMemory<char>> serializator)

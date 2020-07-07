@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Algebra
 {
-  public class BoolArrayEnumerable : IArrayEnumerable<bool>
+  public class BoolArrayEnumerable : IUnmanagedArrayEnumerable<bool>
   {
     static ConcurrentDictionary<uint, ValueArray<ValueArray<bool>>> _collections = new ConcurrentDictionary<uint, ValueArray<ValueArray<bool>>>();
 
@@ -14,7 +14,7 @@ namespace Arnible.MathModeling.Algebra
       return values.ToSequncesWithReturning(length).Select(s => new BoolArray(s)).Order().Select(s => s.Values).ToValueArray();
     }
 
-    private static ValueArray<ValueArray<bool>> GetCollection(uint length)
+    private static ValueArray<ValueArray<bool>> GetCollection(in uint length)
     {
       return _collections.GetOrAdd(length, BuildCollection);
     }
@@ -22,9 +22,9 @@ namespace Arnible.MathModeling.Algebra
     private readonly ValueArray<ValueArray<bool>> _collection;
     private uint _position;
 
-    public BoolArrayEnumerable(uint size)
+    public BoolArrayEnumerable(in uint size)
     {
-      _collection = GetCollection(size);
+      _collection = GetCollection(in size);
       _position = 0;
     }
 
@@ -37,7 +37,13 @@ namespace Arnible.MathModeling.Algebra
      * IArray
      */
 
-    public bool this[uint index] => _collection[_position][index];
+    public bool this[in uint index]
+    {
+      get
+      {
+        return _collection[_position][index];
+      }
+    }
 
     public uint Length => _collection[_position].Length;
 

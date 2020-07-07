@@ -1,9 +1,11 @@
-﻿namespace Arnible.MathModeling
+﻿using Arnible.MathModeling.Polynomials;
+
+namespace Arnible.MathModeling
 {
   public static class NumberMath
   {
-    public static Number Sin(Number a) => PolynomialTerm.Sin((PolynomialTerm)a);
+    public static Number Sin(in Number a) => PolynomialTerm.Sin((PolynomialTerm)a);
 
-    public static Number Cos(Number a) => PolynomialTerm.Cos((PolynomialTerm)a);
+    public static Number Cos(in Number a) => PolynomialTerm.Cos((PolynomialTerm)a);
   }
 }

@@ -8,7 +8,7 @@ namespace Arnible.MathModeling.Geometry
     /// <summary>
     /// Estimated change to reach minimum in 1 dimentional case
     /// </summary>
-    public static Number ForMinimumEquals0(Number value, Derivative1Value derivative)
+    public static Number ForMinimumEquals0(in Number value, in Derivative1Value derivative)
     {
       if (derivative.First != 0 && value != 0)
       {
@@ -31,52 +31,52 @@ namespace Arnible.MathModeling.Geometry
     /// Estimated change to reach minimum in the axis direction
     /// </summary>
     public static NumberTranslationVector CartesianForMinimumEquals0(
-      Number value,
-      uint cartesiaxAxisNumber,
-      Derivative1Value derivative)
+      in Number value,
+      in uint cartesiaxAxisNumber,
+      in Derivative1Value derivative)
     {
-      Number rDelta = ForMinimumEquals0(value, derivative);
-      return new NumberTranslationVector(NumberVector.NonZeroValueAt(pos: cartesiaxAxisNumber, value: rDelta));
+      Number rDelta = ForMinimumEquals0(in value, in derivative);
+      return new NumberTranslationVector(NumberVector.NonZeroValueAt(pos: in cartesiaxAxisNumber, value: in rDelta));
     }
 
     /// <summary>
     /// Estimated change to reach minimum in the selected axis direction
     /// </summary>
     public static NumberTranslationVector CartesianForMinimumEquals0(
-      Number value,
-      IArray<Sign> axis,
-      Derivative1Value derivative)
+      in Number value,
+      in IUnmanagedArray<Sign> axis,
+      in Derivative1Value derivative)
     {
-      Number rDelta = ForMinimumEquals0(value, derivative);
-      return new NumberTranslationVector(NumberVector.NonZeroValueAt(pos: axis, value: rDelta));
+      Number rDelta = ForMinimumEquals0(in value, in derivative);
+      return new NumberTranslationVector(NumberVector.NonZeroValueAt(pos: in axis, value: rDelta));
     }
 
     /// <summary>
     /// Estimated change to reach minimum in direction of an angle
     /// </summary>
     public static HypersphericalAngleTranslationVector HypersphericalForMinimumEquals0(
-      Number value,
-      uint anglePos,
-      Derivative1Value derivative)
+      in Number value,
+      in uint anglePos,
+      in Derivative1Value derivative)
     {
-      Number rDelta = ForMinimumEquals0(value, derivative);
-      return new HypersphericalAngleTranslationVector(NumberVector.NonZeroValueAt(pos: anglePos, value: rDelta).ToAngleVector());
+      Number rDelta = ForMinimumEquals0(in value, in derivative);
+      return new HypersphericalAngleTranslationVector(NumberVector.NonZeroValueAt(pos: in anglePos, value: in rDelta).ToAngleVector());
     }
 
     /// <summary>
     /// Estimated change to reach minimum in the angle vector direction
     /// </summary>
     public static NumberTranslationVector CartesianForMinimumEquals0(
-      Number value,
-      HypersphericalAngleVector direction,
-      Derivative1Value derivative)
+      in Number value,
+      in HypersphericalAngleVector direction,
+      in Derivative1Value derivative)
     {
       HypersphericalCoordinate hc;
-      Number rDelta = ForMinimumEquals0(value, derivative);
+      Number rDelta = ForMinimumEquals0(in value, in derivative);
 
       if (rDelta > 0)
       {
-        hc = new HypersphericalCoordinate(rDelta, direction);
+        hc = new HypersphericalCoordinate(in rDelta, in direction);
       }
       else
       {
@@ -91,12 +91,12 @@ namespace Arnible.MathModeling.Geometry
     /// Estimated change to reach minimum in direction of an angle
     /// </summary>
     public static NumberTranslationVector CartesianForMinimumEquals0(
-      Number value,
-      HypersphericalCoordinateOnAxisView currentHcView,
-      uint anglePos,
-      Derivative1Value derivative)
+      in Number value,
+      in HypersphericalCoordinateOnAxisView currentHcView,
+      in uint anglePos,
+      in Derivative1Value derivative)
     {
-      Number angleDelta = ForMinimumEquals0(value, derivative);
+      Number angleDelta = ForMinimumEquals0(in value, in derivative);
 
       if (angleDelta < -1 * Angle.RightAngle)
       {

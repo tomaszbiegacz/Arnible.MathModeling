@@ -2,6 +2,6 @@
 {
   public interface IBinaryOperation<TNumber> where TNumber : struct
   {
-    TNumber Value(TNumber x, TNumber y);
+    TNumber Value(in TNumber x, in TNumber y);
   }
 }

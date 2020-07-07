@@ -1,6 +1,6 @@
 ﻿using Arnible.MathModeling.Algebra;
 using Xunit;
-using static Arnible.MathModeling.Term;
+using static Arnible.MathModeling.Polynomials.Term;
 using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var pc = new PolarCoordinate(r, φ);
       var expected = expression.ToPolar(rc, pc);
 
-      var cc = new CartesianCoordinate(new NumberVector(x, y));
+      CartesianCoordinate cc = new NumberVector(x, y);
       var hc = new HypersphericalCoordinate(r, new HypersphericalAngleVector(φ));
       var actual = expression.ToSpherical(cc, hc);
 

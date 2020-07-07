@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Arnible.MathModeling
+namespace Arnible.MathModeling.Polynomials
 {
   class PolynomialFinitaryOperation : IFinitaryOperation<double>
   {

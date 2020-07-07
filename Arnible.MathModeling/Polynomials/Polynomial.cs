@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace Arnible.MathModeling
+namespace Arnible.MathModeling.Polynomials
 {
   public readonly struct Polynomial : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation, IEnumerable<PolynomialTerm>
   {

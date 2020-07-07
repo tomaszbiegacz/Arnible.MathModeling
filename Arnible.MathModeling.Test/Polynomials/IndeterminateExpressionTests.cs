@@ -1,9 +1,9 @@
 ﻿using System;
 using Xunit;
-using static Arnible.MathModeling.MetaMath;
+using static Arnible.MathModeling.Polynomials.MetaMath;
 using static Arnible.MathModeling.xunit.AssertNumber;
 
-namespace Arnible.MathModeling.Test
+namespace Arnible.MathModeling.Polynomials.Tests
 {
   public class IndeterminateExpressionTests
   {

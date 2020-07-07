@@ -4,9 +4,9 @@ namespace Arnible.MathModeling
 {
   public static class DoubleExtension
   {
-    public static bool NumericEquals(this double a, double b)
+    public static bool NumericEquals(in this double a, in double b)
     {
-      if (IsValidNumeric(a) && IsValidNumeric(b))
+      if (IsValidNumeric(in a) && IsValidNumeric(in b))
       {
         if (a == b)
         {
@@ -34,12 +34,12 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static bool IsValidNumeric(this double a)
+    public static bool IsValidNumeric(in this double a)
     {
       return !double.IsNaN(a) && !double.IsInfinity(a);
     }    
 
-    public static double ToPower(this double a, uint b)
+    public static double ToPower(in this double a, in uint b)
     {
       if (a == 1)
       {
@@ -63,6 +63,20 @@ namespace Arnible.MathModeling
         default:
           return Math.Pow(a, b);
       }
+    }
+
+    public static double RoundedSin(in double value)
+    {
+      if (NumericEquals(in value, 0)) return 0;
+      else if (NumericEquals(in value, Angle.RightAngle)) return 1;
+      else return Math.Sin(value);
+    }
+
+    public static double RoundedCos(in double value)
+    {
+      if (NumericEquals(in value, 0)) return 1;
+      else if (NumericEquals(in value, Angle.RightAngle)) return 0;
+      else return Math.Cos(value);
     }
   }
 }

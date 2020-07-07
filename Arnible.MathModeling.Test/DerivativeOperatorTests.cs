@@ -8,11 +8,11 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ForProductByParameter_OneValue()
     {
-      var v1 = 2;
+      Number v1 = 2d;
       var v1d = new Derivative1Value(3);
 
       var d = DerivativeOperator.ForProductByParameter(
-        productValues: new NumberArray(v1),
+        productValues: v1,
         valueDerrivativeByParameter: new[] { v1d });
 
       AreEqual(3d, d.First);
@@ -21,14 +21,14 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ForProductByParameter_TwoValues()
     {
-      var v1 = 2;
+      Number v1 = 2;
       var v1d = new Derivative1Value(3);
 
-      var v2 = 7;
+      Number v2 = 7;
       var v2d = new Derivative1Value(11);
 
       var d = DerivativeOperator.ForProductByParameter(
-        productValues: new NumberArray(v1, v2),
+        productValues: new[] { v1, v2 },
         valueDerrivativeByParameter: new[] { v1d, v2d });
 
       AreEqual(3d * 7 + 2 * 11, d.First);

@@ -11,11 +11,11 @@ namespace Arnible.MathModeling.Geometry
 
     public static bool IsValidTranslation(
       this INumberRangeDomain domain,
-      HypersphericalCoordinate value,
-      HypersphericalAngleTranslationVector delta)
+      in HypersphericalCoordinate value,
+      in HypersphericalAngleTranslationVector delta)
     {
       domain.Validate(value.ToCartesianView().Coordinates);
-      NumberVector coordinates = delta.Translate(value).ToCartesianView().Coordinates;
+      NumberVector coordinates = delta.Translate(in value).ToCartesianView().Coordinates;
       return coordinates.All(v => domain.IsValid(v));
     }
 
@@ -25,7 +25,7 @@ namespace Arnible.MathModeling.Geometry
 
     public static HypersphericalAngleTranslationVector GetValidTranslation(
       this INumberRangeDomain domain,
-      HypersphericalCoordinate value,
+      in HypersphericalCoordinate value,
       HypersphericalAngleTranslationVector delta)
     {
       domain.Validate(value.ToCartesianView().Coordinates);
@@ -43,7 +43,7 @@ namespace Arnible.MathModeling.Geometry
       Number ratio = domain.GetValidTranslationRatioForLastAngle(
         radius: value.R,
         currentAngle: value.Angles.GetOrDefault(anglePos),
-        angleDelta: delta[anglePos]);
+        angleDelta: in delta[anglePos]);
 
       if (ratio == 0)
       {
@@ -65,10 +65,10 @@ namespace Arnible.MathModeling.Geometry
 
     public static HypersphericalCoordinate Translate(
       this INumberRangeDomain domain,
-      HypersphericalCoordinate value,
-      HypersphericalAngleTranslationVector delta)
+      in HypersphericalCoordinate value,
+      in HypersphericalAngleTranslationVector delta)
     {
-      HypersphericalAngleTranslationVector tr = domain.GetValidTranslation(value, delta);
+      HypersphericalAngleTranslationVector tr = domain.GetValidTranslation(in value, delta);
       return new HypersphericalCoordinate(value.R, tr.Translate(value.Angles));
     }
   }

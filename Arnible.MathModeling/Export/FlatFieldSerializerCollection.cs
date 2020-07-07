@@ -18,14 +18,14 @@ namespace Arnible.MathModeling.Export
 
   abstract class FlatFieldSerializerCollection : IFlatFieldSerializerCollection
   {
-    protected static IEnumerable<PropertyInfo> GetProperties(Type t) => t
+    protected static IEnumerable<PropertyInfo> GetProperties(in Type t) => t
       .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty)
       .Where(p => p.GetCustomAttributes<RecordSerializerIgnoreAttribute>().Count() == 0)
       .ToReadOnlyList();
 
     protected readonly IEnumerable<FlatFieldSerializer> _fields;
 
-    protected FlatFieldSerializerCollection(Type type, IEnumerable<FlatFieldSerializer> fields)
+    protected FlatFieldSerializerCollection(in Type type, in IEnumerable<FlatFieldSerializer> fields)
     {
       FieldsType = type ?? throw new ArgumentNullException(nameof(type));
       _fields = fields?.ToReadOnlyList() ?? throw new ArgumentNullException(nameof(fields));

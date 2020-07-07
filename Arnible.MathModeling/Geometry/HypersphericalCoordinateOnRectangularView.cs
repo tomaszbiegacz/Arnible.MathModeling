@@ -11,7 +11,7 @@ namespace Arnible.MathModeling.Geometry
     IEquatable<HypersphericalCoordinateOnRectangularView>,
     IHypersphericalCoordinateOnRectangularView
   {
-    public static HypersphericalCoordinateOnRectangularView FromCartesian(Number r, Number x, Number y)
+    public static HypersphericalCoordinateOnRectangularView FromCartesian(in Number r, in Number x, in Number y)
     {
       if (r == 0)
       {
@@ -24,16 +24,16 @@ namespace Arnible.MathModeling.Geometry
       else
       {
         return new HypersphericalCoordinateOnRectangularView(
-          r: r,
+          r: in r,
           ratioX: x / r,
-          x: x,
+          x: in x,
           ratioY: y / r,
-          y: y
+          y: in y
           );
       }
     }
 
-    public static HypersphericalCoordinateOnRectangularView FromRatios(Number r, Number ratioX, Number ratioY)
+    public static HypersphericalCoordinateOnRectangularView FromRatios(in Number r, in Number ratioX, in Number ratioY)
     {
       if (ratioX < -1 || ratioX > 1)
       {
@@ -55,21 +55,21 @@ namespace Arnible.MathModeling.Geometry
       else
       {
         return new HypersphericalCoordinateOnRectangularView(
-          r: r,
-          ratioX: ratioX,
+          r: in r,
+          ratioX: in ratioX,
           x: r * ratioX,
-          ratioY: ratioY,
+          ratioY: in ratioY,
           y: r * ratioY
           );
       }
     }
 
     private HypersphericalCoordinateOnRectangularView(
-      Number r,
-      Number ratioX,
-      Number x,
-      Number ratioY,
-      Number y)
+      in Number r,
+      in Number ratioX,
+      in Number x,
+      in Number ratioY,
+      in Number y)
     {
       if (r < 0)
       {
@@ -92,7 +92,7 @@ namespace Arnible.MathModeling.Geometry
     {
       if (obj is HypersphericalCoordinateOnRectangularView casted)
       {
-        return Equals(casted);
+        return Equals(in casted);
       }
       else
       {
@@ -100,10 +100,12 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public bool Equals(HypersphericalCoordinateOnRectangularView other)
+    public bool Equals(in HypersphericalCoordinateOnRectangularView other)
     {
       return R == other.R && X == other.X && Y == other.Y;
     }
+
+    public bool Equals(HypersphericalCoordinateOnRectangularView other) => Equals(in other);
 
     public override int GetHashCode()
     {

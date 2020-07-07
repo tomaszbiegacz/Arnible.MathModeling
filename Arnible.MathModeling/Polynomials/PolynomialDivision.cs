@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Arnible.MathModeling
+namespace Arnible.MathModeling.Polynomials
 {
   public readonly struct PolynomialDivision : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation
   {
@@ -424,7 +424,7 @@ namespace Arnible.MathModeling
      * Other operators
      */
 
-    public PolynomialDivision ToPower(uint power)
+    public PolynomialDivision ToPower(in uint power)
     {
       if (IsPolynomial)
       {

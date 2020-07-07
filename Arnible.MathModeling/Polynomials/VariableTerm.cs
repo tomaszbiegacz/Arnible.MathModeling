@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Arnible.MathModeling
+namespace Arnible.MathModeling.Polynomials
 {
   public readonly struct VariableTerm : IEquatable<VariableTerm>
   {

@@ -1,7 +1,8 @@
 ﻿using Arnible.MathModeling.Algebra;
+using Arnible.MathModeling.Polynomials;
 using Xunit;
-using static Arnible.MathModeling.MetaMath;
-using static Arnible.MathModeling.Term;
+using static Arnible.MathModeling.Polynomials.MetaMath;
+using static Arnible.MathModeling.Polynomials.Term;
 using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
@@ -11,7 +12,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void DerivativeByR()
     {
-      var cartesianPoint = new CartesianCoordinate(new NumberVector(x, y, z));
+      CartesianCoordinate cartesianPoint = new NumberVector(x, y, z);
       var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(θ, φ));
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Arnible.MathModeling
+namespace Arnible.MathModeling.Polynomials
 {
   public interface IPolynomialOperation
   {

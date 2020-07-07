@@ -1,6 +1,7 @@
 ﻿using Arnible.MathModeling.Geometry;
+using Arnible.MathModeling.Polynomials;
 using Xunit;
-using static Arnible.MathModeling.Term;
+using static Arnible.MathModeling.Polynomials.Term;
 using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Test

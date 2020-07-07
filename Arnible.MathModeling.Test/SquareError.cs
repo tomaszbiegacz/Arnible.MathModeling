@@ -5,7 +5,7 @@ namespace Arnible.MathModeling.Test
 {
   public struct SquareError : IBinaryOperation<Number>
   {    
-    public Number Value(Number x, Number y)
+    public Number Value(in Number x, in Number y)
     {
       return (x - y).ToPower(2);
     }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Algebra
 {
-  public class OrthogonalSignArrayEnumerable : IArrayEnumerable<Sign>
+  public class OrthogonalSignArrayEnumerable : IUnmanagedArrayEnumerable<Sign>
   {
     static ConcurrentDictionary<uint, ValueArray<ValueArray<sbyte>>> _collections = new ConcurrentDictionary<uint, ValueArray<ValueArray<sbyte>>>();
 
@@ -14,7 +14,7 @@ namespace Arnible.MathModeling.Algebra
       return values.ToSequncesWithReturning(length).Select(s => new SignArray(s)).Where(s => s.IsOrthogonal).Order().Select(s => s.Values).ToValueArray();
     }
 
-    private static ValueArray<ValueArray<sbyte>> GetOrthogonalSignCollection(uint length)
+    private static ValueArray<ValueArray<sbyte>> GetOrthogonalSignCollection(in uint length)
     {
       return _collections.GetOrAdd(length, BuildOrthogonalSignCollection);
     }
@@ -22,9 +22,9 @@ namespace Arnible.MathModeling.Algebra
     private readonly ValueArray<ValueArray<sbyte>> _collection;
     private uint _position;
 
-    public OrthogonalSignArrayEnumerable(uint size)
+    public OrthogonalSignArrayEnumerable(in uint size)
     {
-      _collection = GetOrthogonalSignCollection(size);
+      _collection = GetOrthogonalSignCollection(in size);
       _position = 0;
     }
 
@@ -37,7 +37,7 @@ namespace Arnible.MathModeling.Algebra
      * IArray
      */
 
-    public Sign this[uint index] => (Sign)_collection[_position][index];
+    public Sign this[in uint index] => (Sign)_collection[_position][index];
 
     public uint Length => _collection[_position].Length;
 

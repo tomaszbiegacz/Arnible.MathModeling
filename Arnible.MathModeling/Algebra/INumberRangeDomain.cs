@@ -12,21 +12,21 @@
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    bool IsValid(Number value);    
+    bool IsValid(in Number value);    
 
     /// <summary>
     /// Translate preserving number range constraints
     /// </summary>    
-    Number Translate(Number value, Number delta);
+    Number Translate(in Number value, in Number delta);
 
     /// <summary>
     /// Get valid transaltion ration, taking under account number range.
     /// </summary>
-    Number GetValidTranslationRatio(Number value, Number delta);
+    Number GetValidTranslationRatio(in Number value, in Number delta);
 
     /// <summary>
     /// Get valid angle translation ratio for last angle
     /// </summary>    
-    Number GetValidTranslationRatioForLastAngle(Number radius, Number currentAngle, Number angleDelta);
+    Number GetValidTranslationRatioForLastAngle(in Number radius, in Number currentAngle, in Number angleDelta);
   }
 }

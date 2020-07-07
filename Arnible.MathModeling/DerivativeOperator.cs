@@ -4,16 +4,10 @@ using System.Collections.Generic;
 namespace Arnible.MathModeling
 {
   public static class DerivativeOperator
-  {
-    /// <summary>
-    /// Polynomial derivative.
-    /// </summary>    
-    public static IEnumerable<PolynomialTerm> DerivativeBy(this IEnumerable<PolynomialTerm> terms, char name)
-    {
-      return terms.SelectMany(t => t.DerivativeBy(name));
-    }
-
-    private static Number Derivative2Ingredient(IArray<Derivative2Value> args, uint pos)
+  {    
+    private static Number Derivative2Ingredient(
+      in ValueArray<Derivative2Value> args, 
+      in uint pos)
     {
       Number result = args[pos].Second;
       for (uint i = 0; i < pos; ++i)
@@ -74,7 +68,9 @@ namespace Arnible.MathModeling
     /// <summary>
     /// Calculate derivative as a sum of (value derivate and other values product) for each value.
     /// </summary>    
-    public static Derivative1Value ForProductByParameter(IArray<Number> productValues, IEnumerable<Derivative1Value> valueDerrivativeByParameter)
+    public static Derivative1Value ForProductByParameter(
+      in ValueArray<Number> productValues, 
+      IEnumerable<Derivative1Value> valueDerrivativeByParameter)
     {
       if (productValues.Length < 1)
       {
@@ -95,7 +91,7 @@ namespace Arnible.MathModeling
           result += productValues.ExcludeAt(i).ProductWithDefault() * derivative;
         }
       }
-      return new Derivative1Value(result);
+      return new Derivative1Value(in result);
     }
   }
 }

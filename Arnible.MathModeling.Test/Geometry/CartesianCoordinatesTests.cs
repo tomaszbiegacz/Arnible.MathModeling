@@ -21,7 +21,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void Constructor_3d()
     {
-      var cc = new CartesianCoordinate(new NumberVector(2, 3, 4));
+      CartesianCoordinate cc = new NumberVector(2, 3, 4);
 
       AreEqual(3u, cc.DimensionsCount);
       AreExactlyEqual(2, cc.Coordinates[0]);
@@ -32,8 +32,8 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void Equal_Rounding()
     {
-      var v1 = new CartesianCoordinate(new NumberVector(1, 1, 0));
-      var v2 = new CartesianCoordinate(new NumberVector(1, 1, 8.65956056235496E-17));
+      CartesianCoordinate v1 = new NumberVector(1, 1, 0);
+      CartesianCoordinate v2 = new NumberVector(1, 1, 8.65956056235496E-17);
       AreEqual(v1, v2);
     }
   }

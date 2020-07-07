@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Export
     private readonly Stream _stream;
     private readonly IRecordSerializer<T> _serializer;
 
-    public RecordSerializerStream(Stream stream, IRecordSerializer<T> serializer)
+    public RecordSerializerStream(in Stream stream, in IRecordSerializer<T> serializer)
     {
       _stream = stream ?? throw new ArgumentNullException(nameof(serializer));
       _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));

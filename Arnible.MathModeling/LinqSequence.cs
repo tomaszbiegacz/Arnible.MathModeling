@@ -10,7 +10,7 @@ namespace Arnible.MathModeling
       return System.Linq.Enumerable.SequenceEqual(source, other);
     }
 
-    public static IEnumerable<IEnumerable<T>> ToSequncesWithReturning<T>(this IEnumerable<T> items, uint length)
+    public static IEnumerable<IEnumerable<T>> ToSequncesWithReturning<T>(this IEnumerable<T> items, in uint length)
     {
       if (items == null)
       {

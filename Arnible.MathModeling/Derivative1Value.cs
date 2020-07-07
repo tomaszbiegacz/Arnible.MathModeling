@@ -11,10 +11,10 @@ namespace Arnible.MathModeling
   {
     public static readonly Derivative1Value Zero = new Derivative1Value(0);
 
-    public Derivative1Value(Number first)
+    public Derivative1Value(in Number first)
     {
       First = first;
-    }    
+    }
 
     public override bool Equals(object obj)
     {
@@ -28,10 +28,12 @@ namespace Arnible.MathModeling
       }
     }
 
-    public bool Equals(Derivative1Value other)
+    public bool Equals(in Derivative1Value other)
     {
       return First == other.First;
     }
+
+    public bool Equals(Derivative1Value other) => Equals(in other);
 
     public override int GetHashCode()
     {
@@ -43,13 +45,13 @@ namespace Arnible.MathModeling
       return $"[{First}]";
     }
 
-    public static bool operator ==(Derivative1Value a, Derivative1Value b) => a.Equals(b);
-    public static bool operator !=(Derivative1Value a, Derivative1Value b) => !a.Equals(b);
+    public static bool operator ==(in Derivative1Value a, in Derivative1Value b) => a.Equals(in b);
+    public static bool operator !=(in Derivative1Value a, in Derivative1Value b) => !a.Equals(in b);
 
     //
     // Properties
     //
 
-    public Number First { get; }    
+    public Number First { get; }
   }
 }

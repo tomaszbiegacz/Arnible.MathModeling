@@ -6,29 +6,29 @@ namespace Arnible.MathModeling.Geometry
 {
   public static class CoordinatesExtension
   {
-    private static double Sqrt(Number x)
+    private static double Sqrt(in Number x)
     {
       return Math.Sqrt((double)x);
     }
 
-    private static double Asin(Number x)
+    private static double Asin(in Number x)
     {
       return Math.Asin((double)x);
     }
 
-    private static double GetFirstAngle(Number x, Number y)
+    private static double GetFirstAngle(in Number x, in Number y)
     {
       return Math.Atan2((double)y, (double)x);
     }
 
-    public static PolarCoordinate ToPolar(this RectangularCoordianate p)
+    public static PolarCoordinate ToPolar(in this RectangularCoordianate p)
     {
       return new PolarCoordinate(
         r: Sqrt(p.X * p.X + p.Y * p.Y),
         φ: GetFirstAngle(p.X, p.Y));
     }
 
-    public static HypersphericalCoordinate ToSpherical(this CartesianCoordinate p)
+    public static HypersphericalCoordinate ToSpherical(in this CartesianCoordinate p)
     {
       NumberVector pc = p.Coordinates;
       NumberVector pc2 = pc.Transform(c => c * c);
@@ -54,7 +54,7 @@ namespace Arnible.MathModeling.Geometry
         angles.Add(GetFirstAngle(pc.GetOrDefault(0), pc.GetOrDefault(1)));
         angles.Reverse();
 
-        return new HypersphericalCoordinate(r, angles.ToAngleVector());
+        return new HypersphericalCoordinate(in r, angles.ToAngleVector());
       }
       else
       {
@@ -62,12 +62,12 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public static HypersphericalCoordinateOnAxisView ToSphericalView(this CartesianCoordinate p)
+    public static HypersphericalCoordinateOnAxisView ToSphericalView(in this CartesianCoordinate p)
     {
       return new HypersphericalCoordinateOnAxisView(p);
     }
 
-    public static Number VectorLength(this CartesianCoordinate point)
+    public static Number VectorLength(in this CartesianCoordinate point)
     {
       return Sqrt(point.Coordinates.Select(d => d * d).SumDefensive());
     }

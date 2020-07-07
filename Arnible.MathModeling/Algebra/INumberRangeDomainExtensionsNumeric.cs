@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Algebra
 {
@@ -9,14 +8,20 @@ namespace Arnible.MathModeling.Algebra
     // GetValidTranslation
     //
 
-    private static Number GetValidTranslationRatio(INumberRangeDomain domain, IEnumerable<Number> value, NumberTranslationVector delta)
+    private static Number GetValidTranslationRatio(
+      INumberRangeDomain domain,
+      in IValueArray<Number> value,
+      in NumberTranslationVector delta)
     {
       return value.Zip(delta, (v, t) => domain.GetValidTranslationRatio(v ?? 0, t ?? 0)).MinDefensive();
     }
 
-    private static NumberTranslationVector GetValidTranslationEnum(INumberRangeDomain domain, IEnumerable<Number> value, NumberTranslationVector delta)
+    private static NumberTranslationVector GetValidTranslationEnum(
+      in INumberRangeDomain domain,
+      in IValueArray<Number> value,
+      in NumberTranslationVector delta)
     {
-      Number ratio = GetValidTranslationRatio(domain, value, delta);
+      Number ratio = GetValidTranslationRatio(domain, in value, in delta);
       if (ratio == 0)
       {
         return default;
@@ -31,18 +36,24 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public static NumberTranslationVector GetValidTranslation(this INumberRangeDomain domain, NumberVector value, NumberTranslationVector delta)
+    public static NumberTranslationVector GetValidTranslation(
+      this INumberRangeDomain domain,
+      in NumberVector value,
+      in NumberTranslationVector delta)
     {
-      return GetValidTranslationEnum(domain, value, delta);
+      return GetValidTranslationEnum(in domain, value, in delta);
     }
 
-    public static NumberTranslationVector GetValidTranslation(this INumberRangeDomain domain, NumberArray value, NumberTranslationVector delta)
+    public static NumberTranslationVector GetValidTranslation(
+      this INumberRangeDomain domain,
+      in ValueArray<Number> value,
+      in NumberTranslationVector delta)
     {
       if (delta.Length > value.Length)
       {
         throw new ArgumentException(nameof(value));
       }
-      return GetValidTranslationEnum(domain, value, delta);
+      return GetValidTranslationEnum(in domain, value, in delta);
     }
   }
 }

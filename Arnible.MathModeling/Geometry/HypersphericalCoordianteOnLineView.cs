@@ -15,7 +15,7 @@ namespace Arnible.MathModeling.Geometry
     IEquatable<HypersphericalCoordianteOnLineView>,
     IHypersphericalCoordinateOnLineView
   {
-    public HypersphericalCoordianteOnLineView(Number r, Number ratioX)
+    public HypersphericalCoordianteOnLineView(in Number r, in Number ratioX)
     {
       if (r < 0)
       {
@@ -47,10 +47,12 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public bool Equals(HypersphericalCoordianteOnLineView other)
+    public bool Equals(in HypersphericalCoordianteOnLineView other)
     {
       return R == other.R && RatioX == other.RatioX;
     }
+
+    public bool Equals(HypersphericalCoordianteOnLineView other) => Equals(in other);
 
     public override int GetHashCode()
     {

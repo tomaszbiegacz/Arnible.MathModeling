@@ -10,26 +10,26 @@ namespace Arnible.MathModeling.Geometry
     private readonly HypersphericalCoordinateOnRectangularView _view;
 
     public HypersphericalCoordinateOnRectangularViewWithDerivative(
-      HypersphericalCoordinateOnRectangularView view,
-      Derivative1Value xDerivative,
-      Derivative1Value yDerivative)
+      in HypersphericalCoordinateOnRectangularView view,
+      in Derivative1Value xDerivative,
+      in Derivative1Value yDerivative)
     {
       _view = view;
       DerivativeForX = xDerivative;
       DerivativeForY = yDerivative;
     }
 
-    public static implicit operator HypersphericalCoordinateOnRectangularView(HypersphericalCoordinateOnRectangularViewWithDerivative v) => v._view;
+    public static implicit operator HypersphericalCoordinateOnRectangularView(in HypersphericalCoordinateOnRectangularViewWithDerivative v) => v._view;
 
     public override bool Equals(object obj)
     {
       if (obj is HypersphericalCoordinateOnRectangularViewWithDerivative casted)
       {
-        return Equals(casted);
+        return Equals(in casted);
       }
       else if (obj is HypersphericalCoordinateOnRectangularView casted2)
       {
-        return Equals(casted2);
+        return Equals(in casted2);
       }
       else
       {
@@ -37,15 +37,19 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public bool Equals(HypersphericalCoordinateOnRectangularViewWithDerivative other)
+    public bool Equals(in HypersphericalCoordinateOnRectangularViewWithDerivative other)
     {
       return _view.Equals(other._view) && DerivativeForX.Equals(other.DerivativeForX) && DerivativeForY.Equals(other.DerivativeForY);
     }
 
-    public bool Equals(HypersphericalCoordinateOnRectangularView other)
+    public bool Equals(HypersphericalCoordinateOnRectangularViewWithDerivative other) => Equals(in other);
+
+    public bool Equals(in HypersphericalCoordinateOnRectangularView other)
     {
       return _view.Equals(other);
     }
+
+    public bool Equals(HypersphericalCoordinateOnRectangularView other) => Equals(in other);
 
     public override int GetHashCode()
     {

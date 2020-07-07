@@ -12,22 +12,14 @@ namespace Arnible.MathModeling.Geometry
   /// Hyperspherical angle vector, where first coordinate angle range over [-π, π] and others range over [-π/2, π/2].
   /// </summary>
   [Serializable]
-  [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
-  public readonly struct HypersphericalAngleVector : IEquatable<HypersphericalAngleVector>, IEquatable<Number>, IArray<Number>
+  [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
+  public readonly struct HypersphericalAngleVector : IEquatable<HypersphericalAngleVector>, IEquatable<Number>, IValueArray<Number>
   {
     private readonly NumberVector _angles;
-
-    class Serializer : ToStringSerializer<HypersphericalAngleVector>
+    
+    public static HypersphericalAngleVector CreateOrthogonalDirection(in uint anglePos, in Number value)
     {
-      public Serializer() : base(v => v.ToString(CultureInfo.InvariantCulture))
-      {
-        // intentionally empty
-      }
-    }
-
-    public static HypersphericalAngleVector CreateOrthogonalDirection(uint anglePos, Number value)
-    {
-      return new HypersphericalAngleVector(NumberVector.NonZeroValueAt(pos: anglePos, value: value));
+      return new HypersphericalAngleVector(NumberVector.NonZeroValueAt(pos: in anglePos, value: in value));
     }    
 
     private static IEnumerable<Number> Normalize(IEnumerable<Number> values)
@@ -52,7 +44,7 @@ namespace Arnible.MathModeling.Geometry
       return new HypersphericalAngleVector(Normalize(parameters).ToVector());
     }
 
-    public static HypersphericalAngleVector GetIdentityVector(uint dimensionsCount)
+    public static HypersphericalAngleVector GetIdentityVector(in uint dimensionsCount)
     {
       switch (dimensionsCount)
       {
@@ -76,7 +68,7 @@ namespace Arnible.MathModeling.Geometry
       // intentionally empty
     }
 
-    private HypersphericalAngleVector(NumberVector angles)
+    private HypersphericalAngleVector(in NumberVector angles)
     {      
       var first = angles.First();
       if (first > Angle.HalfCycle || first <= -1 * Angle.HalfCycle)
@@ -91,20 +83,20 @@ namespace Arnible.MathModeling.Geometry
       _angles = angles;
     }
 
-    public static implicit operator HypersphericalAngleVector(Number v) => new HypersphericalAngleVector(v);
-    public static implicit operator HypersphericalAngleVector(double v) => new HypersphericalAngleVector(v);
+    public static implicit operator HypersphericalAngleVector(in Number v) => new HypersphericalAngleVector(v);
+    public static implicit operator HypersphericalAngleVector(in double v) => new HypersphericalAngleVector(v);
 
-    public static implicit operator NumberVector(HypersphericalAngleVector v) => v._angles;
+    public static implicit operator NumberVector(in HypersphericalAngleVector v) => v._angles;
 
     //
     // Properties
     //    
 
-    public Number this[uint pos] => _angles[pos];
+    public ref readonly Number this[in uint pos] => ref _angles[pos];
 
     public uint Length => _angles.Length;
 
-    public Number GetOrDefault(uint pos) => _angles.GetOrDefault(pos);
+    public Number GetOrDefault(in uint pos) => _angles.GetOrDefault(in pos);
 
     //
     // IArray
@@ -118,19 +110,23 @@ namespace Arnible.MathModeling.Geometry
     // IEquatable
     //    
 
-    public bool Equals(HypersphericalAngleVector other) => other._angles == _angles;
+    public bool Equals(in HypersphericalAngleVector other) => other._angles == _angles;
 
-    public bool Equals(Number other) => other == _angles;
+    public bool Equals(HypersphericalAngleVector other) => Equals(in other);
+
+    public bool Equals(in Number other) => other == _angles;
+
+    public bool Equals(Number other) => Equals(in other);
 
     public override bool Equals(object obj)
     {
       if (obj is HypersphericalAngleVector v)
       {
-        return Equals(v);
+        return Equals(in v);
       }
       else if (obj is Number v2)
       {
-        return Equals(v2);
+        return Equals(in v2);
       }
       else
       {
@@ -144,23 +140,23 @@ namespace Arnible.MathModeling.Geometry
 
     public override int GetHashCode() => _angles.GetHashCode();
 
-    public static bool operator ==(HypersphericalAngleVector a, HypersphericalAngleVector b) => a.Equals(b);
-    public static bool operator !=(HypersphericalAngleVector a, HypersphericalAngleVector b) => !a.Equals(b);
+    public static bool operator ==(in HypersphericalAngleVector a, in HypersphericalAngleVector b) => a.Equals(in b);
+    public static bool operator !=(in HypersphericalAngleVector a, in HypersphericalAngleVector b) => !a.Equals(in b);
 
-    public static bool operator ==(Number a, HypersphericalAngleVector b) => b.Equals(a);
-    public static bool operator !=(Number a, HypersphericalAngleVector b) => !b.Equals(a);
+    public static bool operator ==(in Number a, in HypersphericalAngleVector b) => b.Equals(in a);
+    public static bool operator !=(in Number a, in HypersphericalAngleVector b) => !b.Equals(in a);
 
-    public static bool operator ==(HypersphericalAngleVector a, Number b) => a.Equals(b);
-    public static bool operator !=(HypersphericalAngleVector a, Number b) => !a.Equals(b);
+    public static bool operator ==(in HypersphericalAngleVector a, in Number b) => a.Equals(in b);
+    public static bool operator !=(in HypersphericalAngleVector a, in Number b) => !a.Equals(in b);
 
     //
     // query operators
     //
 
-    public HypersphericalAngleVector GetOrthogonalDirection(uint anglePos)
+    public HypersphericalAngleVector GetOrthogonalDirection(in uint anglePos)
     {
-      Number angle = _angles[anglePos];
-      return new HypersphericalAngleVector(NumberVector.NonZeroValueAt(pos: anglePos, value: angle));
+      ref readonly Number angle = ref _angles[in anglePos];
+      return new HypersphericalAngleVector(NumberVector.NonZeroValueAt(pos: in anglePos, value: in angle));
     }
 
     public HypersphericalAngleVector AddDimension() => new HypersphericalAngleVector(_angles.Append(0).ToVector());

@@ -27,7 +27,10 @@ namespace Arnible.MathModeling.Export
 
     static string GetHeaderNameWithPrefix(string prefix, uint pos, string name) => $"{prefix}_{pos}_{name}";
 
-    static object GetIndexedPropertyValue(PropertyInfo property, uint pos, object value)
+    static object GetIndexedPropertyValue(
+      in PropertyInfo property, 
+      in uint pos, 
+      in object value)
     {
       object propertyValue = property.GetValue(value);
       if (propertyValue == null)
@@ -64,13 +67,15 @@ namespace Arnible.MathModeling.Export
 
     private readonly Func<object, ReadOnlyMemory<char>> _valueSerializer;
 
-    public FlatFieldSerializer(PropertyInfo property, Func<object, ReadOnlyMemory<char>> valueSerializer)
+    public FlatFieldSerializer(
+      in PropertyInfo property, 
+      in Func<object, ReadOnlyMemory<char>> valueSerializer)
       : this(property.Name, NullablePropertySerializer(property, valueSerializer))
     {
       // intentionally empty
     }
 
-    private FlatFieldSerializer(string header, Func<object, ReadOnlyMemory<char>> valueSerializer)
+    private FlatFieldSerializer(in string header, in Func<object, ReadOnlyMemory<char>> valueSerializer)
     {
       Header = header.AsMemory();
       _valueSerializer = valueSerializer ?? throw new ArgumentNullException(nameof(valueSerializer));
@@ -81,14 +86,14 @@ namespace Arnible.MathModeling.Export
 
     public Func<object, TextWriter, CancellationToken, Task> Serializer { get; }
 
-    public FlatFieldSerializer ForProperty(PropertyInfo property)
+    public FlatFieldSerializer ForProperty(in PropertyInfo property)
     {
       return new FlatFieldSerializer(
         GetHeaderNameWithPrefix(property.Name, new string(Header.Span)),
         NullablePropertySerializer(property, _valueSerializer));
     }
 
-    public FlatFieldSerializer ForIndexedProperty(PropertyInfo property, uint pos)
+    public FlatFieldSerializer ForIndexedProperty(in PropertyInfo property, in uint pos)
     {
       return new FlatFieldSerializer(
         GetHeaderNameWithPrefix(property.Name, pos, new string(Header.Span)),

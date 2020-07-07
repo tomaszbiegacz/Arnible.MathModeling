@@ -7,10 +7,10 @@ namespace Arnible.MathModeling
   {
     public static IEnumerable<int> Indexes<T>(this IReadOnlyList<T> arg)
     {
-      return LinqEnumerable.RangeInt(arg.Count);
+      return LinqEnumerable.RangeInt((uint)arg.Count);
     }
 
-    public static IEnumerable<uint> Indexes<T>(this IArray<T> arg)
+    public static IEnumerable<uint> Indexes<T>(in this ValueArray<T> arg) where T: struct
     {
       return LinqEnumerable.RangeUint(arg.Length);
     }
@@ -26,7 +26,7 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static IEnumerable<uint> IndexesWhere<T>(this IArray<T> arg, Func<T, bool> predicate)
+    public static IEnumerable<uint> IndexesWhere<T>(this IUnmanagedArray<T> arg, Func<T, bool> predicate) where T: unmanaged
     {
       for (uint i = 0; i < arg.Length; ++i)
       {

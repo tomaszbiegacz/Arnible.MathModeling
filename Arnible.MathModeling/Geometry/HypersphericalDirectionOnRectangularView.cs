@@ -14,8 +14,8 @@ namespace Arnible.MathModeling.Geometry
     IHypersphericalDirectionOnRectangularView
   {
     public HypersphericalDirectionOnRectangularView(
-      Number ratioX,
-      Number ratioY)
+      in Number ratioX,
+      in Number ratioY)
     {
       if (ratioX < -1 || ratioX > 1)
       {
@@ -34,7 +34,7 @@ namespace Arnible.MathModeling.Geometry
     {
       if (obj is HypersphericalDirectionOnRectangularView casted)
       {
-        return Equals(casted);
+        return Equals(in casted);
       }
       else
       {
@@ -42,10 +42,12 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public bool Equals(HypersphericalDirectionOnRectangularView other)
+    public bool Equals(in HypersphericalDirectionOnRectangularView other)
     {
       return RatioX == other.RatioX && RatioY == other.RatioY;
     }
+
+    public bool Equals(HypersphericalDirectionOnRectangularView other) => Equals(in other);
 
     public override int GetHashCode()
     {

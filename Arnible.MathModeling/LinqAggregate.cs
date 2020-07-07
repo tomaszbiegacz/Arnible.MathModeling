@@ -59,7 +59,11 @@ namespace Arnible.MathModeling
       return groupByKey.Where(kv => kv.Value.Count == sequenceCount).ToDictionary(kv => kv.Key, kv => aggregator(kv.Value));
     }
 
-    private static IEnumerable<T> AggregateCombinations<T>(IReadOnlyList<T> x, uint i, uint groupCount, Func<IEnumerable<T>, T> aggregator, Stack<T> combination)
+    private static IEnumerable<T> AggregateCombinations<T>(
+      IReadOnlyList<T> x, 
+      uint i, 
+      uint groupCount, 
+      Func<IEnumerable<T>, T> aggregator, Stack<T> combination)
     {
       if (groupCount == combination.Count)
       {
@@ -88,7 +92,10 @@ namespace Arnible.MathModeling
     /// <summary>
     /// Calculate aggregate for "groupSize" items count combinations from source collection.
     /// </summary>
-    public static IEnumerable<T> AggregateCombinations<T>(this IEnumerable<T> items, uint groupSize, Func<IEnumerable<T>, T> aggregator)
+    public static IEnumerable<T> AggregateCombinations<T>(
+      this IEnumerable<T> items, 
+      uint groupSize, 
+      Func<IEnumerable<T>, T> aggregator)
     {
       if (groupSize < 1)
       {
@@ -116,7 +123,9 @@ namespace Arnible.MathModeling
     /// <summary>
     /// Calculate aggregate for items count from 1 to collection size
     /// </summary>
-    public static IEnumerable<T> AggregateCombinationsAll<T>(this IEnumerable<T> items, Func<IEnumerable<T>, T> aggregator)
+    public static IEnumerable<T> AggregateCombinationsAll<T>(
+      this IEnumerable<T> items, 
+      Func<IEnumerable<T>, T> aggregator)
     {
       if (items == null)
       {
@@ -150,7 +159,10 @@ namespace Arnible.MathModeling
     /// Applies a specified function to the corresponding elements of two sequences,
     /// producing a sequence of the results.
     /// </summary>
-    public static IEnumerable<TResult> Zip<T, TResult>(this IEnumerable<T> col1, IEnumerable<T> col2, Func<T, T, TResult> merge) where T : class
+    public static IEnumerable<TResult> Zip<T, TResult>(
+      this IEnumerable<T> col1, 
+      IEnumerable<T> col2, 
+      Func<T, T, TResult> merge) where T : class
     {
       return System.Linq.Enumerable.Zip(col1, col2, merge);
     }
@@ -159,7 +171,10 @@ namespace Arnible.MathModeling
     /// Applies a specified function to the corresponding elements of two sequences,
     /// producing a sequence of the results.
     /// </summary>
-    public static IEnumerable<TResult> Zip<T, TResult>(this IEnumerable<T> col1, IEnumerable<T> col2, Func<T?, T?, TResult> merge) where T : struct
+    public static IEnumerable<TResult> Zip<T, TResult>(
+      this IEnumerable<T> col1, 
+      IEnumerable<T> col2, 
+      Func<T?, T?, TResult> merge) where T : struct
     {
       using (var col1Enum = col1.GetEnumerator())
       using (var col2Enum = col2.GetEnumerator())
@@ -194,7 +209,10 @@ namespace Arnible.MathModeling
     /// <remarks>
     /// If validation of equal length is not needed, use Zip instead.
     /// </remarks>
-    public static IEnumerable<TResult> ZipDefensive<T, TResult>(this IEnumerable<T> col1, IEnumerable<T> col2, Func<T, T, TResult> merge)
+    public static IEnumerable<TResult> ZipDefensive<T, TResult>(
+      this IEnumerable<T> col1, 
+      IEnumerable<T> col2, 
+      Func<T, T, TResult> merge)
     {
       using (var col1Enum = col1.GetEnumerator())
       using (var col2Enum = col2.GetEnumerator())

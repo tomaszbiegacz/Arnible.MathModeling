@@ -4,21 +4,22 @@ using System.Globalization;
 
 namespace Arnible.MathModeling
 {
+  /// <summary>
+  /// Double with relaxed equality operator.
+  /// </summary>
+  /// <remarks> 
+  /// Features:
+  /// * DoubleExtension.NumericEquals is used for equality decision  
+  /// Usage considerations:
+  /// * Structure size is less then IntPtr.Size on 64-bit proceses, hence it is suggested to not return/receive structure instance by reference
+  /// </remarks>  
   [Serializable]
-  [RecordSerializer(SerializationMediaType.TabSeparatedValues, typeof(Serializer))]
+  [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
   public readonly struct Number : IEquatable<Number>, IComparable<Number>
-  {
-    class Serializer : ToStringSerializer<Number>
-    {
-      public Serializer() : base(v => v.ToString(CultureInfo.InvariantCulture))
-      {
-        // intentionally empty
-      }
-    }
-
+  {    
     private readonly double _value;
 
-    private Number(double value)
+    private Number(in double value)
     {
       if (!value.IsValidNumeric())
       {
@@ -27,8 +28,8 @@ namespace Arnible.MathModeling
       _value = value;
     }
 
-    public static implicit operator Number(double v) => new Number(v);
-    public static explicit operator double(Number v) => v._value;
+    public static implicit operator Number(in double v) => new Number(in v);
+    public static explicit operator double(in Number v) => v._value;
 
     //
     // Object
@@ -53,7 +54,7 @@ namespace Arnible.MathModeling
 
     public override string ToString() => ToString(CultureInfo.InvariantCulture);
 
-    public string ToString(CultureInfo cultureInfo)
+    public string ToString(in CultureInfo cultureInfo)
     {
       return _value.ToString(cultureInfo);
     }
@@ -64,12 +65,14 @@ namespace Arnible.MathModeling
 
     public bool Equals(Number other) => _value.NumericEquals(other._value);
 
-    public static bool operator ==(Number a, Number b) => a.Equals(b);
-    public static bool operator !=(Number a, Number b) => !a.Equals(b);
+    public bool Equals(in Number other) => _value.NumericEquals(in other._value);
 
-    public static bool operator <(Number a, Number b)
+    public static bool operator ==(in Number a, in Number b) => a.Equals(in b);
+    public static bool operator !=(in Number a, in Number b) => !a.Equals(in b);
+
+    public static bool operator <(in Number a, in Number b)
     {
-      if(a.Equals(b))
+      if(a.Equals(in b))
       {
         return false;
       }
@@ -79,9 +82,9 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static bool operator >(Number a, Number b)
+    public static bool operator >(in Number a, in Number b)
     {
-      if (a.Equals(b))
+      if (a.Equals(in b))
       {
         return false;
       }
@@ -91,9 +94,9 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static bool operator <=(Number a, Number b)
+    public static bool operator <=(in Number a, in Number b)
     {
-      if(a.Equals(b))
+      if(a.Equals(in b))
       {
         return true;
       }
@@ -103,9 +106,9 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static bool operator >=(Number a, Number b)
+    public static bool operator >=(in Number a, in Number b)
     {
-      if (a.Equals(b))
+      if (a.Equals(in b))
       {
         return true;
       }
@@ -115,41 +118,41 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static Number operator /(Number a, Number b) => a._value / b._value;
-    public static Number operator /(Number a, double b) => a._value / b;
-    public static Number operator /(double a, Number b) => a / b._value;
-    public static Number operator /(Number a, int b) => a._value / b;
-    public static Number operator /(int a, Number b) => a / b._value;
-    public static Number operator /(Number a, uint b) => a._value / b;
-    public static Number operator /(uint a, Number b) => a / b._value;
+    public static Number operator /(in Number a, in Number b) => a._value / b._value;
+    public static Number operator /(in Number a, in double b) => a._value / b;
+    public static Number operator /(in double a, in Number b) => a / b._value;
+    public static Number operator /(in Number a, in int b) => a._value / b;
+    public static Number operator /(in int a, in Number b) => a / b._value;
+    public static Number operator /(in Number a, in uint b) => a._value / b;
+    public static Number operator /(in uint a, in Number b) => a / b._value;
 
 
-    public static Number operator +(Number a, Number b) => a._value + b._value;
-    public static Number operator +(Number a, double b) => a._value + b;
-    public static Number operator +(double a, Number b) => a + b._value;
-    public static Number operator +(Number a, int b) => a._value + b;
-    public static Number operator +(int a, Number b) => a + b._value;
-    public static Number operator +(Number a, uint b) => a._value + b;
-    public static Number operator +(uint a, Number b) => a + b._value;
+    public static Number operator +(in Number a, in Number b) => a._value + b._value;
+    public static Number operator +(in Number a, in double b) => a._value + b;
+    public static Number operator +(in double a, in Number b) => a + b._value;
+    public static Number operator +(in Number a, in int b) => a._value + b;
+    public static Number operator +(in int a, in Number b) => a + b._value;
+    public static Number operator +(in Number a, in uint b) => a._value + b;
+    public static Number operator +(in uint a, in Number b) => a + b._value;
 
 
-    public static Number operator -(Number a, Number b) => a._value - b._value;
-    public static Number operator -(Number a, double b) => a._value - b;
-    public static Number operator -(double a, Number b) => a - b._value;
-    public static Number operator -(Number a, int b) => a._value - b;
-    public static Number operator -(int a, Number b) => a - b._value;
-    public static Number operator -(Number a, uint b) => a._value - b;
-    public static Number operator -(uint a, Number b) => a - b._value;
+    public static Number operator -(in Number a, in Number b) => a._value - b._value;
+    public static Number operator -(in Number a, in double b) => a._value - b;
+    public static Number operator -(in double a, in Number b) => a - b._value;
+    public static Number operator -(in Number a, in int b) => a._value - b;
+    public static Number operator -(in int a, in Number b) => a - b._value;
+    public static Number operator -(in Number a, in uint b) => a._value - b;
+    public static Number operator -(in uint a, in Number b) => a - b._value;
 
-    public static Number operator *(Number a, Number b) => a._value * b._value;
-    public static Number operator *(Number a, double b) => a._value * b;
-    public static Number operator *(double a, Number b) => a * b._value;
-    public static Number operator *(Number a, int b) => a._value * b;
-    public static Number operator *(int a, Number b) => a * b._value;    
-    public static Number operator *(Number a, uint b) => a._value * b;
-    public static Number operator *(uint a, Number b) => a * b._value;    
+    public static Number operator *(in Number a, in Number b) => a._value * b._value;
+    public static Number operator *(in Number a, in double b) => a._value * b;
+    public static Number operator *(in double a, in Number b) => a * b._value;
+    public static Number operator *(in Number a, in int b) => a._value * b;
+    public static Number operator *(in int a, in Number b) => a * b._value;    
+    public static Number operator *(in Number a, in uint b) => a._value * b;
+    public static Number operator *(in uint a, in Number b) => a * b._value;    
 
-    public Number ToPower(uint b) => DoubleExtension.ToPower(_value, b);
+    public Number ToPower(in uint b) => DoubleExtension.ToPower(in _value, in b);
 
     //
     // IComparable

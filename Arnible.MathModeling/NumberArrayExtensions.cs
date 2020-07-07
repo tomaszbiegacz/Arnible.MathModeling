@@ -5,39 +5,34 @@ namespace Arnible.MathModeling
 {
   public static class NumberArrayExtensions
   {
-    public static NumberArray ToNumberArray(this IEnumerable<Number> numbers)
-    {
-      return NumberArray.Create(numbers);
-    }
-
-    public static NumberArray ToNumberArray(this IEnumerable<Number> numbers, uint length)
+    public static ValueArray<Number> ToValueArray(this IEnumerable<Number> numbers, in uint length)
     {
       ValueArray<Number> items = numbers.ToValueArray();
-      if(items.Length > length)
+      if (items.Length > length)
       {
         throw new ArgumentException(nameof(length));
       }
 
       uint toAdd = length - items.Length;
-      return NumberArray.Create(items.Concat(LinqEnumerable.Repeat<Number>(0, toAdd)));
+      return items.Concat(LinqEnumerable.Repeat<Number>(0, toAdd)).ToValueArray();
     }
 
-    public static NumberArray ToNumberArray(this IEnumerable<double> numbers)
+    public static ValueArray<Number> ToNumberArray(this IEnumerable<double> numbers)
     {
-      return numbers.Select(v => (Number)v).ToNumberArray();
+      return numbers.Select(v => (Number)v).ToValueArray();
     }
 
-    public static NumberArray ToNumberArray(this IEnumerable<double> numbers, uint length)
+    public static ValueArray<Number> ToNumberArray(this IEnumerable<double> numbers, in uint length)
     {
-      return numbers.Select(v => (Number)v).ToNumberArray(length);
+      return numbers.Select(v => (Number)v).ToValueArray(in length);
     }
 
-    public static IEnumerable<uint> Indexes(this IArray<Number> arg)
+    public static IEnumerable<uint> Indexes(this ValueArray<Number> arg)
     {
       return LinqEnumerable.RangeUint(arg.Length);
     }
 
-    public static IEnumerable<uint> IndexesWhere(this IArray<Number> arg, Func<Number, bool> predicate)
+    public static IEnumerable<uint> IndexesWhere(this ValueArray<Number> arg, Func<Number, bool> predicate)
     {
       for (uint i = 0; i < arg.Length; ++i)
       {
@@ -46,11 +41,11 @@ namespace Arnible.MathModeling
           yield return i;
         }
       }
-    }    
+    }
 
-    public static Number DistanceSquareTo(this IArray<Number> arg, IArray<Number> other)
+    public static Number DistanceSquareTo(in this ValueArray<Number> arg, in ValueArray<Number> other)
     {
-      if(arg.Length != other.Length)
+      if (arg.Length != other.Length)
       {
         throw new ArgumentException(nameof(other));
       }

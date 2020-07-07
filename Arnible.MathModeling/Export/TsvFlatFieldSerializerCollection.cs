@@ -11,7 +11,7 @@ namespace Arnible.MathModeling.Export
     static readonly ConcurrentDictionary<Type, Func<object, ReadOnlyMemory<char>>> _valueSerializers;
     static readonly ConcurrentDictionary<Type, TsvFlatFieldSerializerCollection> _structureSerializers;
 
-    private static ReadOnlyMemory<char> ConvertKnown(string value)
+    private static ReadOnlyMemory<char> ConvertKnown(in string value)
     {
       if (string.IsNullOrWhiteSpace(value))
         return default;
@@ -43,7 +43,7 @@ namespace Arnible.MathModeling.Export
       _structureSerializers = new ConcurrentDictionary<Type, TsvFlatFieldSerializerCollection>();
     }
 
-    static Func<object, ReadOnlyMemory<char>> GetValueSerializer(Type t)
+    static Func<object, ReadOnlyMemory<char>> GetValueSerializer(in Type t)
     {
       Func<object, ReadOnlyMemory<char>> valueSerializer = null;
       if (_valueSerializers.TryGetValue(t, out var serializator))
@@ -67,11 +67,11 @@ namespace Arnible.MathModeling.Export
       return valueSerializer;
     }
 
-    static TsvFlatFieldSerializerCollection GetStructureSerializer(Type t)
+    static TsvFlatFieldSerializerCollection GetStructureSerializer(in Type t)
     {
       if (!_structureSerializers.TryGetValue(t, out var fields))
       {
-        fields = new TsvFlatFieldSerializerCollection(t);
+        fields = new TsvFlatFieldSerializerCollection(in t);
         _structureSerializers.TryAdd(t, fields);
       }
       return fields;
@@ -79,12 +79,12 @@ namespace Arnible.MathModeling.Export
 
     public static IFlatFieldSerializerCollection For<T>() => GetStructureSerializer(typeof(T));
 
-    static FlatFieldSerializer ForRootProperty(PropertyInfo property, Func<object, ReadOnlyMemory<char>> valueSerializer)
+    static FlatFieldSerializer ForRootProperty(in PropertyInfo property, in Func<object, ReadOnlyMemory<char>> valueSerializer)
     {
-      return new FlatFieldSerializer(property, valueSerializer);
+      return new FlatFieldSerializer(in property, in valueSerializer);
     }
 
-    static bool IsEnumerable(Type t)
+    static bool IsEnumerable(in Type t)
     {
       return t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
     }
@@ -140,8 +140,8 @@ namespace Arnible.MathModeling.Export
       }
     }
 
-    private TsvFlatFieldSerializerCollection(Type t)
-      : base(t, GetProperties(t).SelectMany(p => ForRootProperty(p)))
+    private TsvFlatFieldSerializerCollection(in Type t)
+      : base(in t, GetProperties(in t).SelectMany(p => ForRootProperty(p)))
     {
       // intentionally empty
     }

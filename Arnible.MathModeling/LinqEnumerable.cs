@@ -43,7 +43,7 @@ namespace Arnible.MathModeling
       return System.Linq.Enumerable.SingleOrDefault(source);
     }
 
-    public static IEnumerable<T> Where<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+    public static IEnumerable<T> Where<T>(this IEnumerable<T> source, in Func<T, bool> predicate)
     {
       return System.Linq.Enumerable.Where(source, predicate);
     }
@@ -58,6 +58,11 @@ namespace Arnible.MathModeling
       return new ValueArray<T>(source);
     }
 
+    public static IUnmanagedArray<T> ToUnmanagedArray<T>(this IEnumerable<T> source) where T : unmanaged
+    {
+      return new UnmanagedArray<T>(System.Linq.Enumerable.ToArray(source));
+    }
+
     public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
     {
       return System.Linq.Enumerable.ToArray(source);
@@ -68,15 +73,15 @@ namespace Arnible.MathModeling
       return System.Linq.Enumerable.ToList(source);
     }
 
-    public static IDictionary<TKey, TSource> ToDictionary<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+    public static IDictionary<TKey, TSource> ToDictionary<TKey, TSource>(this IEnumerable<TSource> source, in Func<TSource, TKey> keySelector)
     {
       return System.Linq.Enumerable.ToDictionary(source, keySelector);
     }
 
     public static IDictionary<TKey, TValue> ToDictionary<TSource, TKey, TValue>(
       this IEnumerable<TSource> source,
-      Func<TSource, TKey> keySelector,
-      Func<TSource, TValue> valueSelector)
+      in Func<TSource, TKey> keySelector,
+      in Func<TSource, TValue> valueSelector)
     {
       return System.Linq.Enumerable.ToDictionary(source, keySelector, valueSelector);
     }
@@ -90,9 +95,9 @@ namespace Arnible.MathModeling
       yield return src;
     }
 
-    public static IEnumerable<int> RangeInt(int length) => RangeInt(0, length);
+    public static IEnumerable<int> RangeInt(uint length) => RangeInt(0, length);
 
-    public static IEnumerable<int> RangeInt(int start, int length)
+    public static IEnumerable<int> RangeInt(int start, uint length)
     {
       for (int i = start; i < start + length; ++i)
       {

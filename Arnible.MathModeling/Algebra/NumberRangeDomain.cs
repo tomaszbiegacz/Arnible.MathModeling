@@ -8,7 +8,7 @@ namespace Arnible.MathModeling.Algebra
 
     public Number Maximum { get; }
 
-    public NumberRangeDomain(Number minimum, Number maximum)
+    public NumberRangeDomain(in Number minimum, in Number maximum)
     {
       if (maximum <= minimum)
       {
@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Algebra
 
     public double Width => (double)(Maximum - Minimum);
 
-    public bool IsValid(Number value)
+    public bool IsValid(in Number value)
     {
       if (value == Minimum || value == Maximum)
       {
@@ -32,7 +32,7 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    private Number GetTranslationDelta(Number value, Number delta)
+    private Number GetTranslationDelta(in Number value, in Number delta)
     {
       Number minimum = Minimum - value;
       if (delta < minimum)
@@ -49,11 +49,11 @@ namespace Arnible.MathModeling.Algebra
       return delta;
     }
 
-    public Number Translate(Number value, Number delta) => value + GetTranslationDelta(value, delta);
+    public Number Translate(in Number value, in Number delta) => value + GetTranslationDelta(in value, in delta);
 
-    public Number GetValidTranslationRatio(Number value, Number delta)
+    public Number GetValidTranslationRatio(in Number value, in Number delta)
     {
-      if (!IsValid(value))
+      if (!IsValid(in value))
       {
         throw new ArgumentException(nameof(value));
       }
@@ -64,7 +64,7 @@ namespace Arnible.MathModeling.Algebra
       }
       else
       {
-        Number validDelta = GetTranslationDelta(value, delta);
+        Number validDelta = GetTranslationDelta(in value, in delta);
         if (validDelta == delta)
         {
           return 1;
@@ -81,7 +81,7 @@ namespace Arnible.MathModeling.Algebra
       return Math.Asin((double)x);
     }
 
-    private Number GetTranslationDeltaForLastAngle(Number radius, Number currentAngle, Number angleDelta)
+    private Number GetTranslationDeltaForLastAngle(in Number radius, in Number currentAngle, in Number angleDelta)
     {
       if (radius == 0)
       {
@@ -115,7 +115,7 @@ namespace Arnible.MathModeling.Algebra
       return angleDelta;
     }
 
-    public Number GetValidTranslationRatioForLastAngle(Number radius, Number currentAngle, Number angleDelta)
+    public Number GetValidTranslationRatioForLastAngle(in Number radius, in Number currentAngle, in Number angleDelta)
     {
       if (angleDelta == 0)
       {

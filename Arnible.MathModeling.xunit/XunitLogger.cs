@@ -19,7 +19,7 @@ namespace Arnible.MathModeling.xunit
     // IMathModelingLogger
     //
 
-    public void Log(string message)
+    public void Log(in string message)
     {
       _output.WriteLine(message);
       Debug.WriteLine(message);

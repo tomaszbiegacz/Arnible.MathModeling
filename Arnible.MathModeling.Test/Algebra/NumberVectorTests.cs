@@ -172,14 +172,14 @@ namespace Arnible.MathModeling.Algebra.Test
     public void ToArray_SameSize()
     {
       var v = new NumberVector(1, 2, 3);
-      AreEquals(new[] { 1d, 2, 3 }, v.ToArray(3));
+      AreEquals(new Number[] { 1d, 2, 3 }, v.ToValueArray(3));
     }
 
     [Fact]
     public void ToArray_GreaterSize()
     {
       var v = new NumberVector(1, 2, 3);
-      AreEquals(new[] { 1d, 2, 3, 0 }, v.ToArray(4));
+      AreEquals(new Number[] { 1d, 2, 3, 0 }, v.ToValueArray(4));
     }
   }
 }

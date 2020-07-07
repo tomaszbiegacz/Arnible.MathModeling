@@ -6,7 +6,11 @@ namespace Arnible.MathModeling.Geometry
 {
   public class HypersphericalCoordinateOnAxisViewForAngleDerivatives
   {
-    private static NumberArray GetCartesianAxisViewsRatiosDerivativesByAngle(Number r, HypersphericalAngleVector anglesVector, uint anglesCount, uint pos)
+    private static ValueArray<Number> GetCartesianAxisViewsRatiosDerivativesByAngle(
+      in Number r, 
+      in HypersphericalAngleVector anglesVector, 
+      in uint anglesCount, 
+      in uint pos)
     {
       if (anglesCount < anglesVector.Length)
       {
@@ -54,16 +58,19 @@ namespace Arnible.MathModeling.Geometry
       cartesianDimensions.Add(replacement);
       cartesianDimensions.Reverse();
 
-      return cartesianDimensions.Concat(LinqEnumerable.Repeat<Number>(0, (uint)cartesianDimensions.Count - anglesCount - 1)).ToNumberArray();
+      return cartesianDimensions.Concat(LinqEnumerable.Repeat<Number>(0, (uint)(cartesianDimensions.Count - anglesCount - 1))).ToValueArray();
     }
 
-    private NumberArray _angleDerivatives;
+    private ValueArray<Number> _angleDerivatives;
 
-    public HypersphericalCoordinateOnAxisViewForAngleDerivatives(HypersphericalCoordinateOnAxisView view, uint anglesCount, uint anglePos)
+    public HypersphericalCoordinateOnAxisViewForAngleDerivatives(
+      in HypersphericalCoordinateOnAxisView view, 
+      in uint anglesCount, 
+      in uint anglePos)
     {
       View = view;
       AnglePos = anglePos;
-      _angleDerivatives = GetCartesianAxisViewsRatiosDerivativesByAngle(view.R, view.Angles, anglesCount: anglesCount, pos: anglePos);
+      _angleDerivatives = GetCartesianAxisViewsRatiosDerivativesByAngle(view.R, view.Angles, anglesCount: in anglesCount, pos: in anglePos);
 
       if(_angleDerivatives.Length != anglesCount + 1)
       {
@@ -85,7 +92,7 @@ namespace Arnible.MathModeling.Geometry
     // Operations
     //
 
-    public HypersphericalCoordinateOnRectangularViewWithDerivative GetRectangularViewDerivativeByAngle(uint axisA, uint axisB)
+    public HypersphericalCoordinateOnRectangularViewWithDerivative GetRectangularViewDerivativeByAngle(in uint axisA, in uint axisB)
     {
       return new HypersphericalCoordinateOnRectangularViewWithDerivative(
         view: View.GetRectangularView(axisA: axisA, axisB: axisB),

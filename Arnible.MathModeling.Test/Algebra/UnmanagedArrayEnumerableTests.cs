@@ -2,9 +2,9 @@
 
 namespace Arnible.MathModeling.Algebra.Test
 {
-  public abstract class ArrayEnumerableTests<TEnumerator, TValue>
-    where TEnumerator : class, IArrayEnumerable<TValue>
-    where TValue : struct
+  public abstract class UnmanagedArrayEnumerableTests<TEnumerator, TValue>
+    where TEnumerator : class, IUnmanagedArrayEnumerable<TValue>
+    where TValue : unmanaged
   {
     protected static void Verify(TEnumerator list, params TValue[] signs)
     {

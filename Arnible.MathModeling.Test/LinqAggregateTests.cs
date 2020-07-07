@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Arnible.MathModeling.Polynomials;
+using System;
 using System.Collections.Generic;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;

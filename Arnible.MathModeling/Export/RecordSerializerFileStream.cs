@@ -6,14 +6,14 @@ namespace Arnible.MathModeling.Export
 {
   public class RecordSerializerFileStream<T> : RecordSerializerStream<T> where T: struct
   {
-    private static MediaTypeSpecificationAttribute GetMediaTypeSpecification(SerializationMediaType mediaType)
+    private static MediaTypeSpecificationAttribute GetMediaTypeSpecification(in SerializationMediaType mediaType)
     {
       Type enumType = typeof(SerializationMediaType);
       MemberInfo memInfo = enumType.GetMember(enumType.GetEnumName(mediaType)).Single();
       return (MediaTypeSpecificationAttribute)memInfo.GetCustomAttribute(typeof(MediaTypeSpecificationAttribute));
     }
     
-    private static FileInfo NormalizeFileExtension(FileInfo fileInfo, IRecordSerializer<T> serializer)
+    private static FileInfo NormalizeFileExtension(in FileInfo fileInfo, in IRecordSerializer<T> serializer)
     {
       string expectedExtension = GetMediaTypeSpecification(serializer.MediaType).FileExtension;
       if (expectedExtension != fileInfo.Extension)
@@ -24,19 +24,19 @@ namespace Arnible.MathModeling.Export
 
     public FileInfo Destination { get; }
 
-    public static RecordSerializerFileStream<T> ToTempFile(IRecordSerializer<T> serializer)
+    public static RecordSerializerFileStream<T> ToTempFile(in IRecordSerializer<T> serializer)
     {
       return new RecordSerializerFileStream<T>(new FileInfo(Path.GetTempFileName()), serializer);
     }
 
-    public RecordSerializerFileStream(FileInfo fileInfo, IRecordSerializer<T> serializer)
-      : this(NormalizeFileExtension(fileInfo, serializer).FullName, serializer)
+    public RecordSerializerFileStream(in FileInfo fileInfo, in IRecordSerializer<T> serializer)
+      : this(NormalizeFileExtension(in fileInfo, in serializer).FullName, serializer)
     {
       // intentionally empty
     }
 
-    private RecordSerializerFileStream(string filePath, IRecordSerializer<T> serializer)
-      : base(File.Create(filePath), serializer)
+    private RecordSerializerFileStream(in string filePath, in IRecordSerializer<T> serializer)
+      : base(File.Create(filePath), in serializer)
     {
       Destination = new FileInfo(filePath);
     }

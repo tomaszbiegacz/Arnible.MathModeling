@@ -9,11 +9,13 @@ namespace Arnible.MathModeling
 
   public readonly struct Derivative2Value : IDerivative2, IEquatable<Derivative2Value>
   {
-    public Derivative2Value(Number first, Number second)
+    public Derivative2Value(in Number first, in Number second)
     {
       First = first;
       Second = second;
     }
+
+    public static implicit operator Derivative1Value(in Derivative2Value v) => new Derivative1Value(v.First);
 
     public override bool Equals(object obj)
     {
@@ -27,10 +29,12 @@ namespace Arnible.MathModeling
       }
     }
 
-    public bool Equals(Derivative2Value other)
+    public bool Equals(in Derivative2Value other)
     {
       return First == other.First && Second == other.Second;
     }
+
+    public bool Equals(Derivative2Value other) => Equals(in other);
 
     public override int GetHashCode()
     {
@@ -42,10 +46,8 @@ namespace Arnible.MathModeling
       return $"[{First}, {Second}]";
     }
 
-    public static bool operator ==(Derivative2Value a, Derivative2Value b) => a.Equals(b);
-    public static bool operator !=(Derivative2Value a, Derivative2Value b) => !a.Equals(b);
-
-    public static implicit operator Derivative1Value(Derivative2Value v) => new Derivative1Value(v.First);
+    public static bool operator ==(in Derivative2Value a, in Derivative2Value b) => a.Equals(in b);
+    public static bool operator !=(in Derivative2Value a, in Derivative2Value b) => !a.Equals(in b);    
 
     //
     // Properties

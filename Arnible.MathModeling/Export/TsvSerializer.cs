@@ -18,7 +18,7 @@ namespace Arnible.MathModeling.Export
     static readonly ReadOnlyMemory<char> Separator = new[] { TsvConst.SeparatorChar };
     static readonly ReadOnlyMemory<char> NewLine = "\n".AsMemory();
 
-    static TextWriter CreateTextWriter(Stream output) => new StreamWriter(output, EncodingUtf8WithoutBom);
+    static TextWriter CreateTextWriter(in Stream output) => new StreamWriter(output, EncodingUtf8WithoutBom);
 
     public static RecordSerializerFileStream<T> ToTempFile() => RecordSerializerFileStream<T>.ToTempFile(new TsvSerializer<T>());
 

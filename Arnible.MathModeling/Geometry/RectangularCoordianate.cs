@@ -12,7 +12,7 @@
 
     public Number Y { get; }
 
-    public RectangularCoordianate(Number x, Number y)
+    public RectangularCoordianate(in Number x, in Number y)
     {
       X = x;
       Y = y;

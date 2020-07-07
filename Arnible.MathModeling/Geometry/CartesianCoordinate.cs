@@ -24,7 +24,7 @@ namespace Arnible.MathModeling.Geometry
 
     public NumberVector Coordinates { get; }
 
-    public CartesianCoordinate(NumberVector coordinates)
+    private CartesianCoordinate(in NumberVector coordinates)
     {
       Coordinates = coordinates;
     }
@@ -34,32 +34,34 @@ namespace Arnible.MathModeling.Geometry
     {
       // intentionally empty
     }
-
-    public static CartesianCoordinate Concat(NumberArray c1, NumberArray c2)
-    {
-      return new CartesianCoordinate(c1.Concat(c2).ToVector());
-    }
-
-    public static implicit operator CartesianCoordinate(RectangularCoordianate rc)
+    
+    public static implicit operator CartesianCoordinate(in RectangularCoordianate rc)
     {
       return new CartesianCoordinate(new Number[] { rc.X, rc.Y }.ToVector());
     }
 
-    public static implicit operator CartesianCoordinate(NumberArray rc)
+    public static implicit operator CartesianCoordinate(in ValueArray<Number> rc)
     {
-      return new CartesianCoordinate(NumberVector.Create(rc));
+      return new CartesianCoordinate(rc.ToVector());
     }
 
-    public bool Equals(CartesianCoordinate other)
+    public static implicit operator CartesianCoordinate(in NumberVector rc)
+    {
+      return new CartesianCoordinate(in rc);
+    }
+
+    public bool Equals(in CartesianCoordinate other)
     {
       return other.Coordinates == Coordinates;
     }
+
+    public bool Equals(CartesianCoordinate other) => Equals(in other);
 
     public override bool Equals(object obj)
     {
       if(obj is CartesianCoordinate typed)
       {
-        return Equals(typed);
+        return Equals(in typed);
       }
       else
       {

@@ -11,7 +11,7 @@ namespace Arnible.MathModeling.Geometry
     /// </summary>
     public Number Φ { get; }
 
-    public PolarCoordinate(Number r, Number φ)
+    public PolarCoordinate(in Number r, in Number φ)
     {
       R = r;
       Φ = φ;

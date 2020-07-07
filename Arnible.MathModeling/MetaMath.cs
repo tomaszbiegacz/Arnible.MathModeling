@@ -2,12 +2,8 @@
 {
   public static class MetaMath
   {
-    public static PolynomialTerm Sin(PolynomialTerm term) => IndeterminateExpression.Sin((char)term);
+    public static Number Sin(in Number a) => NumberMath.Sin(in a);
 
-    public static PolynomialTerm Cos(PolynomialTerm term) => IndeterminateExpression.Cos((char)term);
-
-    public static Number Sin(Number a) => NumberMath.Sin(a);
-
-    public static Number Cos(Number a) => NumberMath.Cos(a);
+    public static Number Cos(in Number a) => NumberMath.Cos(in a);
   }
 }

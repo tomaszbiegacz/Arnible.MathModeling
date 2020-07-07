@@ -24,7 +24,6 @@
     <Compile Include="..\Arnible.MathModeling\Derivative2Value.cs" Link="Derivative2Value.cs" />
     <Compile Include="..\Arnible.MathModeling\DerivativeOperator.cs" Link="DerivativeOperator.cs" />
     <Compile Include="..\Arnible.MathModeling\DoubleExtension.cs" Link="DoubleExtension.cs" />
-    <Compile Include="..\Arnible.MathModeling\ElementaryUnaryOperation.cs" Link="ElementaryUnaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\Export\IMathModelingLogger.cs" Link="Export\IMathModelingLogger.cs" />
     <Compile Include="..\Arnible.MathModeling\Export\MediaTypeSpecificationAttribute.cs" Link="Export\MediaTypeSpecificationAttribute.cs" />
     <Compile Include="..\Arnible.MathModeling\Export\RecordSerializerAttribute.cs" Link="Export\RecordSerializerAttribute.cs" />
@@ -46,11 +45,10 @@
     <Compile Include="..\Arnible.MathModeling\Geometry\PolarCoordinate.cs" Link="Geometry\PolarCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\QuantifiedDirectionsFactory.cs" Link="Geometry\QuantifiedDirectionsFactory.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\RectangularCoordianate.cs" Link="Geometry\RectangularCoordianate.cs" />
-    <Compile Include="..\Arnible.MathModeling\IArray.cs" Link="IArray.cs" />
     <Compile Include="..\Arnible.MathModeling\IBinaryOperation.cs" Link="IBinaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IFinitaryOperation.cs" Link="IFinitaryOperation.cs" />
-    <Compile Include="..\Arnible.MathModeling\IndeterminateExpression.cs" Link="IndeterminateExpression.cs" />
-    <Compile Include="..\Arnible.MathModeling\IPolynomialOperation.cs" Link="IPolynomialOperation.cs" />
+    <Compile Include="..\Arnible.MathModeling\IUnmanagedArray.cs" Link="IUnmanagedArray.cs" />
+    <Compile Include="..\Arnible.MathModeling\IValueArray.cs" Link="IValueArray.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqAggregate.cs" Link="LinqAggregate.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqAggregateBasic.tt.cs" Link="LinqAggregateBasic.tt.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqArray.cs" Link="LinqArray.cs" />
@@ -62,17 +60,28 @@
     <Compile Include="..\Arnible.MathModeling\LinqSum.tt.cs" Link="LinqSum.tt.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqTransformation.cs" Link="LinqTransformation.cs" />
     <Compile Include="..\Arnible.MathModeling\MetaMath.cs" Link="MetaMath.cs" />
-    <Compile Include="..\Arnible.MathModeling\NumberArray.cs" Link="NumberArray.cs" />
     <Compile Include="..\Arnible.MathModeling\NumberArrayExtensions.cs" Link="NumberArrayExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\NumericFormatting.cs" Link="NumericFormatting.cs" />
     <Compile Include="..\Arnible.MathModeling\OperationExtension.cs" Link="OperationExtension.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomial.cs" Link="Polynomial.cs" />
-    <Compile Include="..\Arnible.MathModeling\PolynomialDivision.cs" Link="PolynomialDivision.cs" />
-    <Compile Include="..\Arnible.MathModeling\PolynomialFinitaryOperation.cs" Link="PolynomialFinitaryOperation.cs" />
-    <Compile Include="..\Arnible.MathModeling\PolynomialTerm.cs" Link="PolynomialTerm.cs" />
-    <Compile Include="..\Arnible.MathModeling\Term.cs" Link="Term.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\ElementaryUnaryOperation.cs" Link="Polynomials\ElementaryUnaryOperation.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\IndeterminateExpression.cs" Link="Polynomials\IndeterminateExpression.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\IPolynomialOperation.cs" Link="Polynomials\IPolynomialOperation.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\IPolynomialOperationExtensions.cs" Link="Polynomials\IPolynomialOperationExtensions.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\MetaMath.cs" Link="Polynomials\MetaMath.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\Polynomial.cs" Link="Polynomials\Polynomial.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\PolynomialDivision.cs" Link="Polynomials\PolynomialDivision.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\PolynomialExtension.cs" Link="Polynomials\PolynomialExtension.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\PolynomialFinitaryOperation.cs" Link="Polynomials\PolynomialFinitaryOperation.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\PolynomialTerm.cs" Link="Polynomials\PolynomialTerm.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\PolynomialTermExtensions.cs" Link="Polynomials\PolynomialTermExtensions.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\Term.cs" Link="Polynomials\Term.cs" />
+    <Compile Include="..\Arnible.MathModeling\Polynomials\VariableTerm.cs" Link="Polynomials\VariableTerm.cs" />
+    <Compile Include="..\Arnible.MathModeling\UnmanagedArray.cs" Link="UnmanagedArray.cs" />
     <Compile Include="..\Arnible.MathModeling\ValueArray.cs" Link="ValueArray.cs" />
-    <Compile Include="..\Arnible.MathModeling\VariableTerm.cs" Link="VariableTerm.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Polynomials\" />
   </ItemGroup>
 
 </Project>

@@ -2,10 +2,11 @@
 
 namespace Arnible.MathModeling
 {
-  public interface IArray<T> : IEnumerable<T>
+  interface IValueArray<T> : IEnumerable<T>
+    where T : struct
   {
     uint Length { get; }
 
-    T this[uint index] { get; }
+    ref readonly T this[in uint index] { get; }
   }
 }
