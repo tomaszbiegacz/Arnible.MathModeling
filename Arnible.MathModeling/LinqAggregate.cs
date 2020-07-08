@@ -24,19 +24,6 @@ namespace Arnible.MathModeling
       Func<TSource, TKey> keySelector,
       Func<IEnumerable<TSource>, TResult> aggregator)
     {
-      if (source == null)
-      {
-        throw new ArgumentNullException(nameof(source));
-      }
-      if (keySelector == null)
-      {
-        throw new ArgumentNullException(nameof(keySelector));
-      }
-      if (aggregator == null)
-      {
-        throw new ArgumentNullException(nameof(aggregator));
-      }
-
       Dictionary<TKey, List<TSource>> groupByKey = new Dictionary<TKey, List<TSource>>();
 
       uint sequenceCount = 0;
@@ -60,9 +47,9 @@ namespace Arnible.MathModeling
     }
 
     private static IEnumerable<T> AggregateCombinations<T>(
-      IReadOnlyList<T> x, 
-      uint i, 
-      uint groupCount, 
+      IReadOnlyList<T> x,
+      uint i,
+      uint groupCount,
       Func<IEnumerable<T>, T> aggregator, Stack<T> combination)
     {
       if (groupCount == combination.Count)
@@ -93,8 +80,8 @@ namespace Arnible.MathModeling
     /// Calculate aggregate for "groupSize" items count combinations from source collection.
     /// </summary>
     public static IEnumerable<T> AggregateCombinations<T>(
-      this IEnumerable<T> items, 
-      uint groupSize, 
+      this IEnumerable<T> items,
+      uint groupSize,
       Func<IEnumerable<T>, T> aggregator)
     {
       if (groupSize < 1)
@@ -124,7 +111,7 @@ namespace Arnible.MathModeling
     /// Calculate aggregate for items count from 1 to collection size
     /// </summary>
     public static IEnumerable<T> AggregateCombinationsAll<T>(
-      this IEnumerable<T> items, 
+      this IEnumerable<T> items,
       Func<IEnumerable<T>, T> aggregator)
     {
       if (items == null)
@@ -160,8 +147,8 @@ namespace Arnible.MathModeling
     /// producing a sequence of the results.
     /// </summary>
     public static IEnumerable<TResult> Zip<T, TResult>(
-      this IEnumerable<T> col1, 
-      IEnumerable<T> col2, 
+      this IEnumerable<T> col1,
+      IEnumerable<T> col2,
       Func<T, T, TResult> merge) where T : class
     {
       return System.Linq.Enumerable.Zip(col1, col2, merge);
@@ -172,8 +159,8 @@ namespace Arnible.MathModeling
     /// producing a sequence of the results.
     /// </summary>
     public static IEnumerable<TResult> Zip<T, TResult>(
-      this IEnumerable<T> col1, 
-      IEnumerable<T> col2, 
+      this IEnumerable<T> col1,
+      IEnumerable<T> col2,
       Func<T?, T?, TResult> merge) where T : struct
     {
       using (var col1Enum = col1.GetEnumerator())
@@ -200,7 +187,7 @@ namespace Arnible.MathModeling
           yield return merge(col1Current, col2Current);
         }
       }
-    }    
+    }
 
     /// <summary>
     /// Applies a specified function to the corresponding elements of two sequences,
@@ -210,8 +197,8 @@ namespace Arnible.MathModeling
     /// If validation of equal length is not needed, use Zip instead.
     /// </remarks>
     public static IEnumerable<TResult> ZipDefensive<T, TResult>(
-      this IEnumerable<T> col1, 
-      IEnumerable<T> col2, 
+      this IEnumerable<T> col1,
+      IEnumerable<T> col2,
       Func<T, T, TResult> merge)
     {
       using (var col1Enum = col1.GetEnumerator())
@@ -243,19 +230,6 @@ namespace Arnible.MathModeling
       IDictionary<TKey, TResult> other,
       Func<TResult, TResult, TMergeResult> merge)
     {
-      if (source == null)
-      {
-        throw new ArgumentNullException(nameof(source));
-      }
-      if (other == null)
-      {
-        throw new ArgumentNullException(nameof(other));
-      }
-      if (merge == null)
-      {
-        throw new ArgumentNullException(nameof(merge));
-      }
-
       var result = new Dictionary<TKey, TMergeResult>();
       foreach (TKey key in source.Keys)
       {

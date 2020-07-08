@@ -31,7 +31,7 @@ namespace Arnible.MathModeling.xunit
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
     {
-      Log(state.ToString());
+      Log(state?.ToString() ?? string.Empty);
     }
 
     public bool IsEnabled(LogLevel logLevel) => true;

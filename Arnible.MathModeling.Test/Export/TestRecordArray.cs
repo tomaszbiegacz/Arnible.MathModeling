@@ -3,6 +3,6 @@
   public struct TestRecordArray
   {
     [FixedArraySerializer(3)]
-    public NullableSubRecord[] Records { get; set; }
+    public NullableSubRecord?[]? Records { get; set; }
   }
 }

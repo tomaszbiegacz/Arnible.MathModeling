@@ -29,11 +29,7 @@ foreach(var kv in generatedTypes)
     /// Calculate items sum or throw ArgumentException if passed enumerable is empty
     /// </summary>
     public static <#= kv.Value #> SumDefensive(this IEnumerable<<#= kv.Key #>> x)
-    {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }
+    {      
       bool anyElement = false;
       <#= kv.Value #> current = 0;
       foreach (<#= kv.Key #> v in x)
@@ -53,10 +49,6 @@ foreach(var kv in generatedTypes)
     /// </summary>
     public static <#= kv.Value #> SumWithDefault(this IEnumerable<<#= kv.Key #>> x)
     {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }      
       <#= kv.Value #> current = 0;
       foreach (<#= kv.Key #> v in x)
       {

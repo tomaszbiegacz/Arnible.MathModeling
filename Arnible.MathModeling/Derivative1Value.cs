@@ -18,9 +18,9 @@ namespace Arnible.MathModeling
 
     public override bool Equals(object obj)
     {
-      if (obj is IDerivative1 typed)
+      if (obj is Derivative1Value typed)
       {
-        return Equals(typed);
+        return Equals(in typed);
       }
       else
       {

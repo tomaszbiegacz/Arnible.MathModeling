@@ -10,13 +10,13 @@ namespace Arnible.MathModeling.Geometry.Test
     private static void AssertDirection(List<HypersphericalAngleQuantified> directions, params sbyte[] expected)
     {
       uint? pos = directions.IndexOf(d => expected.SequenceEqual(d.Angles));
-      directions.RemoveAt((int)pos.Value);
+      directions.RemoveAt((int)pos!);
     }
 
     private static HypersphericalAngleQuantified GetDirection(List<HypersphericalAngleQuantified> directions, params sbyte[] expected)
     {
       uint? pos = directions.IndexOf(d => expected.SequenceEqual(d.Angles));
-      return directions[(int)pos.Value];
+      return directions[(int)pos!];
     }
 
     [Fact]

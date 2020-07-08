@@ -27,8 +27,8 @@ namespace Arnible.MathModeling.Export
 
     protected FlatFieldSerializerCollection(in Type type, in IEnumerable<FlatFieldSerializer> fields)
     {
-      FieldsType = type ?? throw new ArgumentNullException(nameof(type));
-      _fields = fields?.ToReadOnlyList() ?? throw new ArgumentNullException(nameof(fields));
+      FieldsType = type;
+      _fields = fields.ToReadOnlyList();
     }
 
     public Type FieldsType { get; }

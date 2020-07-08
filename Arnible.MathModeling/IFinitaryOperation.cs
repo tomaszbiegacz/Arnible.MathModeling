@@ -4,6 +4,6 @@ namespace Arnible.MathModeling
 {
   public interface IFinitaryOperation<TNumber> where TNumber: struct
   {
-    TNumber Value(IEnumerable<TNumber> x);
+    TNumber Value(in IEnumerable<TNumber> x);
   }  
 }

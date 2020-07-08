@@ -6,7 +6,7 @@
 
     public TestSubRecord Record { get; set; }
 
-    public NullableSubRecord Nullable { get; set; }
+    public NullableSubRecord? Nullable { get; set; }
 
     public int OtherValue { get; set; }
   }

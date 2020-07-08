@@ -37,7 +37,7 @@ namespace Arnible.MathModeling.Algebra
       }
       else
       {
-        return value.Zip(delta, (v, t) => domain.IsValidTranslation(v.Value, t ?? 0)).All();
+        return value.Zip(delta, (v, t) => domain.IsValidTranslation(v ?? throw new ArgumentException(nameof(value)), t ?? 0)).All();
       }
     }
 
@@ -88,7 +88,7 @@ namespace Arnible.MathModeling.Algebra
         throw new ArgumentException(nameof(delta));
       }
 
-      return value.Zip(delta, (v, t) => domain.Translate(v.Value, t ?? 0)).ToValueArray();
+      return value.Zip(delta, (v, t) => domain.Translate(v ?? throw new ArgumentException(nameof(value)), t ?? 0)).ToValueArray();
     }
   }
 }

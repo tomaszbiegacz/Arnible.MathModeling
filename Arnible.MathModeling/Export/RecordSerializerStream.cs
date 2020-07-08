@@ -18,8 +18,8 @@ namespace Arnible.MathModeling.Export
 
     public RecordSerializerStream(in Stream stream, in IRecordSerializer<T> serializer)
     {
-      _stream = stream ?? throw new ArgumentNullException(nameof(serializer));
-      _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+      _stream = stream;
+      _serializer = serializer;
       _isHeaderPrinted = false;
     }
 

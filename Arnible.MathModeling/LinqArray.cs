@@ -10,23 +10,23 @@ namespace Arnible.MathModeling
       return LinqEnumerable.RangeInt((uint)arg.Count);
     }
 
-    public static IEnumerable<uint> Indexes<T>(in this ValueArray<T> arg) where T: struct
+    public static IEnumerable<uint> Indexes<T>(in this ValueArray<T> arg) where T : struct
     {
       return LinqEnumerable.RangeUint(arg.Length);
     }
 
     public static IEnumerable<int> IndexesWhere<T>(this IReadOnlyList<T> arg, Func<T, bool> predicate)
     {
-      for(int i=0; i<arg.Count; ++i)
+      for (int i = 0; i < arg.Count; ++i)
       {
-        if(predicate(arg[i]))
+        if (predicate(arg[i]))
         {
           yield return i;
         }
       }
     }
 
-    public static IEnumerable<uint> IndexesWhere<T>(this IUnmanagedArray<T> arg, Func<T, bool> predicate) where T: unmanaged
+    public static IEnumerable<uint> IndexesWhere<T>(this IUnmanagedArray<T> arg, Func<T, bool> predicate) where T : unmanaged
     {
       for (uint i = 0; i < arg.Length; ++i)
       {
@@ -39,10 +39,6 @@ namespace Arnible.MathModeling
 
     public static T[][] ToArrayJagged<T>(this T[,] twoDimensionalArray)
     {
-      if (twoDimensionalArray == null)
-      {
-        throw new ArgumentNullException(nameof(twoDimensionalArray));
-      }
       int rowsFirstIndex = twoDimensionalArray.GetLowerBound(0);
       int rowsLastIndex = twoDimensionalArray.GetUpperBound(0);
       int numberOfRows = rowsLastIndex + 1;
@@ -66,10 +62,6 @@ namespace Arnible.MathModeling
 
     public static T[][] ToArrayJaggedInversed<T>(this T[,] twoDimensionalArray)
     {
-      if (twoDimensionalArray == null)
-      {
-        throw new ArgumentNullException(nameof(twoDimensionalArray));
-      }
       int rowsFirstIndex = twoDimensionalArray.GetLowerBound(1);
       int rowsLastIndex = twoDimensionalArray.GetUpperBound(1);
       int numberOfRows = rowsLastIndex + 1;

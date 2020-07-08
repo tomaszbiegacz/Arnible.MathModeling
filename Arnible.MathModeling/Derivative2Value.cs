@@ -21,7 +21,7 @@ namespace Arnible.MathModeling
     {
       if (obj is Derivative2Value typed2)
       {
-        return Equals(typed2);
+        return Equals(in typed2);
       }
       else
       {

@@ -57,7 +57,7 @@ namespace Arnible.MathModeling.Polynomials
     private PolynomialTerm(
       double coefficient,
       ValueArray<IndeterminateExpression> indeterminates,
-      string signature,
+      string? signature,
       IndeterminateExpression greatestPowerExpression)
     {
       bool anyIndeterminates = indeterminates.Length > 0;

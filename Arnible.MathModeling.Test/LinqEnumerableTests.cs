@@ -30,6 +30,12 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
+    public void Exclude_Two()
+    {
+      AreEquals(new[] { 2, 3 }, (new[] { 1, 2, 3, 4 }).ExcludeAt(new[] { 0u, 3u }));
+    }
+
+    [Fact]
     public void Exclude_1Of3()
     {
       AreEquals(new[] { 2d, 3d }, (new[] { 2d, 1d, 3d }).ExcludeAt(1));
@@ -39,6 +45,12 @@ namespace Arnible.MathModeling.Test
     public void Duplicate_First()
     {
       AreEquals(new[] { 1, 1, 2, 3, 4 }, (new[] { 1, 2, 3, 4 }).DuplicateAt(0));
+    }
+
+    [Fact]
+    public void Duplicate_Two()
+    {
+      AreEquals(new[] { 1, 1, 2, 3, 3, 4 }, (new[] { 1, 2, 3, 4 }).DuplicateAt(new[] { 0u, 2u }));
     }
 
     [Fact]

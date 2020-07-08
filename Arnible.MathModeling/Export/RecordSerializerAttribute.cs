@@ -5,7 +5,7 @@ namespace Arnible.MathModeling.Export
   [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false, AllowMultiple = true)]
   public class RecordSerializerAttribute : Attribute
   {
-    private readonly Func<object, ReadOnlyMemory<char>> _serializator;
+    private readonly Func<object?, ReadOnlyMemory<char>> _serializator;
 
     public SerializationMediaType MediaType { get; }    
 
@@ -32,7 +32,7 @@ namespace Arnible.MathModeling.Export
       _serializator = objectSerializator.Serializator;
     }
 
-    public ReadOnlyMemory<char> Serialize(object value)
+    public ReadOnlyMemory<char> Serialize(object? value)
     {
       return _serializator(value);
     }

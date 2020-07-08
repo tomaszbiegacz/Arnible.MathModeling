@@ -53,7 +53,7 @@ namespace Arnible.MathModeling
      * Materialization
      */
 
-    public static ValueArray<T> ToValueArray<T>(this IEnumerable<T> source) where T: struct
+    public static ValueArray<T> ToValueArray<T>(this IEnumerable<T> source) where T : struct
     {
       return new ValueArray<T>(source);
     }
@@ -141,10 +141,6 @@ namespace Arnible.MathModeling
 
     public static IEnumerable<T> Prepend<T>(this IEnumerable<T> src, T item)
     {
-      if (src == null)
-      {
-        throw new ArgumentNullException(nameof(src));
-      }
       yield return item;
       foreach (var srcItem in src)
       {
@@ -154,10 +150,6 @@ namespace Arnible.MathModeling
 
     public static IEnumerable<T> DuplicateAt<T>(this IEnumerable<T> x, uint pos)
     {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }
       bool isDuplicated = false;
       uint i = 0;
       foreach (T item in x)
@@ -176,6 +168,20 @@ namespace Arnible.MathModeling
       }
     }
 
+    public static IEnumerable<T> DuplicateAt<T>(this IEnumerable<T> x, IReadOnlyCollection<uint> pos)
+    {
+      uint i = 0;
+      foreach (T item in x)
+      {
+        yield return item;
+        if (System.Linq.Enumerable.Contains(pos, i))
+        {
+          yield return item;
+        }
+        i++;
+      }
+    }
+
     /*
      * Filtering out items
      */
@@ -186,10 +192,6 @@ namespace Arnible.MathModeling
     /// </summary>
     public static IEnumerable<T> ExcludeAt<T>(this IEnumerable<T> x, uint pos)
     {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }
       bool isSkipped = false;
       uint i = 0;
       foreach (T item in x)
@@ -207,6 +209,22 @@ namespace Arnible.MathModeling
       if (!isSkipped)
       {
         throw new ArgumentException($"Enumerator length {i}, hence I can't exclude at {pos}");
+      }
+    }
+
+    /// <summary>
+    /// Return sequence without element at give positions    
+    /// </summary>
+    public static IEnumerable<T> ExcludeAt<T>(this IEnumerable<T> x, IReadOnlyCollection<uint> pos)
+    {
+      uint i = 0;
+      foreach (T item in x)
+      {
+        if (!System.Linq.Enumerable.Contains(pos, i))
+        {
+          yield return item;
+        }
+        i++;
       }
     }
 
@@ -231,10 +249,6 @@ namespace Arnible.MathModeling
 
     public static IEnumerable<T> SkipExactly<T>(this IEnumerable<T> x, uint length)
     {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }
       uint i = 0;
       foreach (T item in x)
       {
@@ -252,10 +266,6 @@ namespace Arnible.MathModeling
 
     public static IEnumerable<T> TakeExactly<T>(this IEnumerable<T> x, uint count)
     {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }
       uint i = 0;
       foreach (T item in x)
       {
@@ -273,10 +283,6 @@ namespace Arnible.MathModeling
 
     public static IEnumerable<T> TakeAtMost<T>(this IEnumerable<T> x, uint count)
     {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }
       uint i = 0;
       foreach (T item in x)
       {

@@ -108,7 +108,7 @@ namespace Arnible.MathModeling
         throw new ArgumentException(nameof(keySelector));
       }
 
-      System.Linq.IOrderedEnumerable<TSource> result = source ?? throw new ArgumentNullException(nameof(source));
+      System.Linq.IOrderedEnumerable<TSource> result = source;
       foreach (Func<TSource, TKey> ks in keySelector)
       {
         result = System.Linq.Enumerable.ThenBy(result, ks);

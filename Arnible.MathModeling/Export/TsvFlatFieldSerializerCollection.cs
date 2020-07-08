@@ -8,7 +8,7 @@ namespace Arnible.MathModeling.Export
 {
   class TsvFlatFieldSerializerCollection : FlatFieldSerializerCollection
   {
-    static readonly ConcurrentDictionary<Type, Func<object, ReadOnlyMemory<char>>> _valueSerializers;
+    static readonly ConcurrentDictionary<Type, Func<object?, ReadOnlyMemory<char>>> _valueSerializers;
     static readonly ConcurrentDictionary<Type, TsvFlatFieldSerializerCollection> _structureSerializers;
 
     private static ReadOnlyMemory<char> ConvertKnown(in string value)
@@ -26,7 +26,7 @@ namespace Arnible.MathModeling.Export
 
     static TsvFlatFieldSerializerCollection()
     {
-      _valueSerializers = new ConcurrentDictionary<Type, Func<object, ReadOnlyMemory<char>>>(new Dictionary<Type, Func<object, ReadOnlyMemory<char>>>
+      _valueSerializers = new ConcurrentDictionary<Type, Func<object?, ReadOnlyMemory<char>>>(new Dictionary<Type, Func<object?, ReadOnlyMemory<char>>>
         {
           { typeof(byte),     new ToStringSerializer<byte>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
           { typeof(sbyte),    new ToStringSerializer<sbyte>(v => v.ToString(CultureInfo.InvariantCulture)).Serializator },
@@ -43,9 +43,9 @@ namespace Arnible.MathModeling.Export
       _structureSerializers = new ConcurrentDictionary<Type, TsvFlatFieldSerializerCollection>();
     }
 
-    static Func<object, ReadOnlyMemory<char>> GetValueSerializer(in Type t)
+    static Func<object?, ReadOnlyMemory<char>>? GetValueSerializer(in Type t)
     {
-      Func<object, ReadOnlyMemory<char>> valueSerializer = null;
+      Func<object?, ReadOnlyMemory<char>>? valueSerializer = null;
       if (_valueSerializers.TryGetValue(t, out var serializator))
       {
         valueSerializer = serializator;
@@ -79,7 +79,7 @@ namespace Arnible.MathModeling.Export
 
     public static IFlatFieldSerializerCollection For<T>() => GetStructureSerializer(typeof(T));
 
-    static FlatFieldSerializer ForRootProperty(in PropertyInfo property, in Func<object, ReadOnlyMemory<char>> valueSerializer)
+    static FlatFieldSerializer ForRootProperty(in PropertyInfo property, in Func<object?, ReadOnlyMemory<char>> valueSerializer)
     {
       return new FlatFieldSerializer(in property, in valueSerializer);
     }

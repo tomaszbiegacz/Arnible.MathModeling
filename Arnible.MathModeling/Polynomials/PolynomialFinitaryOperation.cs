@@ -8,9 +8,9 @@ namespace Arnible.MathModeling.Polynomials
     private readonly IPolynomialOperation _polynomial;
     private readonly ValueArray<char> _variables;
 
-    public PolynomialFinitaryOperation(IPolynomialOperation polynomial, IEnumerable<char> variables)
+    public PolynomialFinitaryOperation(in IPolynomialOperation polynomial, in IEnumerable<char> variables)
     {
-      _polynomial = polynomial ?? throw new ArgumentNullException(nameof(polynomial));
+      _polynomial = polynomial;
 
       var polynomialVariables = new HashSet<char>(_polynomial.Variables);
       if (!polynomialVariables.SetEquals(variables))
@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Polynomials
       _variables = variables.ToValueArray();
     }
 
-    public double Value(IEnumerable<double> x)
+    public double Value(in IEnumerable<double> x)
     {
       // possibly move it at class level to reduce GC at the cost of thread safety
       var args = new Dictionary<char, double>();

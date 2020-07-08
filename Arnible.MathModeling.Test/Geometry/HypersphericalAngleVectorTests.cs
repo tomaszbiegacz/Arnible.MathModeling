@@ -130,7 +130,7 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Sum_One()
     {
       var a = new HypersphericalAngleVector(π, π_2);
-      AreEqual(a, new[] { a }.Sum());
+      AreEqual(a, new[] { a }.SumDefensive());
     }
 
     [Fact]
@@ -138,7 +138,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var a = new HypersphericalAngleVector(π_4, π_4);
       var b = new HypersphericalAngleVector(π_2, -1 * π_4);
-      AreEqual(new HypersphericalAngleVector(3 * π_4, 0), new[] { a, b }.Sum());
+      AreEqual(new HypersphericalAngleVector(3 * π_4, 0), new[] { a, b }.SumDefensive());
     }
 
     [Fact]

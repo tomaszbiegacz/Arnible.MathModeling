@@ -40,15 +40,7 @@ namespace Arnible.MathModeling
     }
     
     public static uint? IndexOf<T>(this IEnumerable<T> src, Func<T, bool> predicate)
-    {
-      if (src == null)
-      {
-        throw new ArgumentNullException(nameof(src));
-      }
-      if (predicate == null)
-      {
-        throw new ArgumentNullException(nameof(predicate));
-      }
+    {      
       uint pos = 0;
       foreach (T item in src)
       {

@@ -23,10 +23,6 @@ foreach(string typeName in generatedTypes)
     /// </summary>
     public static <#= typeName #> ProductDefensive(this IEnumerable<<#= typeName #>> x)
     {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }
       bool anyElement = false;
       <#= typeName #> current = 1;
       foreach (<#= typeName #> v in x)
@@ -46,10 +42,6 @@ foreach(string typeName in generatedTypes)
     /// </summary>
     public static <#= typeName #> ProductWithDefault(this IEnumerable<<#= typeName #>> x)
     {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }
       <#= typeName #> current = 1;
       foreach (<#= typeName #> v in x)
       {

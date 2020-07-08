@@ -7,11 +7,7 @@ void Print_MinDefensive(string typeName)
     /// Finds minimum value or throw ArgumentException if passed enumerable is empty
     /// </summary>
     public static <#= typeName #> MinDefensive(this IEnumerable<<#= typeName #>> x)
-    {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }      
+    {      
       <#= typeName #>? result = null;
       foreach (<#= typeName #> v in x)
       {
@@ -43,12 +39,8 @@ void Print_WithMinimum(string typeName)
     /// <summary>
     /// Finds record with minimum value
     /// </summary>
-    public static T WithMinimum<T>(this IEnumerable<T> x, Func<T, <#= typeName #>> func) where T : struct
-    {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }
+    public static T WithMinimum<T>(this IEnumerable<T> x, in Func<T, <#= typeName #>> func) where T : struct
+    {      
       T? result = null;
       <#= typeName #> resultMinimum = default;
       foreach (T v in x)
@@ -84,12 +76,8 @@ void Print_WithMinimumAt(string typeName)
     /// <summary>
     /// Finds position of record with minimum value
     /// </summary>
-    public static uint WithMinimumAt<T>(this IEnumerable<T> x, Func<T, <#= typeName #>> func) where T : struct
-    {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }      
+    public static uint WithMinimumAt<T>(this IEnumerable<T> x, in Func<T, <#= typeName #>> func) where T : struct
+    {      
       uint? resultMinimumAt = null;
       <#= typeName #> resultMinimum = default;
       uint i = 0;
@@ -128,11 +116,7 @@ void Print_MaxDefensive(string typeName)
     /// Finds maximum value or throw ArgumentException if passed enumerable is empty
     /// </summary>
     public static <#= typeName #> MaxDefensive(this IEnumerable<<#= typeName #>> x)
-    {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }      
+    {      
       <#= typeName #>? result = null;
       foreach (<#= typeName #> v in x)
       {
@@ -164,12 +148,8 @@ void Print_WithMaximum(string typeName)
     /// <summary>
     /// Finds record with minimum value
     /// </summary>
-    public static T WithMaximum<T>(this IEnumerable<T> x, Func<T, <#= typeName #>> func) where T : struct
-    {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }
+    public static T WithMaximum<T>(this IEnumerable<T> x, in Func<T, <#= typeName #>> func) where T : struct
+    {      
       T? result = null;
       <#= typeName #> resultMaximum = default;
       foreach (T v in x)
@@ -205,12 +185,8 @@ void Print_WithMaximumAt(string typeName)
     /// <summary>
     /// Finds position of record with maximum value
     /// </summary>
-    public static uint WithMaximumAt<T>(this IEnumerable<T> x, Func<T, <#= typeName #>> func) where T : struct
-    {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }      
+    public static uint WithMaximumAt<T>(this IEnumerable<T> x, in Func<T, <#= typeName #>> func) where T : struct
+    {      
       uint? resultMaximumAt = null;
       <#= typeName #> resultMaximum = default;
       uint i = 0;
@@ -250,15 +226,10 @@ void Print_MedianDefensive(string typeName)
     /// </summary>
     public static <#= typeName #> MedianDefensive(this IEnumerable<<#= typeName #>> x)
     {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }
-
       List<<#= typeName #>> items = x.ToList();
       if(items.Count == 0)
       {
-        throw new ArgumentNullException(nameof(x));
+        throw new ArgumentException(nameof(x));
       }
       items.Sort();
       return items[items.Count / 2];

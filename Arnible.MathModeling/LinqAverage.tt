@@ -28,14 +28,10 @@ foreach(var kv in generatedTypes)
     /// </summary>
     public static <#= kv.Value #> AverageDefensive(this IEnumerable<<#= kv.Key #>> x)
     {
-      if (x == null)
-      {
-        throw new ArgumentNullException(nameof(x));
-      }
       IReadOnlyList<<#= kv.Key #>> items = x.ToReadOnlyList();
       if (items.Count == 0)
       {
-        throw new ArgumentNullException(nameof(x));
+        throw new ArgumentException(nameof(x));
       }
       return items.SumDefensive() / items.Count;
     }

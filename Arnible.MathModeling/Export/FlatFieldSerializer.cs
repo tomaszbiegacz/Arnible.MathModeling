@@ -18,7 +18,7 @@ namespace Arnible.MathModeling.Export
   {
     static string GetHeaderNameWithPrefix(string prefix, string name) => prefix == null ? name : $"{prefix}_{name}";
 
-    static Func<object, ReadOnlyMemory<char>> NullablePropertySerializer(
+    static Func<object?, ReadOnlyMemory<char>> NullablePropertySerializer(
       PropertyInfo property,
       Func<object, ReadOnlyMemory<char>> valueSerializer)
     {
@@ -27,7 +27,7 @@ namespace Arnible.MathModeling.Export
 
     static string GetHeaderNameWithPrefix(string prefix, uint pos, string name) => $"{prefix}_{pos}_{name}";
 
-    static object GetIndexedPropertyValue(
+    static object? GetIndexedPropertyValue(
       in PropertyInfo property, 
       in uint pos, 
       in object value)
@@ -57,28 +57,28 @@ namespace Arnible.MathModeling.Export
       return null;
     }
 
-    static Func<object, ReadOnlyMemory<char>> NullablePropertySerializer(
+    static Func<object?, ReadOnlyMemory<char>> NullablePropertySerializer(
       PropertyInfo property,
       uint pos,
-      Func<object, ReadOnlyMemory<char>> valueSerializer)
+      Func<object?, ReadOnlyMemory<char>> valueSerializer)
     {
       return o => o == null ? default : valueSerializer(GetIndexedPropertyValue(property, pos, o));
     }
 
-    private readonly Func<object, ReadOnlyMemory<char>> _valueSerializer;
+    private readonly Func<object?, ReadOnlyMemory<char>> _valueSerializer;
 
     public FlatFieldSerializer(
       in PropertyInfo property, 
-      in Func<object, ReadOnlyMemory<char>> valueSerializer)
+      in Func<object?, ReadOnlyMemory<char>> valueSerializer)
       : this(property.Name, NullablePropertySerializer(property, valueSerializer))
     {
       // intentionally empty
     }
 
-    private FlatFieldSerializer(in string header, in Func<object, ReadOnlyMemory<char>> valueSerializer)
+    private FlatFieldSerializer(in string header, in Func<object?, ReadOnlyMemory<char>> valueSerializer)
     {
       Header = header.AsMemory();
-      _valueSerializer = valueSerializer ?? throw new ArgumentNullException(nameof(valueSerializer));
+      _valueSerializer = valueSerializer;
       Serializer = (value, stream, token) => stream.WriteAsync(_valueSerializer(value), token);
     }
 

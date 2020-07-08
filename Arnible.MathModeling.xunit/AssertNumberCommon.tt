@@ -7,7 +7,7 @@ void Print_Equatable()
     // AreEqual
     //
 
-    public static void AreEqual<T>(T expected, T actual) where T: IEquatable<T>
+    public static void AreEqual<T>(in T expected, in T actual) where T: IEquatable<T>
     {      
       Type tType = typeof(T);
       if (tType == typeof(double) || tType == typeof(string))
@@ -18,22 +18,22 @@ void Print_Equatable()
       Assert.True(expected.Equals(actual), $"{expected}\n\nis not equal to\n\n{actual}\n");
     }
 
-    public static void AreEqual(double expected, double actual)
+    public static void AreEqual(in double expected, in double actual)
     {
       AreEqual<Number>(expected, actual);
     }
 
-    public static void AreEqual(string expected, string actual)
+    public static void AreEqual(in string expected, in string actual)
     {
       Assert.Equal(expected, actual);
     }    
 
-    public static void AreEqual(uint expected, int actual)
+    public static void AreEqual(in uint expected, in int actual)
     {
       Assert.True(expected == actual, $"{expected}\n\nis not equal to\n\n{actual}\n");
     }
 
-    public static void AreEqual(int expected, uint actual)
+    public static void AreEqual(in int expected, in uint actual)
     {
       Assert.True(expected == actual, $"{expected}\n\nis not equal to\n\n{actual}\n");
     }
@@ -42,7 +42,7 @@ void Print_Equatable()
     // AreNotEqual
     //
 
-    public static void AreNotEqual<T>(T expected, T actual) where T: IEquatable<T>
+    public static void AreNotEqual<T>(in T expected, in T actual) where T: IEquatable<T>
     {
       Type tType = typeof(T);
       if (tType == typeof(double) || tType == typeof(string))
@@ -53,12 +53,12 @@ void Print_Equatable()
       Assert.False(expected.Equals(actual), $"{expected}\n\nis equal to\n\n{actual}\n");      
     }
 
-    public static void AreNotEqual(double expected, double actual)
+    public static void AreNotEqual(in double expected, in double actual)
     {
       AreNotEqual<Number>(expected, actual);
     }
 
-    public static void AreNotEqual(string expected, string actual)
+    public static void AreNotEqual(in string expected, in string actual)
     {
       Assert.NotEqual(expected, actual);
     }        
@@ -67,7 +67,7 @@ void Print_Equatable()
     // AreEquals
     //
 
-    public static void AreEquals<T>(IEnumerable<T> expected, IEnumerable<T> actual)  where T: IEquatable<T>
+    public static void AreEquals<T>(in IEnumerable<T> expected, in IEnumerable<T> actual)  where T: IEquatable<T>
     {
       IReadOnlyList<T> expectedArray = expected.ToReadOnlyList();
       IReadOnlyList<T> actualArray = actual.ToReadOnlyList();
@@ -78,7 +78,7 @@ void Print_Equatable()
       }
     }
 
-    public static void AreEquals<T>(IEnumerable<IEnumerable<T>> expected, IEnumerable<IEnumerable<T>> actual) where T : IEquatable<T>
+    public static void AreEquals<T>(in IEnumerable<IEnumerable<T>> expected, in IEnumerable<IEnumerable<T>> actual) where T : IEquatable<T>
     {
       IReadOnlyList<IEnumerable<T>> expectedArray = expected.ToReadOnlyList();
       IReadOnlyList<IEnumerable<T>> actualArray = actual.ToReadOnlyList();
@@ -93,7 +93,7 @@ void Print_Equatable()
     foreach(string typeName in new[] { "double", "string"})
     {
 #>
-    public static void AreEquals(IEnumerable<<#= typeName #>> expected, IEnumerable<<#= typeName #>> actual)
+    public static void AreEquals(in IEnumerable<<#= typeName #>> expected, in IEnumerable<<#= typeName #>> actual)
     {
       IReadOnlyList<<#= typeName #>> expectedArray = expected.ToReadOnlyList();
       IReadOnlyList<<#= typeName #>> actualArray = actual.ToReadOnlyList();
@@ -104,7 +104,7 @@ void Print_Equatable()
       }
     }
 
-    public static void AreEquals(IEnumerable<IEnumerable<<#= typeName #>>> expected, IEnumerable<IEnumerable<<#= typeName #>>> actual)
+    public static void AreEquals(in IEnumerable<IEnumerable<<#= typeName #>>> expected, in IEnumerable<IEnumerable<<#= typeName #>>> actual)
     {
       IReadOnlyList<IEnumerable<<#= typeName #>>> expectedArray = expected.ToReadOnlyList();
       IReadOnlyList<IEnumerable<<#= typeName #>>> actualArray = actual.ToReadOnlyList();
@@ -126,37 +126,37 @@ void Print_AreExactlyEqual()
     // AreExactlyEqual
     //
 
-    public static void AreExactlyEqual(double expected, double actual)
+    public static void AreExactlyEqual(in double expected, in double actual)
     {
       Assert.True(expected == actual, $"{expected} is not equal to {actual}\n");
     }
 
-    public static void AreExactlyEqual(Number expected, Number actual)
+    public static void AreExactlyEqual(in Number expected, in Number actual)
     {
       AreExactlyEqual((double)expected, (double)actual);
     }
 
-    public static void AreExactlyNotEqual(double expected, double actual)
+    public static void AreExactlyNotEqual(in double expected, in double actual)
     {
       Assert.False(expected == actual, $"{expected} is equal to {actual}\n");
     }    
 
-    public static void AreExactlyNotEqual(Number expected, Number actual)
+    public static void AreExactlyNotEqual(in Number expected, in Number actual)
     {
       AreExactlyNotEqual((double)expected, (double)actual);
     }
 
-    public static void IsExactlyZero(double actual)
+    public static void IsExactlyZero(in double actual)
     {
       Assert.True(0 == actual, $"{actual} is not zero");
     }
 
-    public static void IsExactlyZero(Number actual)
+    public static void IsExactlyZero(in Number actual)
     {
       IsExactlyZero((double)actual);
     }
 
-    public static void AreExactlyEquals(IEnumerable<double> expected, IEnumerable<double> actual)
+    public static void AreExactlyEquals(in IEnumerable<double> expected, in IEnumerable<double> actual)
     {
       IReadOnlyList<double> expectedArray = expected.ToReadOnlyList();
       IReadOnlyList<double> actualArray = actual.ToReadOnlyList();
@@ -177,14 +177,14 @@ void Print_IsZero(string typeName)
     // IsZero
     //
 
-    public static void IsZero(<#= typeName #> value)
+    public static void IsZero(in <#= typeName #> value)
     {
-      AreEqual<<#= typeName #>>(0, value);
+      AreEqual<<#= typeName #>>(0, in value);
     }
 
-    public static void IsNotZero(<#= typeName #> value)
+    public static void IsNotZero(in <#= typeName #> value)
     {
-      AreNotEqual<<#= typeName #>>(0, value);
+      AreNotEqual<<#= typeName #>>(0, in value);
     }
 
 <#+    
@@ -197,14 +197,14 @@ void Print_NumberExtensionCommon()
     // Number extensions
     //
 
-    public static void IsZero(Number value)
+    public static void IsZero(in Number value)
     {
       AreEqual<Number>(0d, value);
     }
 
-    public static void IsNotZero(Number value)
+    public static void IsNotZero(in Number value)
     {
-      AreNotEqual<Number>(0d, value);
+      AreNotEqual<Number>(0d, in value);
     }
 
 <#+    
@@ -217,21 +217,21 @@ void Print_NumberExtension(string typeName)
     // <#= typeName #> to Number
     //
 
-    public static void AreEqual(<#= typeName #> expected, Number actual)
+    public static void AreEqual(in <#= typeName #> expected, in Number actual)
     {
       Number expectedNumber = expected;
-      AreEqual(expectedNumber, actual);            
+      AreEqual(in expectedNumber, in actual);            
     }
 
-    public static void AreNotEqual(<#= typeName #> expected, Number actual)
+    public static void AreNotEqual(in <#= typeName #> expected, in Number actual)
     {
       Number expectedNumber = expected;
-      AreNotEqual(expectedNumber, actual);            
+      AreNotEqual(in expectedNumber, in actual);            
     }
 
-    public static void AreEquals(IEnumerable<<#= typeName #>> expected, IEnumerable<Number> actual)
+    public static void AreEquals(in IEnumerable<<#= typeName #>> expected, in IEnumerable<Number> actual)
     {
-      AreEquals(expected.Select(v => (Number)v), actual);
+      AreEquals(expected.Select(v => (Number)v), in actual);
     }
 
 <#+    
@@ -244,37 +244,37 @@ void Print_Comparision(string typeName)
     // comparision operators for <#= typeName #>
     //
 
-    public static void IsBetween(<#= typeName #> lower, <#= typeName #> high, <#= typeName #> value)
+    public static void IsBetween(in <#= typeName #> lower, <#= typeName #> high, in <#= typeName #> value)
     {
       Assert.True(lower <= value  && value <= high, $"{value} is not between {lower} and {high}");
     }
 
-    public static void IsGreaterThan(<#= typeName #> baseline, <#= typeName #> value)
+    public static void IsGreaterThan(in <#= typeName #> baseline, in <#= typeName #> value)
     {
       Assert.True(value > baseline, $"{value} is not greater than {baseline}");
     }
 
-    public static void IsGreaterEqualThan(<#= typeName #> baseline, <#= typeName #> value)
+    public static void IsGreaterEqualThan(in <#= typeName #> baseline, in <#= typeName #> value)
     {
       Assert.True(value >= baseline, $"{value} is not greater or equal than {baseline}");
     }
 
-    public static void IsLowerThan(<#= typeName #> baseline, <#= typeName #> value)
+    public static void IsLowerThan(in <#= typeName #> baseline, in <#= typeName #> value)
     {
       Assert.True(value < baseline, $"{value} is not lower than {baseline}");
     }
 
-    public static void IsLowerEqualThan(<#= typeName #> baseline, <#= typeName #> value)
+    public static void IsLowerEqualThan(in <#= typeName #> baseline, in <#= typeName #> value)
     {
       Assert.True(value <= baseline, $"{value} is not lower or equal than {baseline}");
     }
 
-    public static void IsNegative(<#= typeName #> value)
+    public static void IsNegative(in <#= typeName #> value)
     {
       Assert.True(value < 0, $"{value} is not negative");
     }
 
-    public static void IsPositive(<#= typeName #> value)
+    public static void IsPositive(in <#= typeName #> value)
     {
       Assert.True(value > 0, $"{value} is not positive");
     }    
@@ -289,12 +289,12 @@ void Print_Logical()
     // Logical
     //
 
-    public static void IsTrue(bool value)
+    public static void IsTrue(in bool value)
     {
       Assert.True(value);
     }
 
-    public static void IsFalse(bool value)
+    public static void IsFalse(in bool value)
     {
       Assert.False(value);
     }
@@ -309,7 +309,7 @@ void Print_Enumerable()
     // Enumerable
     //
 
-    public static void IsEmpty<T>(IEnumerable<T> value)
+    public static void IsEmpty<T>(in IEnumerable<T> value)
     {
       AreEqual<uint>(0, value.Count());
     }
@@ -324,12 +324,12 @@ void Print_ExpectedErrors()
     // Expected errors
     //
 
-    public static void Throws<T>(Action testCode) where T : Exception
+    public static void Throws<T>(in Action testCode) where T : Exception
     {
       Assert.Throws<T>(testCode);
     }
 
-    public static void Throws<T>(Func<object> testCode) where T : Exception
+    public static void Throws<T>(in Func<object> testCode) where T : Exception
     {
       Assert.Throws<T>(testCode);
     }
