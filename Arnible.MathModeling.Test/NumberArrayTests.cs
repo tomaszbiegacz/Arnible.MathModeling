@@ -58,5 +58,11 @@ namespace Arnible.MathModeling.Test
       var a2 = new Number[] { 2, 1, 1 }.ToValueArray();
       AreEqual(6d, a1.DistanceSquareTo(a2));
     }
+
+    [Fact]
+    public void SubsetFromIndexes()
+    {
+      AreEquals(new Number[] { 1, 3 }, new Number[] { 1, 2, 3 }.ToValueArray().SubsetFromIndexes(new[] { 0u, 2u }));
+    }
   }
 }

@@ -3,7 +3,7 @@
 <#@ output extension=".tt.cs" #>
 <#
 
-string[] generatedTypes = new[] { "double", "int", "uint", "long", "ulong", "byte", "sbyte" };
+string[] generatedTypes = new[] { "byte", "sbyte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double" };
 
 #>
 using System;

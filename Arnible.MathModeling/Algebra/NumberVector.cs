@@ -22,7 +22,7 @@ namespace Arnible.MathModeling.Algebra
   public readonly struct NumberVector : IEquatable<NumberVector>, IEquatable<Number>, IValueArray<Number>
   {
     readonly static Number ZeroValue = 0d;
-    readonly static ValueArray<Number> ZeroVector = new Number[] { 0 }.ToValueArray();        
+    readonly static ValueArray<Number> ZeroVector = new Number[] { 0 };
 
     public static NumberVector Repeat(in Number value, in uint length)
     {
@@ -63,7 +63,7 @@ namespace Arnible.MathModeling.Algebra
         throw new ArgumentException(nameof(value));
       }
 
-      return Create(pos.Select(v => v == Sign.None ? 0 : (int)v*value));
+      return Create(pos.Select(v => v == Sign.None ? 0 : (int)v * value));
     }
 
     private readonly ValueArray<Number> _values;
@@ -115,7 +115,7 @@ namespace Arnible.MathModeling.Algebra
 
     private IEnumerable<Number> GetInternalEnumerator()
     {
-      if(_values.Length == 0)
+      if (_values.Length == 0)
       {
         return ZeroVector;
       }
@@ -129,7 +129,7 @@ namespace Arnible.MathModeling.Algebra
     {
       get
       {
-        if(pos == 0 && _values.Length == 0)
+        if (pos == 0 && _values.Length == 0)
         {
           return ref ZeroValue;
         }
@@ -166,7 +166,7 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public bool Equals(Number other) => Equals(in other);    
+    public bool Equals(Number other) => Equals(in other);
 
     public override bool Equals(object obj)
     {
@@ -225,7 +225,7 @@ namespace Arnible.MathModeling.Algebra
     {
       return Create(GetInternalEnumerator().Select(transformation));
     }
-    
+
     //
     // Arithmetic operators
     //

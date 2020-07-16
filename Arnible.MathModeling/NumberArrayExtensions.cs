@@ -25,23 +25,7 @@ namespace Arnible.MathModeling
     public static ValueArray<Number> ToNumberArray(this IEnumerable<double> numbers, in uint length)
     {
       return numbers.Select(v => (Number)v).ToValueArray(in length);
-    }
-
-    public static IEnumerable<uint> Indexes(this ValueArray<Number> arg)
-    {
-      return LinqEnumerable.RangeUint(arg.Length);
-    }
-
-    public static IEnumerable<uint> IndexesWhere(this ValueArray<Number> arg, Func<Number, bool> predicate)
-    {
-      for (uint i = 0; i < arg.Length; ++i)
-      {
-        if (predicate(arg[i]))
-        {
-          yield return i;
-        }
-      }
-    }
+    }    
 
     public static Number DistanceSquareTo(in this ValueArray<Number> arg, in ValueArray<Number> other)
     {

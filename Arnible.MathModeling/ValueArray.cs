@@ -22,15 +22,9 @@ namespace Arnible.MathModeling
     static IEnumerable<T> Empty = LinqEnumerable.Empty<T>().ToReadOnlyList();
     private readonly T[] _values;
 
-    internal ValueArray(in IEnumerable<T> items)
+    internal ValueArray(params T[] items)
     {
-      _values = System.Linq.Enumerable.ToArray(items);
-    }
-
-    public ValueArray(params T[] items)
-    {
-      _values = new T[items.Length];
-      Array.Copy(items, _values, items.Length);
+      _values = items;
     }
 
     private IEnumerable<T> Values => _values ?? Empty;
@@ -104,5 +98,39 @@ namespace Arnible.MathModeling
     public IEnumerator<T> GetEnumerator() => Values.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => Values.GetEnumerator();
+
+    //
+    // Operations
+    //
+
+    public IEnumerable<uint> Indexes()
+    {
+      return LinqEnumerable.RangeUint(Length);
+    }
+
+    public IEnumerable<uint> IndexesWhere(Func<T, bool> predicate)
+    {
+      for (uint i = 0; i < Length; ++i)
+      {
+        if (predicate(_values[i]))
+        {
+          yield return i;
+        }
+      }
+    }
+
+    public ValueArray<T> SubsetFromIndexes(in IReadOnlyCollection<uint> indexes)
+    {
+      T[] result = new T[indexes.Count];
+
+      uint i = 0;
+      foreach (uint index in indexes)
+      {
+        result[i] = _values[index];
+        i++;
+      }
+
+      return new ValueArray<T>(result);
+    }
   }
 }

@@ -53,9 +53,14 @@ namespace Arnible.MathModeling
      * Materialization
      */
 
-    public static ValueArray<T> ToValueArray<T>(this IEnumerable<T> source) where T : struct
+    public static ValueArray<T> ToValueArray<T>(this T[] source) where T : struct
     {
       return new ValueArray<T>(source);
+    }
+
+    public static ValueArray<T> ToValueArray<T>(this IEnumerable<T> source) where T : struct
+    {
+      return new ValueArray<T>(System.Linq.Enumerable.ToArray(source));
     }
 
     public static IUnmanagedArray<T> ToUnmanagedArray<T>(this IEnumerable<T> source) where T : unmanaged

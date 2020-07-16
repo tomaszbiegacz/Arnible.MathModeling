@@ -69,16 +69,16 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Translate_Array()
     {
       var t = new NumberTranslationVector(2, 3, 4);
-      var v = new Number[] { 1, 2, 3 }.ToValueArray();
-      AreEqual(new Number[] { 3, 5, 7 }.ToValueArray(), t.Translate(v));
+      var v = new Number[] { 1, 2, 3 };
+      AreEqual(new Number[] { 3, 5, 7 }, t.Translate(v));
     }
 
     [Fact]
     public void Translate_ArrayLess()
     {
       var t = new NumberTranslationVector(2, 3);
-      var v = new Number[] { 1, 2, 3 }.ToValueArray();
-      AreEqual(new Number[] { 3, 5, 3 }.ToValueArray(), t.Translate(v));
+      var v = new Number[] { 1, 2, 3 };
+      AreEqual(new Number[] { 3, 5, 3 }, t.Translate(v));
     }
   }
 }

@@ -14,7 +14,7 @@ namespace Arnible.MathModeling.Polynomials
 
     internal Polynomial(params PolynomialTerm[] terms)
     {
-      _terms = PolynomialTerm.Simplify(terms.ToValueArray());
+      _terms = PolynomialTerm.Simplify(terms);
     }
 
     private Polynomial(ValueArray<PolynomialTerm> terms)
