@@ -15,7 +15,7 @@ namespace Arnible.MathModeling.Geometry
 
     public static IEnumerable<Derivative1Value> DerivativeByR(in HypersphericalAngleVector angles)
     {
-      return angles.GetCartesianAxisViewsRatios().Select(v => new Derivative1Value(v));
+      return angles.GetCartesianAxisViewsRatios().GetInternalEnumerable().Select(v => new Derivative1Value(v));
     }
 
     public static NumberVector GetIdentityVector(in uint dimensionsCount)
@@ -49,7 +49,7 @@ namespace Arnible.MathModeling.Geometry
     public HypersphericalCoordinateOnAxisView(HypersphericalCoordinate p)
     {
       _p = p;
-      Coordinates = p.Angles.GetCartesianAxisViewsRatios().Select(v => p.R * v).ToVector();
+      Coordinates = p.Angles.GetCartesianAxisViewsRatios().GetInternalEnumerable().Select(v => p.R * v).ToVector();
     }
 
     public HypersphericalCoordinateOnAxisView(in CartesianCoordinate p)
@@ -188,7 +188,7 @@ namespace Arnible.MathModeling.Geometry
     public IEnumerable<Number> GetCoordinatesRatios()
     {
       Number r = R;
-      return Coordinates.Select(c => c / r);
+      return Coordinates.GetInternalEnumerable().Select(c => c / r);
     }
   }
 }

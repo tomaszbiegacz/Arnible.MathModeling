@@ -5,19 +5,15 @@ namespace Arnible.MathModeling.Polynomials
 {
   class PolynomialFinitaryOperation : IFinitaryOperation<double>
   {
-    private readonly IPolynomialOperation _polynomial;
-    private readonly ValueArray<char> _variables;
+    private readonly Func<IReadOnlyDictionary<char, double>, double> _valueCalculation;
+    private readonly IUnmanagedArray<char> _variables;
 
-    public PolynomialFinitaryOperation(in IPolynomialOperation polynomial, in IEnumerable<char> variables)
+    public PolynomialFinitaryOperation(
+      in IEnumerable<char> variables,
+      in Func<IReadOnlyDictionary<char, double>, double> valueCalculation)
     {
-      _polynomial = polynomial;
-
-      var polynomialVariables = new HashSet<char>(_polynomial.Variables);
-      if (!polynomialVariables.SetEquals(variables))
-      {
-        throw new ArgumentException($"variables are not equal to polynomial variables");
-      }
-      _variables = variables.ToValueArray();
+      _variables = variables.ToUnmanagedArray();
+      _valueCalculation = valueCalculation;
     }
 
     public double Value(in IEnumerable<double> x)
@@ -33,16 +29,21 @@ namespace Arnible.MathModeling.Polynomials
           i++;
           if (i >= _variables.Length)
           {
-            throw new ArgumentException($"Too many arguments, expected {_variables.Length}, got {i}.");
+            throw new ArgumentException(
+              $"Too many arguments, expected {_variables.Length.ToString()}, got {i.ToString()}.");
           }
-          args[_variables[(uint)i]] = xEnum.Current;
+
+          args[_variables[(uint) i]] = xEnum.Current;
         }
+
         if (i + 1 < _variables.Length)
         {
-          throw new ArgumentException($"too few arguments, expected {_variables.Length}, got {i}.");
+          throw new ArgumentException(
+            $"too few arguments, expected {_variables.Length.ToString()}, got {i.ToString()}.");
         }
-      }        
-      return _polynomial.Value(args);
+      }
+
+      return _valueCalculation(args);
     }
   }
 }

@@ -40,6 +40,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>AssertNumber.tt</DependentUpon>
+    </Compile>
+    <Compile Update="AssertNumber.tt.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssertNumber.tt</DependentUpon>
     </Compile>    
   </ItemGroup>
 

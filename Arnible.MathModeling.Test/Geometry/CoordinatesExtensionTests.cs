@@ -1,8 +1,8 @@
 ﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.xunit;
 using System;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
+using static Arnible.MathModeling.xunit.AssertHelpers;
 
 namespace Arnible.MathModeling.Geometry.Test
 {

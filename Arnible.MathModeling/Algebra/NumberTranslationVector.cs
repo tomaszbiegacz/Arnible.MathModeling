@@ -19,7 +19,10 @@ namespace Arnible.MathModeling.Algebra
   /// </remarks>  
   [Serializable]
   [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
-  public readonly struct NumberTranslationVector : IEquatable<NumberTranslationVector>, IEquatable<Number>, IValueArray<Number>
+  public readonly struct NumberTranslationVector : 
+    IEquatable<NumberTranslationVector>, 
+    IEquatable<Number>, 
+    IValueArray<Number>
   {
     private readonly NumberVector _change;    
 
@@ -96,7 +99,9 @@ namespace Arnible.MathModeling.Algebra
 
     /*
      * IArray
-     */    
+     */
+
+    internal IEnumerable<Number> GetInternalEnumerable() => _change.GetInternalEnumerable();
 
     public IEnumerator<Number> GetEnumerator() => _change.GetEnumerator();
 
@@ -124,7 +129,9 @@ namespace Arnible.MathModeling.Algebra
       }
       else
       {
-        return src.Zip(_change, (s, c) => (s ?? 0) + (c ?? 0)).ToValueArray();
+        return src.GetInternalEnumerable().Zip(
+          col2: _change.GetInternalEnumerable(), 
+          merge: (s, c) => (s ?? 0) + (c ?? 0)).ToValueArray();
       }
     }
   }

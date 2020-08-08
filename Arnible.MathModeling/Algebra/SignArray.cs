@@ -55,13 +55,7 @@ namespace Arnible.MathModeling.Algebra
      * Properties
      */
 
-    public bool IsOrthogonal
-    {
-      get
-      {
-        return _valueAbsCount == 0 || _valueAbsCount != _valueNegativeCount;
-      }
-    }
+    public bool IsOrthogonal => _valueAbsCount == 0 || _valueAbsCount != _valueNegativeCount;
 
     public ValueArray<sbyte> Values { get; }
   }

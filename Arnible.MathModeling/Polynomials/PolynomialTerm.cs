@@ -4,7 +4,9 @@ using System.Globalization;
 
 namespace Arnible.MathModeling.Polynomials
 {
-  public readonly struct PolynomialTerm : IEquatable<PolynomialTerm>, IPolynomialOperation
+  public readonly struct PolynomialTerm : 
+    IEquatable<PolynomialTerm>, 
+    IPolynomialOperation
   {
     private readonly double _coefficient;
     private readonly ValueArray<IndeterminateExpression> _indeterminates;
@@ -30,7 +32,7 @@ namespace Arnible.MathModeling.Polynomials
       else
       {
         _indeterminates = term;
-        _indeterminatesSignature = _indeterminates.Single().ToString();
+        _indeterminatesSignature = _indeterminates.GetInternalEnumerable().Single().ToString();
         GreatestPowerIndeterminate = term;
       }
     }
@@ -76,8 +78,8 @@ namespace Arnible.MathModeling.Polynomials
       }
       else
       {
-        _indeterminatesSignature = anyIndeterminates ? string.Join(string.Empty, indeterminates) : string.Empty;
-        GreatestPowerIndeterminate = anyIndeterminates ? FindGreatestPowerIndeterminate(indeterminates) : default;
+        _indeterminatesSignature = anyIndeterminates ? string.Join(string.Empty, indeterminates.GetInternalEnumerable()) : string.Empty;
+        GreatestPowerIndeterminate = anyIndeterminates ? FindGreatestPowerIndeterminate(indeterminates.GetInternalEnumerable()) : default;
       }
     }
 
@@ -156,7 +158,9 @@ namespace Arnible.MathModeling.Polynomials
 
     internal IEnumerable<VariableTerm> GetIdentityVariableTerms()
     {
-      return _indeterminates.Where(i => !i.HasUnaryModifier).Select(i => new VariableTerm(variable: i.Variable, power: i.Power));
+      return _indeterminates
+        .GetInternalEnumerable()
+        .Where(i => !i.HasUnaryModifier).Select(i => new VariableTerm(variable: i.Variable, power: i.Power));
     }
 
     /*
@@ -229,7 +233,9 @@ namespace Arnible.MathModeling.Polynomials
       }
       else
       {
-        return new PolynomialTerm(coefficient, IndeterminateExpression.Multiply(a._indeterminates, b._indeterminates));
+        return new PolynomialTerm(
+          coefficient: coefficient, 
+          indeterminates: IndeterminateExpression.Multiply(a._indeterminates.GetInternalEnumerable(), b._indeterminates.GetInternalEnumerable()));
       }
     }
 
@@ -297,7 +303,7 @@ namespace Arnible.MathModeling.Polynomials
         return true;
       }
 
-      var bIndeterminates = b._indeterminates.ToDictionary(kv => kv.Signature);
+      var bIndeterminates = b._indeterminates.GetInternalEnumerable().ToDictionary(kv => kv.Signature);
       var resultIndeterminates = new List<IndeterminateExpression>();
       foreach (var aInt in _indeterminates)
       {
@@ -403,18 +409,18 @@ namespace Arnible.MathModeling.Polynomials
 
     public PolynomialTerm ReduceByCommon(IEnumerable<VariableTerm> terms)
     {
-      return new PolynomialTerm(_coefficient, ReduceByCommon(_indeterminates, terms));
+      return new PolynomialTerm(_coefficient, ReduceByCommon(_indeterminates.GetInternalEnumerable(), terms));
     }
 
     public IEnumerable<PolynomialTerm> DerivativeBy(char name)
     {
-      ValueArray<IndeterminateExpression> notConstant = _indeterminates.Where(kv => kv.Variable == name).ToValueArray();
+      ValueArray<IndeterminateExpression> notConstant = _indeterminates.GetInternalEnumerable().Where(kv => kv.Variable == name).ToValueArray();
       if (notConstant.Length > 0)
       {
-        ValueArray<IndeterminateExpression> constantIndeterminates = _indeterminates.Where(kv => kv.Variable != name).ToValueArray();
+        ValueArray<IndeterminateExpression> constantIndeterminates = _indeterminates.GetInternalEnumerable().Where(kv => kv.Variable != name).ToValueArray();
         foreach (IndeterminateExpression toDerivative in notConstant)
         {
-          yield return (new PolynomialTerm(_coefficient, notConstant.Where(nc => nc != toDerivative).Concat(constantIndeterminates))) * toDerivative.DerivativeBy(name);
+          yield return (new PolynomialTerm(_coefficient, notConstant.GetInternalEnumerable().Where(nc => nc != toDerivative).Concat(constantIndeterminates.GetInternalEnumerable()))) * toDerivative.DerivativeBy(name);
         }
       }
     }
@@ -435,7 +441,7 @@ namespace Arnible.MathModeling.Polynomials
           else
             return variables;
         default:
-          return variables
+          return variables.GetInternalEnumerable()
             .AggregateBy(v => v._indeterminatesSignature, g => Add(g)).Values
             .Where(v => v != 0)
             .OrderByDescending(v => v.PowerSum, v => v.GreatestPowerIndeterminate.Power).ThenOrderBy(v => v.GreatestPowerIndeterminate.Signature)
@@ -483,16 +489,16 @@ namespace Arnible.MathModeling.Polynomials
       }
       else
       {
-        var remaining = new PolynomialTerm(_coefficient, _indeterminates.Where(kv => kv.Variable != variable));
+        var remaining = new PolynomialTerm(_coefficient, _indeterminates.GetInternalEnumerable().Where(kv => kv.Variable != variable));
 
-        var toReplace = _indeterminates.Where(kv => kv.Variable == variable);
+        var toReplace = _indeterminates.GetInternalEnumerable().Where(kv => kv.Variable == variable);
         if (toReplace.Any(i => i.HasUnaryModifier))
         {
           if (replacement.IsConstant)
           {
             double constantReplacement = (double)replacement;
             Polynomial inPlace = toReplace.Select(r => r.SimplifyForConstant(constantReplacement)).ProductDefensive();
-            return inPlace * remaining;
+            return (inPlace * remaining).GetInternalEnumerable();
           }
           else
           {
@@ -510,7 +516,7 @@ namespace Arnible.MathModeling.Polynomials
           else
           {
             Polynomial inPlace = replacement.ToPower(power);
-            return inPlace * remaining;
+            return (inPlace * remaining).GetInternalEnumerable();
           }
         }
       }
@@ -518,9 +524,9 @@ namespace Arnible.MathModeling.Polynomials
 
     public PolynomialDivision Composition(char variable, PolynomialDivision replacement)
     {
-      var remaining = new PolynomialTerm(_coefficient, _indeterminates.Where(kv => kv.Variable != variable));
+      var remaining = new PolynomialTerm(_coefficient, _indeterminates.GetInternalEnumerable().Where(kv => kv.Variable != variable));
 
-      IReadOnlyList<IndeterminateExpression> toReplace = _indeterminates.Where(kv => kv.Variable == variable).ToReadOnlyList();
+      IReadOnlyList<IndeterminateExpression> toReplace = _indeterminates.GetInternalEnumerable().Where(kv => kv.Variable == variable).ToReadOnlyList();
       PolynomialDivision inPlace = 1;
       if (toReplace.Count > 0)
       {

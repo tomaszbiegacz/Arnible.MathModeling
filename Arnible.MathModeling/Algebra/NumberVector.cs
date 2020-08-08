@@ -22,7 +22,7 @@ namespace Arnible.MathModeling.Algebra
   public readonly struct NumberVector : IEquatable<NumberVector>, IEquatable<Number>, IValueArray<Number>
   {
     readonly static Number ZeroValue = 0d;
-    readonly static ValueArray<Number> ZeroVector = new Number[] { 0 };
+    readonly static IReadOnlyCollection<Number> ZeroVector = new Number[] { 0 };
 
     public static NumberVector Repeat(in Number value, in uint length)
     {
@@ -113,7 +113,7 @@ namespace Arnible.MathModeling.Algebra
     // IArray
     //
 
-    private IEnumerable<Number> GetInternalEnumerator()
+    internal IEnumerable<Number> GetInternalEnumerable()
     {
       if (_values.Length == 0)
       {
@@ -121,7 +121,7 @@ namespace Arnible.MathModeling.Algebra
       }
       else
       {
-        return _values;
+        return _values.GetInternalEnumerable();
       }
     }
 
@@ -142,15 +142,17 @@ namespace Arnible.MathModeling.Algebra
 
     public uint Length => Math.Max(1, _values.Length);
 
-    public IEnumerator<Number> GetEnumerator() => GetInternalEnumerator().GetEnumerator();
+    public Number First => GetInternalEnumerable().First();
 
-    IEnumerator IEnumerable.GetEnumerator() => GetInternalEnumerator().GetEnumerator();
+    public IEnumerator<Number> GetEnumerator() => GetInternalEnumerable().GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => GetInternalEnumerable().GetEnumerator();
 
     //
     // IEquatable
     //
 
-    public bool Equals(in NumberVector other) => _values.SequenceEqual(other._values);
+    public bool Equals(in NumberVector other) => _values.GetInternalEnumerable().SequenceEqual(other._values.GetInternalEnumerable());
 
     public bool Equals(NumberVector other) => Equals(in other);
 
@@ -194,7 +196,7 @@ namespace Arnible.MathModeling.Algebra
       }
       else
       {
-        return "[" + string.Join(" ", GetInternalEnumerator().Select(v => v.ToString(cultureInfo))) + "]";
+        return "[" + string.Join(" ", GetInternalEnumerable().Select(v => v.ToString(cultureInfo))) + "]";
       }
     }
 
@@ -218,22 +220,32 @@ namespace Arnible.MathModeling.Algebra
 
     public NumberVector Transform(in Func<Number, Number> transformation)
     {
-      return Create(GetInternalEnumerator().Select(transformation));
+      return Create(GetInternalEnumerable().Select(transformation));
     }
 
     public NumberVector Transform(in Func<uint, Number, Number> transformation)
     {
-      return Create(GetInternalEnumerator().Select(transformation));
+      return Create(GetInternalEnumerable().Select(transformation));
     }
 
     //
     // Arithmetic operators
     //
 
-    public static NumberVector operator +(in NumberVector a, in NumberVector b) => a.Zip(b, (va, vb) => (va ?? 0) + (vb ?? 0)).ToVector();
-    public static NumberVector operator -(in NumberVector a, in NumberVector b) => a.Zip(b, (va, vb) => (va ?? 0) - (vb ?? 0)).ToVector();
+    public static NumberVector operator +(in NumberVector a, in NumberVector b)
+    {
+      return a.GetInternalEnumerable().Zip(b.GetInternalEnumerable(), (va, vb) => (va ?? 0) + (vb ?? 0)).ToVector();
+    }
 
-    public static NumberVector operator /(in NumberVector a, Number b) => new NumberVector(a.Select(v => v / b).ToValueArray());
+    public static NumberVector operator -(in NumberVector a, in NumberVector b)
+    {
+      return a.GetInternalEnumerable().Zip(b.GetInternalEnumerable(), (va, vb) => (va ?? 0) - (vb ?? 0)).ToVector();
+    }
+
+    public static NumberVector operator /(in NumberVector a, Number b)
+    {
+      return new NumberVector(a.GetInternalEnumerable().Select(v => v / b).ToValueArray());
+    }
 
     public static NumberVector operator *(in NumberVector a, Number b)
     {
@@ -243,10 +255,44 @@ namespace Arnible.MathModeling.Algebra
       }
       else
       {
-        return new NumberVector(a.Select(v => v * b).ToValueArray());
+        return new NumberVector(a.GetInternalEnumerable().Select(v => v * b).ToValueArray());
       }
     }
 
     public static NumberVector operator *(in Number a, in NumberVector b) => b * a;
+    
+    //
+    // IEnumerable extensions (to avoid boxing)
+    //
+
+    public bool All(in Func<Number, bool> predicate)
+    {
+      return GetInternalEnumerable().All(predicate);
+    }
+    
+    public IEnumerable<TResult> Select<TResult>(in Func<Number, TResult> selector)
+    {
+      return GetInternalEnumerable().Select(selector);
+    }
+
+    public Number SumDefensive()
+    {
+      return GetInternalEnumerable().SumDefensive();
+    }
+
+    public IEnumerable<Number> TakeExactly(uint count)
+    {
+      return GetInternalEnumerable().TakeExactly(count);
+    }
+
+    public ValueArray<Number> ToValueArray()
+    {
+      return _values;
+    }
+    
+    public IEnumerable<Number> Where(in Func<Number, bool> predicate)
+    {
+      return GetInternalEnumerable().Where(predicate);
+    }
   }
 }

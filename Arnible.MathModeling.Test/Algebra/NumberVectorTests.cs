@@ -43,7 +43,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       NumberVector v = new NumberVector(2, 3, 4);
       IsFalse(v == 0);
-      AreEquals(v, new Number[] { 2, 3, 4 });
+      AreEquals(v.GetInternalEnumerable(), new Number[] { 2, 3, 4 });
       AreEqual(3u, v.Length);
       AreEqual("[2 3 4]", v.ToString());
 
@@ -106,14 +106,14 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void CreateUniform()
     {
-      AreEquals(new Number[] { 2, 2, 2 }, NumberVector.Repeat(2, 3));
+      AreEquals(new Number[] { 2, 2, 2 }, NumberVector.Repeat(2, 3).GetInternalEnumerable());
     }
 
     [Fact]
     public void CreateFromEnumerable()
     {
       IEnumerable<Number> args = new Number[] { 2, 3, 4 };
-      AreEquals(new Number[] { 2, 3, 4 }, args.ToVector());
+      AreEquals(new Number[] { 2, 3, 4 }, args.ToVector().GetInternalEnumerable());
     }
 
     [Fact]
@@ -172,14 +172,14 @@ namespace Arnible.MathModeling.Algebra.Test
     public void ToArray_SameSize()
     {
       var v = new NumberVector(1, 2, 3);
-      AreEquals(new Number[] { 1d, 2, 3 }, v.ToValueArray(3));
+      AreEquals(new Number[] { 1d, 2, 3 }, v.GetInternalEnumerable().ToValueArray(3).GetInternalEnumerable());
     }
 
     [Fact]
     public void ToArray_GreaterSize()
     {
       var v = new NumberVector(1, 2, 3);
-      AreEquals(new Number[] { 1d, 2, 3, 0 }, v.ToValueArray(4));
+      AreEquals(new Number[] { 1d, 2, 3, 0 }, v.GetInternalEnumerable().ToValueArray(4).GetInternalEnumerable());
     }
   }
 }

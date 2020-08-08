@@ -11,6 +11,7 @@ namespace Arnible.MathModeling.Algebra.Test
       AreEqual(signs.Length, list.Length);
       for (uint i = 0; i < signs.Length; ++i)
       {
+        // ReSharper disable once HeapView.BoxingAllocation
         IsTrue(signs[i].Equals(list[i]));
       }
     }

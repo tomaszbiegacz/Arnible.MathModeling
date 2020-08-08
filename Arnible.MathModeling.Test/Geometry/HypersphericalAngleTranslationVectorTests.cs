@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
+using static Arnible.MathModeling.xunit.AssertHelpers;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -36,7 +37,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       HypersphericalAngleTranslationVector v = new HypersphericalAngleTranslationVector(2, 1, -1);
       IsFalse(v == 0);
-      AreEquals(v, new Number[] { 2, 1, -1 });
+      AreEquals(new Number[] { 2, 1, -1 }, v);
       AreEqual(3u, v.Length);
       AreEqual("[2 1 -1]", v.ToString());
     }

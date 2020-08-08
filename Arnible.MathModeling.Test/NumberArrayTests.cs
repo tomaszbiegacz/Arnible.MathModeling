@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
+using static Arnible.MathModeling.xunit.AssertHelpers;
 
 namespace Arnible.MathModeling.Test
 {
@@ -21,7 +22,7 @@ namespace Arnible.MathModeling.Test
     public void Constructor_Explicit()
     {
       ValueArray<Number> v = new Number[] { 2, 3, 4 };
-      AreEquals(v, new Number[] { 2, 3, 4 });
+      AreEquals(new Number[] { 2, 3, 4 }, v);
       AreEqual(3u, v.Length);
       AreExactlyEqual(3, v[1]);
       AreEqual("[2 3 4]", v.ToString());

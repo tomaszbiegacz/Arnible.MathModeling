@@ -4,7 +4,10 @@ using System.Globalization;
 
 namespace Arnible.MathModeling.Polynomials
 {
-  public readonly struct PolynomialDivision : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation
+  public readonly struct PolynomialDivision : 
+    IEquatable<PolynomialDivision>, 
+    IEquatable<Polynomial>, 
+    IPolynomialOperation
   {
     private readonly Polynomial _numerator;
     private readonly Polynomial _denominator;
@@ -65,8 +68,9 @@ namespace Arnible.MathModeling.Polynomials
       }
       else
       {
-        var commonVariables = GetCommonIdentityVariables(numerator: numerator, denominator: denominator).ToValueArray();
-        if (commonVariables.Length > 0)
+        IReadOnlyCollection<VariableTerm> commonVariables =
+          GetCommonIdentityVariables(numerator: numerator, denominator: denominator).ToReadOnlyList();
+        if (commonVariables.Count > 0)
         {
           numerator = numerator.ReduceByCommon(commonVariables);
           denominator = denominator.ReduceByCommon(commonVariables);

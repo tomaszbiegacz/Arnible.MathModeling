@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
+using static Arnible.MathModeling.xunit.AssertHelpers;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
@@ -36,7 +37,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       NumberTranslationVector v = new NumberTranslationVector(2, 3, 4);
       IsFalse(v == 0);
-      AreEquals(v, new Number[] { 2, 3, 4 });
+      AreEquals(new Number[] { 2, 3, 4 }, v);
       AreEqual(3u, v.Length);
       AreEqual("[2 3 4]", v.ToString());
     }

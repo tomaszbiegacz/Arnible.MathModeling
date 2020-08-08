@@ -45,7 +45,7 @@ namespace Arnible.MathModeling.Polynomials
       }
       else
       {
-        return $"{Variable}{Power.ToSuperscriptString()}";
+        return $"{Variable.ToString()}{Power.ToSuperscriptString()}";
       }
     }
   }

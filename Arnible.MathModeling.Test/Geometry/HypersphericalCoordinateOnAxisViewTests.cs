@@ -1,6 +1,7 @@
 ﻿using Arnible.MathModeling.Algebra;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
+using static Arnible.MathModeling.xunit.AssertHelpers;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -64,7 +65,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [InlineData(8u)]
     public void GetIdentityVector(uint dimensionsCount)
     {
-      var vector = HypersphericalCoordinateOnAxisView.GetIdentityVector(dimensionsCount);
+      NumberVector vector = HypersphericalCoordinateOnAxisView.GetIdentityVector(dimensionsCount);
       AreEqual(dimensionsCount, vector.Length);
 
       IsTrue(vector.All(v => v > 0));

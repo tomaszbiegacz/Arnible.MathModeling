@@ -22,6 +22,9 @@
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVector.cs" Link="Algebra\NumberVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVectorExtensions.cs" Link="Algebra\NumberVectorExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\Sign.cs" Link="Algebra\Sign.cs" />
+    <Compile Include="..\Arnible.MathModeling\Algebra\SignExtensions.cs">
+      <Link>Algebra\SignExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\Angle.cs" Link="Angle.cs" />
     <Compile Include="..\Arnible.MathModeling\Derivative1Value.cs" Link="Derivative1Value.cs" />
     <Compile Include="..\Arnible.MathModeling\Derivative2Value.cs" Link="Derivative2Value.cs" />
@@ -63,7 +66,6 @@
     <Compile Include="..\Arnible.MathModeling\LinqSum.tt.cs" Link="LinqSum.tt.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqTransformation.cs" Link="LinqTransformation.cs" />
     <Compile Include="..\Arnible.MathModeling\MetaMath.cs" Link="MetaMath.cs" />
-    <Compile Include="..\Arnible.MathModeling\NumberArrayExtensions.cs" Link="NumberArrayExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\NumericFormatting.cs" Link="NumericFormatting.cs" />
     <Compile Include="..\Arnible.MathModeling\OperationExtension.cs" Link="OperationExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\Polynomials\ElementaryUnaryOperation.cs" Link="Polynomials\ElementaryUnaryOperation.cs" />
@@ -81,6 +83,12 @@
     <Compile Include="..\Arnible.MathModeling\Polynomials\VariableTerm.cs" Link="Polynomials\VariableTerm.cs" />
     <Compile Include="..\Arnible.MathModeling\UnmanagedArray.cs" Link="UnmanagedArray.cs" />
     <Compile Include="..\Arnible.MathModeling\ValueArray.cs" Link="ValueArray.cs" />
+    <Compile Include="..\Arnible.MathModeling\ValueArrayExtensions.cs">
+      <Link>ValueArrayExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\ValueWithDerivative1.cs">
+      <Link>ValueWithDerivative1.cs</Link>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

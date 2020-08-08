@@ -45,9 +45,9 @@ namespace Arnible.MathModeling.Polynomials
         case ElementaryUnaryOperation.Identity:
           return Variable + powerExpression;
         case ElementaryUnaryOperation.Sine:
-          return $"Sin{powerExpression}({Variable})";
+          return $"Sin{powerExpression}({Variable.ToString()})";
         case ElementaryUnaryOperation.Cosine:
-          return $"Cos{powerExpression}({Variable})";
+          return $"Cos{powerExpression}({Variable.ToString()})";
         default:
           throw new InvalidOperationException("Unknown modifier: " + _modifier);
       }
@@ -58,7 +58,7 @@ namespace Arnible.MathModeling.Polynomials
       int nameCompare = Variable.CompareTo(other.Variable);
       if (nameCompare == 0)
       {
-        var modifierCompare = _modifier.CompareTo(other._modifier);
+        var modifierCompare = ((int)_modifier).CompareTo((int)other._modifier);
         return modifierCompare == 0 ? Power.CompareTo(other.Power) : modifierCompare;
       }
       else
@@ -85,7 +85,7 @@ namespace Arnible.MathModeling.Polynomials
 
     public override int GetHashCode()
     {
-      return Variable.GetHashCode() ^ _modifier.GetHashCode();
+      return Variable.GetHashCode() ^ (int)_modifier;
     }
 
     public static bool operator ==(in IndeterminateExpression a, in IndeterminateExpression b) => a.Equals(in b);
@@ -95,7 +95,7 @@ namespace Arnible.MathModeling.Polynomials
      * Properties
      */
 
-    public string Signature => $"{_modifier}_{Variable}";
+    public string Signature => $"{((int)_modifier).ToString()}_{Variable.ToString()}";
 
     public bool IsOne => Power == 0;
 
@@ -159,7 +159,7 @@ namespace Arnible.MathModeling.Polynomials
 
           int compareResult = vi1.Variable.CompareTo(vi2.Variable);
           if (compareResult == 0)
-            compareResult = vi1._modifier.CompareTo(vi2._modifier);
+            compareResult = ((int)vi1._modifier).CompareTo((int)vi2._modifier);
 
           if (compareResult < 0)
           {

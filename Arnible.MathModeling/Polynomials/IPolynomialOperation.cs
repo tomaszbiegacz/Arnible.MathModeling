@@ -2,7 +2,7 @@
 
 namespace Arnible.MathModeling.Polynomials
 {
-  public interface IPolynomialOperation
+  interface IPolynomialOperation
   {
     IEnumerable<char> Variables { get; }
 

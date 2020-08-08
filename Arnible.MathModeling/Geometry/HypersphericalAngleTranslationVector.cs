@@ -8,12 +8,12 @@ namespace Arnible.MathModeling.Geometry
 {
   [Serializable]
   [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
-  public readonly struct HypersphericalAngleTranslationVector : 
-    IEquatable<HypersphericalAngleTranslationVector>, 
-    IEquatable<Number>, 
+  public readonly struct HypersphericalAngleTranslationVector :
+    IEquatable<HypersphericalAngleTranslationVector>,
+    IEquatable<Number>,
     IValueArray<Number>
   {
-    private readonly HypersphericalAngleVector _change;    
+    private readonly HypersphericalAngleVector _change;
 
     public HypersphericalAngleTranslationVector(params Number[] parameters)
       : this(new HypersphericalAngleVector(parameters))
@@ -26,8 +26,11 @@ namespace Arnible.MathModeling.Geometry
       _change = change;
     }
 
-    public static implicit operator HypersphericalAngleTranslationVector(in Number v) => new HypersphericalAngleTranslationVector(v);
-    public static implicit operator HypersphericalAngleTranslationVector(in double v) => new HypersphericalAngleTranslationVector(v);
+    public static implicit operator HypersphericalAngleTranslationVector(in Number v) =>
+      new HypersphericalAngleTranslationVector(v);
+
+    public static implicit operator HypersphericalAngleTranslationVector(in double v) =>
+      new HypersphericalAngleTranslationVector(v);
 
     //
     // Properties
@@ -71,8 +74,11 @@ namespace Arnible.MathModeling.Geometry
 
     public override int GetHashCode() => _change.GetHashCode();
 
-    public static bool operator ==(in HypersphericalAngleTranslationVector a, in HypersphericalAngleTranslationVector b) => a.Equals(in b);
-    public static bool operator !=(in HypersphericalAngleTranslationVector a, in HypersphericalAngleTranslationVector b) => !a.Equals(in b);
+    public static bool operator ==(in HypersphericalAngleTranslationVector a,
+      in HypersphericalAngleTranslationVector b) => a.Equals(in b);
+
+    public static bool operator !=(in HypersphericalAngleTranslationVector a,
+      in HypersphericalAngleTranslationVector b) => !a.Equals(in b);
 
     public static bool operator ==(in HypersphericalAngleTranslationVector a, in Number b) => a.Equals(in b);
     public static bool operator !=(in HypersphericalAngleTranslationVector a, in Number b) => !a.Equals(in b);
@@ -82,21 +88,27 @@ namespace Arnible.MathModeling.Geometry
 
     /*
      * IArray
-     */    
+     */
+
+    internal IEnumerable<Number> GetInternalEnumerable() => _change.GetInternalEnumerable();
 
     public IEnumerator<Number> GetEnumerator() => _change.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator() => _change.GetEnumerator();    
+    IEnumerator IEnumerable.GetEnumerator() => _change.GetEnumerator();
 
     /*
      * Operations
      */
 
-    public static HypersphericalAngleTranslationVector operator *(in HypersphericalAngleTranslationVector a, in Number b) => new HypersphericalAngleTranslationVector(b * a._change);
-    public static HypersphericalAngleTranslationVector operator *(in Number a, in HypersphericalAngleTranslationVector b) => new HypersphericalAngleTranslationVector(a * b._change);
+    public static HypersphericalAngleTranslationVector operator *(in HypersphericalAngleTranslationVector a,
+      in Number b) => new HypersphericalAngleTranslationVector(b * a._change);
+
+    public static HypersphericalAngleTranslationVector operator *(in Number a,
+      in HypersphericalAngleTranslationVector b) => new HypersphericalAngleTranslationVector(a * b._change);
 
     public HypersphericalAngleVector Translate(in HypersphericalAngleVector src) => src + _change;
 
-    public HypersphericalCoordinate Translate(in HypersphericalCoordinate src) => new HypersphericalCoordinate(src.R,  src.Angles + _change);
+    public HypersphericalCoordinate Translate(in HypersphericalCoordinate src) =>
+      new HypersphericalCoordinate(src.R, src.Angles + _change);
   }
 }

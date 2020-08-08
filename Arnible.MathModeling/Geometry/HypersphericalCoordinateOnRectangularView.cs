@@ -118,7 +118,7 @@ namespace Arnible.MathModeling.Geometry
 
     public override string ToString()
     {
-      return $"({X}, {Y})";
+      return $"({X.ToString()}, {Y.ToString()})";
     }
 
     //

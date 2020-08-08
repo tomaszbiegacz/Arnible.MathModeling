@@ -17,6 +17,11 @@
 
   <ItemGroup>
     <Compile Include="..\Arnible.MathModeling.xunit\XunitLogger.cs" Link="XunitLogger.cs" />
+    <Compile Update="AssertNumber.tt.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssertNumber.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

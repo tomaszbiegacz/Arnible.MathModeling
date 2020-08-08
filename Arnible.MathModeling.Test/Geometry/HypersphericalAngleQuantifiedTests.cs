@@ -22,7 +22,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void ToVector_Single()
     {
-      var directions = HypersphericalAngleQuantified.GetQuantifiedDirections(anglesCount: 1, resolution: 2).ToValueArray();
+      var directions = HypersphericalAngleQuantified.GetQuantifiedDirections(anglesCount: 1, resolution: 2).ToReadOnlyList();
 
       AreEqual(new HypersphericalAngleVector(-1 * Math.PI / 4), directions.Where(d => d.Angles.Single() == -1).Single().ToAngleVector());
       AreEqual(new HypersphericalAngleVector(0), directions.Where(d => d.Angles.Single() == 0).Single().ToAngleVector());

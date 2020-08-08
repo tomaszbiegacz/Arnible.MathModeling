@@ -43,7 +43,7 @@ namespace Arnible.MathModeling
 
     public override string ToString()
     {
-      return $"[{First}, {Second}]";
+      return $"[{First.ToString()}, {Second.ToString()}]";
     }
 
     public static bool operator ==(in Derivative2Value a, in Derivative2Value b) => a.Equals(in b);

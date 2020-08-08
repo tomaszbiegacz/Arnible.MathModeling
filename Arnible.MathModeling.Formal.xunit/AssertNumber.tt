@@ -1,5 +1,5 @@
 ﻿<#@ template debug="false" hostspecific="false" language="C#" #>
-<#@ include file="./..//Arnible.MAthModeling.xunit/AssertNumberCommon.tt" #>
+<#@ include file="..\Arnible.MathModeling.xunit\AssertNumberCommon.tt" #>
 <#@ output extension=".tt.cs" #>
 using System;
 using System.Collections.Generic;

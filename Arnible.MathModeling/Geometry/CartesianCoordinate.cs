@@ -42,7 +42,7 @@ namespace Arnible.MathModeling.Geometry
 
     public static implicit operator CartesianCoordinate(in ValueArray<Number> rc)
     {
-      return new CartesianCoordinate(rc.ToVector());
+      return new CartesianCoordinate(rc.GetInternalEnumerable().ToVector());
     }
 
     public static implicit operator CartesianCoordinate(in NumberVector rc)
@@ -91,7 +91,7 @@ namespace Arnible.MathModeling.Geometry
 
     public CartesianCoordinate AddDimension()
     {
-      return new CartesianCoordinate(Coordinates.Append(0).ToVector());
+      return new CartesianCoordinate(Coordinates.GetInternalEnumerable().Append(0).ToVector());
     }    
   }
 }

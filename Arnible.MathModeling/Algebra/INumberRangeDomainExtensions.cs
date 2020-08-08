@@ -23,7 +23,9 @@ namespace Arnible.MathModeling.Algebra
       in NumberVector value, 
       in NumberTranslationVector delta)
     {
-      return value.Zip(delta, (v, t) => domain.IsValidTranslation(v ?? 0, t ?? 0)).All();
+      return value.GetInternalEnumerable().Zip(
+        col2: delta.GetInternalEnumerable(), 
+        merge: (v, t) => domain.IsValidTranslation(v ?? 0, t ?? 0)).All();
     }
 
     public static bool IsValidTranslation(
@@ -37,7 +39,9 @@ namespace Arnible.MathModeling.Algebra
       }
       else
       {
-        return value.Zip(delta, (v, t) => domain.IsValidTranslation(v ?? throw new ArgumentException(nameof(value)), t ?? 0)).All();
+        return value.GetInternalEnumerable().Zip(
+          col2: delta.GetInternalEnumerable(), 
+          merge: (v, t) => domain.IsValidTranslation(v ?? throw new ArgumentException(nameof(value)), t ?? 0)).All();
       }
     }
 
@@ -66,6 +70,11 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
+    public static void Validate(this INumberRangeDomain domain, NumberVector value)
+    {
+      Validate(domain, value.GetInternalEnumerable());
+    }
+
     //
     // Translate
     //
@@ -75,7 +84,9 @@ namespace Arnible.MathModeling.Algebra
       in NumberVector value, 
       in NumberTranslationVector delta)
     {
-      return value.Zip(delta, (v, t) => domain.Translate(v ?? 0, t ?? 0)).ToVector();
+      return value.GetInternalEnumerable().Zip(
+        col2: delta.GetInternalEnumerable(), 
+        merge: (v, t) => domain.Translate(v ?? 0, t ?? 0)).ToVector();
     }
 
     public static ValueArray<Number> Translate(
@@ -88,7 +99,9 @@ namespace Arnible.MathModeling.Algebra
         throw new ArgumentException(nameof(delta));
       }
 
-      return value.Zip(delta, (v, t) => domain.Translate(v ?? throw new ArgumentException(nameof(value)), t ?? 0)).ToValueArray();
+      return value.GetInternalEnumerable().Zip(
+        col2: delta.GetInternalEnumerable(), 
+        merge: (v, t) => domain.Translate(v ?? throw new ArgumentException(nameof(value)), t ?? 0)).ToValueArray();
     }
   }
 }

@@ -88,7 +88,7 @@ namespace Arnible.MathModeling
         Number derivative = valueDerivatives[i].First;
         if (derivative != 0)
         {
-          result += productValues.ExcludeAt(i).ProductWithDefault() * derivative;
+          result += productValues.GetInternalEnumerable().ExcludeAt(i).ProductWithDefault() * derivative;
         }
       }
       return new Derivative1Value(in result);

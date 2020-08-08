@@ -70,12 +70,12 @@ namespace Arnible.MathModeling.Geometry
 
     private HypersphericalAngleVector(in NumberVector angles)
     {      
-      var first = angles.First();
+      var first = angles.First;
       if (first > Angle.HalfCycle || first <= -1 * Angle.HalfCycle)
       {
         throw new ArgumentException($"Invalid first angualr coordinate: {first}");
       }
-      if (angles.SkipExactly(1).Any(a => a > Angle.RightAngle || a < -1 * Angle.RightAngle))
+      if (angles.GetInternalEnumerable().SkipExactly(1).Any(a => a > Angle.RightAngle || a < -1 * Angle.RightAngle))
       {
         throw new ArgumentException($"Invalid angular coordinates: {angles}");
       }      
@@ -100,7 +100,9 @@ namespace Arnible.MathModeling.Geometry
 
     //
     // IArray
-    //    
+    //
+
+    internal IEnumerable<Number> GetInternalEnumerable() => _angles.GetInternalEnumerable();
 
     public IEnumerator<Number> GetEnumerator() => _angles.GetEnumerator();
 
@@ -159,13 +161,16 @@ namespace Arnible.MathModeling.Geometry
       return new HypersphericalAngleVector(NumberVector.NonZeroValueAt(pos: in anglePos, value: in angle));
     }
 
-    public HypersphericalAngleVector AddDimension() => new HypersphericalAngleVector(_angles.Append(0).ToVector());
+    public HypersphericalAngleVector AddDimension()
+    {
+      return new HypersphericalAngleVector(_angles.GetInternalEnumerable().Append(0).ToVector());
+    }
 
     private IEnumerable<Number> MirrorAngles
     {
       get
       {
-        Number firstAngle = _angles.First();
+        Number firstAngle = _angles.First;
         if (firstAngle > 0)
         {
           yield return -1 * Angle.HalfCycle + firstAngle;
@@ -175,7 +180,7 @@ namespace Arnible.MathModeling.Geometry
           yield return Angle.HalfCycle + firstAngle;
         }
 
-        foreach (Number angle in _angles.SkipExactly(1))
+        foreach (Number angle in _angles.GetInternalEnumerable().SkipExactly(1))
         {
           yield return -1 * angle;
         }
@@ -188,7 +193,7 @@ namespace Arnible.MathModeling.Geometry
     {
       var cartesianDimensions = new List<Number>();
       Number replacement = 1;
-      foreach (var angle in this.Reverse())
+      foreach (var angle in GetInternalEnumerable().Reverse())
       {
         cartesianDimensions.Add(replacement * Sin(angle));
         replacement *= Cos(angle);
@@ -227,12 +232,14 @@ namespace Arnible.MathModeling.Geometry
 
     private static IEnumerable<Number> AddAngles(NumberVector a, NumberVector b)
     {
-      return Normalize(a.Zip(b, (v1, v2) => (v1 ?? 0) + (v2 ?? 0)));      
+      return Normalize(a.GetInternalEnumerable().Zip(
+        col2: b.GetInternalEnumerable(), 
+        merge: (v1, v2) => (v1 ?? 0) + (v2 ?? 0)));      
     }
 
     private static IEnumerable<Number> ScaleAngles(NumberVector a, Number b)
     {
-      return Normalize(a * b);
+      return Normalize((a * b).GetInternalEnumerable());
     }
 
     public static HypersphericalAngleVector operator +(HypersphericalAngleVector a, HypersphericalAngleVector b)

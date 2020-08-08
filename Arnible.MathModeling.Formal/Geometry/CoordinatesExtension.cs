@@ -41,8 +41,8 @@ namespace Arnible.MathModeling.Geometry
       PolynomialDivision replacement = (PolynomialDivision)hypersphericalPoint.R;
       PolynomialDivision result = source;
 
-      ValueArray<Number> cd = cartesianPoint.Coordinates.Reverse().ToValueArray();
-      ValueArray<Number> ad = hypersphericalPoint.Angles.Reverse().ToValueArray();
+      ValueArray<Number> cd = cartesianPoint.Coordinates.GetInternalEnumerable().Reverse().ToValueArray();
+      ValueArray<Number> ad = hypersphericalPoint.Angles.GetInternalEnumerable().Reverse().ToValueArray();
       for (uint i = 0; i < ad.Length; ++i)
       {
         var cartesianDimension = (PolynomialTerm)cd[i];
@@ -52,7 +52,7 @@ namespace Arnible.MathModeling.Geometry
         replacement *= Cos(angle);
       }
 
-      return result.Composition((PolynomialTerm)cd.Last(), replacement);
+      return result.Composition((PolynomialTerm)cd.Last, replacement);
     }
 
     public static Number ToSpherical(

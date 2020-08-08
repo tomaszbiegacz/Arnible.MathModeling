@@ -56,7 +56,7 @@ namespace Arnible.MathModeling.Geometry
 
     public override string ToString()
     {
-      return $"({RatioX}, {RatioY})";
+      return $"({RatioX.ToString()}, {RatioY.ToString()})";
     }
 
     //

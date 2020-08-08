@@ -9,12 +9,14 @@ namespace Arnible.MathModeling
 
   public readonly struct Derivative1Value : IDerivative1, IEquatable<Derivative1Value>
   {
-    public static readonly Derivative1Value Zero = new Derivative1Value(0);
+    public static readonly Derivative1Value Zero = new Derivative1Value(first: 0);
 
     public Derivative1Value(in Number first)
     {
       First = first;
     }
+    
+    public static explicit operator Derivative1Value(in Number v) => new Derivative1Value(v);
 
     public override bool Equals(object obj)
     {
@@ -42,7 +44,7 @@ namespace Arnible.MathModeling
 
     public override string ToString()
     {
-      return $"[{First}]";
+      return $"[{First.ToString()}]";
     }
 
     public static bool operator ==(in Derivative1Value a, in Derivative1Value b) => a.Equals(in b);

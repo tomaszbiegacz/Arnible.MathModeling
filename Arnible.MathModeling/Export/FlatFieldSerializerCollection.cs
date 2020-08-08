@@ -13,7 +13,7 @@ namespace Arnible.MathModeling.Export
     Type FieldsType { get; }
 
     Task SerializeHeader(TextWriter writer, ReadOnlyMemory<char> separator, CancellationToken cancellationToken);
-    Task SerializeRecord(object record, TextWriter writer, ReadOnlyMemory<char> separator, CancellationToken cancellationToken);
+    Task SerializeRecord<T>(T record, TextWriter writer, ReadOnlyMemory<char> separator, CancellationToken cancellationToken);
   }
 
   abstract class FlatFieldSerializerCollection : IFlatFieldSerializerCollection
@@ -52,7 +52,7 @@ namespace Arnible.MathModeling.Export
       }
     }
 
-    public async Task SerializeRecord(object record, TextWriter writer, ReadOnlyMemory<char> separator, CancellationToken cancellationToken)
+    public async Task SerializeRecord<T>(T record, TextWriter writer, ReadOnlyMemory<char> separator, CancellationToken cancellationToken)
     {
       if(record != null)
       {

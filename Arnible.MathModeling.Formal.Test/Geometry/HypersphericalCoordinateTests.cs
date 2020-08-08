@@ -33,7 +33,7 @@ namespace Arnible.MathModeling.Geometry.Test
       }
     }
 
-    private static void EqualityAfterTranformation(PolynomialDivision polynomial)
+    private static void EqualityAfterTransformation(PolynomialDivision polynomial)
     {
       CartesianCoordinate cartesianPoint = new NumberVector(Term.x, Term.y, Term.z);
       var sphericalPoint = new HypersphericalCoordinate(Term.r, new HypersphericalAngleVector(Term.θ, Term.φ));
@@ -48,9 +48,9 @@ namespace Arnible.MathModeling.Geometry.Test
     }
 
     [Fact]
-    public void EqualityAfterTranformation_Linear() => EqualityAfterTranformation(Term.x + Term.y + Term.z);
+    public void EqualityAfterTransformation_Linear() => EqualityAfterTransformation(Term.x + Term.y + Term.z);
 
     [Fact]
-    public void EqualityAfterTranformation_Polynomial3d() => EqualityAfterTranformation(1 + Term.x + 2 * Term.y * Term.z);    
+    public void EqualityAfterTransformation_Polynomial3d() => EqualityAfterTransformation(1 + Term.x + 2 * Term.y * Term.z);    
   }
 }

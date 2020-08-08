@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Arnible.MathModeling
 {
   /// <summary>
-  /// Immmutable value array.  
+  /// Immutable value array.  
   /// </summary>
   /// <remarks> 
   /// Features:
@@ -19,7 +19,7 @@ namespace Arnible.MathModeling
   [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
   public readonly struct ValueArray<T> : IEquatable<ValueArray<T>>, IValueArray<T> where T : struct
   {
-    static IEnumerable<T> Empty = LinqEnumerable.Empty<T>().ToReadOnlyList();
+    private static IEnumerable<T> _empty = LinqEnumerable.Empty<T>().ToReadOnlyList();
     private readonly T[] _values;
 
     internal ValueArray(params T[] items)
@@ -27,21 +27,19 @@ namespace Arnible.MathModeling
       _values = items;
     }
 
-    private IEnumerable<T> Values => _values ?? Empty;
-
     public static implicit operator ValueArray<T>(in T[] v) => new ValueArray<T>(v);
 
     public static implicit operator ValueArray<T>(in T v) => new ValueArray<T>(new[] { v });
 
     public override string ToString()
     {
-      return "[" + string.Join(" ", Values.Select(v => v.ToString())) + "]";
+      return "[" + string.Join(" ", GetInternalEnumerable().Select(v => v.ToString())) + "]";
     }
 
     public override int GetHashCode()
     {
       int hc = Length.GetHashCode();
-      foreach (var v in Values)
+      foreach (T v in GetInternalEnumerable())
       {
         hc = unchecked(hc * 314159 + v.GetHashCode());
       }
@@ -52,7 +50,7 @@ namespace Arnible.MathModeling
     // IEquatable
     //    
 
-    public bool Equals(in ValueArray<T> other) => Values.SequenceEqual(other.Values);
+    public bool Equals(in ValueArray<T> other) => GetInternalEnumerable().SequenceEqual(other.GetInternalEnumerable());
 
     public bool Equals(ValueArray<T> other) => Equals(in other);
 
@@ -74,6 +72,8 @@ namespace Arnible.MathModeling
     //
     // IArray
     //
+    
+    internal IEnumerable<T> GetInternalEnumerable() => _values ?? _empty;
 
     public ref readonly T this[in uint index]
     {
@@ -87,17 +87,14 @@ namespace Arnible.MathModeling
       }
     }
 
-    public uint Length
-    {
-      get
-      {
-        return (uint)(_values?.Length ?? 0);
-      }
-    }
+    public uint Length => (uint)(_values?.Length ?? 0);
 
-    public IEnumerator<T> GetEnumerator() => Values.GetEnumerator();
+    public ref readonly T First => ref _values[0];
+    public ref readonly T Last => ref _values[^1];
 
-    IEnumerator IEnumerable.GetEnumerator() => Values.GetEnumerator();
+    public IEnumerator<T> GetEnumerator() => GetInternalEnumerable().GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => GetInternalEnumerable().GetEnumerator();
 
     //
     // Operations
@@ -126,11 +123,62 @@ namespace Arnible.MathModeling
       uint i = 0;
       foreach (uint index in indexes)
       {
+        if (index >= Length)
+        {
+          throw new ArgumentException(nameof(indexes));
+        }
+        
         result[i] = _values[index];
         i++;
       }
 
       return new ValueArray<T>(result);
+    }
+    
+    //
+    // IEnumerable implementation (to avoid boxing)
+    //
+    
+    public IEnumerable<TOutput> AggregateCombinations<TOutput>(
+      in uint groupSize,
+      in Func<IEnumerable<T>, TOutput> aggregator)
+    {
+      return GetInternalEnumerable().AggregateCombinations(in groupSize, in aggregator);
+    }
+    
+    public bool All(in Func<T, bool> predicate)
+    {
+      return GetInternalEnumerable().All(predicate);
+    }
+
+    public bool Any(in Func<T, bool> predicate)
+    {
+      return GetInternalEnumerable().Any(predicate);
+    }
+
+    public IEnumerable<T> ExcludeAt(in uint pos)
+    {
+      return GetInternalEnumerable().ExcludeAt(pos);
+    }
+
+    public IEnumerable<TResult> Select<TResult>(in Func<T, TResult> selector)
+    {
+      return GetInternalEnumerable().Select(selector);
+    }
+
+    public IEnumerable<TResult> Select<TResult>(in Func<uint, T, TResult> selector)
+    {
+      return GetInternalEnumerable().Select(selector);
+    }
+
+    public T Single()
+    {
+      return GetInternalEnumerable().Single();
+    }
+    
+    public IEnumerable<T> Where(in Func<T, bool> predicate)
+    {
+      return GetInternalEnumerable().Where(predicate);
     }
   }
 }

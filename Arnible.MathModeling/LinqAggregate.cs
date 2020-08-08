@@ -46,11 +46,11 @@ namespace Arnible.MathModeling
       return groupByKey.Where(kv => kv.Value.Count == sequenceCount).ToDictionary(kv => kv.Key, kv => aggregator(kv.Value));
     }
 
-    private static IEnumerable<T> AggregateCombinations<T>(
-      IReadOnlyList<T> x,
+    private static IEnumerable<TOutput> AggregateCombinations<TInput, TOutput>(
+      IReadOnlyList<TInput> x,
       uint i,
       uint groupCount,
-      Func<IEnumerable<T>, T> aggregator, Stack<T> combination)
+      Func<IEnumerable<TInput>, TOutput> aggregator, Stack<TInput> combination)
     {
       if (groupCount == combination.Count)
       {
@@ -62,7 +62,7 @@ namespace Arnible.MathModeling
         for (uint j = i; j < x.Count; ++j)
         {
           combination.Push(x[(int)j]);
-          foreach (T v in AggregateCombinations(x, j + 1, groupCount, aggregator, combination))
+          foreach (TOutput v in AggregateCombinations(x, j + 1, groupCount, aggregator, combination))
           {
             yield return v;
           }
@@ -79,10 +79,10 @@ namespace Arnible.MathModeling
     /// <summary>
     /// Calculate aggregate for "groupSize" items count combinations from source collection.
     /// </summary>
-    public static IEnumerable<T> AggregateCombinations<T>(
-      this IEnumerable<T> items,
-      uint groupSize,
-      Func<IEnumerable<T>, T> aggregator)
+    public static IEnumerable<TOutput> AggregateCombinations<TInput, TOutput>(
+      this IEnumerable<TInput> items,
+      in uint groupSize,
+      in Func<IEnumerable<TInput>, TOutput> aggregator)
     {
       if (groupSize < 1)
       {
@@ -93,7 +93,7 @@ namespace Arnible.MathModeling
       {
         throw new ArgumentException(nameof(items));
       }
-      IReadOnlyList<T> x = items.ToReadOnlyList();
+      IReadOnlyList<TInput> x = items.ToReadOnlyList();
       if (x.Count < groupSize)
       {
         throw new ArgumentException($"x.Length: {x.Count} where groupCount: {groupSize}");
@@ -103,7 +103,7 @@ namespace Arnible.MathModeling
         throw new ArgumentException(nameof(aggregator));
       }
 
-      var combination = new Stack<T>();
+      var combination = new Stack<TInput>();
       return AggregateCombinations(x, 0, groupSize, aggregator, combination);
     }
 

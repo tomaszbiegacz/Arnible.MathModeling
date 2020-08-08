@@ -6,7 +6,11 @@ using System.Text;
 
 namespace Arnible.MathModeling.Polynomials
 {
-  public readonly struct Polynomial : IEquatable<PolynomialDivision>, IEquatable<Polynomial>, IPolynomialOperation, IEnumerable<PolynomialTerm>
+  public readonly struct Polynomial : 
+    IEquatable<PolynomialDivision>, 
+    IEquatable<Polynomial>,
+    IEnumerable<PolynomialTerm>,
+    IPolynomialOperation
   {
     const char InPlaceVariableReplacement = '$';
 
@@ -170,20 +174,20 @@ namespace Arnible.MathModeling.Polynomials
      * Operators
      */
 
-    public static explicit operator PolynomialTerm(Polynomial v) => v.SingleOrDefault();
+    public static explicit operator PolynomialTerm(Polynomial v) => v.GetInternalEnumerable().SingleOrDefault();
 
-    public static explicit operator double(Polynomial v) => (double)v.SingleOrDefault();
+    public static explicit operator double(Polynomial v) => (double)v.GetInternalEnumerable().SingleOrDefault();
 
     // +
 
     public static Polynomial operator +(Polynomial a, Polynomial b)
     {
-      return CreateSimplified(a.Concat(b));
+      return CreateSimplified(a.GetInternalEnumerable().Concat(b.GetInternalEnumerable()));
     }
 
     public static Polynomial operator +(Polynomial a, double b)
     {
-      return CreateSimplified(a.Append(b));
+      return CreateSimplified(a.GetInternalEnumerable().Append(b));
     }
 
     public static Polynomial operator +(double a, Polynomial b) => b + a;
@@ -192,12 +196,12 @@ namespace Arnible.MathModeling.Polynomials
 
     public static Polynomial operator -(Polynomial a, Polynomial b)
     {
-      return CreateSimplified(a.Concat(b.Select(v => -1 * v)));
+      return CreateSimplified(a.GetInternalEnumerable().Concat(b.GetInternalEnumerable().Select(v => -1 * v)));
     }
 
     public static Polynomial operator -(Polynomial a, double b)
     {
-      return CreateSimplified(a.Append(-1 * b));
+      return CreateSimplified(a.GetInternalEnumerable().Append(-1 * b));
     }
 
     public static Polynomial operator -(double a, Polynomial b) => -1 * b + a;
@@ -229,7 +233,7 @@ namespace Arnible.MathModeling.Polynomials
       else
       {
         // no need for simplification
-        return new Polynomial(b.Select(t => a * t).ToValueArray());
+        return new Polynomial(b.GetInternalEnumerable().Select(t => a * t).ToValueArray());
       }
     }
 
@@ -244,7 +248,7 @@ namespace Arnible.MathModeling.Polynomials
       else
       {
         // no need for simplification
-        return new Polynomial(b.Select(t => a * t).ToValueArray());
+        return new Polynomial(b.GetInternalEnumerable().Select(t => a * t).ToValueArray());
       }
     }
 
@@ -342,8 +346,8 @@ namespace Arnible.MathModeling.Polynomials
         return 0;
       }
 
-      PolynomialTerm denominator = b._terms.First();
-      Polynomial denominatorSuffix = new Polynomial(b._terms.SkipExactly(1).ToValueArray());        // no need for simplification
+      PolynomialTerm denominator = b.GetInternalEnumerable().First();
+      Polynomial denominatorSuffix = new Polynomial(b.GetInternalEnumerable().SkipExactly(1).ToValueArray());        // no need for simplification
       var resultTerms = new List<PolynomialTerm>();
       reminder = TryReduce(this, denominator, denominatorSuffix, resultTerms);
       return new Polynomial(resultTerms.ToValueArray());                                           // no need for simplification
@@ -371,7 +375,7 @@ namespace Arnible.MathModeling.Polynomials
 
     public Polynomial DerivativeBy(char name)
     {
-      return CreateSimplified(_terms.SelectMany(v => v.DerivativeBy(name)));
+      return CreateSimplified(GetInternalEnumerable().SelectMany(v => v.DerivativeBy(name)));
     }
 
     public Polynomial DerivativeBy(PolynomialTerm name) => DerivativeBy((char)name);
@@ -450,7 +454,7 @@ namespace Arnible.MathModeling.Polynomials
      * IPolynomialOperation
      */
 
-    public IEnumerable<char> Variables => _terms.SelectMany(kv => kv.Variables);
+    public IEnumerable<char> Variables => GetInternalEnumerable().SelectMany(kv => kv.Variables);
 
     public double Value(IReadOnlyDictionary<char, double> x)
     {
@@ -471,5 +475,7 @@ namespace Arnible.MathModeling.Polynomials
     public IEnumerator<PolynomialTerm> GetEnumerator() => _terms.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => _terms.GetEnumerator();
+
+    internal IEnumerable<PolynomialTerm> GetInternalEnumerable() => _terms.GetInternalEnumerable();
   }
 }

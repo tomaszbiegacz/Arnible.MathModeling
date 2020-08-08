@@ -9,6 +9,7 @@ namespace Arnible.MathModeling.Export
     private static MediaTypeSpecificationAttribute GetMediaTypeSpecification(in SerializationMediaType mediaType)
     {
       Type enumType = typeof(SerializationMediaType);
+      // ReSharper disable once HeapView.BoxingAllocation
       MemberInfo memInfo = enumType.GetMember(enumType.GetEnumName(mediaType)).Single();
       return (MediaTypeSpecificationAttribute)memInfo.GetCustomAttribute(typeof(MediaTypeSpecificationAttribute));
     }

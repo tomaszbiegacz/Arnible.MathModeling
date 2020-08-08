@@ -24,7 +24,7 @@ namespace Arnible.MathModeling.Algebra
         itemsCount++;
         if (result == null)
         {
-          result = item.ToList();
+          result = item.GetInternalEnumerable().ToList();
         }
         else
         {

@@ -25,7 +25,7 @@ namespace Arnible.MathModeling.Export
       return o => o == null ? default : valueSerializer(property.GetValue(o));
     }
 
-    static string GetHeaderNameWithPrefix(string prefix, uint pos, string name) => $"{prefix}_{pos}_{name}";
+    static string GetHeaderNameWithPrefix(string prefix, uint pos, string name) => $"{prefix}_{pos.ToString()}_{name}";
 
     static object? GetIndexedPropertyValue(
       in PropertyInfo property, 

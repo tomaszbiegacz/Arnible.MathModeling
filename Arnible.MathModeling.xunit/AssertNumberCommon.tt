@@ -15,7 +15,7 @@ void Print_Equatable()
         throw new InvalidOperationException("Something went wrong.");
       }
 
-      Assert.True(expected.Equals(actual), $"{expected}\n\nis not equal to\n\n{actual}\n");
+      Assert.True(expected.Equals(actual), $"{expected.ToString()}\n\nis not equal to\n\n{actual.ToString()}\n");
     }
 
     public static void AreEqual(in double expected, in double actual)
@@ -30,12 +30,12 @@ void Print_Equatable()
 
     public static void AreEqual(in uint expected, in int actual)
     {
-      Assert.True(expected == actual, $"{expected}\n\nis not equal to\n\n{actual}\n");
+      Assert.True(expected == actual, $"{expected.ToString()}\n\nis not equal to\n\n{actual.ToString()}\n");
     }
 
     public static void AreEqual(in int expected, in uint actual)
     {
-      Assert.True(expected == actual, $"{expected}\n\nis not equal to\n\n{actual}\n");
+      Assert.True(expected == actual, $"{expected.ToString()}\n\nis not equal to\n\n{actual.ToString()}\n");
     }
 
     //
@@ -50,7 +50,7 @@ void Print_Equatable()
         throw new InvalidOperationException("Something went wrong.");
       }
       
-      Assert.False(expected.Equals(actual), $"{expected}\n\nis equal to\n\n{actual}\n");      
+      Assert.False(expected.Equals(actual), $"{expected.ToString()}\n\nis equal to\n\n{actual.ToString()}\n");      
     }
 
     public static void AreNotEqual(in double expected, in double actual)
@@ -128,7 +128,7 @@ void Print_AreExactlyEqual()
 
     public static void AreExactlyEqual(in double expected, in double actual)
     {
-      Assert.True(expected == actual, $"{expected} is not equal to {actual}\n");
+      Assert.True(expected == actual, $"{expected.ToString()} is not equal to {actual.ToString()}\n");
     }
 
     public static void AreExactlyEqual(in Number expected, in Number actual)
@@ -138,7 +138,7 @@ void Print_AreExactlyEqual()
 
     public static void AreExactlyNotEqual(in double expected, in double actual)
     {
-      Assert.False(expected == actual, $"{expected} is equal to {actual}\n");
+      Assert.False(expected == actual, $"{expected.ToString()} is equal to {actual.ToString()}\n");
     }    
 
     public static void AreExactlyNotEqual(in Number expected, in Number actual)
@@ -148,7 +148,7 @@ void Print_AreExactlyEqual()
 
     public static void IsExactlyZero(in double actual)
     {
-      Assert.True(0 == actual, $"{actual} is not zero");
+      Assert.True(0 == actual, $"{actual.ToString()} is not zero");
     }
 
     public static void IsExactlyZero(in Number actual)
@@ -246,37 +246,37 @@ void Print_Comparision(string typeName)
 
     public static void IsBetween(in <#= typeName #> lower, <#= typeName #> high, in <#= typeName #> value)
     {
-      Assert.True(lower <= value  && value <= high, $"{value} is not between {lower} and {high}");
+      Assert.True(lower <= value  && value <= high, $"{value.ToString()} is not between {lower.ToString()} and {high.ToString()}");
     }
 
     public static void IsGreaterThan(in <#= typeName #> baseline, in <#= typeName #> value)
     {
-      Assert.True(value > baseline, $"{value} is not greater than {baseline}");
+      Assert.True(value > baseline, $"{value.ToString()} is not greater than {baseline.ToString()}");
     }
 
     public static void IsGreaterEqualThan(in <#= typeName #> baseline, in <#= typeName #> value)
     {
-      Assert.True(value >= baseline, $"{value} is not greater or equal than {baseline}");
+      Assert.True(value >= baseline, $"{value.ToString()} is not greater or equal than {baseline.ToString()}");
     }
 
     public static void IsLowerThan(in <#= typeName #> baseline, in <#= typeName #> value)
     {
-      Assert.True(value < baseline, $"{value} is not lower than {baseline}");
+      Assert.True(value < baseline, $"{value.ToString()} is not lower than {baseline.ToString()}");
     }
 
     public static void IsLowerEqualThan(in <#= typeName #> baseline, in <#= typeName #> value)
     {
-      Assert.True(value <= baseline, $"{value} is not lower or equal than {baseline}");
+      Assert.True(value <= baseline, $"{value.ToString()} is not lower or equal than {baseline.ToString()}");
     }
 
     public static void IsNegative(in <#= typeName #> value)
     {
-      Assert.True(value < 0, $"{value} is not negative");
+      Assert.True(value < 0, $"{value.ToString()} is not negative");
     }
 
     public static void IsPositive(in <#= typeName #> value)
     {
-      Assert.True(value > 0, $"{value} is not positive");
+      Assert.True(value > 0, $"{value.ToString()} is not positive");
     }    
 
 <#+    

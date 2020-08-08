@@ -35,6 +35,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>LinqSum.tt</DependentUpon>
     </None>
+    <None Update="LinqAggregate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
   </ItemGroup>
 
   <ItemGroup>    
@@ -89,6 +92,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>LinqAverage.tt</DependentUpon>
+    </Compile>
+    <Compile Update="LinqProduct.tt.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LinqProduct.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

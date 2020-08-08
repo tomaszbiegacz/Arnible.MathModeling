@@ -160,7 +160,7 @@ namespace Arnible.MathModeling.Polynomials.Tests
     [Fact]
     public void Power_ByTwo()
     {
-      AreEquals(x * x + 2 * x + 1, (x + 1).ToPower(2));
+      AreEqual(x * x + 2 * x + 1, (x + 1).ToPower(2));
     }
 
     [Fact]

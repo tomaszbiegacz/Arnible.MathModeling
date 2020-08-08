@@ -47,7 +47,7 @@ namespace Arnible.MathModeling.Algebra
 
     public uint Length => _collection[_position].Length;
 
-    private IEnumerable<bool> GetEnumerable() => _collection[_position];
+    private IEnumerable<bool> GetEnumerable() => _collection[_position].GetInternalEnumerable();
 
     public IEnumerator<bool> GetEnumerator() => GetEnumerable().GetEnumerator();
 

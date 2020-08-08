@@ -1,6 +1,7 @@
 ﻿using System;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
+using static Arnible.MathModeling.xunit.AssertHelpers;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -24,7 +25,7 @@ namespace Arnible.MathModeling.Geometry.Test
 
       AreEqual(3u, hc.DimensionsCount);
       AreExactlyEqual(3d, hc.R);
-      AreEquals(new[] { 1, 0.5 }, hc.Angles);
+      AreEquals(new Number[] { 1, 0.5 }, hc.Angles);
     }
 
     [Fact]

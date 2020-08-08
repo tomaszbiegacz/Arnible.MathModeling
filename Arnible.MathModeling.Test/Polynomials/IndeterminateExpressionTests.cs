@@ -14,14 +14,20 @@ namespace Arnible.MathModeling.Polynomials.Tests
 
       IsTrue(v.IsOne);
       IsFalse(v.HasUnaryModifier);
-      Throws<InvalidOperationException>(() => (char)v);
+      Throws<InvalidOperationException>(() =>
+      {
+        var _ = (char) v;
+      });
 
       AreEqual("1", v.ToString());
       AreEqual(v, v.ToPower(2));
 
       AreExactlyEqual(1, v.GetOperation().Value());
 
-      Throws<InvalidOperationException>(() => v.DerivativeBy('a'));
+      Throws<InvalidOperationException>(() =>
+      {
+        var _ = v.DerivativeBy('a');
+      });
 
       AreExactlyEqual(12, v.SimplifyForConstant(12));
     }
@@ -50,7 +56,10 @@ namespace Arnible.MathModeling.Polynomials.Tests
       IndeterminateExpression v = IndeterminateExpression.Sin('v');
       IsFalse(v.IsOne);
       IsTrue(v.HasUnaryModifier);
-      Throws<InvalidOperationException>(() => (char)v);
+      Throws<InvalidOperationException>(() =>
+      {
+        var _ = (char) v;
+      });
 
       AreEqual("Sin(v)", v.ToString());
       AreEqual("Sin²(v)", v.ToPower(2).ToString());
@@ -70,7 +79,10 @@ namespace Arnible.MathModeling.Polynomials.Tests
       IndeterminateExpression v = IndeterminateExpression.Cos('v');
       IsFalse(v.IsOne);
       IsTrue(v.HasUnaryModifier);
-      Throws<InvalidOperationException>(() => (char)v);
+      Throws<InvalidOperationException>(() =>
+      {
+        var _ = (char) v;
+      });
 
       AreEqual("Cos(v)", v.ToString());
       AreEqual("Cos²(v)", v.ToPower(2).ToString());

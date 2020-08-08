@@ -76,13 +76,13 @@ namespace Arnible.MathModeling.Geometry
     }
 
     private readonly byte _rightAngleResolution;
-    private readonly ValueArray<sbyte> _angles;
+    private readonly IReadOnlyList<sbyte> _angles;
 
     private HypersphericalAngleQuantified(IEnumerable<sbyte> angles, byte rightAngleResolution, uint id)
     {
       Id = id;
       _rightAngleResolution = rightAngleResolution;
-      _angles = angles.ToValueArray();
+      _angles = angles.ToReadOnlyList();
       if (_angles.Where(a => a == rightAngleResolution).Count() > 1)
       {
         throw new ArgumentException(nameof(angles));
@@ -90,10 +90,10 @@ namespace Arnible.MathModeling.Geometry
       UsedCartesianDirectionsCount = GetUsedCartesianDirectionsCount(_angles, rightAngleResolution);
     }
 
-    private static byte GetUsedCartesianDirectionsCount(ValueArray<sbyte> angles, byte rightAngleResolution)
+    private static byte GetUsedCartesianDirectionsCount(IReadOnlyList<sbyte> angles, byte rightAngleResolution)
     {
       byte result = 0;
-      if (angles.Length > 0)
+      if (angles.Count > 0)
       {
         uint anglePos;
         uint? firstAnglePos = angles.IndexOf(a => a == rightAngleResolution);
@@ -148,7 +148,7 @@ namespace Arnible.MathModeling.Geometry
 
     public HypersphericalAngleVector ToAngleVector()
     {
-      if (_angles.Length > 0)
+      if (_angles.Count > 0)
       {
         Number step = Angle.RightAngle / _rightAngleResolution;
         return _angles.Select(v => v * step).ToAngleVector();

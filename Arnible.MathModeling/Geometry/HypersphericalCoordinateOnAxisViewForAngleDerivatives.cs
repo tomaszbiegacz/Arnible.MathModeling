@@ -21,11 +21,14 @@ namespace Arnible.MathModeling.Geometry
         throw new ArgumentException(nameof(pos));
       }
 
-      ValueArray<Number> angles = anglesVector.Concat(LinqEnumerable.Repeat<Number>(0, anglesCount - anglesVector.Length)).ToValueArray();
+      IReadOnlyCollection<Number> angles = anglesVector
+        .GetInternalEnumerable()
+        .Concat(LinqEnumerable.Repeat<Number>(0, anglesCount - anglesVector.Length))
+        .ToReadOnlyList();
 
       var cartesianDimensions = new List<Number>();
       Number replacement = r;
-      uint currentAnglePos = angles.Length;
+      uint currentAnglePos = (uint)angles.Count;
       foreach (var angle in angles.Reverse())
       {
         currentAnglePos--;
@@ -61,7 +64,7 @@ namespace Arnible.MathModeling.Geometry
       return cartesianDimensions.Concat(LinqEnumerable.Repeat<Number>(0, (uint)(cartesianDimensions.Count - anglesCount - 1))).ToValueArray();
     }
 
-    private ValueArray<Number> _angleDerivatives;
+    private readonly ValueArray<Number> _angleDerivatives;
 
     public HypersphericalCoordinateOnAxisViewForAngleDerivatives(
       in HypersphericalCoordinateOnAxisView view, 

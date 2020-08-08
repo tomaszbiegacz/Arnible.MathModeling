@@ -69,7 +69,7 @@ namespace Arnible.MathModeling.Geometry
 
     public override string ToString()
     {
-      return $"{{{R}, {Angles}}}";
+      return $"{{{R.ToString()}, {Angles.ToString()}}}";
     }
 
     //

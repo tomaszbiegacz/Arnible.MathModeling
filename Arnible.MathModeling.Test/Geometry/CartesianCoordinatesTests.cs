@@ -13,7 +13,7 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = rc;
 
       AreEqual(2u, cc.DimensionsCount);
-      AreEqual(2u, cc.Coordinates.Count());
+      AreEqual(2u, cc.Coordinates.Length);
       AreExactlyEqual(3, cc.Coordinates[0]);
       AreExactlyEqual(4, cc.Coordinates[1]);
     }
