@@ -150,21 +150,21 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void Sum_One()
     {
-      var arr = new NumberVector[] { new NumberVector(1, 2, 3) };
+      var arr = new[] { new NumberVector(1, 2, 3) };
       AreEqual(new NumberVector(1, 2, 3), arr.Sum());
     }
 
     [Fact]
     public void Sum_Two()
     {
-      var arr = new NumberVector[] { new NumberVector(1, 2, 3), new NumberVector(1, 3, 5) };
+      var arr = new[] { new NumberVector(1, 2, 3), new NumberVector(1, 3, 5) };
       AreEqual(new NumberVector(2, 5, 8), arr.Sum());
     }
 
     [Fact]
     public void Average_Two()
     {
-      var arr = new NumberVector[] { new NumberVector(1, 2, 3), new NumberVector(1, 3, 5) };
+      var arr = new[] { new NumberVector(1, 2, 3), new NumberVector(1, 3, 5) };
       AreEqual(new NumberVector(1, 2.5, 4), arr.Average());
     }
 

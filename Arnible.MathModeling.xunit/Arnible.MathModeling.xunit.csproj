@@ -28,6 +28,10 @@
     <None Update="AssertNumber.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AssertNumber.tt.cs</LastGenOutput>
+    </None>
+    <None Update="AssertNumberCommon.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AssertNumberCommon.tt.cs</LastGenOutput>
     </None>    
   </ItemGroup>
 
@@ -45,6 +49,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AssertNumber.tt</DependentUpon>
+    </Compile>
+    <Compile Update="AssertNumberCommon.tt.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssertNumberCommon.tt</DependentUpon>
     </Compile>    
   </ItemGroup>
 

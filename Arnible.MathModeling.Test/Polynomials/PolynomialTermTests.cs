@@ -1,5 +1,4 @@
 ﻿using System;
-using Arnible.MathModeling.xunit;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 using static Arnible.MathModeling.xunit.AssertHelpers;

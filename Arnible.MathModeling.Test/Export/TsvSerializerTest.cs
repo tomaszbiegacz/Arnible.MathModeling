@@ -1,6 +1,5 @@
 ﻿using Arnible.MathModeling.Algebra;
 using Arnible.MathModeling.Test.Export;
-using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;

@@ -74,7 +74,7 @@ void Print_Equatable()
       AreEqual(expectedArray.Count, actualArray.Count);
       for (int i = 0; i < expectedArray.Count; i++)
       {
-        AreEqual<T>(expectedArray[i], actualArray[i]);
+        AreEqual(expectedArray[i], actualArray[i]);
       }
     }
 
@@ -85,7 +85,7 @@ void Print_Equatable()
       AreEqual(expectedArray.Count, actualArray.Count);
       for (int i = 0; i < expectedArray.Count; i++)
       {
-        AreEquals<T>(expectedArray[i], actualArray[i]);
+        AreEquals(expectedArray[i], actualArray[i]);
       }
     }
 
@@ -128,7 +128,8 @@ void Print_AreExactlyEqual()
 
     public static void AreExactlyEqual(in double expected, in double actual)
     {
-      Assert.True(expected == actual, $"{expected.ToString()} is not equal to {actual.ToString()}\n");
+      // ReSharper disable once CompareOfFloatsByEqualityOperator
+      Assert.True(expected == actual, $"{expected.ToString(CultureInfo.CurrentCulture)} is not equal to {actual.ToString(CultureInfo.CurrentCulture)}\n");
     }
 
     public static void AreExactlyEqual(in Number expected, in Number actual)
@@ -138,7 +139,8 @@ void Print_AreExactlyEqual()
 
     public static void AreExactlyNotEqual(in double expected, in double actual)
     {
-      Assert.False(expected == actual, $"{expected.ToString()} is equal to {actual.ToString()}\n");
+      // ReSharper disable once CompareOfFloatsByEqualityOperator
+      Assert.False(expected == actual, $"{expected.ToString(CultureInfo.CurrentCulture)} is equal to {actual.ToString(CultureInfo.CurrentCulture)}\n");
     }    
 
     public static void AreExactlyNotEqual(in Number expected, in Number actual)
@@ -148,7 +150,8 @@ void Print_AreExactlyEqual()
 
     public static void IsExactlyZero(in double actual)
     {
-      Assert.True(0 == actual, $"{actual.ToString()} is not zero");
+      // ReSharper disable once CompareOfFloatsByEqualityOperator
+      Assert.True(0 == actual, $"{actual.ToString(CultureInfo.CurrentCulture)} is not zero");
     }
 
     public static void IsExactlyZero(in Number actual)
@@ -237,7 +240,7 @@ void Print_NumberExtension(string typeName)
 <#+    
 }
 
-void Print_Comparision(string typeName)
+void Print_Comparision(string typeName, bool canBeNegative)
 {    
 #>   
     //
@@ -267,19 +270,23 @@ void Print_Comparision(string typeName)
     public static void IsLowerEqualThan(in <#= typeName #> baseline, in <#= typeName #> value)
     {
       Assert.True(value <= baseline, $"{value.ToString()} is not lower or equal than {baseline.ToString()}");
-    }
-
-    public static void IsNegative(in <#= typeName #> value)
-    {
-      Assert.True(value < 0, $"{value.ToString()} is not negative");
-    }
+    }    
 
     public static void IsPositive(in <#= typeName #> value)
     {
       Assert.True(value > 0, $"{value.ToString()} is not positive");
     }    
 
-<#+    
+<#+
+    if (canBeNegative)
+    {
+#> 
+    public static void IsNegative(in <#= typeName #> value)
+    {
+      Assert.True(value < 0, $"{value.ToString()} is not negative");
+    }
+<#+     
+    }
 }
 
 void Print_Logical()
@@ -344,7 +351,7 @@ void PrintCommon()
     Print_Equatable();    
     foreach(string typeName in new[] {"int", "uint", "long", "ulong"})
     {
-        Print_Comparision(typeName);
+        Print_Comparision(typeName, canBeNegative: !typeName.StartsWith("u"));
         Print_IsZero(typeName);
     }
     Print_AreExactlyEqual();

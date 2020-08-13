@@ -6,8 +6,8 @@ namespace Arnible.MathModeling.Polynomials.Tests
 {
   public class PolynomialDivisionTests
   {
-    private readonly PolynomialTerm x = 'x';
-    private readonly PolynomialTerm y = 'y';
+    private readonly PolynomialTerm _x = 'x';
+    private readonly PolynomialTerm _y = 'y';
 
     [Fact]
     public void Constructor_Default()
@@ -73,7 +73,7 @@ namespace Arnible.MathModeling.Polynomials.Tests
     public void Constructor_Polynomial()
     {
       Polynomial constant = 1;
-      PolynomialDivision v = x / constant;
+      PolynomialDivision v = _x / constant;
       IsTrue(v.IsPolynomial);
       IsFalse(v.IsConstant);
       AreEqual("x", v.ToString());
@@ -82,7 +82,7 @@ namespace Arnible.MathModeling.Polynomials.Tests
     [Fact]
     public void Constructor_PolynomialDivision()
     {
-      PolynomialDivision v = x / y;
+      PolynomialDivision v = _x / _y;
       IsFalse(v == 0);
       IsFalse(v.IsPolynomial);
       IsFalse(v.IsConstant);
@@ -93,7 +93,7 @@ namespace Arnible.MathModeling.Polynomials.Tests
     [Fact]
     public void Equality_Equals()
     {
-      AreEqual(x / y, 'x' / (PolynomialTerm)'y');
+      AreEqual(_x / _y, 'x' / (PolynomialTerm)'y');
     }
 
     [Fact]
@@ -101,27 +101,27 @@ namespace Arnible.MathModeling.Polynomials.Tests
     {
       PolynomialTerm zero = 0;
 
-      IsExactlyZero((double)(zero / x));
-      AreEqual(zero / x, zero / y);
-      AreEqual(0 * (x / y), zero / y);
+      IsExactlyZero((double)(zero / _x));
+      AreEqual(zero / _x, zero / _y);
+      AreEqual(0 * (_x / _y), zero / _y);
     }
 
     [Fact]
     public void Equality_NumeratorNotEqual()
     {
-      AreNotEqual((x + 1) / y, x / y);
+      AreNotEqual((_x + 1) / _y, _x / _y);
     }
 
     [Fact]
     public void Equality_DenominatorNotEqual()
     {
-      AreNotEqual(x / (y + 1), x / y);
+      AreNotEqual(_x / (_y + 1), _x / _y);
     }
 
     [Fact]
     public void Value_Simple()
     {
-      var v = (x + 1) / (x - 3);
+      var v = (_x + 1) / (_x - 3);
       AreEqual(3, v.Value(new Dictionary<char, double>
       {
         { 'x', 5 }
@@ -131,196 +131,196 @@ namespace Arnible.MathModeling.Polynomials.Tests
     [Fact]
     public void Derivative_Simple()
     {
-      var expression = 1 + (y + x + 1) / (2 * x + 1);
-      AreEqual(-1 * (2 * y + 1) / (4 * x * x + 4 * x + 1), expression.DerivativeBy(x));
-      AreEqual(1 / (2 * x + 1), expression.DerivativeBy(y));
+      var expression = 1 + (_y + _x + 1) / (2 * _x + 1);
+      AreEqual(-1 * (2 * _y + 1) / (4 * _x * _x + 4 * _x + 1), expression.DerivativeBy(_x));
+      AreEqual(1 / (2 * _x + 1), expression.DerivativeBy(_y));
 
-      IsExactlyZero((double)expression.DerivativeBy(y).DerivativeBy(y));
+      IsExactlyZero((double)expression.DerivativeBy(_y).DerivativeBy(_y));
     }
 
     [Fact]
     public void Derivative2_Simple()
     {
-      var expression = (x * x * y) / (2 * x + 1);
-      AreEqual((2 * x * y * (x + 1)) / (4 * x * x + 4 * x + 1), expression.DerivativeBy('x'));
-      AreEqual((2 * y) / (8 * x * x * x + 12 * x * x + 6 * x + 1), expression.Derivative2By('x'));
+      var expression = (_x * _x * _y) / (2 * _x + 1);
+      AreEqual((2 * _x * _y * (_x + 1)) / (4 * _x * _x + 4 * _x + 1), expression.DerivativeBy('x'));
+      AreEqual((2 * _y) / (8 * _x * _x * _x + 12 * _x * _x + 6 * _x + 1), expression.Derivative2By('x'));
       IsExactlyZero((double)expression.Derivative2By('y'));
     }
 
     [Fact]
     public void Derivative2_NonZero()
     {
-      var denominator = (x + y - x * y);
-      var denominatorExpected = x * x * y * y - 2 * x * x * y - 2 * x * y * y + x * x + y * y + 2 * x * y;
+      var denominator = (_x + _y - _x * _y);
+      var denominatorExpected = _x * _x * _y * _y - 2 * _x * _x * _y - 2 * _x * _y * _y + _x * _x + _y * _y + 2 * _x * _y;
       AreEqual(denominatorExpected, denominator * denominator);
 
-      var expression = (x * y) / denominator;
-      AreEqual((y * y) / denominatorExpected, expression.DerivativeBy('x'));
+      var expression = (_x * _y) / denominator;
+      AreEqual((_y * _y) / denominatorExpected, expression.DerivativeBy('x'));
     }
 
     [Fact]
     public void Composition_Square()
     {
-      PolynomialDivision entry = (x + 1) / (x - 1);
-      AreEqual((y + 2) / y, entry.Composition((char)x, y + 1));
+      PolynomialDivision entry = (_x + 1) / (_x - 1);
+      AreEqual((_y + 2) / _y, entry.Composition((char)_x, _y + 1));
     }
 
     [Fact]
     public void Composition_Division()
     {
-      PolynomialDivision entry = x / (x + 1);
-      AreEqual(y / (x + y), entry.Composition(x, y / x));
+      PolynomialDivision entry = _x / (_x + 1);
+      AreEqual(_y / (_x + _y), entry.Composition(_x, _y / _x));
     }
 
     [Fact]
     public void Simplify_Polynomial_Division_x2_minus_1()
     {
-      var expression = (x * x - y * y) / (x - y);
-      AreEqual(x + y, (Polynomial)expression);
+      var expression = (_x * _x - _y * _y) / (_x - _y);
+      AreEqual(_x + _y, (Polynomial)expression);
     }
 
     [Fact]
     public void Simplify_Polynomial_Division_PolynomialDivision_Polynomial()
     {
-      var expression = x * x - y * y;
-      var polymialDivision = (x - y) / (x + 3);
-      AreEqual((x + 3) * (x + y), expression / polymialDivision);
+      var expression = _x * _x - _y * _y;
+      var polymialDivision = (_x - _y) / (_x + 3);
+      AreEqual((_x + 3) * (_x + _y), expression / polymialDivision);
     }
 
     [Fact]
     public void Simplify_Multiplication_x_plus_1()
     {
-      var expression = 1 / (x * x - 1);
-      AreEqual(1 / (x - 1), expression * (x + 1));
+      var expression = 1 / (_x * _x - 1);
+      AreEqual(1 / (_x - 1), expression * (_x + 1));
     }
 
     [Fact]
     public void Simplify_Division_x_plus_1()
     {
-      var expression = (x * x - 1) / (x + 3);
-      AreEqual((x - 1) / (x + 3), expression / (x + 1));
+      var expression = (_x * _x - 1) / (_x + 3);
+      AreEqual((_x - 1) / (_x + 3), expression / (_x + 1));
     }
 
     [Fact]
     public void Simplify_CommonTerm()
     {
-      var numerator = x * x;
-      var denominator = 2 * x - x * x;
-      AreEqual(x / (2 - x), numerator / denominator);
+      var numerator = _x * _x;
+      var denominator = 2 * _x - _x * _x;
+      AreEqual(_x / (2 - _x), numerator / denominator);
     }
 
     [Fact]
     public void Operator_Minus_Polynomial()
     {
-      AreEqual(x / (x + 1), 1 - 1 / (x + 1));
+      AreEqual(_x / (_x + 1), 1 - 1 / (_x + 1));
     }
 
     [Fact]
     public void Operator_Minus_Long()
     {
-      var a = x / (x - 2);
-      var b = 1 / (x + 2);
-      AreEqual((x * x + x + 2) / (x * x - 4), a - b);
+      var a = _x / (_x - 2);
+      var b = 1 / (_x + 2);
+      AreEqual((_x * _x + _x + 2) / (_x * _x - 4), a - b);
     }
 
     [Fact]
     public void Operator_Minus_Short()
     {
-      var a = x / (x - 2);
-      var b = 1 / (x - 2);
-      AreEqual((x - 1) / (x - 2), a - b);
+      var a = _x / (_x - 2);
+      var b = 1 / (_x - 2);
+      AreEqual((_x - 1) / (_x - 2), a - b);
     }
 
     [Fact]
     public void Operator_Multiply_Polynomial()
     {
-      AreEqual((1 - 2 * x + x * x) / (1 + x), (1 - x) / (1 + x) * (1 - x));
+      AreEqual((1 - 2 * _x + _x * _x) / (1 + _x), (1 - _x) / (1 + _x) * (1 - _x));
     }
 
     [Fact]
     public void Operator_Multiply_Long()
     {
-      var a = (x - 1) / (x - 2);
-      var b = (x + 1) / (x + 2);
-      AreEqual((x * x - 1) / (x * x - 4), a * b);
+      var a = (_x - 1) / (_x - 2);
+      var b = (_x + 1) / (_x + 2);
+      AreEqual((_x * _x - 1) / (_x * _x - 4), a * b);
     }
 
     [Fact]
     public void Operator_Divide_Polynomial()
     {
-      AreEqual(1 / (1 - x * x), 1 / (1 - x) / (1 + x));
+      AreEqual(1 / (1 - _x * _x), 1 / (1 - _x) / (1 + _x));
     }
 
     [Fact]
     public void Operator_Divide_Short()
     {
-      var a = (x - 1) / (2 * x + 3);
-      var b = (x - 2) / (2 * x + 3);
-      AreEqual((x - 1) / (x - 2), a / b);
+      var a = (_x - 1) / (2 * _x + 3);
+      var b = (_x - 2) / (2 * _x + 3);
+      AreEqual((_x - 1) / (_x - 2), a / b);
     }
 
     [Fact]
     public void Operator_Divide_Long()
     {
-      var a = (x - 1) / (x + 2);
-      var b = (x - 2) / (x + 1);
-      AreEqual((x * x - 1) / (x * x - 4), a / b);
+      var a = (_x - 1) / (_x + 2);
+      var b = (_x - 2) / (_x + 1);
+      AreEqual((_x * _x - 1) / (_x * _x - 4), a / b);
     }
 
     [Fact]
     public void ReduceBy()
     {
-      var numerator = (x - 1) * (x + 1);
-      var denominator = (x - 1) * (x + 2);
+      var numerator = (_x - 1) * (_x + 1);
+      var denominator = (_x - 1) * (_x + 2);
       var expr = numerator / denominator;
 
       // shortcommings of current library
-      AreEqual((x * x - 1) / (x * x + x - 2), expr);
+      AreEqual((_x * _x - 1) / (_x * _x + _x - 2), expr);
 
       // test
-      AreEqual((x + 1) / (x + 2), expr.ReduceBy(x - 1));
+      AreEqual((_x + 1) / (_x + 2), expr.ReduceBy(_x - 1));
     }
 
     [Fact]
     public void TryDivideBy_Positive()
     {
-      var numerator = x - 1;
-      var denominator = x + 2;
+      var numerator = _x - 1;
+      var denominator = _x + 2;
       var expr = numerator / denominator;
 
       // test
       PolynomialDivision result;
-      IsTrue(expr.TryDivideBy(x - 1, out result));
-      AreEqual(1 / (x + 2), result);
+      IsTrue(expr.TryDivideBy(_x - 1, out result));
+      AreEqual(1 / (_x + 2), result);
     }
 
     [Fact]
     public void TryDivideBy_Negative()
     {
-      var numerator = x - 1;
-      var denominator = x + 2;
+      var numerator = _x - 1;
+      var denominator = _x + 2;
       var expr = numerator / denominator + 1;
 
       // test
-      IsFalse(expr.TryDivideBy(x - 1, out _));
+      IsFalse(expr.TryDivideBy(_x - 1, out _));
     }
 
     [Fact]
     public void TryDivideBy_Polynomial()
     {
-      PolynomialDivision numerator = (x - 1) * (x + 2);
+      PolynomialDivision numerator = (_x - 1) * (_x + 2);
 
       // test
       PolynomialDivision result;
-      IsTrue(numerator.TryDivideBy(x - 1, out result));
-      AreEqual(x + 2, result);
+      IsTrue(numerator.TryDivideBy(_x - 1, out result));
+      AreEqual(_x + 2, result);
     }
 
     [Fact]
     public void Power_By_2()
     {
-      var expr = (x + 1) / (x - 3);
-      AreEqual((x * x + 2 * x + 1) / (x * x - 6 * x + 9), expr.ToPower(2));
+      var expr = (_x + 1) / (_x - 3);
+      AreEqual((_x * _x + 2 * _x + 1) / (_x * _x - 6 * _x + 9), expr.ToPower(2));
     }
   }
 }

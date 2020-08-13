@@ -6,18 +6,21 @@ using System.Threading.Tasks;
 
 namespace Arnible.MathModeling.Export
 {
+  public class TsvSerializerCommon
+  {
+    protected static readonly Encoding EncodingUtf8WithoutBom = new UTF8Encoding(false);
+    protected static readonly ReadOnlyMemory<char> Separator = new[] { TsvConst.SeparatorChar };
+    protected static readonly ReadOnlyMemory<char> NewLine = "\n".AsMemory();
+  }
+  
   /// <summary>
   /// TSV file that can be open in Excel
   /// </summary>
   /// <remarks>
   /// https://en.wikipedia.org/wiki/Tab-separated_values
   /// </remarks>
-  public class TsvSerializer<T> : IRecordSerializer<T> where T: struct
+  public class TsvSerializer<T> : TsvSerializerCommon, IRecordSerializer<T> where T: struct
   {
-    static readonly Encoding EncodingUtf8WithoutBom = new UTF8Encoding(false);
-    static readonly ReadOnlyMemory<char> Separator = new[] { TsvConst.SeparatorChar };
-    static readonly ReadOnlyMemory<char> NewLine = "\n".AsMemory();
-
     static TextWriter CreateTextWriter(in Stream output) => new StreamWriter(output, EncodingUtf8WithoutBom);
 
     public static RecordSerializerFileStream<T> ToTempFile() => RecordSerializerFileStream<T>.ToTempFile(new TsvSerializer<T>());

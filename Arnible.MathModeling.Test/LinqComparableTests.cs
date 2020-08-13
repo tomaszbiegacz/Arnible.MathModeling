@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 

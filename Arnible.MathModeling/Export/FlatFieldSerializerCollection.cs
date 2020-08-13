@@ -23,24 +23,24 @@ namespace Arnible.MathModeling.Export
       .Where(p => p.GetCustomAttributes<RecordSerializerIgnoreAttribute>().Count() == 0)
       .ToReadOnlyList();
 
-    protected readonly IEnumerable<FlatFieldSerializer> _fields;
+    protected readonly IEnumerable<FlatFieldSerializer> Fields;
 
     protected FlatFieldSerializerCollection(in Type type, in IEnumerable<FlatFieldSerializer> fields)
     {
       FieldsType = type;
-      _fields = fields.ToReadOnlyList();
+      Fields = fields.ToReadOnlyList();
     }
 
     public Type FieldsType { get; }
 
-    public IEnumerator<IFlatFieldSerializer> GetEnumerator() => _fields.GetEnumerator();
+    public IEnumerator<IFlatFieldSerializer> GetEnumerator() => Fields.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator() => _fields.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => Fields.GetEnumerator();
 
     public async Task SerializeHeader(TextWriter writer, ReadOnlyMemory<char> separator, CancellationToken cancellationToken)
     {
       bool useSeparator = false;
-      foreach (IFlatFieldSerializer field in _fields)
+      foreach (IFlatFieldSerializer field in Fields)
       {
         if (useSeparator)
         {
@@ -57,7 +57,7 @@ namespace Arnible.MathModeling.Export
       if(record != null)
       {
         bool useSeparator = false;
-        foreach (IFlatFieldSerializer field in _fields)
+        foreach (IFlatFieldSerializer field in Fields)
         {
           if (useSeparator)
           {

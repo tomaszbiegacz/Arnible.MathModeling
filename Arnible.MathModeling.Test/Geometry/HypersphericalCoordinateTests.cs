@@ -60,7 +60,7 @@ namespace Arnible.MathModeling.Geometry.Test
     private static void VerifyCartesianCoordinateAngle(HypersphericalCoordinate hc, CartesianCoordinate cc)
     {
       var cartesianCoordinatesAngles = hc.ToCartesianView().CartesianCoordinatesAngles().ToValueArray();
-      AreEqual((uint)cartesianCoordinatesAngles.Length, cc.DimensionsCount);
+      AreEqual(cartesianCoordinatesAngles.Length, cc.DimensionsCount);
 
       for (uint pos = 0; pos < cc.DimensionsCount; ++pos)
       {

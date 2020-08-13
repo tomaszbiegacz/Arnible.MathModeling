@@ -6,39 +6,39 @@ namespace Arnible.MathModeling.Test
 {
   public class NumberTests
   {
-    private static readonly Number a = Term.a;
+    private static readonly Number A = Term.a;
 
     [Fact]
     public void Equality()
     {
-      IsTrue(0 == a - a);
-      IsFalse(0 != a - a);
+      IsTrue(0 == A - A);
+      IsFalse(0 != A - A);
 
-      IsTrue(1 == a + 1 - a);
-      IsFalse(1 != a + 1 - a);
+      IsTrue(1 == A + 1 - A);
+      IsFalse(1 != A + 1 - A);
 
-      IsFalse(1 == a - a);
-      IsTrue(1 != a - a);      
+      IsFalse(1 == A - A);
+      IsTrue(1 != A - A);      
     }
 
     [Fact]
     public void Greater()
     {
-      IsFalse(0 > a + 1 - a);
-      IsTrue(0 < a + 1 - a);
+      IsFalse(0 > A + 1 - A);
+      IsTrue(0 < A + 1 - A);
 
-      IsTrue(2 > a + 1 - a);
-      IsFalse(2 < a + 1 - a);
+      IsTrue(2 > A + 1 - A);
+      IsFalse(2 < A + 1 - A);
 
-      IsFalse(2 * a > a);
-      IsFalse(2 * a < a);
-      IsFalse(2 * a >= a);
-      IsFalse(2 * a <= a);
+      IsFalse(2 * A > A);
+      IsFalse(2 * A < A);
+      IsFalse(2 * A >= A);
+      IsFalse(2 * A <= A);
 
-      IsFalse(a > Term.a);
-      IsFalse(a < Term.a);
-      IsTrue(a <= Term.a);
-      IsTrue(a >= Term.a);
+      IsFalse(A > Term.a);
+      IsFalse(A < Term.a);
+      IsTrue(A <= Term.a);
+      IsTrue(A >= Term.a);
     }
   }
 }

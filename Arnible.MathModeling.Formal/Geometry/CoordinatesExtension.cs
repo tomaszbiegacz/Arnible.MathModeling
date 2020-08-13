@@ -1,5 +1,4 @@
-﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Polynomials;
+﻿using Arnible.MathModeling.Polynomials;
 using System;
 using static Arnible.MathModeling.Polynomials.MetaMath;
 

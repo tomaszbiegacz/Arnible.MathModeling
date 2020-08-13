@@ -3,7 +3,7 @@ using static Arnible.MathModeling.MetaMath;
 
 namespace Arnible.MathModeling.Test
 {
-  public struct SquareError : IBinaryOperation<Number>
+  public class SquareError : IBinaryOperation<Number>
   {    
     public Number Value(in Number x, in Number y)
     {

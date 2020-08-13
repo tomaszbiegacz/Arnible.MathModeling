@@ -1,5 +1,8 @@
-﻿namespace Arnible.MathModeling.Polynomials
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Arnible.MathModeling.Polynomials
 {
+  [SuppressMessage("ReSharper", "InconsistentNaming")]
   public static class Term
   {
     public static readonly PolynomialTerm a = 'a';

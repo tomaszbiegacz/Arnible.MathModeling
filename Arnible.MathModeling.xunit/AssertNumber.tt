@@ -3,6 +3,7 @@
 <#@ output extension=".tt.cs" #>
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Xunit;
 
 namespace Arnible.MathModeling.xunit
@@ -12,7 +13,7 @@ namespace Arnible.MathModeling.xunit
 <#
 		PrintCommon();
 
-        Print_Comparision("Number");
+        Print_Comparision("Number", canBeNegative: true);
         Print_NumberExtension("double");
 #>
   }

@@ -6,8 +6,8 @@ using System.Text;
 
 namespace Arnible.MathModeling.Polynomials
 {
-  public readonly struct Polynomial : 
-    IEquatable<PolynomialDivision>, 
+  public readonly struct Polynomial :
+    IEquatable<PolynomialDivision>,
     IEquatable<Polynomial>,
     IEnumerable<PolynomialTerm>,
     IPolynomialOperation
@@ -28,19 +28,19 @@ namespace Arnible.MathModeling.Polynomials
 
     private Polynomial(double v)
     {
-      if (v == 0)
+      if (v.NumericEquals(0))
       {
         _terms = default;
       }
       else
       {
-        _terms = new PolynomialTerm[] { v };
+        _terms = new PolynomialTerm[] {v};
       }
     }
 
     private Polynomial(char v)
     {
-      _terms = new PolynomialTerm[] { v };
+      _terms = new PolynomialTerm[] {v};
     }
 
     private static Polynomial CreateSimplified(IEnumerable<PolynomialTerm> terms)
@@ -56,8 +56,8 @@ namespace Arnible.MathModeling.Polynomials
     {
       if (IsConstant && other.IsConstant)
       {
-        double a = (double)this;
-        double b = (double)other;
+        double a = (double) this;
+        double b = (double) other;
         return a.NumericEquals(b);
       }
 
@@ -73,12 +73,12 @@ namespace Arnible.MathModeling.Polynomials
       }
       else
       {
-        double comparisionResult = (double)result;
+        double comparisionResult = (double) result;
         return comparisionResult.NumericEquals(0);
       }
     }
 
-    public bool Equals(PolynomialDivision other) => other.IsPolynomial ? Equals((Polynomial)other) : false;
+    public bool Equals(PolynomialDivision other) => other.IsPolynomial ? Equals((Polynomial) other) : false;
 
     public override int GetHashCode()
     {
@@ -87,6 +87,7 @@ namespace Arnible.MathModeling.Polynomials
       {
         result ^= v.GetHashCode();
       }
+
       return result;
     }
 
@@ -122,10 +123,12 @@ namespace Arnible.MathModeling.Polynomials
           {
             result.Append("+");
           }
+
           result.Append(variable.ToString(cultureInfo));
 
           printOperator = true;
         }
+
         return result.ToString();
       }
     }
@@ -142,10 +145,7 @@ namespace Arnible.MathModeling.Polynomials
 
     public bool IsSingleTerm
     {
-      get
-      {
-        return _terms.Length <= 1;
-      }
+      get { return _terms.Length <= 1; }
     }
 
     public bool IsConstant
@@ -167,7 +167,8 @@ namespace Arnible.MathModeling.Polynomials
 
     internal IDictionary<char, uint> GetIdentityVariableTerms()
     {
-      return _terms.Select(t => t.GetIdentityVariableTerms()).AggregateCommonBy(v => v.Variable, vc => vc.Select(v => v.Power).MinDefensive());
+      return _terms.Select(t => t.GetIdentityVariableTerms())
+        .AggregateCommonBy(v => v.Variable, vc => vc.Select(v => v.Power).MinDefensive());
     }
 
     /*
@@ -176,7 +177,7 @@ namespace Arnible.MathModeling.Polynomials
 
     public static explicit operator PolynomialTerm(Polynomial v) => v.GetInternalEnumerable().SingleOrDefault();
 
-    public static explicit operator double(Polynomial v) => (double)v.GetInternalEnumerable().SingleOrDefault();
+    public static explicit operator double(Polynomial v) => (double) v.GetInternalEnumerable().SingleOrDefault();
 
     // +
 
@@ -281,15 +282,15 @@ namespace Arnible.MathModeling.Polynomials
         case 1:
           return this;
         default:
-          {
-            uint power2 = power / 2;
-            var power2Item = ToPower(power2);
-            var power2Item2 = power2Item * power2Item;
-            if (power % 2 == 0)
-              return power2Item2;
-            else
-              return power2Item2 * this;
-          }
+        {
+          uint power2 = power / 2;
+          var power2Item = ToPower(power2);
+          var power2Item2 = power2Item * power2Item;
+          if (power % 2 == 0)
+            return power2Item2;
+          else
+            return power2Item2 * this;
+        }
       }
     }
 
@@ -338,8 +339,9 @@ namespace Arnible.MathModeling.Polynomials
       if (b.IsConstant)
       {
         reminder = default;
-        return this / (double)b;
+        return this / (double) b;
       }
+
       if (_terms.Length == 0)
       {
         reminder = default;
@@ -347,10 +349,11 @@ namespace Arnible.MathModeling.Polynomials
       }
 
       PolynomialTerm denominator = b.GetInternalEnumerable().First();
-      Polynomial denominatorSuffix = new Polynomial(b.GetInternalEnumerable().SkipExactly(1).ToValueArray());        // no need for simplification
+      Polynomial denominatorSuffix =
+        new Polynomial(b.GetInternalEnumerable().SkipExactly(1).ToValueArray()); // no need for simplification
       var resultTerms = new List<PolynomialTerm>();
       reminder = TryReduce(this, denominator, denominatorSuffix, resultTerms);
-      return new Polynomial(resultTerms.ToValueArray());                                           // no need for simplification
+      return new Polynomial(resultTerms.ToValueArray()); // no need for simplification
     }
 
     public bool TryDivideBy(Polynomial b, out Polynomial result)
@@ -366,6 +369,7 @@ namespace Arnible.MathModeling.Polynomials
       {
         throw new InvalidOperationException($"Cannot divide [{this}] by [{b}].");
       }
+
       return result;
     }
 
@@ -378,7 +382,7 @@ namespace Arnible.MathModeling.Polynomials
       return CreateSimplified(GetInternalEnumerable().SelectMany(v => v.DerivativeBy(name)));
     }
 
-    public Polynomial DerivativeBy(PolynomialTerm name) => DerivativeBy((char)name);
+    public Polynomial DerivativeBy(PolynomialTerm name) => DerivativeBy((char) name);
 
     /*
      * Composition
@@ -386,7 +390,6 @@ namespace Arnible.MathModeling.Polynomials
 
     private IEnumerable<PolynomialTerm> CompositionIngredients(char variable, Polynomial replacement)
     {
-      List<PolynomialTerm> remaining = new List<PolynomialTerm>();
       foreach (PolynomialTerm term in _terms)
       {
         if (term.Variables.Any(v => v == variable))
@@ -446,9 +449,11 @@ namespace Arnible.MathModeling.Polynomials
       return result;
     }
 
-    public Polynomial Composition(PolynomialTerm variable, Polynomial replacement) => Composition((char)variable, replacement);
+    public Polynomial Composition(PolynomialTerm variable, Polynomial replacement) =>
+      Composition((char) variable, replacement);
 
-    public PolynomialDivision Composition(PolynomialTerm variable, PolynomialDivision replacement) => Composition((char)variable, replacement);
+    public PolynomialDivision Composition(PolynomialTerm variable, PolynomialDivision replacement) =>
+      Composition((char) variable, replacement);
 
     /*
      * IPolynomialOperation

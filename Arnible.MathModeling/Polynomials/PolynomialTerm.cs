@@ -106,9 +106,9 @@ namespace Arnible.MathModeling.Polynomials
     {
       if (IsConstant)
         return _coefficient.ToString(cultureInfo);
-      if (_coefficient == 1)
+      if (_coefficient.NumericEquals(1))
         return IndeterminatesSignature;
-      if (_coefficient == -1)
+      if (_coefficient.NumericEquals(-1))
         return $"-{IndeterminatesSignature}";
       else
         return $"{_coefficient.ToString(cultureInfo)}{IndeterminatesSignature}";
@@ -177,7 +177,7 @@ namespace Arnible.MathModeling.Polynomials
 
     public static explicit operator char(PolynomialTerm v)
     {
-      if (v._coefficient == 1 && v._indeterminates.Length == 1)
+      if (v._coefficient.NumericEquals(1) && v._indeterminates.Length == 1)
       {
         return (char)v._indeterminates[0];
       }
@@ -219,7 +219,7 @@ namespace Arnible.MathModeling.Polynomials
     public static PolynomialTerm operator *(PolynomialTerm a, PolynomialTerm b)
     {
       double coefficient = a._coefficient * b._coefficient;
-      if (coefficient == 0)
+      if (coefficient.NumericEquals(0))
       {
         return 0;
       }
@@ -242,7 +242,7 @@ namespace Arnible.MathModeling.Polynomials
     public static PolynomialTerm operator *(double a, PolynomialTerm b)
     {
       double coefficient = a * b._coefficient;
-      if (coefficient == 0)
+      if (coefficient.NumericEquals(0))
       {
         return 0;
       }
@@ -255,7 +255,7 @@ namespace Arnible.MathModeling.Polynomials
     public static PolynomialTerm operator *(PolynomialTerm a, double b)
     {
       double coefficient = a._coefficient * b;
-      if (coefficient == 0)
+      if (coefficient.NumericEquals(0))
       {
         return 0;
       }
@@ -273,7 +273,7 @@ namespace Arnible.MathModeling.Polynomials
       {
         throw new ArgumentOutOfRangeException($"Denominator is not valid: {denominator}");
       }
-      if (denominator == 0)
+      if (denominator.NumericEquals(0))
       {
         throw new DivideByZeroException();
       }
@@ -553,7 +553,7 @@ namespace Arnible.MathModeling.Polynomials
 
     public double Value(IReadOnlyDictionary<char, double> x)
     {
-      if (_coefficient == 0)
+      if (_coefficient.NumericEquals(0))
       {
         return 0;
       }

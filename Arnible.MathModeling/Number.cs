@@ -160,7 +160,7 @@ namespace Arnible.MathModeling
 
     public int CompareTo(Number other)
     {
-      if (_value == other._value) return 0;
+      if (_value.NumericEquals(other._value)) return 0;
       return _value > other._value ? 1 : -1;
     }
   }

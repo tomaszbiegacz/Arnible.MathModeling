@@ -39,8 +39,9 @@ namespace Arnible.MathModeling.Algebra
         return byLength;
       }
 
-      for (uint i = Values.Length - 1; i >= 0; --i)
+      for (uint iPos = 0; iPos < Values.Length; iPos++)
       {
+        uint i = Values.Length - 1 - iPos;
         int byValue = Values[i].CompareTo(other.Values[i]);
         if (byValue != 0)
         {

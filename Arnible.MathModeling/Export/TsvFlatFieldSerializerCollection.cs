@@ -92,7 +92,7 @@ namespace Arnible.MathModeling.Export
     static IEnumerable<FlatFieldSerializer> ResolveStructureProperties(PropertyInfo property)
     {
       TsvFlatFieldSerializerCollection structureSerializer = GetStructureSerializer(property.PropertyType);
-      foreach (FlatFieldSerializer field in structureSerializer._fields)
+      foreach (FlatFieldSerializer field in structureSerializer.Fields)
       {
         yield return field.ForProperty(property);
       }
@@ -115,7 +115,7 @@ namespace Arnible.MathModeling.Export
 
       for (uint i = 0; i < fixedArray.Size; ++i)
       {
-        foreach (FlatFieldSerializer field in structureSerializer._fields)
+        foreach (FlatFieldSerializer field in structureSerializer.Fields)
         {
           yield return field.ForIndexedProperty(property, i);
         }
