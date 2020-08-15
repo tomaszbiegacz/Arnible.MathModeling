@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Arnible.MathModeling.Export
+﻿namespace Arnible.MathModeling.Export
 {
   public static class IMathModelingLoggerExtensions
   {
@@ -13,20 +9,6 @@ namespace Arnible.MathModeling.Export
       RecordSerializerFileStream<T> result = TsvSerializer<T>.ToTempFile();
       logger.Log($"Notepad {name}: {result.Destination}");
       return result;
-    }
-
-    public static async Task LogDataSet<T>(
-      this IMathModelingLogger logger,
-      string name, 
-      IEnumerable<T> records,
-      CancellationToken cancellationToken) where T : struct
-    {
-      await using RecordSerializerFileStream<T> result = TsvSerializer<T>.ToTempFile();
-      logger.Log($"Data set {name}: {result.Destination}");
-      foreach (T record in records)
-      {
-        await result.Serialize(record, cancellationToken);
-      }
     }
   }
 }

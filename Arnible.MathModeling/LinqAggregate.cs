@@ -149,18 +149,6 @@ namespace Arnible.MathModeling
     public static IEnumerable<TResult> Zip<T, TResult>(
       this IEnumerable<T> col1,
       IEnumerable<T> col2,
-      Func<T, T, TResult> merge) where T : class
-    {
-      return System.Linq.Enumerable.Zip(col1, col2, merge);
-    }
-
-    /// <summary>
-    /// Applies a specified function to the corresponding elements of two sequences,
-    /// producing a sequence of the results.
-    /// </summary>
-    public static IEnumerable<TResult> Zip<T, TResult>(
-      this IEnumerable<T> col1,
-      IEnumerable<T> col2,
       Func<T?, T?, TResult> merge) where T : struct
     {
       using (var col1Enum = col1.GetEnumerator())

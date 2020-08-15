@@ -7,9 +7,7 @@
     public Number GetValidTranslationRatio(in Number value, in Number delta) => 1;
 
     public bool IsValid(in Number value) => true;    
-
-    public bool IsValidTranslation(in Number value, in Number delta) => true;
-
+    
     public Number Translate(in Number value, in Number delta) => value + delta;    
 
     public Number GetValidTranslationRatioForLastAngle(in Number radius, in Number currentAngle, in Number angleDelta) => angleDelta;

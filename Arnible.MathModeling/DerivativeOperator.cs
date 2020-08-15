@@ -46,12 +46,7 @@ namespace Arnible.MathModeling
         first: args.Select(d => d.First).ProductDefensive(),
         second: args.Indexes().Select(pos => Derivative2Ingredient(args, pos)).SumDefensive());
     }
-
-    /// <summary>
-    /// Calculates up to second derivatives composition.
-    /// </summary>    
-    public static Derivative2Value ForComposition(params Derivative2Value[] args) => args.ForComposition();
-
+    
     /// <summary>
     /// Calculates first derivatives composition.
     /// </summary>    

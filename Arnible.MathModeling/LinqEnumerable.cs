@@ -20,11 +20,6 @@ namespace Arnible.MathModeling
       return System.Linq.Enumerable.FirstOrDefault(source);
     }
 
-    public static T Last<T>(this IEnumerable<T> source)
-    {
-      return System.Linq.Enumerable.Last(source);
-    }
-
     /// <summary>
     /// Returns the only element of a sequence
     /// and throws an exception if there is not exactly one item in sequence.
@@ -230,17 +225,6 @@ namespace Arnible.MathModeling
           yield return item;
         }
         i++;
-      }
-    }
-
-    /// <summary>
-    /// Type safe casting
-    /// </summary>
-    public static IEnumerable<TResult> Cast<TSource, TResult>(this IEnumerable<TSource> source) where TSource : TResult
-    {
-      foreach (TSource item in source)
-      {
-        yield return item;
       }
     }
 

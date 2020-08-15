@@ -9,7 +9,7 @@ namespace Arnible.MathModeling
 
     public UnmanagedArray(params T[] items)
     {
-      _items = items ?? new T[0];
+      _items = items;
     }
 
     public T this[in uint index] => _items[index];
