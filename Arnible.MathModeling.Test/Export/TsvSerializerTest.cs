@@ -1,6 +1,4 @@
-﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Test.Export;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -26,14 +24,17 @@ namespace Arnible.MathModeling.Export.Test
         StringValue = "value",
         DoubleValue = 1.1,
         NumberValue = 1.2,
-        NumberVectorValue = new NumberVector(1, 2)
+        NumberArray = new Number[] { 1.3, 1.4 }
       };
 
       string result;
-      var serializer = new TsvSerializer<TestRecord>();
       await using (MemoryStream stream = new MemoryStream())
       {
-        await serializer.Serialize(new[] { record }, stream, default);
+        var streamWriter = new TsvStreamWriter(stream);
+        var serializer = TestRecord.CreateSerializer(streamWriter.FieldSerializer);
+
+        serializer.Write(in record);
+        await streamWriter.Flush();
 
         stream.Position = 0;
         var bytes = stream.ToArray();
@@ -42,8 +43,12 @@ namespace Arnible.MathModeling.Export.Test
 
       string[] lines = result.Split('\n');
       AreEqual(3, lines.Length);
-      AreEquals(new[] { "ByteValue", "SbyteValue", "UShortValue", "ShortValue", "UIntValue", "IntValue", "ULongValue", "LongValue", "StringValue", "DoubleValue", "NumberValue", "NumberVectorValue" }, lines[0].Split('\t'));
-      AreEqual("1\t-1\t2\t-2\t3\t-3\t4\t-4\tvalue\t1.1\t1.2\t[1 2]", lines[1]);
+      AreEquals(new[]
+      {
+        "ByteValue", "SbyteValue", "UShortValue", "ShortValue", "UIntValue", "IntValue", "ULongValue", "LongValue", 
+        "StringValue", "DoubleValue", "NumberValue", "NumberArray_0", "NumberArray_1"
+      }, lines[0].Split('\t'));
+      AreEqual("1\t-1\t2\t-2\t3\t-3\t4\t-4\tvalue\t1.1\t1.2\t1.3\t1.4", lines[1]);
       IsEmpty(lines[2]);
     }
 
@@ -59,10 +64,13 @@ namespace Arnible.MathModeling.Export.Test
       };
 
       string result;
-      var serializer = new TsvSerializer<TestComplexRecord>();
       await using (MemoryStream stream = new MemoryStream())
       {
-        await serializer.Serialize(new[] { record }, stream, default);
+        var streamWriter = new TsvStreamWriter(stream);
+        var serializer = TestComplexRecord.CreateSerializer(streamWriter.FieldSerializer);
+
+        serializer.Write(in record);
+        await streamWriter.Flush();
 
         stream.Position = 0;
         var bytes = stream.ToArray();
@@ -82,17 +90,24 @@ namespace Arnible.MathModeling.Export.Test
       var record = new TestRecordArray
       {
         Records = new[] {
-          null,
           new NullableSubRecord(),
-          null
+          new NullableSubRecord
+          {
+            NotPresentValue = 1,
+            NotPresentOther = 5
+          }
+          
         }
       };
 
       string result;
-      var serializer = new TsvSerializer<TestRecordArray>();
       await using (MemoryStream stream = new MemoryStream())
       {
-        await serializer.Serialize(new[] { record }, stream, default);
+        var streamWriter = new TsvStreamWriter(stream);
+        var serializer = TestRecordArray.CreateSerializer(streamWriter.FieldSerializer);
+
+        serializer.Write(in record);
+        await streamWriter.Flush();
 
         stream.Position = 0;
         var bytes = stream.ToArray();
@@ -101,40 +116,11 @@ namespace Arnible.MathModeling.Export.Test
       
       string[] lines = result.Split('\n');
       AreEqual(3, lines.Length);
-      AreEquals(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
-      AreEqual("\t\t2\t3\t\t", lines[1]);
+      AreEquals(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther" }, lines[0].Split('\t'));
+      AreEqual("2\t3\t1\t5", lines[1]);
       IsEmpty(lines[2]);
     }
-
-    [Fact]
-    public async Task ArraySerialization_Underscaled()
-    {
-      var record = new TestRecordArray
-      {
-        Records = new[] {
-          null,
-          new NullableSubRecord()
-        }
-      };
-
-      string result;
-      var serializer = new TsvSerializer<TestRecordArray>();
-      await using (MemoryStream stream = new MemoryStream())
-      {
-        await serializer.Serialize(new[] { record }, stream, default);
-
-        stream.Position = 0;
-        var bytes = stream.ToArray();
-        result = Encoding.UTF8.GetString(bytes);
-      }
-
-      string[] lines = result.Split('\n');
-      AreEqual(3, lines.Length);
-      AreEquals(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
-      AreEqual("\t\t2\t3\t\t", lines[1]);
-      IsEmpty(lines[2]);
-    }
-
+    
     [Fact]
     public async Task ArraySerialization_Empty()
     {
@@ -144,10 +130,13 @@ namespace Arnible.MathModeling.Export.Test
       };
 
       string result;
-      var serializer = new TsvSerializer<TestRecordArray>();
       await using (MemoryStream stream = new MemoryStream())
       {
-        await serializer.Serialize(new[] { record }, stream, default);
+        var streamWriter = new TsvStreamWriter(stream);
+        var serializer = TestRecordArray.CreateSerializer(streamWriter.FieldSerializer);
+
+        serializer.Write(in record);
+        await streamWriter.Flush();
 
         stream.Position = 0;
         var bytes = stream.ToArray();
@@ -156,60 +145,9 @@ namespace Arnible.MathModeling.Export.Test
 
       string[] lines = result.Split('\n');
       AreEqual(3, lines.Length);
-      AreEquals(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther", "Records_2_NotPresentValue", "Records_2_NotPresentOther" }, lines[0].Split('\t'));
-      AreEqual("\t\t\t\t\t", lines[1]);
+      IsEmpty(lines[0]);
+      IsEmpty(lines[1]);
       IsEmpty(lines[2]);
-    }
-
-    [Fact]
-    public async Task GenericSerializer()
-    {
-      var serializerNumber = new TsvSerializer<TestGenericRecord<Number>>();
-      var serializerVector = new TsvSerializer<TestGenericRecord<NumberVector>>();
-
-      var recordNumber = new TestGenericRecord<Number>
-      {
-        Output = 1,
-        Error = 2,
-        ErrorVector = new NumberVector(1, 2),
-        SubOutput = new TestGenericSubRecord<Number>(5)
-      };
-      await using (MemoryStream stream = new MemoryStream())
-      {
-        await serializerNumber.Serialize(new[] { recordNumber }, stream, default);
-
-        stream.Position = 0;
-        var bytes = stream.ToArray();
-        string result = Encoding.UTF8.GetString(bytes);
-
-        string[] lines = result.Split('\n');
-        AreEqual(3, lines.Length);
-        AreEquals(new[] { "Output", "Error", "ErrorVector", "SubOutput_Property" }, lines[0].Split('\t'));
-        AreEqual("1\t2\t[1 2]\t5", lines[1]);
-        IsEmpty(lines[2]);
-      }
-
-      var recordVector = new TestGenericRecord<NumberVector>
-      {
-        Output = new NumberVector(1, 2),
-        Error = 2,
-        ErrorVector = new NumberVector(1, 2),
-        SubOutput = new TestGenericSubRecord<NumberVector>(new NumberVector(3, 5))
-      };
-      await using (MemoryStream stream = new MemoryStream())
-      {
-        await serializerVector.Serialize(new[] { recordVector }, stream, default);
-
-        stream.Position = 0;
-        var bytes = stream.ToArray();
-        string result = Encoding.UTF8.GetString(bytes);
-
-        string[] lines = result.Split('\n');
-        AreEqual(3, lines.Length);
-        AreEquals(new[] { "Output", "Error", "ErrorVector", "SubOutput_Property" }, lines[0].Split('\t'));
-        AreEqual("[1 2]\t2\t[1 2]\t[3 5]", lines[1]);
-        IsEmpty(lines[2]);
-      }
     }
   }
 }

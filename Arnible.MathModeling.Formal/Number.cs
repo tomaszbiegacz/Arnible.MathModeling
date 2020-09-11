@@ -5,7 +5,10 @@ using System.Globalization;
 
 namespace Arnible.MathModeling
 {
-  public readonly struct Number : IEquatable<Number>, IComparable<Number>
+  public readonly struct Number : 
+    IEquatable<Number>, 
+    IComparable<Number>, 
+    IValueObject
   {
     private readonly PolynomialDivision _value;
 
@@ -51,13 +54,14 @@ namespace Arnible.MathModeling
     {
       return _value.GetHashCode();
     }
-
-    public override string ToString() => ToString(CultureInfo.InvariantCulture);
+    public int GetHashCodeValue() => GetHashCode();
 
     public string ToString(CultureInfo cultureInfo)
     {
       return _value.ToString(cultureInfo);
     }
+    public override string ToString() => ToString(CultureInfo.InvariantCulture);
+    public string ToStringValue() => ToString();
 
     //
     // Operators

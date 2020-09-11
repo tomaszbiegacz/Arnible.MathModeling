@@ -3,7 +3,7 @@ using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling
 {
-  public readonly struct ValueWithDerivative1 : IDerivative1
+  public readonly struct ValueWithDerivative1 : IDerivative1, IValueObject
   {
     public ValueWithDerivative1(in Number value, in Number first)
     {
@@ -17,6 +17,13 @@ namespace Arnible.MathModeling
     {
       return $"[{First.ToString()}]";
     }
+    public string ToStringValue() => ToString();
+
+    public override int GetHashCode()
+    {
+      return First.GetHashCode();
+    }
+    public int GetHashCodeValue() => GetHashCode();
 
     //
     // Properties

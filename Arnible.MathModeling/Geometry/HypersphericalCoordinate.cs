@@ -8,7 +8,11 @@ namespace Arnible.MathModeling.Geometry
     HypersphericalAngleVector Angles { get; }
   }
 
-  public readonly struct HypersphericalCoordinate : IEquatable<HypersphericalCoordinate>, IHypersphericalCoordinate, ICoordinate<HypersphericalCoordinate>
+  public readonly struct HypersphericalCoordinate : 
+    IEquatable<HypersphericalCoordinate>, 
+    IHypersphericalCoordinate, 
+    ICoordinate<HypersphericalCoordinate>,
+    IValueObject
   {
     /// <summary>
     /// Angles:
@@ -66,11 +70,13 @@ namespace Arnible.MathModeling.Geometry
     {
       return R.GetHashCode() ^ Angles.GetHashCode();
     }
+    public int GetHashCodeValue() => GetHashCode();
 
     public override string ToString()
     {
       return $"{{{R.ToString()}, {Angles.ToString()}}}";
     }
+    public string ToStringValue() => ToString();
 
     //
     // Properties

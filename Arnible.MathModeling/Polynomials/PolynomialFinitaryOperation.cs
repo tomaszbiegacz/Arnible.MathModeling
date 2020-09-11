@@ -6,7 +6,7 @@ namespace Arnible.MathModeling.Polynomials
   class PolynomialFinitaryOperation : IFinitaryOperation<double>
   {
     private readonly Func<IReadOnlyDictionary<char, double>, double> _valueCalculation;
-    private readonly IUnmanagedArray<char> _variables;
+    private readonly UnmanagedArray<char> _variables;
 
     public PolynomialFinitaryOperation(
       in IEnumerable<char> variables,

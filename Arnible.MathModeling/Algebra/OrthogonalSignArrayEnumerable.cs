@@ -6,21 +6,27 @@ namespace Arnible.MathModeling.Algebra
 {
   public class OrthogonalSignArrayEnumerable : IUnmanagedArrayEnumerable<Sign>
   {
-    static ConcurrentDictionary<uint, ValueArray<ValueArray<sbyte>>> _collections = new ConcurrentDictionary<uint, ValueArray<ValueArray<sbyte>>>();
+    static readonly ConcurrentDictionary<uint, IReadOnlyList<IReadOnlyList<sbyte>>> _collections = new ConcurrentDictionary<uint, IReadOnlyList<IReadOnlyList<sbyte>>>();
 
-    private static ValueArray<ValueArray<sbyte>> BuildOrthogonalSignCollection(uint length)
+    private static IReadOnlyList<IReadOnlyList<sbyte>> BuildOrthogonalSignCollection(uint length)
     {
       var values = new[] { (sbyte)Sign.Negative, (sbyte)Sign.None, (sbyte)Sign.Positive };
-      return values.ToSequncesWithReturning(length).Select(s => new SignArray(s)).Where(s => s.IsOrthogonal).Order().Select(s => s.Values).ToValueArray();
+      return values
+        .ToSequncesWithReturning(length)
+        .Select(s => new SignArray(s))
+        .Where(s => s.IsOrthogonal)
+        .Order()
+        .Select(s => s.Values)
+        .ToReadOnlyList();
     }
 
-    private static ValueArray<ValueArray<sbyte>> GetOrthogonalSignCollection(in uint length)
+    private static IReadOnlyList<IReadOnlyList<sbyte>> GetOrthogonalSignCollection(in uint length)
     {
       return _collections.GetOrAdd(length, BuildOrthogonalSignCollection);
     }
 
-    private readonly ValueArray<ValueArray<sbyte>> _collection;
-    private uint _position;
+    private readonly IReadOnlyList<IReadOnlyList<sbyte>> _collection;
+    private int _position;
 
     public OrthogonalSignArrayEnumerable(in uint size)
     {
@@ -37,9 +43,9 @@ namespace Arnible.MathModeling.Algebra
      * IArray
      */
 
-    public Sign this[in uint index] => (Sign)_collection[_position][index];
+    public Sign this[in uint index] => (Sign)_collection[_position][(int)index];
 
-    public uint Length => _collection[_position].Length;
+    public uint Length => (uint)_collection[_position].Count;
 
     private IEnumerable<Sign> GetEnumerable() => _collection[_position].Select(s => (Sign)s);
 
@@ -53,7 +59,7 @@ namespace Arnible.MathModeling.Algebra
 
     public bool MoveNext()
     {
-      if (_position + 1 < _collection.Length)
+      if (_position + 1 < _collection.Count)
       {
         _position++;
         return true;

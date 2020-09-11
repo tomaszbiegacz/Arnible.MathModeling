@@ -1,5 +1,4 @@
-﻿using Arnible.MathModeling.Export;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,7 +6,7 @@ using System.Globalization;
 namespace Arnible.MathModeling.Algebra
 {
   /// <summary>
-  /// Immmutable cartesian translation vector.
+  /// Immutable cartesian translation vector.
   /// Last dimension in the vector is always either non-zero or zero for 1d vector.
   /// </summary>
   /// <remarks> 
@@ -18,13 +17,13 @@ namespace Arnible.MathModeling.Algebra
   /// * Structure size is equal to IntPtr.Size, hence there is no need to return/receive structure instance by reference
   /// </remarks>  
   [Serializable]
-  [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
   public readonly struct NumberTranslationVector : 
     IEquatable<NumberTranslationVector>, 
     IEquatable<Number>, 
-    IValueArray<Number>
+    IValueArray<Number>,
+    IValueObject
   {
-    private readonly NumberVector _change;    
+    private readonly NumberVector _change;
 
     public NumberTranslationVector(params Number[] parameters)
       : this(new NumberVector(parameters))
@@ -58,9 +57,9 @@ namespace Arnible.MathModeling.Algebra
     // Equatable
     //
 
-    public override string ToString() => _change.ToString();
-
     public string ToString(in CultureInfo cultureInfo) => _change.ToString(cultureInfo);
+    public override string ToString() => _change.ToString();
+    public string ToStringValue() => ToString();
 
     public bool Equals(in NumberTranslationVector other) => other._change == _change;
 
@@ -87,6 +86,7 @@ namespace Arnible.MathModeling.Algebra
     }
 
     public override int GetHashCode() => _change.GetHashCode();
+    public int GetHashCodeValue() => GetHashCode();
 
     public static bool operator ==(in NumberTranslationVector a, in NumberTranslationVector b) => a.Equals(in b);
     public static bool operator !=(in NumberTranslationVector a, in NumberTranslationVector b) => !a.Equals(in b);

@@ -4,7 +4,7 @@ namespace Arnible.MathModeling
 {
   public static class IUnmanagedArrayExtensions
   {
-    public static IUnmanagedArray<T> SubsetFromIndexes<T>(
+    public static UnmanagedArray<T> SubsetFromIndexes<T>(
       this IUnmanagedArray<T> src,
       in IReadOnlyCollection<uint> indexes
     ) where T : unmanaged

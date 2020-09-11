@@ -6,7 +6,8 @@ namespace Arnible.MathModeling.Polynomials
   public readonly struct IndeterminateExpression : 
     IEquatable<IndeterminateExpression>, 
     IComparable<IndeterminateExpression>, 
-    IPolynomialOperation
+    IPolynomialOperation,
+    IValueObject
   {
     private readonly ElementaryUnaryOperation _modifier;
 
@@ -52,6 +53,7 @@ namespace Arnible.MathModeling.Polynomials
           throw new InvalidOperationException("Unknown modifier: " + _modifier);
       }
     }
+    public string ToStringValue() => ToString();
 
     public int CompareTo(IndeterminateExpression other)
     {
@@ -87,6 +89,7 @@ namespace Arnible.MathModeling.Polynomials
     {
       return Variable.GetHashCode() ^ (int)_modifier;
     }
+    public int GetHashCodeValue() => GetHashCode();
 
     public static bool operator ==(in IndeterminateExpression a, in IndeterminateExpression b) => a.Equals(in b);
     public static bool operator !=(in IndeterminateExpression a, in IndeterminateExpression b) => !a.Equals(in b);

@@ -1,5 +1,4 @@
-﻿using Arnible.MathModeling.Export;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,11 +6,11 @@ using System.Globalization;
 namespace Arnible.MathModeling.Geometry
 {
   [Serializable]
-  [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
   public readonly struct HypersphericalAngleTranslationVector :
     IEquatable<HypersphericalAngleTranslationVector>,
     IEquatable<Number>,
-    IValueArray<Number>
+    IValueArray<Number>,
+    IValueObject
   {
     private readonly HypersphericalAngleVector _change;
 
@@ -43,10 +42,10 @@ namespace Arnible.MathModeling.Geometry
     //
     // Equatable
     //
-
-    public override string ToString() => _change.ToString();
-
+    
     public string ToString(CultureInfo cultureInfo) => _change.ToString(cultureInfo);
+    public override string ToString() => _change.ToString();
+    public string ToStringValue() => ToString();
 
     public bool Equals(in HypersphericalAngleTranslationVector other) => other._change == _change;
 
@@ -73,6 +72,7 @@ namespace Arnible.MathModeling.Geometry
     }
 
     public override int GetHashCode() => _change.GetHashCode();
+    public int GetHashCodeValue() => GetHashCode();
 
     public static bool operator ==(in HypersphericalAngleTranslationVector a,
       in HypersphericalAngleTranslationVector b) => a.Equals(in b);

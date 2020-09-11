@@ -48,17 +48,17 @@ namespace Arnible.MathModeling
      * Materialization
      */
 
-    public static ValueArray<T> ToValueArray<T>(this T[] source) where T : struct
+    public static ValueArray<T> ToValueArray<T>(this T[] source) where T : struct, IValueObject
     {
       return new ValueArray<T>(source);
     }
 
-    public static ValueArray<T> ToValueArray<T>(this IEnumerable<T> source) where T : struct
+    public static ValueArray<T> ToValueArray<T>(this IEnumerable<T> source) where T : struct, IValueObject
     {
       return new ValueArray<T>(System.Linq.Enumerable.ToArray(source));
     }
 
-    public static IUnmanagedArray<T> ToUnmanagedArray<T>(this IEnumerable<T> source) where T : unmanaged
+    public static UnmanagedArray<T> ToUnmanagedArray<T>(this IEnumerable<T> source) where T : unmanaged
     {
       return new UnmanagedArray<T>(System.Linq.Enumerable.ToArray(source));
     }
@@ -73,7 +73,9 @@ namespace Arnible.MathModeling
       return System.Linq.Enumerable.ToList(source);
     }
 
-    public static IDictionary<TKey, TSource> ToDictionary<TKey, TSource>(this IEnumerable<TSource> source, in Func<TSource, TKey> keySelector)
+    public static IDictionary<TKey, TSource> ToDictionary<TKey, TSource>(
+      this IEnumerable<TSource> source, 
+      in Func<TSource, TKey> keySelector)
     {
       return System.Linq.Enumerable.ToDictionary(source, keySelector);
     }

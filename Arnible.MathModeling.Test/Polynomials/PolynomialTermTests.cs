@@ -144,24 +144,6 @@ namespace Arnible.MathModeling.Polynomials.Tests
     }
 
     [Fact]
-    public void IsSimplified_Empty()
-    {
-      IsTrue(PolynomialTerm.IsSimplified(new PolynomialTerm[] { }));
-    }
-
-    [Fact]
-    public void IsSimplified_True()
-    {
-      IsTrue(PolynomialTerm.IsSimplified(new PolynomialTerm[] { 'a', 'b', 1 }));
-    }
-
-    [Fact]
-    public void IsSimplified_False()
-    {
-      IsFalse(PolynomialTerm.IsSimplified(new PolynomialTerm[] { 1, 'a', 2, 'b', 'a' }));
-    }
-
-    [Fact]
     public void Power_ByZero()
     {
       PolynomialTerm x = 'x';

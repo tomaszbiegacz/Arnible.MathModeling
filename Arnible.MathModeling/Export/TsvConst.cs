@@ -1,7 +1,10 @@
-﻿namespace Arnible.MathModeling.Export
+namespace Arnible.MathModeling.Export
 {
   static class TsvConst
   {
-    public static readonly char SeparatorChar = '\t';
+    public const char HeaderFieldSeparator = '_';
+    public const char RowFieldSeparator = '\t';
+    
+    public const string FileExtension = ".tsv";
   }
 }

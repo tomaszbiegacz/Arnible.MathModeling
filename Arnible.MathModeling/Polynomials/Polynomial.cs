@@ -10,7 +10,8 @@ namespace Arnible.MathModeling.Polynomials
     IEquatable<PolynomialDivision>,
     IEquatable<Polynomial>,
     IEnumerable<PolynomialTerm>,
-    IPolynomialOperation
+    IPolynomialOperation,
+    IValueObject
   {
     const char InPlaceVariableReplacement = '$';
 
@@ -90,6 +91,7 @@ namespace Arnible.MathModeling.Polynomials
 
       return result;
     }
+    public int GetHashCodeValue() => GetHashCode();
 
     public override bool Equals(object obj)
     {
@@ -134,7 +136,7 @@ namespace Arnible.MathModeling.Polynomials
     }
 
     public override string ToString() => ToString(CultureInfo.InvariantCulture);
-
+    public string ToStringValue() => ToString();
 
     public static bool operator ==(Polynomial a, Polynomial b) => a.Equals(b);
     public static bool operator !=(Polynomial a, Polynomial b) => !a.Equals(b);

@@ -24,7 +24,7 @@ namespace Arnible.MathModeling.Test
       AreEqual(-1, (new[] { 1, 2, 3 }).SequenceCompare(new[] { 1, 2, 4 }));
     }
 
-    readonly struct ForOrdering : IEquatable<ForOrdering>
+    readonly struct ForOrdering : IEquatable<ForOrdering>, IValueObject
     {
       public int Root { get; }
       public int Reminder { get; }
@@ -39,6 +39,18 @@ namespace Arnible.MathModeling.Test
       {
         return Root == other.Root && Reminder == other.Reminder;
       }
+
+      public override string ToString()
+      {
+        return $"{Root.ToString()} {Reminder.ToString()}";
+      }
+      public string ToStringValue() => ToString();
+
+      public override int GetHashCode()
+      {
+        return Root.GetHashCode() ^ Reminder.GetHashCode();
+      }
+      public int GetHashCodeValue() => GetHashCode();
     }
 
     [Fact]

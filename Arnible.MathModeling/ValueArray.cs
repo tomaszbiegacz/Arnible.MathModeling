@@ -16,8 +16,11 @@ namespace Arnible.MathModeling
   /// * Structure size is equal to IntPtr.Size, hence there is no need to return/receive structure instance by reference
   /// </remarks>  
   [Serializable]
-  [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
-  public readonly struct ValueArray<T> : IEquatable<ValueArray<T>>, IValueArray<T> where T : struct
+  public readonly struct ValueArray<T> : 
+    IEquatable<ValueArray<T>>, 
+    IValueArray<T>, 
+    IValueObject 
+    where T : struct, IValueObject
   {
     private static IEnumerable<T> _empty = LinqEnumerable.Empty<T>().ToReadOnlyList();
     private readonly T[] _values;
@@ -33,19 +36,54 @@ namespace Arnible.MathModeling
 
     public override string ToString()
     {
-      return "[" + string.Join(" ", GetInternalEnumerable().Select(v => v.ToString())) + "]";
+      return "[" + string.Join(" ", GetInternalEnumerable().Select(v => v.ToStringValue())) + "]";
     }
+    public string ToStringValue() => ToString();
 
     public override int GetHashCode()
     {
       int hc = Length.GetHashCode();
       foreach (T v in GetInternalEnumerable())
       {
-        hc = unchecked(hc * 314159 + v.GetHashCode());
+        hc = unchecked(hc * 314159 + v.GetHashCodeValue());
       }
       return hc;
     }
+    public int GetHashCodeValue() => GetHashCode();
+    
+    //
+    // Serializer
+    //
 
+    class Serializer : IRecordWriter<ValueArray<T>>
+    {
+      private readonly IRecordWriterReadOnlyCollection<T> _serializer;
+
+      public Serializer(
+        in IRecordFieldSerializer serializer, 
+        in Func<IRecordFieldSerializer, IRecordWriter<T>> writerFactory)
+      {
+        _serializer = serializer.GetReadOnlyCollectionSerializer(string.Empty, in writerFactory);
+      }
+      
+      public void Write(in ValueArray<T> record)
+      {
+        _serializer.Write(record._values);
+      }
+
+      public void WriteNull()
+      {
+        // intentionally empty
+      }
+    }
+    
+    public static IRecordWriter<ValueArray<T>> CreateSerializer(
+      IRecordFieldSerializer serializer,
+      Func<IRecordFieldSerializer, IRecordWriter<T>> writerFactory)
+    {
+      return new Serializer(in serializer, in writerFactory);
+    }
+    
     //
     // IEquatable
     //    

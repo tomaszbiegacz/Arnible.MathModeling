@@ -6,7 +6,8 @@ namespace Arnible.MathModeling.Polynomials
 {
   public readonly struct PolynomialTerm : 
     IEquatable<PolynomialTerm>, 
-    IPolynomialOperation
+    IPolynomialOperation,
+    IValueObject
   {
     private readonly double _coefficient;
     private readonly ValueArray<IndeterminateExpression> _indeterminates;
@@ -99,9 +100,7 @@ namespace Arnible.MathModeling.Polynomials
     public static implicit operator PolynomialTerm(char name) => new PolynomialTerm((IndeterminateExpression)name);
     public static implicit operator PolynomialTerm(IndeterminateExpression name) => new PolynomialTerm(name);
     public static implicit operator PolynomialTerm(double value) => new PolynomialTerm(value);
-
-    public override string ToString() => ToString(CultureInfo.InvariantCulture);
-
+    
     public string ToString(CultureInfo cultureInfo)
     {
       if (IsConstant)
@@ -113,6 +112,8 @@ namespace Arnible.MathModeling.Polynomials
       else
         return $"{_coefficient.ToString(cultureInfo)}{IndeterminatesSignature}";
     }
+    public override string ToString() => ToString(CultureInfo.InvariantCulture);
+    public string ToStringValue() => ToString();
 
     public bool Equals(PolynomialTerm other)
     {
@@ -123,6 +124,7 @@ namespace Arnible.MathModeling.Polynomials
     {
       return _coefficient.GetHashCode() ^ IndeterminatesSignature.GetHashCode();
     }
+    public int GetHashCodeValue() => GetHashCode();
 
     public override bool Equals(object obj)
     {
@@ -449,20 +451,16 @@ namespace Arnible.MathModeling.Polynomials
       }
     }
 
-    public static bool IsSimplified(IEnumerable<PolynomialTerm> variables)
-    {
-      return variables.Select(v => v._indeterminatesSignature).Distinct().Count() == variables.Count();
-    }
-
     private static PolynomialTerm Add(IEnumerable<PolynomialTerm> variables)
     {
-      if (variables.Count() == 1)
+      IReadOnlyCollection<PolynomialTerm> variablesM = variables.ToReadOnlyList();
+      if (variablesM.Count == 1)
       {
-        return variables.Single();
+        return variablesM.Single();
       }
       else
       {
-        var coefficient = variables.Select(v => v._coefficient).SumWithDefault();
+        var coefficient = variablesM.Select(v => v._coefficient).SumWithDefault();
 
         if (coefficient.NumericEquals(0))
         {
@@ -470,7 +468,7 @@ namespace Arnible.MathModeling.Polynomials
         }
         else
         {
-          var result = variables.First();
+          var result = variablesM.First();
           return new PolynomialTerm(
             coefficient,
             result._indeterminates,
@@ -491,7 +489,10 @@ namespace Arnible.MathModeling.Polynomials
       {
         var remaining = new PolynomialTerm(_coefficient, _indeterminates.GetInternalEnumerable().Where(kv => kv.Variable != variable));
 
-        var toReplace = _indeterminates.GetInternalEnumerable().Where(kv => kv.Variable == variable);
+        var toReplace = _indeterminates
+          .GetInternalEnumerable()
+          .Where(kv => kv.Variable == variable)
+          .ToReadOnlyList();
         if (toReplace.Any(i => i.HasUnaryModifier))
         {
           if (replacement.IsConstant)

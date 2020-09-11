@@ -10,8 +10,8 @@ namespace Arnible.MathModeling.Geometry.Test
   {
     private static PolynomialDivision GetSum(uint inputCount)
     {
-      var cartesianInputs = Number.Terms(inputCount);
-      CartesianCoordinate cartesianPoint = cartesianInputs.ToVector();
+      var cartesianInputs = Number.Terms(inputCount).ToVector();
+      CartesianCoordinate cartesianPoint = cartesianInputs;
       var sphericalPoint = new HypersphericalCoordinate((PolynomialTerm)'R', Number.GreekTerms(inputCount - 1).ToAngleVector());
 
       Number product = cartesianInputs.SumDefensive();

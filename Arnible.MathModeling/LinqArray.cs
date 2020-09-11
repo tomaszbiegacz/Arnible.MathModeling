@@ -10,7 +10,7 @@ namespace Arnible.MathModeling
       return LinqEnumerable.RangeInt((uint)arg.Count);
     }
 
-    public static IEnumerable<uint> Indexes<T>(in this ValueArray<T> arg) where T : struct
+    public static IEnumerable<uint> Indexes<T>(in this ValueArray<T> arg) where T : struct, IValueObject
     {
       return LinqEnumerable.RangeUint(arg.Length);
     }

@@ -31,6 +31,7 @@ namespace Arnible.MathModeling.xunit
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
     {
+      // ReSharper disable once HeapView.PossibleBoxingAllocation
       Log(state?.ToString() ?? string.Empty);
     }
 

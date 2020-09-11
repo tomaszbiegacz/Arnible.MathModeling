@@ -23,7 +23,7 @@ namespace Arnible.MathModeling.Geometry
       {
         for (uint axisAngle = 1; axisAngle < _angleCount; ++axisAngle)
         {
-          var prefix = _factory.Axis(axisAngle);
+          var prefix = _factory.Axis(axisAngle).ToReadOnlyList();
           foreach (var sequence in _factory.AnglesWithoutRightAngle().ToSequncesWithReturning(_angleCount - axisAngle))
           {
             yield return _factory.Create(prefix.Concat(sequence));

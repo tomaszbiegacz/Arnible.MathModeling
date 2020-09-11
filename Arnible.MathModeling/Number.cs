@@ -11,11 +11,13 @@ namespace Arnible.MathModeling
   /// Features:
   /// * DoubleExtension.NumericEquals is used for equality decision  
   /// Usage considerations:
-  /// * Structure size is less then IntPtr.Size on 64-bit proceses, hence it is suggested to not return/receive structure instance by reference
+  /// * Structure size is less then IntPtr.Size on 64-bit processes, hence it is suggested to not return/receive structure instance by reference
   /// </remarks>  
   [Serializable]
-  [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
-  public readonly struct Number : IEquatable<Number>, IComparable<Number>
+  public readonly struct Number : 
+    IEquatable<Number>, 
+    IComparable<Number>, 
+    IValueObject
   {    
     private readonly double _value;
 
@@ -30,6 +32,33 @@ namespace Arnible.MathModeling
 
     public static implicit operator Number(in double v) => new Number(in v);
     public static explicit operator double(in Number v) => v._value;
+    
+    //
+    // Serializer
+    //
+
+    class Serializer : IRecordWriter<Number>
+    {
+      private readonly IRecordFieldSerializer _serializer;
+      public Serializer(in IRecordFieldSerializer serializer)
+      {
+        _serializer = serializer;
+      }
+      public void Write(in Number record)
+      {
+        _serializer.Write(string.Empty, record._value);
+      }
+
+      public void WriteNull()
+      {
+        _serializer.WriteNull(string.Empty);
+      }
+    }
+    
+    public static IRecordWriter<Number> CreateSerializer(IRecordFieldSerializer serializer)
+    {
+      return new Serializer(in serializer);
+    }
 
     //
     // Object
@@ -51,13 +80,14 @@ namespace Arnible.MathModeling
     {
       return _value.GetHashCode();
     }
-
-    public override string ToString() => ToString(CultureInfo.InvariantCulture);
-
+    public int GetHashCodeValue() => GetHashCode();
+    
     public string ToString(in CultureInfo cultureInfo)
     {
       return _value.ToString(cultureInfo);
     }
+    public override string ToString() => ToString(CultureInfo.InvariantCulture);
+    public string ToStringValue() => ToString();
 
     //
     // Operators

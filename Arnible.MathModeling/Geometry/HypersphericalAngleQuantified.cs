@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public readonly struct HypersphericalAngleQuantified : IEquatable<HypersphericalAngleQuantified>
+  public readonly struct HypersphericalAngleQuantified : 
+    IEquatable<HypersphericalAngleQuantified>,
+    IValueObject
   {
     internal class Factory
     {
@@ -140,11 +142,13 @@ namespace Arnible.MathModeling.Geometry
     public static bool operator !=(HypersphericalAngleQuantified a, HypersphericalAngleQuantified b) => !a.Equals(b);
 
     public override int GetHashCode() => Id.GetHashCode();
+    public int GetHashCodeValue() => GetHashCode();
 
     public override string ToString()
     {
       return "[" + string.Join(" ", Angles) + "]";
     }
+    public string ToStringValue() => ToString();
 
     public HypersphericalAngleVector ToAngleVector()
     {

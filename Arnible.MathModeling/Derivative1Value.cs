@@ -7,7 +7,10 @@ namespace Arnible.MathModeling
     Number First { get; }
   }
 
-  public readonly struct Derivative1Value : IDerivative1, IEquatable<Derivative1Value>
+  public readonly struct Derivative1Value : 
+    IDerivative1, 
+    IEquatable<Derivative1Value>, 
+    IValueObject
   {
     public static readonly Derivative1Value Zero = new Derivative1Value(first: 0);
 
@@ -41,11 +44,13 @@ namespace Arnible.MathModeling
     {
       return First.GetHashCode();
     }
+    public int GetHashCodeValue() => GetHashCode();
 
     public override string ToString()
     {
       return $"[{First.ToString()}]";
     }
+    public string ToStringValue() => ToString();
 
     public static bool operator ==(in Derivative1Value a, in Derivative1Value b) => a.Equals(in b);
     public static bool operator !=(in Derivative1Value a, in Derivative1Value b) => !a.Equals(in b);

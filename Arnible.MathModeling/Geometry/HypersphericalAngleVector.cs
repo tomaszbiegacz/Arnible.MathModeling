@@ -1,5 +1,4 @@
 ﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Export;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,8 +11,11 @@ namespace Arnible.MathModeling.Geometry
   /// Hyperspherical angle vector, where first coordinate angle range over [-π, π] and others range over [-π/2, π/2].
   /// </summary>
   [Serializable]
-  [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
-  public readonly struct HypersphericalAngleVector : IEquatable<HypersphericalAngleVector>, IEquatable<Number>, IValueArray<Number>
+  public readonly struct HypersphericalAngleVector : 
+    IEquatable<HypersphericalAngleVector>, 
+    IEquatable<Number>, 
+    IValueArray<Number>,
+    IValueObject
   {
     private readonly NumberVector _angles;
     
@@ -135,12 +137,13 @@ namespace Arnible.MathModeling.Geometry
         return false;
       }
     }
-
-    public override string ToString() => _angles.ToString();
-
+    
     public string ToString(CultureInfo culture) => _angles.ToString(culture);
+    public override string ToString() => _angles.ToString();
+    public string ToStringValue() => ToString();
 
     public override int GetHashCode() => _angles.GetHashCode();
+    public int GetHashCodeValue() => GetHashCode();
 
     public static bool operator ==(in HypersphericalAngleVector a, in HypersphericalAngleVector b) => a.Equals(in b);
     public static bool operator !=(in HypersphericalAngleVector a, in HypersphericalAngleVector b) => !a.Equals(in b);

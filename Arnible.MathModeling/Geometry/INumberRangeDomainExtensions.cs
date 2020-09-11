@@ -1,5 +1,6 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
+using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -29,8 +30,11 @@ namespace Arnible.MathModeling.Geometry
       HypersphericalAngleTranslationVector delta)
     {
       domain.Validate(value.ToCartesianView().Coordinates);
-      ValueArray<uint> nonZeroAngles = LinqEnumerable.RangeUint(0, delta.Length).Where(i => delta[i] != 0).ToValueArray();
-      if (nonZeroAngles.Length != 1)
+      IReadOnlyList<uint> nonZeroAngles = LinqEnumerable.RangeUint(0, delta.Length)
+        .Where(i => delta[i] != 0)
+        .ToReadOnlyList();
+      
+      if (nonZeroAngles.Count != 1)
       {
         throw new ArgumentException("Exactly one angle has to be non-negative. Other options are not yet supported.");
       }

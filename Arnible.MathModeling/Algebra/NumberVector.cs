@@ -1,5 +1,4 @@
-﻿using Arnible.MathModeling.Export;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,7 +6,7 @@ using System.Globalization;
 namespace Arnible.MathModeling.Algebra
 {
   /// <summary>
-  /// Immmutable number vector.
+  /// Immutable number vector.
   /// Last dimension in the vector is always either non-zero or zero for 1d vector.
   /// </summary>
   /// <remarks> 
@@ -18,8 +17,11 @@ namespace Arnible.MathModeling.Algebra
   /// * Structure size is equal to IntPtr.Size, hence there is no need to return/receive structure instance by reference
   /// </remarks>  
   [Serializable]
-  [RecordSerializer(SerializationMediaType.TabSeparatedValues)]
-  public readonly struct NumberVector : IEquatable<NumberVector>, IEquatable<Number>, IValueArray<Number>
+  public readonly struct NumberVector : 
+    IEquatable<NumberVector>, 
+    IEquatable<Number>, 
+    IValueArray<Number>,
+    IValueObject
   {
     readonly static Number ZeroValue = 0d;
     readonly static IReadOnlyCollection<Number> ZeroVector = new Number[] { 0 };
@@ -186,8 +188,6 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public override string ToString() => ToString(CultureInfo.InvariantCulture);
-
     public string ToString(CultureInfo cultureInfo)
     {
       if (Length == 1)
@@ -199,11 +199,14 @@ namespace Arnible.MathModeling.Algebra
         return "[" + string.Join(" ", GetInternalEnumerable().Select(v => v.ToString(cultureInfo))) + "]";
       }
     }
+    public override string ToString() => ToString(CultureInfo.InvariantCulture);
+    public string ToStringValue() => ToString();
 
     public override int GetHashCode()
     {
       return _values.GetHashCode();
     }
+    public int GetHashCodeValue() => GetHashCode();
 
     public static bool operator ==(in NumberVector a, in NumberVector b) => a.Equals(in b);
     public static bool operator !=(in NumberVector a, in NumberVector b) => !a.Equals(in b);

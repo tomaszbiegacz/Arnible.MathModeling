@@ -7,7 +7,7 @@ void Print_Equatable()
     // AreEqual
     //
 
-    public static void AreEqual<T>(in T expected, in T actual) where T: IEquatable<T>
+    public static void AreEqual<T>(in T expected, in T actual) where T: IEquatable<T>, IValueObject
     {      
       Type tType = typeof(T);
       if (tType == typeof(double) || tType == typeof(string))
@@ -28,12 +28,22 @@ void Print_Equatable()
       Assert.Equal(expected, actual);
     }    
 
-    public static void AreEqual(in uint expected, in int actual)
+    public static void AreEqual(in int expected, in int actual)
     {
       Assert.True(expected == actual, $"{expected.ToString()}\n\nis not equal to\n\n{actual.ToString()}\n");
     }
 
-    public static void AreEqual(in int expected, in uint actual)
+    public static void AreEqual(in uint expected, in uint actual)
+    {
+      Assert.True(expected == actual, $"{expected.ToString()}\n\nis not equal to\n\n{actual.ToString()}\n");
+    }
+
+    public static void AreEqual(in ulong expected, in ulong actual)
+    {
+      Assert.True(expected == actual, $"{expected.ToString()}\n\nis not equal to\n\n{actual.ToString()}\n");
+    }
+
+    public static void AreEqual(in long expected, in long actual)
     {
       Assert.True(expected == actual, $"{expected.ToString()}\n\nis not equal to\n\n{actual.ToString()}\n");
     }
@@ -42,7 +52,7 @@ void Print_Equatable()
     // AreNotEqual
     //
 
-    public static void AreNotEqual<T>(in T expected, in T actual) where T: IEquatable<T>
+    public static void AreNotEqual<T>(in T expected, in T actual) where T: IEquatable<T>, IValueObject
     {
       Type tType = typeof(T);
       if (tType == typeof(double) || tType == typeof(string))
@@ -63,11 +73,64 @@ void Print_Equatable()
       Assert.NotEqual(expected, actual);
     }        
 
+    public static void AreNotEqual(in uint expected, in uint actual)
+    {
+      Assert.True(expected != actual, $"{expected.ToString()}\n\nis equal to\n\n{actual.ToString()}\n");
+    }
+
+    public static void AreNotEqual(in int expected, in int actual)
+    {
+      Assert.True(expected != actual, $"{expected.ToString()}\n\nis equal to\n\n{actual.ToString()}\n");
+    }
+
+    public static void AreNotEqual(in ulong expected, in ulong actual)
+    {
+      Assert.True(expected != actual, $"{expected.ToString()}\n\nis equal to\n\n{actual.ToString()}\n");
+    }
+
+    public static void AreNotEqual(in long expected, in long actual)
+    {
+      Assert.True(expected != actual, $"{expected.ToString()}\n\nis equal to\n\n{actual.ToString()}\n");
+    }
+
     //
     // AreEquals
     //
 
-    public static void AreEquals<T>(in IEnumerable<T> expected, in IEnumerable<T> actual)  where T: IEquatable<T>
+    public static void AreEquals(in IEnumerable<int> expected, in IEnumerable<int> actual)
+    {
+      var expectedArray = expected.ToReadOnlyList();
+      var actualArray = actual.ToReadOnlyList();
+      AreEqual(expectedArray.Count, actualArray.Count);
+      for (int i = 0; i < expectedArray.Count; i++)
+      {
+        AreEqual(expectedArray[i], actualArray[i]);
+      }
+    }
+
+    public static void AreEquals(in IEnumerable<uint> expected, in IEnumerable<uint> actual)
+    {
+      var expectedArray = expected.ToReadOnlyList();
+      var actualArray = actual.ToReadOnlyList();
+      AreEqual(expectedArray.Count, actualArray.Count);
+      for (int i = 0; i < expectedArray.Count; i++)
+      {
+        AreEqual(expectedArray[i], actualArray[i]);
+      }
+    }
+
+    public static void AreEquals(in IEnumerable<IEnumerable<int>> expected, in IEnumerable<IEnumerable<int>> actual)
+    {
+      var expectedArray = expected.ToReadOnlyList();
+      var actualArray = actual.ToReadOnlyList();
+      AreEqual(expectedArray.Count, actualArray.Count);
+      for (int i = 0; i < expectedArray.Count; i++)
+      {
+        AreEquals(expectedArray[i], actualArray[i]);
+      }
+    }
+
+    public static void AreEquals<T>(in IEnumerable<T> expected, in IEnumerable<T> actual)  where T: IEquatable<T>, IValueObject
     {
       IReadOnlyList<T> expectedArray = expected.ToReadOnlyList();
       IReadOnlyList<T> actualArray = actual.ToReadOnlyList();
@@ -78,7 +141,7 @@ void Print_Equatable()
       }
     }
 
-    public static void AreEquals<T>(in IEnumerable<IEnumerable<T>> expected, in IEnumerable<IEnumerable<T>> actual) where T : IEquatable<T>
+    public static void AreEquals<T>(in IEnumerable<IEnumerable<T>> expected, in IEnumerable<IEnumerable<T>> actual) where T : IEquatable<T>, IValueObject
     {
       IReadOnlyList<IEnumerable<T>> expectedArray = expected.ToReadOnlyList();
       IReadOnlyList<IEnumerable<T>> actualArray = actual.ToReadOnlyList();
@@ -182,12 +245,12 @@ void Print_IsZero(string typeName)
 
     public static void IsZero(in <#= typeName #> value)
     {
-      AreEqual<<#= typeName #>>(0, in value);
+      AreEqual(0, in value);
     }
 
     public static void IsNotZero(in <#= typeName #> value)
     {
-      AreNotEqual<<#= typeName #>>(0, in value);
+      AreNotEqual(0, in value);
     }
 
 <#+    
@@ -318,7 +381,7 @@ void Print_Enumerable()
 
     public static void IsEmpty<T>(in IEnumerable<T> value)
     {
-      AreEqual<uint>(0, value.Count());
+      AreEqual(0, value.Count());
     }
 
 <#+

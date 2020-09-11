@@ -7,7 +7,8 @@ namespace Arnible.MathModeling.Polynomials
   public readonly struct PolynomialDivision : 
     IEquatable<PolynomialDivision>, 
     IEquatable<Polynomial>, 
-    IPolynomialOperation
+    IPolynomialOperation,
+    IValueObject
   {
     private readonly Polynomial _numerator;
     private readonly Polynomial _denominator;
@@ -137,6 +138,7 @@ namespace Arnible.MathModeling.Polynomials
     }
 
     public override int GetHashCode() => _numerator.GetHashCode() ^ _denominator.GetHashCode();
+    public int GetHashCodeValue() => GetHashCode();
 
     public override bool Equals(object obj)
     {
@@ -168,6 +170,7 @@ namespace Arnible.MathModeling.Polynomials
     }
 
     public override string ToString() => ToString(CultureInfo.InvariantCulture);
+    public string ToStringValue() => ToString();
 
     public static bool operator ==(PolynomialDivision a, PolynomialDivision b) => a.Equals(b);
     public static bool operator !=(PolynomialDivision a, PolynomialDivision b) => !a.Equals(b);

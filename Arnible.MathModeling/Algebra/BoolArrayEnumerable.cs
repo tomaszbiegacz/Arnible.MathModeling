@@ -6,21 +6,26 @@ namespace Arnible.MathModeling.Algebra
 {
   public class BoolArrayEnumerable : IUnmanagedArrayEnumerable<bool>
   {
-    static ConcurrentDictionary<uint, ValueArray<ValueArray<bool>>> _collections = new ConcurrentDictionary<uint, ValueArray<ValueArray<bool>>>();
+    static readonly ConcurrentDictionary<uint, IReadOnlyList<IReadOnlyList<bool>>> _collections = new ConcurrentDictionary<uint, IReadOnlyList<IReadOnlyList<bool>>>();
 
-    private static ValueArray<ValueArray<bool>> BuildCollection(uint length)
+    private static IReadOnlyList<IReadOnlyList<bool>> BuildCollection(uint length)
     {
       var values = new[] { false, true };
-      return values.ToSequncesWithReturning(length).Select(s => new BoolArray(s)).Order().Select(s => s.Values).ToValueArray();
+      return values
+        .ToSequncesWithReturning(length)
+        .Select(s => new BoolArray(s))
+        .Order()
+        .Select(s => s.Values)
+        .ToReadOnlyList();
     }
 
-    private static ValueArray<ValueArray<bool>> GetCollection(in uint length)
+    private static IReadOnlyList<IReadOnlyList<bool>> GetCollection(in uint length)
     {
       return _collections.GetOrAdd(length, BuildCollection);
     }
 
-    private readonly ValueArray<ValueArray<bool>> _collection;
-    private uint _position;
+    private readonly IReadOnlyList<IReadOnlyList<bool>> _collection;
+    private int _position;
 
     public BoolArrayEnumerable(in uint size)
     {
@@ -41,13 +46,13 @@ namespace Arnible.MathModeling.Algebra
     {
       get
       {
-        return _collection[_position][index];
+        return _collection[_position][(int)index];
       }
     }
 
-    public uint Length => _collection[_position].Length;
+    public uint Length => (uint)_collection[_position].Count;
 
-    private IEnumerable<bool> GetEnumerable() => _collection[_position].GetInternalEnumerable();
+    private IEnumerable<bool> GetEnumerable() => _collection[_position];
 
     public IEnumerator<bool> GetEnumerator() => GetEnumerable().GetEnumerator();
 
@@ -59,7 +64,7 @@ namespace Arnible.MathModeling.Algebra
 
     public bool MoveNext()
     {
-      if (_position + 1 < _collection.Length)
+      if (_position + 1 < _collection.Count)
       {
         _position++;
         return true;

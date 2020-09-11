@@ -9,12 +9,12 @@ namespace Arnible.MathModeling.xunit
   {
     public static void AreEquals<T>(
       IEnumerable<T> expected,
-      in ValueArray<T> actual) where T : struct, IEquatable<T>
+      in ValueArray<T> actual) where T : struct, IEquatable<T>, IValueObject
     {
       AssertNumber.AreEquals(expected, actual.GetInternalEnumerable());
     }
 
-    public static void IsEmpty<T>(in ValueArray<T> value) where T : struct, IEquatable<T>
+    public static void IsEmpty<T>(in ValueArray<T> value) where T : struct, IEquatable<T>, IValueObject
     {
       AssertNumber.IsEmpty(value.GetInternalEnumerable());
     }

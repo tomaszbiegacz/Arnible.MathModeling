@@ -1,14 +1,19 @@
-﻿namespace Arnible.MathModeling.Export
+﻿using System;
+
+namespace Arnible.MathModeling.Export
 {
   public static class IMathModelingLoggerExtensions
   {
-    public static IRecordSerializerStream<T> CreateTsvNotepad<T>(
+    public static IRecordWriterDisposable<T> CreateTsvNotepad<T>(
       this IMathModelingLogger logger, 
-      in string name) where T : struct
+      in string name,
+      Func<IRecordFieldSerializer, IRecordWriter<T>> writerFactory)
     {
-      RecordSerializerFileStream<T> result = TsvSerializer<T>.ToTempFile();
-      logger.Log($"Notepad {name}: {result.Destination}");
-      return result;
+      TsvFileSerializer serializer = new TsvFileSerializer();
+      IRecordWriter<T> writer = writerFactory(serializer.FieldSerializer);
+      
+      logger.Log($"Notepad {name}: {serializer.Destination}");
+      return new RecordWriterDisposable<T>(serializer, writer);
     }
   }
 }

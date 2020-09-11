@@ -10,7 +10,7 @@ namespace Arnible.MathModeling.Algebra
 
     public SignArray(IEnumerable<sbyte> sings)
     {
-      Values = sings.ToValueArray();
+      Values = sings.ToReadOnlyList();
       _valueAbsCount = Values.Where(s => s != 0).Count();
       _valueNegativeCount = Values.Where(s => s < 0).Count();
     }
@@ -33,15 +33,15 @@ namespace Arnible.MathModeling.Algebra
         return byNegativeCount;
       }
 
-      int byLength = Values.Length.CompareTo(other.Values.Length);
+      int byLength = Values.Count.CompareTo(other.Values.Count);
       if (byLength != 0)
       {
         return byLength;
       }
 
-      for (uint iPos = 0; iPos < Values.Length; iPos++)
+      for (int iPos = 0; iPos < Values.Count; iPos++)
       {
-        uint i = Values.Length - 1 - iPos;
+        int i = Values.Count - 1 - iPos;
         int byValue = Values[i].CompareTo(other.Values[i]);
         if (byValue != 0)
         {
@@ -58,6 +58,6 @@ namespace Arnible.MathModeling.Algebra
 
     public bool IsOrthogonal => _valueAbsCount == 0 || _valueAbsCount != _valueNegativeCount;
 
-    public ValueArray<sbyte> Values { get; }
+    public IReadOnlyList<sbyte> Values { get; }
   }
 }

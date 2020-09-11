@@ -8,7 +8,11 @@ namespace Arnible.MathModeling.Geometry
     NumberVector Coordinates { get; }
   }
 
-  public readonly struct CartesianCoordinate : IEquatable<CartesianCoordinate>, ICartesianCoordinate, ICoordinate<CartesianCoordinate>
+  public readonly struct CartesianCoordinate : 
+    IEquatable<CartesianCoordinate>, 
+    ICartesianCoordinate, 
+    ICoordinate<CartesianCoordinate>,
+    IValueObject
   {
     public static CartesianCoordinate ForAxis(uint dimensionsCount, uint axisNumber, Number value)
     {
@@ -73,11 +77,13 @@ namespace Arnible.MathModeling.Geometry
     {
       return Coordinates.GetHashCode();
     }
+    public int GetHashCodeValue() => GetHashCode();
 
     public override string ToString()
     {
       return Coordinates.ToString();
     }
+    public string ToStringValue() => ToString();
 
     //
     // Properties

@@ -31,10 +31,15 @@
     <Compile Include="..\Arnible.MathModeling\DerivativeOperator.cs" Link="DerivativeOperator.cs" />
     <Compile Include="..\Arnible.MathModeling\DoubleExtension.cs" Link="DoubleExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\Export\IMathModelingLogger.cs" Link="Export\IMathModelingLogger.cs" />
-    <Compile Include="..\Arnible.MathModeling\Export\MediaTypeSpecificationAttribute.cs" Link="Export\MediaTypeSpecificationAttribute.cs" />
-    <Compile Include="..\Arnible.MathModeling\Export\RecordSerializerAttribute.cs" Link="Export\RecordSerializerAttribute.cs" />
-    <Compile Include="..\Arnible.MathModeling\Export\SerializationMediaType.cs" Link="Export\SerializationMediaType.cs" />
-    <Compile Include="..\Arnible.MathModeling\Export\ToStringSerializer.cs" Link="Export\ToStringSerializer.cs" />
+    <Compile Include="..\Arnible.MathModeling\Export\IRecordFieldSerializer.cs">
+      <Link>Export\IRecordFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Export\IRecordWriter.cs">
+      <Link>Export\IRecordWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Export\IRecordWriterReadOnlyCollection.cs">
+      <Link>Export\IRecordWriterReadOnlyCollection.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\Geometry\CartesianCoordinate.cs" Link="Geometry\CartesianCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleQuantified.cs" Link="Geometry\HypersphericalAngleQuantified.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleTranslationVector.cs" Link="Geometry\HypersphericalAngleTranslationVector.cs" />
@@ -55,6 +60,9 @@
     <Compile Include="..\Arnible.MathModeling\IFinitaryOperation.cs" Link="IFinitaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IUnmanagedArray.cs" Link="IUnmanagedArray.cs" />
     <Compile Include="..\Arnible.MathModeling\IValueArray.cs" Link="IValueArray.cs" />
+    <Compile Include="..\Arnible.MathModeling\IValueObject.cs">
+      <Link>IValueObject.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\LinqAggregate.cs" Link="LinqAggregate.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqAggregateBasic.tt.cs" Link="LinqAggregateBasic.tt.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqArray.cs" Link="LinqArray.cs" />
