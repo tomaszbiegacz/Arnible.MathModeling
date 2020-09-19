@@ -12,7 +12,7 @@ namespace Arnible.MathModeling.Algebra
     {
       var values = new[] { false, true };
       return values
-        .ToSequncesWithReturning(length)
+        .ToSequencesWithReturning(length)
         .Select(s => new BoolArray(s))
         .Order()
         .Select(s => s.Values)

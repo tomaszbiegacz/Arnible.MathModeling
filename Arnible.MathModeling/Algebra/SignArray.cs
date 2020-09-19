@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Arnible.MathModeling.Algebra
 {
   readonly struct SignArray : IComparable<SignArray>
   {
-    private readonly uint _valueAbsCount;
-    private readonly uint _valueNegativeCount;
-
     public SignArray(IEnumerable<sbyte> sings)
     {
       Values = sings.ToReadOnlyList();
-      _valueAbsCount = Values.Where(s => s != 0).Count();
-      _valueNegativeCount = Values.Where(s => s < 0).Count();
     }
 
     /*
@@ -21,22 +17,18 @@ namespace Arnible.MathModeling.Algebra
 
     public int CompareTo(SignArray other)
     {
-      int byAbsCount = _valueAbsCount.CompareTo(other._valueAbsCount);
-      if (byAbsCount != 0)
-      {
-        return byAbsCount;
-      }
-
-      int byNegativeCount = _valueNegativeCount.CompareTo(other._valueNegativeCount);
-      if (byNegativeCount != 0)
-      {
-        return byNegativeCount;
-      }
-
       int byLength = Values.Count.CompareTo(other.Values.Count);
       if (byLength != 0)
       {
         return byLength;
+      }
+      
+      uint valueCount = Values.Where(s => s != 0).Count();
+      uint valueCountOther = other.Values.Where(s => s != 0).Count();
+      int byValueCount = valueCount.CompareTo(valueCountOther);
+      if (byValueCount != 0)
+      {
+        return byValueCount;
       }
 
       for (int iPos = 0; iPos < Values.Count; iPos++)
@@ -56,8 +48,23 @@ namespace Arnible.MathModeling.Algebra
      * Properties
      */
 
-    public bool IsOrthogonal => _valueAbsCount == 0 || _valueAbsCount != _valueNegativeCount;
-
     public IReadOnlyList<sbyte> Values { get; }
+    
+    /*
+     * Operations
+     */
+    
+    public bool GetIsOrthogonal()
+    {
+      uint negativeCount = Values.Where(s => s < 0).Count();
+      if (negativeCount == 0)
+      {
+        // only positive direction
+        return true;
+      }
+
+      sbyte lastNonZero = Values.Where(s => s != 0).Last();
+      return lastNonZero > 0;
+    }
   }
 }

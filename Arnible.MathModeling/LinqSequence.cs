@@ -10,32 +10,32 @@ namespace Arnible.MathModeling
       return System.Linq.Enumerable.SequenceEqual(source, other);
     }
 
-    public static IEnumerable<IEnumerable<T>> ToSequncesWithReturning<T>(this IEnumerable<T> items, in uint length)
+    public static IEnumerable<IEnumerable<T>> ToSequencesWithReturning<T>(this IEnumerable<T> items, in uint length)
     {
       if (items == null)
       {
         throw new ArgumentException(nameof(items));
       }
-      return ToSequncesWithReturningInternal(items.ToReadOnlyList(), length);
+      return ToSequencesWithReturningInternal(items.ToReadOnlyList(), length);
     }
 
-    public static IEnumerable<IEnumerable<T>> ToSequncesWithReturning<T>(this IEnumerable<T> items)
+    public static IEnumerable<IEnumerable<T>> ToSequencesWithReturning<T>(this IEnumerable<T> items)
     {
       if (items == null)
       {
         throw new ArgumentException(nameof(items));
       }
       var x = items.ToReadOnlyList();
-      return ToSequncesWithReturningInternal(x, (uint)x.Count);
+      return ToSequencesWithReturningInternal(x, (uint)x.Count);
     }
 
-    private static IEnumerable<IEnumerable<T>> ToSequncesWithReturningInternal<T>(IReadOnlyList<T> items, uint length)
+    private static IEnumerable<IEnumerable<T>> ToSequencesWithReturningInternal<T>(IReadOnlyList<T> items, uint length)
     {
       if (length > 0)
       {
         if (length == 1)
         {
-          foreach (var item in items)
+          foreach (T item in items)
           {
             yield return LinqEnumerable.Yield(item);
           }
@@ -44,8 +44,8 @@ namespace Arnible.MathModeling
         {
           for (int i = 0; i < items.Count; ++i)
           {
-            var e = items[i];
-            foreach (IEnumerable<T> combination in ToSequncesWithReturningInternal(items, length - 1))
+            T e = items[i];
+            foreach (IEnumerable<T> combination in ToSequencesWithReturningInternal(items, length - 1))
             {
               yield return combination.Prepend(e);
             }

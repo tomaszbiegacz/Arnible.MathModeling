@@ -19,9 +19,9 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ToSequncesWithReturning()
     {
-      IsEmpty(LinqEnumerable.Empty<int>().ToSequncesWithReturning());
+      IsEmpty(LinqEnumerable.Empty<int>().ToSequencesWithReturning());
 
-      var result = Materialize(new[] { 1, 2 }.ToSequncesWithReturning()).ToReadOnlyList();
+      var result = Materialize(new[] { 1, 2 }.ToSequencesWithReturning()).ToReadOnlyList();
       AssertContainsCollection(result, 1, 1);
       AssertContainsCollection(result, 1, 2);
 
@@ -33,9 +33,9 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ToSequncesWithReturning_Limited()
     {
-      IsEmpty(new[] { 1, 2, 3 }.ToSequncesWithReturning(0));
+      IsEmpty(new[] { 1, 2, 3 }.ToSequencesWithReturning(0));
 
-      var result = Materialize(new[] { 1, 2, 3 }.ToSequncesWithReturning(2)).ToReadOnlyList();
+      var result = Materialize(new[] { 1, 2, 3 }.ToSequencesWithReturning(2)).ToReadOnlyList();
       AssertContainsCollection(result, 1, 1);
       AssertContainsCollection(result, 1, 2);
       AssertContainsCollection(result, 1, 3);

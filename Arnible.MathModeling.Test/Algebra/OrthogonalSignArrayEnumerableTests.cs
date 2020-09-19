@@ -21,10 +21,8 @@ namespace Arnible.MathModeling.Algebra.Test
       VerifyAndMove(items, Sign.Positive, Sign.None);
       VerifyAndMove(items, Sign.None, Sign.Positive);
 
-      VerifyAndMove(items, Sign.Positive, Sign.Positive);
-
-      VerifyAndMove(items, Sign.Positive, Sign.Negative);
-      VerifyAndFinish(items, Sign.Negative, Sign.Positive);
+      VerifyAndMove(items, Sign.Negative, Sign.Positive);
+      VerifyAndFinish(items, Sign.Positive, Sign.Positive);
     }
 
     [Fact]
@@ -37,26 +35,18 @@ namespace Arnible.MathModeling.Algebra.Test
       VerifyAndMove(items, Sign.None, Sign.Positive, Sign.None);
       VerifyAndMove(items, Sign.None, Sign.None, Sign.Positive);
 
+      VerifyAndMove(items, Sign.Negative, Sign.Positive, Sign.None);
       VerifyAndMove(items, Sign.Positive, Sign.Positive, Sign.None);
+      
+      VerifyAndMove(items, Sign.None, Sign.Negative, Sign.Positive);
+      VerifyAndMove(items, Sign.Negative, Sign.None, Sign.Positive);
       VerifyAndMove(items, Sign.Positive, Sign.None, Sign.Positive);
       VerifyAndMove(items, Sign.None, Sign.Positive, Sign.Positive);
 
-      VerifyAndMove(items, Sign.Positive, Sign.None, Sign.Negative);
-      VerifyAndMove(items, Sign.None, Sign.Positive, Sign.Negative);
-      VerifyAndMove(items, Sign.Positive, Sign.Negative, Sign.None);
-      VerifyAndMove(items, Sign.Negative, Sign.Positive, Sign.None);
-      VerifyAndMove(items, Sign.None, Sign.Negative, Sign.Positive);
-      VerifyAndMove(items, Sign.Negative, Sign.None, Sign.Positive);
-
-      VerifyAndMove(items, Sign.Positive, Sign.Positive, Sign.Positive);
-
-      VerifyAndMove(items, Sign.Positive, Sign.Positive, Sign.Negative);
+      VerifyAndMove(items, Sign.Negative, Sign.Negative, Sign.Positive);
       VerifyAndMove(items, Sign.Positive, Sign.Negative, Sign.Positive);
       VerifyAndMove(items, Sign.Negative, Sign.Positive, Sign.Positive);
-
-      VerifyAndMove(items, Sign.Positive, Sign.Negative, Sign.Negative);
-      VerifyAndMove(items, Sign.Negative, Sign.Positive, Sign.Negative);
-      VerifyAndFinish(items, Sign.Negative, Sign.Negative, Sign.Positive);
+      VerifyAndFinish(items, Sign.Positive, Sign.Positive, Sign.Positive);
     }
   }
 }

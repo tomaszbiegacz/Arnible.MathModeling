@@ -12,9 +12,9 @@ namespace Arnible.MathModeling.Algebra
     {
       var values = new[] { (sbyte)Sign.Negative, (sbyte)Sign.None, (sbyte)Sign.Positive };
       return values
-        .ToSequncesWithReturning(length)
+        .ToSequencesWithReturning(length)
         .Select(s => new SignArray(s))
-        .Where(s => s.IsOrthogonal)
+        .Where(s => s.GetIsOrthogonal())
         .Order()
         .Select(s => s.Values)
         .ToReadOnlyList();

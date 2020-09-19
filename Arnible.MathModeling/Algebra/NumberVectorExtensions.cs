@@ -19,7 +19,7 @@ namespace Arnible.MathModeling.Algebra
     {
       List<Number>? result = null;
       uint itemsCount = 0;
-      foreach (var item in vectors)
+      foreach (NumberVector item in vectors)
       {
         itemsCount++;
         if (result == null)
@@ -33,31 +33,29 @@ namespace Arnible.MathModeling.Algebra
             throw new ArgumentException(nameof(vectors));
           }
 
-          using (var itemEnumerator = item.GetEnumerator())
+          using var itemEnumerator = item.GetEnumerator();
+          for (int i = 0; i < result.Count; ++i)
           {
-            for (int i = 0; i < result.Count; ++i)
+            if (!itemEnumerator.MoveNext())
             {
-              if (!itemEnumerator.MoveNext())
-              {
-                throw new InvalidOperationException();
-              }
-              result[i] += itemEnumerator.Current;
+              throw new InvalidOperationException();
             }
-          }            
+            result[i] += itemEnumerator.Current;
+          }
         }
       }
-      return (result != null ? result.ToVector() : default, itemsCount);
+      return (result?.ToVector() ?? default, itemsCount);
     }
 
     public static NumberVector Sum(this IEnumerable<NumberVector> vectors)
     {
-      var (sum, _) = SumWithCount(vectors);
+      (NumberVector sum, _) = SumWithCount(vectors);
       return sum;
     }
 
     public static NumberVector Average(this IEnumerable<NumberVector> vectors)
     {
-      var (sum, count) = SumWithCount(vectors);
+      (NumberVector sum, var count) = SumWithCount(vectors);
       return sum / count;
     }
   }

@@ -24,7 +24,7 @@ namespace Arnible.MathModeling.Geometry
         for (uint axisAngle = 1; axisAngle < _angleCount; ++axisAngle)
         {
           var prefix = _factory.Axis(axisAngle).ToReadOnlyList();
-          foreach (var sequence in _factory.AnglesWithoutRightAngle().ToSequncesWithReturning(_angleCount - axisAngle))
+          foreach (var sequence in _factory.AnglesWithoutRightAngle().ToSequencesWithReturning(_angleCount - axisAngle))
           {
             yield return _factory.Create(prefix.Concat(sequence));
           }
@@ -33,7 +33,7 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    private IEnumerable<HypersphericalAngleQuantified> WithoutRightAnglePrefix => _factory.AnglesWithoutRightAngle().ToSequncesWithReturning(_angleCount).Select(a => _factory.Create(a));
+    private IEnumerable<HypersphericalAngleQuantified> WithoutRightAnglePrefix => _factory.AnglesWithoutRightAngle().ToSequencesWithReturning(_angleCount).Select(a => _factory.Create(a));
 
     public IEnumerable<HypersphericalAngleQuantified> Angles => WithRightAnglePrefix.Concat(WithoutRightAnglePrefix);
   }
