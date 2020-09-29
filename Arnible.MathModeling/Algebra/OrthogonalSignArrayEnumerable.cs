@@ -6,7 +6,12 @@ namespace Arnible.MathModeling.Algebra
 {
   public class OrthogonalSignArrayEnumerable : IUnmanagedArrayEnumerable<Sign>
   {
-    static readonly ConcurrentDictionary<uint, IReadOnlyList<IReadOnlyList<sbyte>>> _collections = new ConcurrentDictionary<uint, IReadOnlyList<IReadOnlyList<sbyte>>>();
+    private static readonly ConcurrentDictionary<uint, IReadOnlyList<IReadOnlyList<sbyte>>> _collections;
+
+    static OrthogonalSignArrayEnumerable()
+    {
+      _collections = new ConcurrentDictionary<uint, IReadOnlyList<IReadOnlyList<sbyte>>>();
+    }
 
     private static IReadOnlyList<IReadOnlyList<sbyte>> BuildOrthogonalSignCollection(uint length)
     {
@@ -69,6 +74,5 @@ namespace Arnible.MathModeling.Algebra
         return false;
       }
     }
-
   }
 }

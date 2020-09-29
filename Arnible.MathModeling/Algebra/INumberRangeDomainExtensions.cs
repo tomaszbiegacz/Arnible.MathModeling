@@ -5,6 +5,11 @@ namespace Arnible.MathModeling.Algebra
 {
   public static class INumberRangeDomainExtensions
   {
+    public static bool IsValid(this INumberRangeDomain domain, in ValueArray<Number> values)
+    {
+      return values.All(v => domain.IsValid(v));
+    }
+    
     //
     // IsValidTranslation
     //

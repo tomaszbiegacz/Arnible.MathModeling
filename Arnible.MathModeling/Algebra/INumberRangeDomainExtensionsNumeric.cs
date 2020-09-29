@@ -48,7 +48,7 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public static NumberTranslationVector GetValidTranslation(
+    public static TranslationVectorScaling GetValidTranslation(
       this INumberRangeDomain domain,
       in ValueArray<Number> value,
       in NumberTranslationVector delta)
@@ -65,11 +65,11 @@ namespace Arnible.MathModeling.Algebra
       }
       else if (ratio == 1)
       {
-        return delta;
+        return new TranslationVectorScaling(delta);
       }
       else
       {
-        return ratio * delta;
+        return new TranslationVectorScaling(delta, ratio);
       }
     }
   }

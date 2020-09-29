@@ -18,7 +18,8 @@ namespace Arnible.MathModeling.Algebra
   /// </remarks>  
   [Serializable]
   public readonly struct NumberVector : 
-    IEquatable<NumberVector>, 
+    IEquatable<NumberVector>,
+    IComparable<NumberVector>,
     IEquatable<Number>, 
     IValueArray<Number>,
     IValueObject
@@ -216,10 +217,24 @@ namespace Arnible.MathModeling.Algebra
 
     public static bool operator ==(in NumberVector a, in Number b) => a.Equals(in b);
     public static bool operator !=(in NumberVector a, in Number b) => !a.Equals(in b);
+    
+    //
+    // IComparable
+    //
+
+    public int CompareTo(NumberVector other)
+    {
+      return GetLengthSquare().CompareTo(other.GetLengthSquare());
+    }
 
     //
-    // query operators
+    // Query operators
     //
+
+    public Number GetLengthSquare()
+    {
+      return GetInternalEnumerable().Select(v => v * v).SumWithDefault();
+    }
 
     public NumberVector Transform(in Func<Number, Number> transformation)
     {

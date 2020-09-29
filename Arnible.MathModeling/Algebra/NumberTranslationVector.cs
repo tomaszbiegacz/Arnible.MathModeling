@@ -18,7 +18,8 @@ namespace Arnible.MathModeling.Algebra
   /// </remarks>  
   [Serializable]
   public readonly struct NumberTranslationVector : 
-    IEquatable<NumberTranslationVector>, 
+    IEquatable<NumberTranslationVector>,
+    IComparable<NumberTranslationVector>,
     IEquatable<Number>, 
     IValueArray<Number>,
     IValueObject
@@ -96,10 +97,19 @@ namespace Arnible.MathModeling.Algebra
 
     public static bool operator ==(in Number a, in NumberTranslationVector b) => b.Equals(in a);
     public static bool operator !=(in Number a, in NumberTranslationVector b) => !b.Equals(in a);
+    
+    //
+    // IComparable
+    //
 
-    /*
-     * IArray
-     */
+    public int CompareTo(NumberTranslationVector other)
+    {
+      return _change.CompareTo(other._change);
+    }
+
+    //
+    // IArray
+    //
 
     internal IEnumerable<Number> GetInternalEnumerable() => _change.GetInternalEnumerable();
 
@@ -107,9 +117,9 @@ namespace Arnible.MathModeling.Algebra
 
     IEnumerator IEnumerable.GetEnumerator() => _change.GetEnumerator();    
 
-    /*
-     * Operations
-     */
+    //
+    // Operations
+    //
 
     public static NumberTranslationVector operator *(in NumberTranslationVector a, in Number b) => new NumberTranslationVector(b * a._change);
     public static NumberTranslationVector operator *(in Number a, in NumberTranslationVector b) => new NumberTranslationVector(a * b._change);

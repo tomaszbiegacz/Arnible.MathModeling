@@ -19,6 +19,11 @@ namespace Arnible.MathModeling
     {
       return System.Linq.Enumerable.FirstOrDefault(source);
     }
+    
+    public static T Last<T>(this IEnumerable<T> source)
+    {
+      return System.Linq.Enumerable.Last(source);
+    }
 
     /// <summary>
     /// Returns the only element of a sequence
