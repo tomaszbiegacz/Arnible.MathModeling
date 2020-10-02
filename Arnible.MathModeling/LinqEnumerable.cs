@@ -262,31 +262,49 @@ namespace Arnible.MathModeling
 
     public static IEnumerable<T> TakeExactly<T>(this IEnumerable<T> x, uint count)
     {
+      using var iterator = x.GetEnumerator();
       uint i = 0;
-      foreach (T item in x)
+      bool isTheEnd = false;
+      while (!isTheEnd)
       {
-        if (i < count)
+        if(iterator.MoveNext())
         {
-          yield return item;
+          isTheEnd = i >= count;
+          i++;
         }
-        i++;
-      }
-      if (i < count)
-      {
-        throw new ArgumentException($"Enumerator length {i}, hence I can't take exactly {count}");
+        else
+        {
+          throw new ArgumentException($"Enumerator length {i}, hence I can't take exactly {count}");
+        }
+
+        if (!isTheEnd)
+        {
+          yield return iterator.Current;  
+        }
       }
     }
 
     public static IEnumerable<T> TakeAtMost<T>(this IEnumerable<T> x, uint count)
     {
+      using var iterator = x.GetEnumerator();
       uint i = 0;
-      foreach (T item in x)
+      bool isTheEnd = false;
+      while (!isTheEnd)
       {
-        if (i < count)
+        if(iterator.MoveNext())
         {
-          yield return item;
+          isTheEnd = i >= count;
+          i++;
         }
-        i++;
+        else
+        {
+          isTheEnd = true;
+        }
+
+        if (!isTheEnd)
+        {
+          yield return iterator.Current;  
+        }
       }
     }
   }
