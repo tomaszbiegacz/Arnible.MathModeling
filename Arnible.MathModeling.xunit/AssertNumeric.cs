@@ -30,7 +30,10 @@ namespace Arnible.MathModeling.xunit
       
       Number pointValue = func(point);
       IUnmanagedArrayEnumerable<Sign> directions = new SignArrayEnumerable(point.Length);
+      
       // skip zero point
+      directions.MoveNext();
+      
       while (directions.MoveNext())
       {
         IEnumerable<Sign> direction = directions;

@@ -35,7 +35,7 @@ namespace Arnible.MathModeling.Algebra
     public SignArrayEnumerable(in uint size)
     {
       _collection = GetSignCollection(in size);
-      _position = 0;
+      _position = -1;
     }
 
     public override string ToString()
@@ -72,6 +72,11 @@ namespace Arnible.MathModeling.Algebra
       {
         return false;
       }
+    }
+
+    public IUnmanagedArray<Sign> GetCurrent()
+    {
+      return new UnmanagedArraySign(_collection[_position]);
     }
   }
 }

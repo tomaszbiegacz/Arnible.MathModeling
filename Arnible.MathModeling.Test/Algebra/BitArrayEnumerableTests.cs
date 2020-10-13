@@ -1,4 +1,5 @@
 ﻿using Xunit;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
@@ -8,6 +9,7 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Collection_1()
     {
       var items = new BoolArrayEnumerable(1);
+      IsTrue(items.MoveNext());
       VerifyAndMove(items, false);
       VerifyAndFinish(items, true);
     }
@@ -16,6 +18,7 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Collection_2()
     {
       var items = new BoolArrayEnumerable(2);
+      IsTrue(items.MoveNext());
       VerifyAndMove(items, false, false);
 
       VerifyAndMove(items, true, false);
@@ -28,6 +31,7 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Collection_3()
     {
       var items = new BoolArrayEnumerable(3);
+      IsTrue(items.MoveNext());
       VerifyAndMove(items, false, false, false);
 
       VerifyAndMove(items, true, false, false);

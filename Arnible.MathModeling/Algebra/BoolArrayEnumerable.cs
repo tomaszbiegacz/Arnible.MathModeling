@@ -30,7 +30,7 @@ namespace Arnible.MathModeling.Algebra
     public BoolArrayEnumerable(in uint size)
     {
       _collection = GetCollection(in size);
-      _position = 0;
+      _position = -1;
     }
 
     public override string ToString()
@@ -72,6 +72,14 @@ namespace Arnible.MathModeling.Algebra
       else
       {
         return false;
+      }
+    }
+
+    public IReadOnlyList<bool> Current
+    {
+      get
+      {
+        return _collection[_position];  
       }
     }
   }

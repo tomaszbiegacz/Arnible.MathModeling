@@ -34,9 +34,9 @@ namespace Arnible.MathModeling.Algebra.Test
     [InlineData(0.4, -1.2, 1)]
     [InlineData(0.4, -1.4, 1)]
     [InlineData(0.4, -2.8, 0.5)]
-    public void GetValidTranslationRatio(double currentValue, double evaluatedDelta, double expectedValue)
+    public void GetValidTranslationRatio(double currentValue, double evaluatedDelta, double expectedRatio)
     {
-      AreEqual(expectedValue, _range.GetValidTranslationRatio(currentValue, evaluatedDelta));
+      AreEqual(expectedRatio, _range.GetValidTranslationRatio(currentValue, evaluatedDelta));
     }
 
     [Fact]

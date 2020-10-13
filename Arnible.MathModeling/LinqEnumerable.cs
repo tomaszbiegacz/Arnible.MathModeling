@@ -269,18 +269,14 @@ namespace Arnible.MathModeling
       {
         if(iterator.MoveNext())
         {
-          isTheEnd = i >= count;
+          yield return iterator.Current;
           i++;
         }
         else
         {
           throw new ArgumentException($"Enumerator length {i}, hence I can't take exactly {count}");
         }
-
-        if (!isTheEnd)
-        {
-          yield return iterator.Current;  
-        }
+        isTheEnd = i >= count;
       }
     }
 
@@ -293,17 +289,13 @@ namespace Arnible.MathModeling
       {
         if(iterator.MoveNext())
         {
-          isTheEnd = i >= count;
+          yield return iterator.Current;
           i++;
+          isTheEnd = i >= count;
         }
         else
         {
           isTheEnd = true;
-        }
-
-        if (!isTheEnd)
-        {
-          yield return iterator.Current;  
         }
       }
     }
