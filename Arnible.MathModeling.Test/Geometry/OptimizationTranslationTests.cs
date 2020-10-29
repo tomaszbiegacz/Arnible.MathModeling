@@ -29,7 +29,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void CartesianForMinimumEquals0_DirectedPosive()
     {
-      AreEqual(new NumberTranslationVector(0, 3), OptimizationTranslation.CartesianForMinimumEquals0(value: 6, cartesiaxAxisNumber: 1, new Derivative1Value(-2)));
+      AreEqual(new NumberTranslationVector(0, 3), OptimizationTranslation.CartesianForMinimumEquals0(value: 6, cartesianAxisNumber: 1, new Derivative1Value(-2)));
     }
 
     [Fact]
@@ -41,7 +41,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void CartesianForMinimumEquals0_DirectedNegative()
     {      
-      AreEqual(new NumberTranslationVector(-3), OptimizationTranslation.CartesianForMinimumEquals0(value: 6, cartesiaxAxisNumber: 0, new Derivative1Value(2)));
+      AreEqual(new NumberTranslationVector(-3), OptimizationTranslation.CartesianForMinimumEquals0(value: 6, cartesianAxisNumber: 0, new Derivative1Value(2)));
     }
 
     [Fact]

@@ -80,7 +80,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void Array_IsValid_True()
     {
-      var src = new ValueArray<Number>(0.1, 0.2);
+      var src = new Number[] {0.1, 0.2};
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3);
       IsTrue(_range.IsValidTranslation(src, delta));
     }
@@ -88,7 +88,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void Array_IsValid_False()
     {
-      var src = new ValueArray<Number>(0.1, 0.2);
+      var src = new Number[] {0.1, 0.2};
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3, 0.1);
       IsFalse(_range.IsValidTranslation(src, delta));
     }
@@ -96,7 +96,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void Array_IsValid_False_Overflow()
     {
-      var src = new ValueArray<Number>(0.1, 0.9);
+      var src = new Number[] {0.1, 0.9};
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3);
       IsFalse(_range.IsValidTranslation(src, delta));
     }
@@ -104,9 +104,9 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void Array_Translate_Superset()
     {
-      var src = new ValueArray<Number>(0.1, 0.2, 0.1);
+      var src = new Number[] {0.1, 0.2, 0.1};
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
-      AreEqual(new ValueArray<Number>(0.3, 1, 0.1), _range.Translate(src, delta));
+      AreEqual(new Number[]{0.3, 1, 0.1}, _range.Translate(src, delta));
     }
 
     [Fact]

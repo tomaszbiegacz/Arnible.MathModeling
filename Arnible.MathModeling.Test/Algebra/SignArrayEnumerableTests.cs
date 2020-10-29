@@ -3,14 +3,14 @@ using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
-  public class SignArrayEnumerableTests : UnmanagedArrayEnumerableTests<SignArrayEnumerable, Sign>
+  public class SignArrayEnumerableTests : UnmanagedArrayEnumerableTests<Sign>
   {
     // 1 -> 3
     
     [Fact]
     public void Collection_1()
     {
-      var items = new SignArrayEnumerable(1);
+      using var items = new SignArrayEnumerable(1).GetEnumerator();
       IsTrue(items.MoveNext());
       VerifyAndMove(items, Sign.None);
       VerifyAndMove(items, Sign.Negative);
@@ -22,7 +22,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void Collection_2()
     {
-      var items = new SignArrayEnumerable(2);
+      using var items = new SignArrayEnumerable(2).GetEnumerator();
       IsTrue(items.MoveNext());
       VerifyAndMove(items, Sign.None, Sign.None);
       

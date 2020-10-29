@@ -2,7 +2,7 @@
 
 namespace Arnible.MathModeling
 {
-  public interface IUnmanagedArray<T> : IEnumerable<T>
+  interface IUnmanagedArray<T> : IEnumerable<T>
     where T : unmanaged
   {
     uint Length { get; }

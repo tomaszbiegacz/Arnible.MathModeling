@@ -20,5 +20,10 @@ namespace Arnible.MathModeling.Algebra
     public uint Length => (uint)_items.Count;
 
     public Sign this[in uint index] => (Sign) _items[(int)index];
+    
+    public override string ToString()
+    {
+      return $"[{string.Join(',', this)}]";
+    }
   }
 }

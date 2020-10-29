@@ -4,11 +4,16 @@ using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Algebra
 {
-  public class BoolArrayEnumerable : IUnmanagedArrayEnumerable<bool>
+  public class BoolArrayEnumerable : IReadOnlyCollection<UnmanagedArray<bool>>
   {
-    static readonly ConcurrentDictionary<uint, IReadOnlyList<IReadOnlyList<bool>>> _collections = new ConcurrentDictionary<uint, IReadOnlyList<IReadOnlyList<bool>>>();
+    private static readonly ConcurrentDictionary<uint, IReadOnlyList<UnmanagedArray<bool>>> _collections;
 
-    private static IReadOnlyList<IReadOnlyList<bool>> BuildCollection(uint length)
+    static BoolArrayEnumerable()
+    {
+      _collections = new ConcurrentDictionary<uint, IReadOnlyList<UnmanagedArray<bool>>>();
+    }
+
+    private static IReadOnlyList<UnmanagedArray<bool>> BuildCollection(uint length)
     {
       var values = new[] { false, true };
       return values
@@ -19,68 +24,28 @@ namespace Arnible.MathModeling.Algebra
         .ToReadOnlyList();
     }
 
-    private static IReadOnlyList<IReadOnlyList<bool>> GetCollection(in uint length)
+    private static IReadOnlyList<UnmanagedArray<bool>> GetCollection(in uint length)
     {
       return _collections.GetOrAdd(length, BuildCollection);
     }
 
-    private readonly IReadOnlyList<IReadOnlyList<bool>> _collection;
-    private int _position;
+    private readonly IReadOnlyList<UnmanagedArray<bool>> _collection;
 
     public BoolArrayEnumerable(in uint size)
     {
       _collection = GetCollection(in size);
-      _position = -1;
-    }
-
-    public override string ToString()
-    {
-      return $"[{string.Join(',', this)}]";
     }
 
     /*
-     * IArray
+     * IReadOnlyCollection
      */
 
-    public bool this[in uint index]
-    {
-      get
-      {
-        return _collection[_position][(int)index];
-      }
-    }
+    public int Count => _collection.Count;
 
-    public uint Length => (uint)_collection[_position].Count;
+    private IEnumerable<UnmanagedArray<bool>> GetEnumerable() => _collection;
 
-    private IEnumerable<bool> GetEnumerable() => _collection[_position];
-
-    public IEnumerator<bool> GetEnumerator() => GetEnumerable().GetEnumerator();
+    public IEnumerator<UnmanagedArray<bool>> GetEnumerator() => GetEnumerable().GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerable().GetEnumerator();
-
-    /*
-     * Operations
-     */
-
-    public bool MoveNext()
-    {
-      if (_position + 1 < _collection.Count)
-      {
-        _position++;
-        return true;
-      }
-      else
-      {
-        return false;
-      }
-    }
-
-    public IReadOnlyList<bool> Current
-    {
-      get
-      {
-        return _collection[_position];  
-      }
-    }
   }
 }

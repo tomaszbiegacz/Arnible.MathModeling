@@ -3,21 +3,29 @@ using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
-  public class OrthogonalSignArrayEnumerableTests : UnmanagedArrayEnumerableTests<OrthogonalSignArrayEnumerable, Sign>
+  public class OrthogonalSignArrayEnumerableTests : UnmanagedArrayEnumerableTests<Sign>
   {    
     [Fact]
     public void Collection_1()
     {
-      var items = new OrthogonalSignArrayEnumerable(1);
+      using var items = SignArrayEnumerable.GetOrthogonalSignCollection(1).GetEnumerator();
       IsTrue(items.MoveNext());
       VerifyAndMove(items, Sign.None);
+      VerifyAndFinish(items, Sign.Positive);      
+    }
+    
+    [Fact]
+    public void Collection_1_1()
+    {
+      using var items = SignArrayEnumerable.GetOrthogonalSignCollection(1, 1).GetEnumerator();
+      IsTrue(items.MoveNext());
       VerifyAndFinish(items, Sign.Positive);      
     }
 
     [Fact]
     public void Collection_2()
     {
-      var items = new OrthogonalSignArrayEnumerable(2);
+      using var items = SignArrayEnumerable.GetOrthogonalSignCollection(2).GetEnumerator();
       IsTrue(items.MoveNext());
       VerifyAndMove(items, Sign.None, Sign.None);
 
@@ -27,11 +35,30 @@ namespace Arnible.MathModeling.Algebra.Test
       VerifyAndMove(items, Sign.Negative, Sign.Positive);
       VerifyAndFinish(items, Sign.Positive, Sign.Positive);
     }
+    
+    [Fact]
+    public void Collection_2_1()
+    {
+      using var items = SignArrayEnumerable.GetOrthogonalSignCollection(2, 1).GetEnumerator();
+      IsTrue(items.MoveNext());
+      VerifyAndMove(items, Sign.Positive, Sign.None);
+      VerifyAndFinish(items, Sign.None, Sign.Positive);
+    }
+    
+    [Fact]
+    public void Collection_2_2()
+    {
+      using var items = SignArrayEnumerable.GetOrthogonalSignCollection(2, 2).GetEnumerator();
+      IsTrue(items.MoveNext());
+      
+      VerifyAndMove(items, Sign.Negative, Sign.Positive);
+      VerifyAndFinish(items, Sign.Positive, Sign.Positive);
+    }
 
     [Fact]
     public void Collection_3()
     {
-      var items = new OrthogonalSignArrayEnumerable(3);
+      using var items = SignArrayEnumerable.GetOrthogonalSignCollection(3).GetEnumerator();
       IsTrue(items.MoveNext());
       VerifyAndMove(items, Sign.None, Sign.None, Sign.None);
 

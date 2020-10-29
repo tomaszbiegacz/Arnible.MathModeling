@@ -5,9 +5,9 @@ namespace Arnible.MathModeling.Algebra
 {
   readonly struct SignArray : IComparable<SignArray>
   {
-    public SignArray(IEnumerable<sbyte> sings)
+    public SignArray(IEnumerable<Sign> sings)
     {
-      Values = sings.ToReadOnlyList();
+      Values = sings.ToUnmanagedArray();
     }
 
     /*
@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Algebra
 
     public int CompareTo(SignArray other)
     {
-      int byLength = Values.Count.CompareTo(other.Values.Count);
+      int byLength = Values.Length.CompareTo(other.Values.Length);
       if (byLength != 0)
       {
         return byLength;
@@ -30,10 +30,12 @@ namespace Arnible.MathModeling.Algebra
         return byValueCount;
       }
 
-      for (int iPos = 0; iPos < Values.Count; iPos++)
+      for (uint iPos = 0; iPos < Values.Length; iPos++)
       {
-        int i = Values.Count - 1 - iPos;
-        int byValue = Values[i].CompareTo(other.Values[i]);
+        uint i = Values.Length - 1 - iPos;
+        Sign v1 = Values[i];
+        Sign v2 = other.Values[i];
+        int byValue = ((int)v1).CompareTo((int)v2);
         if (byValue != 0)
         {
           return byValue;
@@ -47,7 +49,7 @@ namespace Arnible.MathModeling.Algebra
      * Properties
      */
 
-    public IReadOnlyList<sbyte> Values { get; }
+    public UnmanagedArray<Sign> Values { get; }
     
     /*
      * Operations
@@ -62,7 +64,7 @@ namespace Arnible.MathModeling.Algebra
         return true;
       }
 
-      sbyte lastNonZero = Values.Where(s => s != 0).Last();
+      Sign lastNonZero = Values.Where(s => s != 0).Last();
       return lastNonZero > 0;
     }
   }

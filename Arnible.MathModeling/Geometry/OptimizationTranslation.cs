@@ -6,7 +6,7 @@ namespace Arnible.MathModeling.Geometry
   public static class OptimizationTranslation
   {
     /// <summary>
-    /// Estimated change to reach minimum in 1 dimentional case
+    /// Estimated change to reach minimum in 1 dimensional case
     /// </summary>
     public static Number ForMinimumEquals0(in Number value, in Derivative1Value derivative)
     {
@@ -32,11 +32,11 @@ namespace Arnible.MathModeling.Geometry
     /// </summary>
     public static NumberTranslationVector CartesianForMinimumEquals0(
       in Number value,
-      in uint cartesiaxAxisNumber,
+      in uint cartesianAxisNumber,
       in Derivative1Value derivative)
     {
       Number rDelta = ForMinimumEquals0(in value, in derivative);
-      return new NumberTranslationVector(NumberVector.NonZeroValueAt(pos: in cartesiaxAxisNumber, value: in rDelta));
+      return new NumberTranslationVector(NumberVector.NonZeroValueAt(pos: in cartesianAxisNumber, value: in rDelta));
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ namespace Arnible.MathModeling.Geometry
     /// </summary>
     public static NumberTranslationVector CartesianForMinimumEquals0(
       in Number value,
-      in IUnmanagedArray<Sign> axis,
+      in UnmanagedArray<Sign> axis,
       in Derivative1Value derivative)
     {
       Number rDelta = ForMinimumEquals0(in value, in derivative);

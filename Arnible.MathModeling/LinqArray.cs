@@ -26,17 +26,6 @@ namespace Arnible.MathModeling
       }
     }
 
-    public static IEnumerable<uint> IndexesWhere<T>(this IUnmanagedArray<T> arg, Func<T, bool> predicate) where T : unmanaged
-    {
-      for (uint i = 0; i < arg.Length; ++i)
-      {
-        if (predicate(arg[i]))
-        {
-          yield return i;
-        }
-      }
-    }
-
     public static T[][] ToArrayJagged<T>(this T[,] twoDimensionalArray)
     {
       int rowsFirstIndex = twoDimensionalArray.GetLowerBound(0);

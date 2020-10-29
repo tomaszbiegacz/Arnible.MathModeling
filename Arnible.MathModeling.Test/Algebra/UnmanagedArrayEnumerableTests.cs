@@ -1,12 +1,12 @@
-﻿using static Arnible.MathModeling.xunit.AssertNumber;
+﻿using System.Collections.Generic;
+using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
-  public abstract class UnmanagedArrayEnumerableTests<TEnumerator, TValue>
-    where TEnumerator : class, IUnmanagedArrayEnumerable<TValue>
+  public abstract class UnmanagedArrayEnumerableTests<TValue>
     where TValue : unmanaged
   {
-    protected static void Verify(TEnumerator list, params TValue[] signs)
+    protected static void Verify(UnmanagedArray<TValue> list, params TValue[] signs)
     {
       AreEqual(signs.Length, list.Length);
       for (uint i = 0; i < signs.Length; ++i)
@@ -17,17 +17,16 @@ namespace Arnible.MathModeling.Algebra.Test
       }
     }
 
-    protected static void VerifyAndMove(TEnumerator list, params TValue[] signs)
+    protected static void VerifyAndMove(IEnumerator<UnmanagedArray<TValue>> list, params TValue[] signs)
     {
-      Verify(list, signs);
+      Verify(list.Current, signs);
       IsTrue(list.MoveNext());
     }
 
-    protected static void VerifyAndFinish(TEnumerator list, params TValue[] signs)
+    protected static void VerifyAndFinish(IEnumerator<UnmanagedArray<TValue>> list, params TValue[] signs)
     {
-      Verify(list, signs);
+      Verify(list.Current, signs);
       IsFalse(list.MoveNext());
-      Verify(list, signs);
     }
   }
 }

@@ -9,7 +9,7 @@ namespace Arnible.MathModeling.Algebra
 
     public BoolArray(IEnumerable<bool> values)
     {
-      Values = values.ToReadOnlyList();
+      Values = values.ToUnmanagedArray();
       _valueCount = Values.Where(s => s).Count();
     }
 
@@ -25,9 +25,9 @@ namespace Arnible.MathModeling.Algebra
         return byCount;
       }      
 
-      for (int iPos = 0; iPos < Values.Count; iPos++)
+      for (uint iPos = 0; iPos < Values.Length; iPos++)
       {
-        int i = Values.Count - 1 - iPos;
+        uint i = Values.Length - 1 - iPos;
         int byValue = Values[i].CompareTo(other.Values[i]);
         if (byValue != 0)
         {
@@ -42,6 +42,6 @@ namespace Arnible.MathModeling.Algebra
      * Properties
      */
 
-    public IReadOnlyList<bool> Values { get; }
+    public UnmanagedArray<bool> Values { get; }
   }
 }

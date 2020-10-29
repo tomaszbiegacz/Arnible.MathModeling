@@ -29,14 +29,14 @@ namespace Arnible.MathModeling.xunit
       AssertNumber.IsTrue(valueDomain.IsValid(in point));
       
       Number pointValue = func(point);
-      IUnmanagedArrayEnumerable<Sign> directions = new SignArrayEnumerable(point.Length);
+      using IEnumerator<UnmanagedArray<Sign>> directions = new SignArrayEnumerable(point.Length).GetEnumerator();
       
       // skip zero point
       directions.MoveNext();
       
       while (directions.MoveNext())
       {
-        IEnumerable<Sign> direction = directions;
+        UnmanagedArray<Sign> direction = directions.Current;
         ValueArray<Number> newPoint = direction.Select((i, s) => GetNearbyPoint(point[i], s, distance)).ToValueArray();
         if (valueDomain.IsValid(in newPoint))
         {

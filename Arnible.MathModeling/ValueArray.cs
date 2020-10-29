@@ -25,7 +25,7 @@ namespace Arnible.MathModeling
     private static IEnumerable<T> _empty = LinqEnumerable.Empty<T>().ToReadOnlyList();
     private readonly T[] _values;
 
-    internal ValueArray(params T[] items)
+    internal ValueArray(T[] items)
     {
       _values = items;
     }

@@ -4,79 +4,59 @@ using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Algebra
 {
-  public class SignArrayEnumerable : IUnmanagedArrayEnumerable<Sign>
+  public class SignArrayEnumerable : IReadOnlyCollection<UnmanagedArray<Sign>>
   {
-    private static readonly ConcurrentDictionary<uint, IReadOnlyList<IReadOnlyList<sbyte>>> _collections;
+    private static readonly ConcurrentDictionary<uint, IReadOnlyList<UnmanagedArray<Sign>>> _collections;
+    private readonly IReadOnlyList<UnmanagedArray<Sign>> _collection;
 
     static SignArrayEnumerable()
     {
-      _collections = new ConcurrentDictionary<uint, IReadOnlyList<IReadOnlyList<sbyte>>>();
+      _collections = new ConcurrentDictionary<uint, IReadOnlyList<UnmanagedArray<Sign>>>();
     }
 
-    private static IReadOnlyList<IReadOnlyList<sbyte>> BuildOSignCollection(uint length)
+    private static IReadOnlyList<UnmanagedArray<Sign>> BuildOSignCollection(uint length)
     {
-      var values = new[] { (sbyte)Sign.Negative, (sbyte)Sign.None, (sbyte)Sign.Positive };
-      return values
-        .ToSequencesWithReturning(length)
-        .Select(s => new SignArray(s))
-        .Order()
+      return SignArrayCache.GetAllPossibilities(length)
         .Select(s => s.Values)
         .ToReadOnlyList();
     }
 
-    private static IReadOnlyList<IReadOnlyList<sbyte>> GetSignCollection(in uint length)
+    private static IReadOnlyList<UnmanagedArray<Sign>> GetSignCollection(in uint length)
     {
       return _collections.GetOrAdd(length, BuildOSignCollection);
     }
-
-    private readonly IReadOnlyList<IReadOnlyList<sbyte>> _collection;
-    private int _position;
-
+    
     public SignArrayEnumerable(in uint size)
+    : this(GetSignCollection(in size))
     {
-      _collection = GetSignCollection(in size);
-      _position = -1;
+      // intentionally empty
+    }
+    
+    internal SignArrayEnumerable(IReadOnlyList<UnmanagedArray<Sign>> collection)
+    {
+      _collection = collection;
     }
 
-    public override string ToString()
+    public static SignArrayEnumerable GetOrthogonalSignCollection(in uint length)
     {
-      return $"[{string.Join(',', this)}]";
+      return new SignArrayEnumerable(OrthogonalSignArrayEnumerable.GetOrthogonalSignCollection(length));
     }
 
-    /*
-     * IArray
-     */
+    public static SignArrayEnumerable GetOrthogonalSignCollection(uint length, uint singsCount)
+    {
+      return new SignArrayEnumerable(OrthogonalSignArrayEnumerable.GetOrthogonalSignCollection(length, singsCount));
+    }
+    
+    //
+    // IReadOnlyCollection
+    //
+    
+    public int Count => _collection.Count;
 
-    public Sign this[in uint index] => (Sign)_collection[_position][(int)index];
+    private IEnumerable<UnmanagedArray<Sign>> GetEnumerable() => _collection;
 
-    public uint Length => (uint)_collection[_position].Count;
-
-    private IEnumerable<Sign> GetEnumerable() => _collection[_position].Select(s => (Sign)s);
-
-    public IEnumerator<Sign> GetEnumerator() => GetEnumerable().GetEnumerator();
+    public IEnumerator<UnmanagedArray<Sign>> GetEnumerator() => GetEnumerable().GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerable().GetEnumerator();
-
-    /*
-     * Operations
-     */
-
-    public bool MoveNext()
-    {
-      if (_position + 1 < _collection.Count)
-      {
-        _position++;
-        return true;
-      }
-      else
-      {
-        return false;
-      }
-    }
-
-    public IUnmanagedArray<Sign> GetCurrent()
-    {
-      return new UnmanagedArraySign(_collection[_position]);
-    }
   }
 }

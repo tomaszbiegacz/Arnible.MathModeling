@@ -3,12 +3,12 @@ using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
-  public class BitArrayEnumerableTests : UnmanagedArrayEnumerableTests<BoolArrayEnumerable, bool>
+  public class BitArrayEnumerableTests : UnmanagedArrayEnumerableTests<bool>
   {
     [Fact]
     public void Collection_1()
     {
-      var items = new BoolArrayEnumerable(1);
+      using var items = new BoolArrayEnumerable(1).GetEnumerator();
       IsTrue(items.MoveNext());
       VerifyAndMove(items, false);
       VerifyAndFinish(items, true);
@@ -17,7 +17,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void Collection_2()
     {
-      var items = new BoolArrayEnumerable(2);
+      using var items = new BoolArrayEnumerable(2).GetEnumerator();
       IsTrue(items.MoveNext());
       VerifyAndMove(items, false, false);
 
@@ -30,7 +30,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void Collection_3()
     {
-      var items = new BoolArrayEnumerable(3);
+      using var items = new BoolArrayEnumerable(3).GetEnumerator();
       IsTrue(items.MoveNext());
       VerifyAndMove(items, false, false, false);
 

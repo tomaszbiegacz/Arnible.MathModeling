@@ -49,7 +49,7 @@ namespace Arnible.MathModeling.Algebra
       return new NumberVector(LinqEnumerable.Repeat<Number>(0, pos).Append(value).ToValueArray());
     }
 
-    public static NumberVector NonZeroValueAt(in IUnmanagedArray<bool> pos, Number value)
+    public static NumberVector NonZeroValueAt(in UnmanagedArray<bool> pos, Number value)
     {
       if (value == 0)
       {
@@ -59,7 +59,7 @@ namespace Arnible.MathModeling.Algebra
       return Create(pos.Select(v => v ? value : 0));
     }
 
-    public static NumberVector NonZeroValueAt(in IUnmanagedArray<Sign> pos, Number value)
+    public static NumberVector NonZeroValueAt(in UnmanagedArray<Sign> pos, Number value)
     {
       if (value == 0)
       {

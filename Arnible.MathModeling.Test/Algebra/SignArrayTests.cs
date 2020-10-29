@@ -7,7 +7,7 @@ namespace Arnible.MathModeling.Algebra.Test
   {
     private static SignArray Create(params sbyte[] values)
     {
-      return new SignArray(values);
+      return new SignArray(values.Select(s => (Sign)s));
     }
     
     // 1 -> 3
