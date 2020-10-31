@@ -47,6 +47,11 @@ namespace Arnible.MathModeling.Algebra
       return new SignArrayEnumerable(OrthogonalSignArrayEnumerable.GetOrthogonalSignCollection(length, singsCount));
     }
     
+    public static SignArrayEnumerable GetAxisCollection(uint length)
+    {
+      return new SignArrayEnumerable(SignArrayCache.GetAxisParameters(length));
+    }
+    
     //
     // IReadOnlyCollection
     //

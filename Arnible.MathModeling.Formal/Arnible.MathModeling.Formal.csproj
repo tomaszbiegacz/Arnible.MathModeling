@@ -22,6 +22,18 @@
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVector.cs" Link="Algebra\NumberVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVectorExtensions.cs" Link="Algebra\NumberVectorExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\Sign.cs" Link="Algebra\Sign.cs" />
+    <Compile Include="..\Arnible.MathModeling\Algebra\SignArray.cs">
+      <Link>Algebra\SignArray.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\SignArrayCache.cs">
+      <Link>Algebra\SignArrayCache.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\SignArrayCacheOrthogonal.cs">
+      <Link>Algebra\SignArrayCacheOrthogonal.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\SignArrayEnumerable.cs">
+      <Link>Algebra\SignArrayEnumerable.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\Algebra\SignExtensions.cs">
       <Link>Algebra\SignExtensions.cs</Link>
     </Compile>

@@ -36,5 +36,14 @@ namespace Arnible.MathModeling.Algebra.Test
       VerifyAndMove(items, Sign.Negative, Sign.Positive);
       VerifyAndFinish(items, Sign.Positive, Sign.Positive);
     }
+    
+    [Fact]
+    public void Collection_2_Axis()
+    {
+      using var items = SignArrayEnumerable.GetAxisCollection(2).GetEnumerator();
+      IsTrue(items.MoveNext());
+      VerifyAndMove(items, Sign.Positive, Sign.None);
+      VerifyAndFinish(items, Sign.None, Sign.Positive);
+    }
   }
 }
