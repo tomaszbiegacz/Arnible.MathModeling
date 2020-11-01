@@ -4,7 +4,7 @@ namespace Arnible.MathModeling.Algebra
 {
   public static class SignExtensions
   {
-    public static Number ToValue(this Sign sign)
+    private static Number ToValue(this Sign sign)
     {
       switch (sign)
       {
@@ -17,6 +17,16 @@ namespace Arnible.MathModeling.Algebra
       }
 
       throw new ArgumentException(nameof(sign));
+    }
+
+    public static ValueArray<Number> ToDirectionArray(this in UnmanagedArray<Sign> signs)
+    {
+      return signs.Select(s => ToValue(s)).ToValueArray();
+    }
+    
+    public static ValueArray<Number> ToDirectionArray(this Sign[] signs)
+    {
+      return signs.Select(s => ToValue(s)).ToValueArray();
     }
   }
 }

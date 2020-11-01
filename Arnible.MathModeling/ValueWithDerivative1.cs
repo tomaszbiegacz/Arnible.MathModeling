@@ -47,5 +47,17 @@ namespace Arnible.MathModeling
 
       throw new ArgumentException(nameof(sign));
     }
+    
+    public ValueWithDerivative1 ChangeDirection(in Number direction)
+    {
+      if (direction == 1)
+      {
+        return this;
+      }
+      else
+      {
+        return new ValueWithDerivative1(value: Value, first: direction * First);
+      }
+    }
   }
 }
