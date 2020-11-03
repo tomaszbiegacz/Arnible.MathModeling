@@ -28,5 +28,17 @@ namespace Arnible.MathModeling.Algebra
     {
       return signs.Select(s => ToValue(s)).ToValueArray();
     }
+
+    public static Sign GetSign(this in Number v)
+    {
+      if (v == 0)
+      {
+        return Sign.None;
+      }
+      else
+      {
+        return v > 0 ? Sign.Positive : Sign.Negative;
+      }
+    }
   }
 }

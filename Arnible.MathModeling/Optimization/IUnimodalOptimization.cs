@@ -17,5 +17,9 @@ namespace Arnible.MathModeling.Optimization
     /// </summary>
     /// <returns>Is solution improved?</returns>
     bool MoveNext();
+    
+    bool IsOptimal { get; }
+    
+    Number Width { get; }
   }
 }

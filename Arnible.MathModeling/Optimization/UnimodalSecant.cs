@@ -1,4 +1,5 @@
 using System;
+using Arnible.MathModeling.Algebra;
 using Arnible.MathModeling.Export;
 
 namespace Arnible.MathModeling.Optimization
@@ -17,33 +18,55 @@ namespace Arnible.MathModeling.Optimization
       ValueWithDerivative1 b,
       IMathModelingLogger logger)
     {
-      if (a.First >= 0)
+      if (a.First <= 0)
       {
-        throw new ArgumentException(nameof(a));
+        _a = a;
+        _b = b;  
       }
-      if (b.First <= 0)
+      else
+      {
+        _a = b;
+        _b = a;
+      }
+      if (_b.First < 0)
       {
         throw new ArgumentException(nameof(b));
       }
       
       _f = f;
-      _a = a;
-      _b = b;
+      
       _notUnimodalFunction = false;
       _logger = logger;
     }
-    
+
+    public bool IsOptimal => _a.X == _b.X ||  _a.First == 0 || _b.First == 0;
     public Number X => _a.Y < _b.Y ? _a.X : _b.X;
     public Number Y => _a.Y < _b.Y ? _a.Y : _b.Y;
 
+    public Number Width
+    {
+      get
+      {
+        Number value = _b.X - _a.X;
+        return value * (int)value.GetSign();
+      }
+    }
+
     public bool MoveNext()
     {
-      if (_a.First > 0 || _b.First <= 0)
+      if (_a.First > 0 || _b.First < 0)
       {
+        // something when wrong
         throw new InvalidOperationException($"da: {_a.First.ToStringValue()}, db: {_b.First.ToStringValue()}");
       }
-      if (_a.First == 0 || _notUnimodalFunction)
+      if (IsOptimal)
       {
+        // we're done here
+        return false;
+      }
+      if (_a.First == _b.First || _notUnimodalFunction)
+      {
+        // we've a problem here
         return false;
       }
 
