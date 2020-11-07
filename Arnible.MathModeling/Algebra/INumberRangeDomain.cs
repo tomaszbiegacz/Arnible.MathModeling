@@ -20,13 +20,23 @@
     Number Translate(in Number value, in Number delta);
 
     /// <summary>
-    /// Get valid transaltion ration, taking under account number range.
+    /// Get valid translation ratio, taking under account number range.
     /// </summary>
     Number GetValidTranslationRatio(in Number value, in Number delta);
+
+    /// <summary>
+    /// Get maximum valid translation ratio, taking under account number range.
+    /// </summary>
+    Number? GetMaximumValidTranslationRatio(in Number value, in Number delta);
 
     /// <summary>
     /// Get valid angle translation ratio for last angle
     /// </summary>    
     Number GetValidTranslationRatioForLastAngle(in Number radius, in Number currentAngle, in Number angleDelta);
+
+    /// <summary>
+    /// Checks whether given translation is valid
+    /// </summary>
+    bool IsValidTranslation(in Number value, in Sign direction);
   }
 }

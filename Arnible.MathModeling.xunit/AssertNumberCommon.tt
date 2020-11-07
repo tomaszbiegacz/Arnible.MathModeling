@@ -3,6 +3,16 @@
 void Print_Equatable()
 {
 #>
+    public static void IsNull<T>(in T? actual) where T: struct
+    {
+      Assert.True(actual is null, $"actual is not null\n");
+    }
+    
+    public static void IsNull<T>(in T? actual) where T: class
+    {
+      Assert.True(actual is null, $"actual is not null\n");
+    }
+
     //
     // AreEqual
     //
@@ -283,11 +293,18 @@ void Print_NumberExtension(string typeName)
     // <#= typeName #> to Number
     //
 
+    public static void AreEqual(in <#= typeName #> expected, in Number? actual)
+    {
+      Assert.False(actual is null, "actual is null");
+      Number expectedNumber = expected;
+      AreEqual(in expectedNumber, actual ?? throw new InvalidOperationException("Actual is null"));
+    }    
+
     public static void AreEqual(in <#= typeName #> expected, in Number actual)
     {
       Number expectedNumber = expected;
-      AreEqual(in expectedNumber, in actual);            
-    }
+      AreEqual(in expectedNumber, actual);
+    }    
 
     public static void AreNotEqual(in <#= typeName #> expected, in Number actual)
     {

@@ -76,6 +76,32 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
+    public Number? GetMaximumValidTranslationRatio(in Number value, in Number delta)
+    {
+      if (!IsValid(in value))
+      {
+        throw new ArgumentException(nameof(value));
+      }
+
+      if (delta == 0)
+      {
+        return null;
+      }
+      else
+      {
+        if (delta > 0)
+        {
+          Number range = Maximum - value;
+          return range / delta;
+        }
+        else
+        {
+          Number range = value - Minimum;
+          return -1 * range / delta;
+        }
+      }
+    }
+    
     private static double Asin(Number x)
     {
       return Math.Asin((double)x);
@@ -132,6 +158,28 @@ namespace Arnible.MathModeling.Algebra
         {
           return validDelta / angleDelta;
         }
+      }
+    }
+
+    public bool IsValidTranslation(in Number value, in Sign direction)
+    {
+      if (IsValid(value))
+      {
+        switch (direction)
+        {
+          case Sign.None:
+            return true;
+          case Sign.Negative:
+            return value > Minimum;
+          case Sign.Positive:
+            return value < Maximum;
+          default:
+            throw new ArgumentException(nameof(direction));
+        }  
+      }
+      else
+      {
+        return false;
       }
     }
   }

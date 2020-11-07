@@ -17,6 +17,7 @@ namespace Arnible.MathModeling
 
 foreach(string typeName in generatedTypes)
 {
+    Print_MinOrDefault(typeName);
     Print_MinDefensive(typeName);
     Print_WithMinimum(typeName);
     Print_WithMinimumAt(typeName);

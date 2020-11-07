@@ -9,14 +9,14 @@ namespace Arnible.MathModeling.Optimization
     private const double Ratio = 0.618;
     
     private readonly INumberFunctionWithDerivative _f;
-    private ValueWithDerivative1 _a;
-    private ValueWithDerivative1 _b;
+    private NumberValueWithDerivative1 _a;
+    private NumberValueWithDerivative1 _b;
     private readonly IMathModelingLogger _logger;
 
     public GoldenSectionConstrained(
       INumberFunctionWithDerivative f,
-      ValueWithDerivative1 a,
-      ValueWithDerivative1 b,
+      NumberValueWithDerivative1 a,
+      NumberValueWithDerivative1 b,
       IMathModelingLogger logger)
     {
       if (a.X <= b.X)
@@ -51,8 +51,8 @@ namespace Arnible.MathModeling.Optimization
       Number x1 = _a.X + Ratio * width;
       Number x2 = _b.X - Ratio * width;
       
-      ValueWithDerivative1 c1 = _f.ValueWithDerivative(in x1);
-      ValueWithDerivative1 c2 = _f.ValueWithDerivative(in x2);
+      NumberValueWithDerivative1 c1 = _f.ValueWithDerivative(in x1);
+      NumberValueWithDerivative1 c2 = _f.ValueWithDerivative(in x2);
       
       if (c1.Y < c2.Y)
       {

@@ -161,5 +161,77 @@ namespace Arnible.MathModeling.Algebra.Test
       Number ratio = range.GetValidTranslationRatioForLastAngle(radius: r, currentAngle: Angle.HalfRightAngle, angleDelta: Angle.RightAngle);
       AreEqual(1d / 6, ratio);
     }
+    
+    [Fact]
+    public void GetMaximumValidTranslationRatio_Empty()
+    {
+      var translation = _range.GetMaximumValidTranslationRatio(
+        value: new Number[] {1, 0.2}, 
+        gradient: new Number[] {0.2, 0.3});
+      AreEqual(0, translation);
+    }
+    
+    [Fact]
+    public void GetMaximumValidTranslationRatio_Null()
+    {
+      var translation = _range.GetMaximumValidTranslationRatio(
+        value: new Number[] {1, 0.2}, 
+        gradient: new Number[] {0, 0});
+      IsNull(translation);
+    }
+    
+    [Fact]
+    public void GetMaximumValidTranslationRatio_ScaledUp()
+    {
+      var translation = _range.GetMaximumValidTranslationRatio(
+        value: new Number[] {0, 0}, 
+        gradient: new Number[] {0.2, 0.1});
+      AreEqual(5, translation);
+    }
+    
+    [Fact]
+    public void GetMaximumValidTranslationRatio_ScaledDown()
+    {
+      var translation = _range.GetMaximumValidTranslationRatio(
+        value: new Number[] { 0.2, 0 }, 
+        gradient: new Number[] { -2.4, 0.1 });
+      AreEqual(0.5, translation);
+    }
+
+    [Fact]
+    public void IsValidTranslation_None_Invalid()
+    {
+      IsFalse(_range.IsValidTranslation(-2, Sign.None));
+    }
+    
+    [Fact]
+    public void IsValidTranslation_None_Valid()
+    {
+      IsTrue(_range.IsValidTranslation(-1, Sign.None));
+    }
+    
+    [Fact]
+    public void IsValidTranslation_Negative_Invalid()
+    {
+      IsFalse(_range.IsValidTranslation(-1, Sign.Negative));
+    }
+    
+    [Fact]
+    public void IsValidTranslation_Negative_Valid()
+    {
+      IsTrue(_range.IsValidTranslation(-0.9, Sign.Negative));
+    }
+    
+    [Fact]
+    public void IsValidTranslation_Positive_Invalid()
+    {
+      IsFalse(_range.IsValidTranslation(1, Sign.Positive));
+    }
+    
+    [Fact]
+    public void IsValidTranslation_Positive_Valid()
+    {
+      IsTrue(_range.IsValidTranslation(0.9, Sign.Positive));
+    }
   }
 }

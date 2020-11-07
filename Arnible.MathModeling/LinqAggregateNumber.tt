@@ -12,6 +12,7 @@ namespace Arnible.MathModeling
 
 string typeName = "Number";
 
+Print_MinOrDefault(typeName);
 Print_MinDefensive(typeName);
 Print_WithMinimum(typeName);
 Print_WithMinimumAt(typeName);

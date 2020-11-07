@@ -28,6 +28,17 @@ namespace Arnible.MathModeling.Algebra
         merge: (v, t) => domain.GetValidTranslationRatio(v ?? 0, t ?? 0)).MinDefensive();
     }
 
+    public static Number? GetMaximumValidTranslationRatio(
+      this INumberRangeDomain domain,
+      in ValueArray<Number> value,
+      in ValueArray<Number> gradient)
+    {
+      return value.GetInternalEnumerable().ZipDefensive(
+        col2: gradient.GetInternalEnumerable(), 
+        merge: (v, t) => domain.GetMaximumValidTranslationRatio(v, t)
+        ).MinOrDefault();
+    }
+
     public static NumberTranslationVector GetValidTranslation(
       this INumberRangeDomain domain,
       in NumberVector value,

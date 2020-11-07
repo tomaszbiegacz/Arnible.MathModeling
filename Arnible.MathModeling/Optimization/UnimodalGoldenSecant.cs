@@ -12,16 +12,16 @@ namespace Arnible.MathModeling.Optimization
 
     public UnimodalGoldenSecant(
       INumberFunctionWithDerivative f,
-      ValueWithDerivative1 a,
-      ValueWithDerivative1 b,
+      NumberValueWithDerivative1 a,
+      NumberValueWithDerivative1 b,
       IMathModelingLogger logger)
     {
       _logger = logger;
       if (a.First.GetSign() != b.First.GetSign())
       {
-        _logger.Log($"  Starting with secant");
         _goldenSection = null;
         _secant = new UnimodalSecant(f: f, a: a, b: b, logger);
+        _logger.Log($"  Starting with secant");
       }
       else
       {

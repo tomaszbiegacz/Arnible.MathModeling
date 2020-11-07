@@ -37,6 +37,7 @@
     </None>
     <None Update="LinqAggregate.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LinqAggregate.tt.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -97,6 +98,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LinqProduct.tt</DependentUpon>
+    </Compile>
+    <Compile Update="LinqAggregate.tt.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LinqAggregate.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

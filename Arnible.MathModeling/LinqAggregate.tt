@@ -1,5 +1,37 @@
 ﻿<#+
 
+void Print_MinOrDefault(string typeName)
+{
+#>
+    /// <summary>
+    /// Finds minimum value for not null values or return null
+    /// </summary>
+    public static <#= typeName #>? MinOrDefault(this IEnumerable<<#= typeName #>?> x)
+    {      
+      <#= typeName #>? result = null;
+      foreach (<#= typeName #>? v in x)
+      {
+        if(v.HasValue)
+        {
+            if (result.HasValue)
+            {
+              if (v < result.Value)
+              {
+                result = v;
+              }
+            }
+            else
+            {
+              result = v;
+            }
+        }                
+      }
+      return result;
+    }
+
+<#+
+}
+
 void Print_MinDefensive(string typeName)
 {
 #>

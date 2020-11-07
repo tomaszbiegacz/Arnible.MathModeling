@@ -1,8 +1,8 @@
 namespace Arnible.MathModeling.Optimization
 {
-  public readonly struct ValueWithDerivative1 : IValueObject
+  public readonly struct NumberValueWithDerivative1 : IValueObject
   {
-    public ValueWithDerivative1(Number x, Number y, Number first)
+    public NumberValueWithDerivative1(Number x, Number y, Number first)
     {
       X = x;
       Y = y;
@@ -23,7 +23,7 @@ namespace Arnible.MathModeling.Optimization
 
     public string ToStringValue()
     {
-      return $"({X.ToStringValue()}, {Y.ToStringValue()}, {First.ToStringValue()})";
+      return $"(x: {X.ToStringValue()}, y: {Y.ToStringValue()}, d: {First.ToStringValue()})";
     }
   }
 }

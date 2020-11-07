@@ -16,6 +16,18 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
+    public void Min_OfThree_OrDefault()
+    {
+      AreEqual(2d, (new Number?[] { 4d, null, 2d }).MinOrDefault());
+    }
+    
+    [Fact]
+    public void Min_OfNull_OrDefault()
+    {
+      IsNull((new Number?[] { null, null, null }).MinOrDefault());
+    }
+    
+    [Fact]
     public void Min_OfThree_Defensive()
     {
       AreEqual(2d, (new[] { 4d, 2d, 3d }).MinDefensive());

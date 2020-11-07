@@ -7,15 +7,15 @@ namespace Arnible.MathModeling.Optimization
   public class UnimodalSecant : IUnimodalOptimization
   {
     private readonly INumberFunctionWithDerivative _f;
-    private ValueWithDerivative1 _a;
-    private ValueWithDerivative1 _b;
+    private NumberValueWithDerivative1 _a;
+    private NumberValueWithDerivative1 _b;
     private bool _notUnimodalFunction;
     private readonly IMathModelingLogger _logger;
 
     public UnimodalSecant(
       INumberFunctionWithDerivative f,
-      ValueWithDerivative1 a,
-      ValueWithDerivative1 b,
+      NumberValueWithDerivative1 a,
+      NumberValueWithDerivative1 b,
       IMathModelingLogger logger)
     {
       if (a.First <= 0)
@@ -71,7 +71,7 @@ namespace Arnible.MathModeling.Optimization
       }
 
       Number step = _a.First * (_b.X - _a.X) / (_b.First - _a.First);
-      ValueWithDerivative1 c = _f.ValueWithDerivative(_a.X - step);
+      NumberValueWithDerivative1 c = _f.ValueWithDerivative(_a.X - step);
       
       if (c.First == 0)
       {
@@ -100,7 +100,7 @@ namespace Arnible.MathModeling.Optimization
         else
         {
           _b = c;
-          _logger.Log($"  Improving b with {c.ToStringValue()}");
+          _logger.Log($"  Improving b with {c.ToStringValue()} to width {Width.ToStringValue()} having a {_a.ToStringValue()}");
           return true;
         }
       }
@@ -115,7 +115,7 @@ namespace Arnible.MathModeling.Optimization
         else
         {
           _a = c;
-          _logger.Log($"  Improving a with {c.ToStringValue()}");
+          _logger.Log($"  Improving a with {c.ToStringValue()} to width {Width.ToStringValue()} having b {_b.ToStringValue()}");
           return true;
         }
       }
