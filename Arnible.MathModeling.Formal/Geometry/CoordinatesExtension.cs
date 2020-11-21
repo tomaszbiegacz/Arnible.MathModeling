@@ -6,7 +6,7 @@ namespace Arnible.MathModeling.Geometry
 {
   public static class CoordinatesExtension
   {
-    private static Polynomial ToPolar(in this Polynomial source, in RectangularCoordianate cartesianPoint, in PolarCoordinate polarPoint)
+    private static Polynomial ToPolar(in this Polynomial source, in RectangularCoordinate cartesianPoint, in PolarCoordinate polarPoint)
     {
       var x = (PolynomialTerm)cartesianPoint.X;
       var y = (PolynomialTerm)cartesianPoint.Y;
@@ -22,7 +22,7 @@ namespace Arnible.MathModeling.Geometry
       throw new NotImplementedException("Roots are not yet supported");
     }
 
-    public static Number ToPolar(in this Number source, in RectangularCoordianate cartesianPoint, in PolarCoordinate polarPoint)
+    public static Number ToPolar(in this Number source, in RectangularCoordinate cartesianPoint, in PolarCoordinate polarPoint)
     {
       return ToPolar((Polynomial)source, in cartesianPoint, in polarPoint);
     }

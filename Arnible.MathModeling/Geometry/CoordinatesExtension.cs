@@ -21,7 +21,7 @@ namespace Arnible.MathModeling.Geometry
       return Math.Atan2((double)y, (double)x);
     }
 
-    public static PolarCoordinate ToPolar(in this RectangularCoordianate p)
+    public static PolarCoordinate ToPolar(in this RectangularCoordinate p)
     {
       return new PolarCoordinate(
         r: Sqrt(p.X * p.X + p.Y * p.Y),

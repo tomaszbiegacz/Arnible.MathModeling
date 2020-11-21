@@ -19,21 +19,21 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void DerivativeByX()
     {
-      var p = new RectangularCoordianate(x, y);
+      var p = new RectangularCoordinate(x, y);
       AreDerivativesEqual((PolynomialDivision)_error.Value(x, y), x, _error.DerivativeByX(p));
     }
 
     [Fact]
     public void DerivativeByY()
     {
-      var p = new RectangularCoordianate(x, y);
+      var p = new RectangularCoordinate(x, y);
       AreDerivativesEqual((PolynomialDivision)_error.Value(x, y), y, _error.DerivativeByY(p));
     }
 
     [Fact]
     public void DerivativeByR()
     {
-      var cartesianPoint = new RectangularCoordianate(x, y);
+      var cartesianPoint = new RectangularCoordinate(x, y);
       var polarPoint = new PolarCoordinate(r, φ);
       var valueInPolar = _error.Value(x, y).ToPolar(cartesianPoint, polarPoint);
       AreDerivativesEqual((PolynomialDivision)valueInPolar, r, _error.DerivativeByR(polarPoint));
@@ -42,7 +42,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void DerivativeByΦ()
     {
-      var cartesianPoint = new RectangularCoordianate(x, y);
+      var cartesianPoint = new RectangularCoordinate(x, y);
       var polarPoint = new PolarCoordinate(r, φ);
       var valueInPolar = _error.Value(x, y).ToPolar(cartesianPoint, polarPoint);
       AreDerivativesEqual((PolynomialDivision)valueInPolar, φ, _error.DerivativeByΦ(polarPoint));

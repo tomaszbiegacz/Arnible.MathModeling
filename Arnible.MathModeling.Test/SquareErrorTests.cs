@@ -25,7 +25,7 @@ namespace Arnible.MathModeling.Test
     [InlineData(-1, 1, -4, 2)]
     public void DerivativeByX(double x, double y, double first, double second)
     {
-      var derivative = _error.DerivativeByX(new RectangularCoordianate(x, y));
+      var derivative = _error.DerivativeByX(new RectangularCoordinate(x, y));
       AreEqual(first, derivative.First);
       AreEqual(second, derivative.Second);
     }
@@ -36,7 +36,7 @@ namespace Arnible.MathModeling.Test
     [InlineData(-1, 1, 4, 2)]
     public void DerivativeByY(double x, double y, double first, double second)
     {
-      var derivative = _error.DerivativeByY(new RectangularCoordianate(x, y));
+      var derivative = _error.DerivativeByY(new RectangularCoordinate(x, y));
       AreEqual(first, derivative.First);
       AreEqual(second, derivative.Second);
     }    
@@ -47,7 +47,7 @@ namespace Arnible.MathModeling.Test
     [InlineData(-1, 1, 4 * Sqrt2, 4)]
     public void DerivativeByR(double x, double y, double first, double second)
     {
-      PolarCoordinate p = new RectangularCoordianate(x, y).ToPolar();
+      PolarCoordinate p = new RectangularCoordinate(x, y).ToPolar();
       var derivative = _error.DerivativeByR(p);
       AreEqual(first, derivative.First);
       AreEqual(second, derivative.Second);
@@ -59,7 +59,7 @@ namespace Arnible.MathModeling.Test
     [InlineData(-1, 1, 0, -8)]
     public void DerivativeByΦ(double x, double y, double first, double second)
     {
-      PolarCoordinate p = new RectangularCoordianate(x, y).ToPolar();
+      PolarCoordinate p = new RectangularCoordinate(x, y).ToPolar();
       var derivative = _error.DerivativeByΦ(p);
       AreEqual(first, derivative.First);
       AreEqual(second, derivative.Second);

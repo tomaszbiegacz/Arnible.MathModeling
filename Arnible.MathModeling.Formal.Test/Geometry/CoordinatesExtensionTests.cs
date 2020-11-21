@@ -12,7 +12,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       Number expression = (x - y).ToPower(2);
 
-      var rc = new RectangularCoordianate(x, y);
+      var rc = new RectangularCoordinate(x, y);
       var pc = new PolarCoordinate(r, φ);
       var expected = expression.ToPolar(rc, pc);
 

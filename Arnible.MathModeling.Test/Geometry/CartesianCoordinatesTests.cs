@@ -9,7 +9,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void Cast_RectangularCoordinates()
     {
-      var rc = new RectangularCoordianate(3, 4);
+      var rc = new RectangularCoordinate(3, 4);
       CartesianCoordinate cc = rc;
 
       AreEqual(2u, cc.DimensionsCount);

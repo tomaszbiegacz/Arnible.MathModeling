@@ -193,5 +193,13 @@ namespace Arnible.MathModeling
       if (_value.NumericEquals(other._value)) return 0;
       return _value > other._value ? 1 : -1;
     }
+    
+    //
+    // Extensions
+    //
+    public Number Abs()
+    {
+      return Math.Abs(_value);
+    }
   }
 }

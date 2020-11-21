@@ -10,14 +10,14 @@ namespace Arnible.MathModeling.Test
       return (x - y).ToPower(2);
     }
 
-    public Derivative2Value DerivativeByX(RectangularCoordianate p)
+    public Derivative2Value DerivativeByX(RectangularCoordinate p)
     {
       return new Derivative2Value(
         first: 2 * (p.X - p.Y),
         second: 2);
     }
 
-    public Derivative2Value DerivativeByY(RectangularCoordianate p)
+    public Derivative2Value DerivativeByY(RectangularCoordinate p)
     {
       return new Derivative2Value(
         first: -2 * (p.X - p.Y),

@@ -2,7 +2,7 @@
 
 namespace Arnible.MathModeling.Geometry
 {
-  interface IHypersphericalCoordinateOnRectangularView : IRectangularCoordianate, IHypersphericalDirectionOnRectangularView
+  interface IHypersphericalCoordinateOnRectangularView : IRectangularCoordinate, IHypersphericalDirectionOnRectangularView
   {
     Number R { get; }
   }

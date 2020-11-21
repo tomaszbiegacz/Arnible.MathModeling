@@ -1,5 +1,5 @@
 using System;
-using Arnible.MathModeling.Algebra;
+using System.Threading;
 using Arnible.MathModeling.Export;
 
 namespace Arnible.MathModeling.Optimization
@@ -9,7 +9,6 @@ namespace Arnible.MathModeling.Optimization
     private readonly INumberFunctionWithDerivative _f;
     private NumberValueWithDerivative1 _a;
     private NumberValueWithDerivative1 _b;
-    private bool _notUnimodalFunction;
     private readonly IMathModelingLogger _logger;
 
     public UnimodalSecant(
@@ -18,7 +17,7 @@ namespace Arnible.MathModeling.Optimization
       NumberValueWithDerivative1 b,
       IMathModelingLogger logger)
     {
-      if (a.First <= 0)
+      if (a.First < 0)
       {
         _a = a;
         _b = b;  
@@ -28,97 +27,110 @@ namespace Arnible.MathModeling.Optimization
         _a = b;
         _b = a;
       }
-      if (_b.First < 0)
+      if (_a.First >= 0 || _b.First <= 0)
       {
-        throw new ArgumentException(nameof(b));
+        throw new ArgumentException();
       }
       
       _f = f;
       
-      _notUnimodalFunction = false;
+      IsPolimodal = false;
       _logger = logger;
     }
 
-    public bool IsOptimal => _a.X == _b.X ||  _a.First == 0 || _b.First == 0;
+    public bool IsOptimal => _a.X == _b.X;
+    public bool IsPolimodal { get; private set; }
+
     public Number X => _a.Y < _b.Y ? _a.X : _b.X;
     public Number Y => _a.Y < _b.Y ? _a.Y : _b.Y;
 
-    public Number Width
+    public Number Width => (_b.X - _a.X).Abs();
+
+    internal static NumberValueWithDerivative1 ConsiderPoint(
+      in INumberFunctionWithDerivative f,
+      in NumberValueWithDerivative1 a,
+      in NumberValueWithDerivative1 b)
     {
-      get
+      if (a.First >= 0 || b.First <= 0)
       {
-        Number value = _b.X - _a.X;
-        return value * (int)value.GetSign();
+        throw new ArgumentException($"Something went wrong {a.ToStringValue()}, {b.ToStringValue()}");
       }
+
+      Number step = a.First * (b.X - a.X) / (b.First - a.First);
+      if (step == 0)
+      {
+        throw new InvalidOperationException($"Something went wrong {a.ToStringValue()}, {b.ToStringValue()}");
+      }
+      
+      return f.ValueWithDerivative(a.X - step);
     }
 
     public bool MoveNext()
     {
-      if (_a.First > 0 || _b.First < 0)
+      if (IsOptimal || IsPolimodal)
       {
-        // something when wrong
-        throw new InvalidOperationException($"da: {_a.First.ToStringValue()}, db: {_b.First.ToStringValue()}");
-      }
-      if (IsOptimal)
-      {
-        // we're done here
-        return false;
-      }
-      if (_a.First == _b.First || _notUnimodalFunction)
-      {
-        // we've a problem here
         return false;
       }
 
-      Number step = _a.First * (_b.X - _a.X) / (_b.First - _a.First);
-      NumberValueWithDerivative1 c = _f.ValueWithDerivative(_a.X - step);
-      
+      NumberValueWithDerivative1 c = ConsiderPoint(in _f, in _a, in _b);
       if (c.First == 0)
       {
         if (c.Y > Y)
         {
-          _logger.Log($"  Function found not to be unimodal due to {_a.ToStringValue()}, {_b.ToStringValue()}, {c.ToStringValue()}");
-          _notUnimodalFunction = true;
+          Log("Stop, found maximum", in c);
+          IsPolimodal = true;
           return false;
         }
         else
         {
-          _logger.Log($"  Function optimum found at {c.ToStringValue()}");
+          Log("Found minimum", in c);
           _a = c;
-          return true;
-        }
-      }
-
-      if (c.First > 0)
-      {
-        if (c.Y > _b.Y)
-        {
-          _logger.Log($"  Function found not to be unimodal due to {_a.ToStringValue()}, {_b.ToStringValue()}, {c.ToStringValue()}");
-          _notUnimodalFunction = true;
-          return false;
-        }
-        else
-        {
           _b = c;
-          _logger.Log($"  Improving b with {c.ToStringValue()} to width {Width.ToStringValue()} having a {_a.ToStringValue()}");
           return true;
         }
       }
       else
       {
-        if (c.Y > _a.Y)
+        // mandatory: d_a < 0 and d_b > 0
+        // stop if found not to be unimodal
+        if (c.First > 0)
         {
-          _logger.Log($"  Function found not to be unimodal due to {_a.ToStringValue()}, {_b.ToStringValue()}, {c.ToStringValue()}");
-          _notUnimodalFunction = true;
-          return false;
+          if (c.Y > _b.Y)
+          {
+            Log("Stop, not unimodal at b", in c);
+            IsPolimodal = true;
+            return false;
+          }
+          else
+          {
+            Log("Moving point with positive derivative", in c);
+            _b = c;
+            return true;
+          }
         }
         else
         {
-          _a = c;
-          _logger.Log($"  Improving a with {c.ToStringValue()} to width {Width.ToStringValue()} having b {_b.ToStringValue()}");
-          return true;
+          if (c.Y > _a.Y)
+          {
+            Log("Stop, not unimodal at a", in c);
+            IsPolimodal = true;
+            return false;
+          }
+          else
+          {
+            Log("Moving point with negative derivative", in c);
+            _a = c;
+            return true;
+          }
         }
       }
+    }
+    
+    private void Log(
+      in string message,
+      in NumberValueWithDerivative1 c)
+    {
+      _logger.Log($"  [{_a.ToStringValue()}, {_b.ToStringValue()}] {message}, c:{c.ToStringValue()}");
     }
   }
 }

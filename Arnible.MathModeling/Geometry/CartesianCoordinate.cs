@@ -39,7 +39,7 @@ namespace Arnible.MathModeling.Geometry
       // intentionally empty
     }
     
-    public static implicit operator CartesianCoordinate(in RectangularCoordianate rc)
+    public static implicit operator CartesianCoordinate(in RectangularCoordinate rc)
     {
       return new CartesianCoordinate(new[] { rc.X, rc.Y }.ToVector());
     }

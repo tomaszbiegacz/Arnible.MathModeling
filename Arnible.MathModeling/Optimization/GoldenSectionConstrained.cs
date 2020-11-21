@@ -8,7 +8,6 @@ namespace Arnible.MathModeling.Optimization
   {
     private const double Ratio = 0.618;
     
-    private readonly INumberFunctionWithDerivative _f;
     private NumberValueWithDerivative1 _a;
     private NumberValueWithDerivative1 _b;
     private readonly IMathModelingLogger _logger;
@@ -19,7 +18,14 @@ namespace Arnible.MathModeling.Optimization
       NumberValueWithDerivative1 b,
       IMathModelingLogger logger)
     {
-      if (a.X <= b.X)
+      Update(in a, in b);
+      F = f;
+      _logger = logger;
+    }
+
+    protected void Update(in NumberValueWithDerivative1 a, in NumberValueWithDerivative1 b)
+    {
+      if (a.Y < b.Y)
       {
         _a = a;
         _b = b;  
@@ -29,17 +35,20 @@ namespace Arnible.MathModeling.Optimization
         _a = b;
         _b = a;
       }
-      _f = f;
-      _logger = logger;
     }
+
+    protected INumberFunctionWithDerivative F { get; }
+    protected ref readonly NumberValueWithDerivative1 BorderSmaller => ref _a;
+    protected ref readonly NumberValueWithDerivative1 BorderGreater => ref _b;
     
-    public bool IsOptimal => _a.X == _b.X || _a.First == 0 || _b.First == 0;
-    public Number X => _a.Y < _b.Y ? _a.X : _b.X;
-    public Number Y => _a.Y < _b.Y ? _a.Y : _b.Y;
+    public bool IsOptimal => _a.X == _b.X;
+    
+    public Number X => _a.X;
+    public Number Y => _a.Y;
 
-    public Number Width => _b.X - _a.X;
+    public Number Width => (_b.X - _a.X).Abs();
 
-    public bool MoveNext()
+    public virtual bool MoveNext()
     {
       if (IsOptimal)
       {
@@ -48,55 +57,115 @@ namespace Arnible.MathModeling.Optimization
       }
 
       Number width = _b.X - _a.X;
+      
       Number x1 = _a.X + Ratio * width;
       Number x2 = _b.X - Ratio * width;
       
-      NumberValueWithDerivative1 c1 = _f.ValueWithDerivative(in x1);
-      NumberValueWithDerivative1 c2 = _f.ValueWithDerivative(in x2);
+      MoveNext("x1", F.ValueWithDerivative(in x1));
+      MoveNext("x2", F.ValueWithDerivative(in x2));
+
+      return true;
+    }
+
+    private void MoveNext(string prefix, in NumberValueWithDerivative1 c)
+    {
+      Sign daSign = _a.First.GetSign();
+      Sign dbSign = _b.First.GetSign();
+      Sign dcSign = c.First.GetSign();
       
-      if (c1.Y < c2.Y)
+      // mandatory: a.Y <= b.Y
+      // assume that it is unimodal, but be tolerant. Ideally a.First != b.First or a.First == b.First == 0
+      if (c.Y < _a.Y)
       {
-        Sign d2Sign = c2.First.GetSign();
-        Sign dbSign = _b.First.GetSign();
-        if (d2Sign >= dbSign)
+        // smallest value has just been improved
+        if (dcSign != dbSign || dbSign == Sign.None)
         {
-          _logger.Log($"  Removing last section, from {_b.ToStringValue()} to {c2.ToStringValue()}");
-          _b = c2;  
+          Log($"{prefix} Improving a with dc != db or db = 0", in c);
+          _a = c;
         }
         else
         {
-          _logger.Log($"  Focusing on last section, from {_a.ToStringValue()} to {c2.ToStringValue()}");
-          _a = c2;
+          // dcSign == dbSign
+          if (daSign != dcSign)
+          {
+            Log($"{prefix} Focusing on first section having smallest, values with c being a", in c);
+            _b = _a;
+            _a = c;  
+          }
+          else
+          {
+            Log("Focusing on first section having smallest, values dcSign = dbSign", in c);
+            _b = c;
+          }
         }
       }
       else
       {
-        Sign daSign = _a.First.GetSign();
-        Sign d1Sign = c1.First.GetSign();
-        if (daSign >= d1Sign)
+        if (c.Y < _b.Y)
         {
-          _logger.Log($"  Removing first section, from {_a.ToStringValue()} to {c1.ToStringValue()}");
-          _a = c1;  
+          // smallest value is still a, but b has been improved
+          if(dcSign != daSign || daSign == Sign.None)
+          {
+            Log($"{prefix} Improving b with dc != da or da == 0", in c);
+            _b = c;
+          }
+          else
+          {
+            Log($"{prefix} Focusing on first section having smallest values", in c);
+            _b = c;
+          }
         }
         else
         {
-          _logger.Log($"  Focusing on first section, from {_b.ToStringValue()} to {c1.ToStringValue()}");
-          _b = c1;
+          if (c.Y > _b.Y)
+          {
+            Log("Narrowing search to first section", in c);
+            _b = c;  
+          }
+          else
+          {
+            // c is equal to b and a 
+            if (dbSign == dcSign)
+            {
+              Log("Narrowing search to first section, with dbSign = dcSign", in c);
+              _b = c;
+            }
+            else
+            {
+              if (daSign == dcSign)
+              {
+                Log("Narrowing search to second section, with daSign = dcSign", in c);
+                _a = c;
+              }
+              else
+              {
+                if (daSign == Sign.Negative || daSign == Sign.None)
+                {
+                  Log("Narrowing search to first section, with daSign <= 0", in c);
+                  _b = c;
+                }
+                else
+                {
+                  Log("Narrowing search to second section, with daSign > 0", in c);
+                  _a = c;
+                }
+              }
+            }
+          }
         }
       }
-      return true;
+
+      if (_b.Y < _a.Y)
+      {
+        throw new InvalidOperationException($"Something went wrong {_a.ToStringValue()}, {_b.ToStringValue()}");
+      }
     }
 
-    public bool IsSecantOptimizerReady => _a.First.GetSign() != _b.First.GetSign();
-
-    public UnimodalSecant GetSecantOptimizer()
+    protected void Log(
+      in string message,
+      in NumberValueWithDerivative1 c)
     {
-      if (!IsSecantOptimizerReady)
-      {
-        throw new InvalidOperationException("Not secant ready");
-      }
-      
-      return new UnimodalSecant(f: _f, a: _a, b: _b, _logger);
+      _logger.Log($"  [{_a.ToStringValue()}, {_b.ToStringValue()}] {message}, c:{c.ToStringValue()}");
     }
   }
 }

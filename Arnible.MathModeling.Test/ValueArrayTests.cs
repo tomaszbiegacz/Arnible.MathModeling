@@ -4,7 +4,7 @@ using static Arnible.MathModeling.xunit.AssertHelpers;
 
 namespace Arnible.MathModeling.Test
 {
-  public class NumberArrayTests
+  public class ValueArrayTests
   {
     [Fact]
     public void Constructor_Default()
@@ -64,6 +64,18 @@ namespace Arnible.MathModeling.Test
     public void SubsetFromIndexes()
     {
       AreEquals(new Number[] { 1, 3 }, new Number[] { 1, 2, 3 }.ToValueArray().SubsetFromIndexes(new[] { 0u, 2u }));
+    }
+    
+    [Fact]
+    public void AddAtPos()
+    {
+      AreEquals(new Number[] { 1, 5 }, new Number[] { 1, 2 }.ToValueArray().AddAtPos(1, 3));
+    }
+    
+    [Fact]
+    public void SetAtPos()
+    {
+      AreEquals(new Number[] { 1, 3 }, new Number[] { 1, 2 }.ToValueArray().SetAtPos(1, 3));
     }
   }
 }

@@ -36,7 +36,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [InlineData(3, -2)]
     public void Cast_HyperspehricalEqualsRectangular(double x, double y)
     {
-      var rc = new RectangularCoordianate(x, y);
+      var rc = new RectangularCoordinate(x, y);
       CartesianCoordinate cc = rc;
 
       var pc = rc.ToPolar();

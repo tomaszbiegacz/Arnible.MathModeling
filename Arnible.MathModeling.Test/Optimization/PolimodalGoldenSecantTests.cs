@@ -1,21 +1,13 @@
 using System;
+using Arnible.MathModeling.Export;
 using Arnible.MathModeling.xunit;
 using Xunit;
-using Xunit.Abstractions;
 using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Optimization.Test
 {
-  public class GoldenSectionConstrainedTests
+  public class PolimodalGoldenSecantTests
   {
-    // ReSharper disable once NotAccessedField.Local
-    private readonly ITestOutputHelper _output;
-
-    public GoldenSectionConstrainedTests(ITestOutputHelper output)
-    {
-      _output = output;
-    }
-
     [Fact]
     public void Unimodal_Square_Optimum()
     {
@@ -23,14 +15,16 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(-1);
       var b = f.ValueWithDerivative(2);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, new DeafLogger());
       AreExactlyEqual(2, method.X);
       AreExactlyEqual(4, method.Y);
-
-      uint i = OptimizationHelper.FindOptimal(method);
       
+      IsTrue(method.MoveNext());
       AreEqual(1, method.X);
-      AreEqual(26, i);
+      AreEqual(3, method.Y);
+      
+      IsTrue(method.IsOptimal);
+      IsFalse(method.MoveNext());
     }
     
     [Fact]
@@ -40,7 +34,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(1.5);
       var b = f.ValueWithDerivative(2);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, new DeafLogger());
       AreExactlyEqual(1.5, method.X);
 
       uint i = OptimizationHelper.FindOptimal(method);
@@ -56,7 +50,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(1);
       var b = f.ValueWithDerivative(2);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, new DeafLogger());
       AreExactlyEqual(1, method.X);
 
       uint i = OptimizationHelper.FindOptimal(method);
@@ -72,7 +66,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(0.5);
       var b = f.ValueWithDerivative(-2);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, new DeafLogger());
       AreExactlyEqual(0.5, method.X);
 
       uint i = OptimizationHelper.FindOptimal(method);
@@ -88,7 +82,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(1);
       var b = f.ValueWithDerivative(-2);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, new DeafLogger());
       AreExactlyEqual(1, method.X);
 
       uint i = OptimizationHelper.FindOptimal(method);
@@ -108,7 +102,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(-1);
       var b = f.ValueWithDerivative(2);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, new DeafLogger());
       AreExactlyEqual(-1, method.X);
       AreExactlyEqual(-1, method.Y);
 
@@ -129,14 +123,14 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(-1.3 * Math.PI);
       var b = f.ValueWithDerivative(0.4 * Math.PI);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, new DeafLogger());
       AreExactlyEqual(a.X, method.X);
       AreExactlyEqual(a.Y, method.Y);
 
       uint i = OptimizationHelper.FindOptimal(method);
       
       AreEqual(2, method.Y);
-      AreEqual(22, i);
+      AreEqual(6, i);
     }
     
     [Fact]
@@ -146,7 +140,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(0.3 * Math.PI);
       var b = f.ValueWithDerivative(Math.PI);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, new DeafLogger());
       AreExactlyEqual(b.X, method.X);
       AreExactlyEqual(b.Y, method.Y);
       IsGreaterThan(b.Y, a.Y);
@@ -164,7 +158,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(0);
       var b = f.ValueWithDerivative(0.7 * Math.PI);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, new DeafLogger());
       AreExactlyEqual(a.X, method.X);
       AreExactlyEqual(a.Y, method.Y);
       IsGreaterThan(a.Y, b.Y);
@@ -190,14 +184,14 @@ namespace Arnible.MathModeling.Optimization.Test
       IsLowerThan(0, a.First);
       IsGreaterThan(0, b.First);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, new DeafLogger());
       AreExactlyEqual(a.X, method.X);
       AreExactlyEqual(a.Y, method.Y);
 
       uint i = OptimizationHelper.FindOptimal(method);
       
       AreEqual(2, method.Y);
-      AreEqual(22, i);
+      AreEqual(6, i);
     }
   }
 }

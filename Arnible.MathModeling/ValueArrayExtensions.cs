@@ -34,6 +34,16 @@ namespace Arnible.MathModeling
         merge: (a, b) => (a - b).ToPower(2)).SumWithDefault();
     }
 
+    public static ValueArray<Number> AddAtPos(in this ValueArray<Number> arg, uint pos, Number value)
+    {
+      return arg.GetInternalEnumerable().Select((i, v) => i == pos ? v + value : v).ToValueArray();
+    }
+    
+    public static ValueArray<Number> SetAtPos(in this ValueArray<Number> arg, uint pos, Number value)
+    {
+      return arg.GetInternalEnumerable().Select((i, v) => i == pos ? value : v).ToValueArray();
+    }
+
     //
     // IEnumerable implementation (to avoid boxing)
     //
