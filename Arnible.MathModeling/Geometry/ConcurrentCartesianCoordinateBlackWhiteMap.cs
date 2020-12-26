@@ -103,7 +103,7 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public void MarkPoint(in ValueArray<Number> point)
+    public bool MarkPoint(in ValueArray<Number> point)
     {
       byte[] normalizedPoint = System.Linq.Enumerable.ToArray(NormalizeCoordinate(point));
       lock (_points)
@@ -112,6 +112,11 @@ namespace Arnible.MathModeling.Geometry
         if (pos < 0)
         {
           _points.Insert(~pos, normalizedPoint);
+          return true;
+        }
+        else
+        {
+          return false;
         }
       }
     }

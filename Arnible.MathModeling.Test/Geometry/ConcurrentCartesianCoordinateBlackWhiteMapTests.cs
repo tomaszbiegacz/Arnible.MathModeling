@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Geometry.Test
       IsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
       IsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
       
-      map.MarkPoint(new Number[] { 0, 0, 0 });
+      IsTrue(map.MarkPoint(new Number[] { 0, 0, 0 }));
       
       AreEqual(1, map.MarkedPointsCount);
       IsTrue(map.IsMarked(new Number[] {0, -1, -2}));
@@ -45,7 +45,7 @@ namespace Arnible.MathModeling.Geometry.Test
       IsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
       IsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
       
-      map.MarkPoint(new Number[] { 0, 0, 0 });
+      IsTrue(map.MarkPoint(new Number[] { 0, 0, 0 }));
       
       AreEqual(1, map.MarkedPointsCount);
       IsTrue(map.IsMarked(new Number[] {0, -1, -2}));
@@ -69,13 +69,16 @@ namespace Arnible.MathModeling.Geometry.Test
       IsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
       IsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
       
-      map.MarkPoint(new Number[] { 0, 0, 0 });
+      IsTrue(map.MarkPoint(new Number[] { 0, 0, 0 }));
       
       AreEqual(1, map.MarkedPointsCount);
       IsFalse(map.IsMarked(new Number[] {0, -1, -2}));
       IsTrue(map.IsMarked(new Number[] { 0, 0, 0 }));
+      IsTrue(map.IsMarked(new Number[] { 0.1, 0.1, 0.1 }));
       IsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
       IsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
+      
+      IsFalse(map.MarkPoint(new Number[] { 0.1, 0.1, 0.1 }));
     }
   }
 }
