@@ -21,6 +21,44 @@ namespace Arnible.MathModeling
     {
       return numbers.GetInternalEnumerable().ToValueArray(length);
     }
+    
+    //
+    // Operators
+    //
+    
+    public static ValueArray<Number> Substract(this in ValueArray<Number> a, in ValueArray<Number> b)
+    {
+      if (a.Length != b.Length)
+      {
+        throw new ArgumentException(nameof(a));
+      }
+
+      Number[] result = new Number[a.Length];
+      for (uint i = 0; i < a.Length; ++i)
+      {
+        result[i] = a[i] - b[i];
+      }
+      return new ValueArray<Number>(result);
+    }
+    
+    public static ValueArray<Number> Add(this in ValueArray<Number> a, in ValueArray<Number> b)
+    {
+      if (a.Length != b.Length)
+      {
+        throw new ArgumentException(nameof(a));
+      }
+
+      Number[] result = new Number[a.Length];
+      for (uint i = 0; i < a.Length; ++i)
+      {
+        result[i] = a[i] + b[i];
+      }
+      return new ValueArray<Number>(result);
+    }
+    
+    //
+    // Operations
+    //
 
     public static Number DistanceSquareTo(in this ValueArray<Number> arg, in ValueArray<Number> other)
     {
@@ -42,6 +80,14 @@ namespace Arnible.MathModeling
     public static ValueArray<Number> SetAtPos(in this ValueArray<Number> arg, uint pos, Number value)
     {
       return arg.GetInternalEnumerable().Select((i, v) => i == pos ? value : v).ToValueArray();
+    }
+
+    public static ValueArray<Number> TranslateCoordinate(
+      in this ValueArray<Number> start,
+      ValueArray<Number> direction,
+      Number value)
+    {
+      return start.Select((i, v) => v + direction[i] * value).ToValueArray();
     }
 
     //

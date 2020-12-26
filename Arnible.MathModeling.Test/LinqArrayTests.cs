@@ -26,7 +26,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ToInversedJaggedArray()
     {
-      AreEquals(new int[][] { new[] { 0, 1 }, new[] { 1, 2 }, new[] { 2, 3 } }, new int[,] { { 0, 1, 2 }, { 1, 2, 3 } }.ToArrayJaggedInversed());
+      AreEquals(new int[][] { new[] { 0, 1 }, new[] { 1, 2 }, new[] { 2, 3 } }, new int[,] { { 0, 1, 2 }, { 1, 2, 3 } }.ToArrayJaggedInverted());
     }
   }
 }

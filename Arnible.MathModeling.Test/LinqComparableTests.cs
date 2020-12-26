@@ -68,5 +68,29 @@ namespace Arnible.MathModeling.Test
         new[] { new ForOrdering(2), new ForOrdering(3), new ForOrdering(1) },
         (new[] { new ForOrdering(1), new ForOrdering(2), new ForOrdering(3) }).OrderByDescending(i => i.Root).ThenOrderBy(i => i.Reminder));
     }
+
+    [Fact]
+    public void Distinct_Number()
+    {
+      AreEquals(new Number[] { 1, 2, 3 }, (new Number[] { 1, 2, 2, 3, 2.00000000001 }).Distinct());
+    }
+    
+    [Fact]
+    public void Distinct_NumberArray()
+    {
+      var expected = new ValueArray<Number>[]
+      {
+        new Number[] {1, 2, 3},
+        new Number[] {1, 2},
+      };
+      var withDuplicates = new ValueArray<Number>[]
+      {
+        new Number[] {1, 2, 3},
+        new Number[] {1, 2},
+        new Number[] {1.00000000001, 2},
+        new Number[] {1, 2, 3.00000000001},
+      };
+      AreEquals(expected, withDuplicates.Distinct());
+    }
   }
 }

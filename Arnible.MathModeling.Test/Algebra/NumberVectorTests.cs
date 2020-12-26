@@ -87,6 +87,18 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       AreEqual(new NumberVector(1, 1, 0), new NumberVector(1, 1, 8.65956056235496E-17));
     }
+    
+    [Fact]
+    public void ToArray_Equal()
+    {
+      AreEqual(new Number[] {1, 0, 2}, new NumberVector(1, 0, 2).ToValueArray(3));
+    }
+    
+    [Fact]
+    public void ToArray_Greater()
+    {
+      AreEqual(new Number[] {1, 0, 2, 0, 0}, new NumberVector(1, 0, 2).ToValueArray(5));
+    }
 
     [Fact]
     public void Transform()

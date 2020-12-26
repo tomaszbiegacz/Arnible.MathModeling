@@ -203,6 +203,24 @@ namespace Arnible.MathModeling.Algebra
     public override string ToString() => ToString(CultureInfo.InvariantCulture);
     public string ToStringValue() => ToString();
 
+    public ValueArray<Number> ToValueArray(uint length)
+    {
+      if (length < _values.Length)
+      {
+        throw new ArgumentException(nameof(length));
+      }
+
+      uint diff = length - _values.Length;
+      if (diff == 0)
+      {
+        return _values;
+      }
+      else
+      {
+        return _values.Append(0, diff).ToValueArray();
+      }
+    }
+
     public override int GetHashCode()
     {
       return _values.GetHashCode();

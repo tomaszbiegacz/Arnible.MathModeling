@@ -82,5 +82,11 @@ namespace Arnible.MathModeling.Test
     {
       AreEquals(new[] { 2d, 1d }, (new[] { 2d, 1d }).TakeAtMost(3));
     }
+    
+    [Fact]
+    public void Append_Two()
+    {
+      AreEquals(new[] { 2d, 1d, 3, 3 }, (new[] { 2d, 1d }).Append(3, 2));
+    }
   }
 }

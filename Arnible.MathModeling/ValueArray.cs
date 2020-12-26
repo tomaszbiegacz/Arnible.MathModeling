@@ -133,7 +133,7 @@ namespace Arnible.MathModeling
     public IEnumerator<T> GetEnumerator() => GetInternalEnumerable().GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetInternalEnumerable().GetEnumerator();
-
+    
     //
     // Operations
     //
@@ -192,6 +192,23 @@ namespace Arnible.MathModeling
     public bool Any(in Func<T, bool> predicate)
     {
       return GetInternalEnumerable().Any(predicate);
+    }
+    
+    public IEnumerable<T> Append(T item, uint count)
+    {
+      foreach (T srcItem in GetInternalEnumerable())
+      {
+        yield return srcItem;
+      }
+      for (uint i = 0; i < count; i++)
+      {
+        yield return item;
+      }
+    }
+    
+    public IEnumerable<T> Append(T item)
+    {
+      return Append(item, 1);
     }
 
     public IEnumerable<T> ExcludeAt(in uint pos)

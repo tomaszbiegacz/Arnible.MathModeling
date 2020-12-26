@@ -67,6 +67,18 @@ namespace Arnible.MathModeling.Test
     }
     
     [Fact]
+    public void Add()
+    {
+      AreEquals(new Number[] { 2, 5 }, new Number[] { 1, 2 }.ToValueArray().Add(new Number[] { 1, 3 }));
+    }
+    
+    [Fact]
+    public void Substract()
+    {
+      AreEquals(new Number[] { 0, -1 }, new Number[] { 1, 2 }.ToValueArray().Substract(new Number[] { 1, 3 }));
+    }
+    
+    [Fact]
     public void AddAtPos()
     {
       AreEquals(new Number[] { 1, 5 }, new Number[] { 1, 2 }.ToValueArray().AddAtPos(1, 3));
@@ -76,6 +88,14 @@ namespace Arnible.MathModeling.Test
     public void SetAtPos()
     {
       AreEquals(new Number[] { 1, 3 }, new Number[] { 1, 2 }.ToValueArray().SetAtPos(1, 3));
+    }
+    
+    [Fact]
+    public void TranslateCoordinate()
+    {
+      AreEquals(new Number[] { 3, 13 }, new Number[] { 1, 3 }.ToValueArray().TranslateCoordinate(
+        new Number[] { 1, 5 }, 
+        2));
     }
   }
 }

@@ -95,7 +95,7 @@ namespace Arnible.MathModeling.Optimization
           else
           {
             Log("Focusing on first section having smallest, values dcSign = dbSign", in c);
-            _b = c;
+            _a = c;
           }
         }
       }

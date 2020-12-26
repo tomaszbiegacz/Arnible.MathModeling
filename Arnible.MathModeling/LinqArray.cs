@@ -49,7 +49,7 @@ namespace Arnible.MathModeling
       return jaggedArray;
     }
 
-    public static T[][] ToArrayJaggedInversed<T>(this T[,] twoDimensionalArray)
+    public static T[][] ToArrayJaggedInverted<T>(this T[,] twoDimensionalArray)
     {
       int rowsFirstIndex = twoDimensionalArray.GetLowerBound(1);
       int rowsLastIndex = twoDimensionalArray.GetUpperBound(1);

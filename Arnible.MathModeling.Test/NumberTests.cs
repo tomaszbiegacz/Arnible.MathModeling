@@ -15,6 +15,15 @@ namespace Arnible.MathModeling.Test
       AreNotEqual<Number>(2, 0);
       AreNotEqual<Number>(0, -2);
     }
+    
+    [Fact]
+    public void Basic_Array()
+    {
+      AreEqual<ValueArray<Number>>(new Number[] { 2 }, new Number[] { 2.0 });
+      
+      AreNotEqual<ValueArray<Number>>(new Number[] { 2 }, new Number[] { 2.1 });
+      AreNotEqual<ValueArray<Number>>(new Number[] { 2 }, new Number[] { 2, 3 });
+    }
 
     [Theory]
     [InlineData(0, 8.65956056235496E-17)]
@@ -25,6 +34,12 @@ namespace Arnible.MathModeling.Test
     {
       AreExactlyNotEqual(first, second);
       AreEqual<Number>(first, second);
+    }
+    
+    [Fact]
+    public void Rounding_Array()
+    {
+      AreEqual<ValueArray<Number>>(new Number[] { 0 }, new Number[] { 8.65956056235496E-17 });
     }
 
     [Theory]

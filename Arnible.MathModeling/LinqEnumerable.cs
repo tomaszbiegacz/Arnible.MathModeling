@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Arnible.MathModeling
 {
@@ -136,14 +137,33 @@ namespace Arnible.MathModeling
      * Adding items
      */
 
+    public static IEnumerable<T> Append<T>(this IEnumerable<T> src, T item, uint count)
+    {
+      foreach (T srcItem in src)
+      {
+        yield return srcItem;
+      }
+      for (uint i = 0; i < count; i++)
+      {
+        yield return item;
+      }
+    }
+    
     public static IEnumerable<T> Append<T>(this IEnumerable<T> src, T item)
     {
-      return System.Linq.Enumerable.Append(src, item);
+      return Append(src, item, 1);
     }
 
     public static IEnumerable<T> Concat<T>(this IEnumerable<T> source, IEnumerable<T> after)
     {
-      return System.Linq.Enumerable.Concat(source, after);
+      foreach (T srcItem in source)
+      {
+        yield return srcItem;
+      }
+      foreach (T srcItem in after)
+      {
+        yield return srcItem;
+      }
     }
 
     public static IEnumerable<T> Prepend<T>(this IEnumerable<T> src, T item)
