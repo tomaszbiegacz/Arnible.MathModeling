@@ -79,34 +79,5 @@ namespace Arnible.MathModeling.Algebra
     {
       Validate(domain, value.GetInternalEnumerable());
     }
-
-    //
-    // Translate
-    //
-
-    public static NumberVector Translate(
-      this INumberRangeDomain domain, 
-      in NumberVector value, 
-      in NumberTranslationVector delta)
-    {
-      return value.GetInternalEnumerable().Zip(
-        col2: delta.GetInternalEnumerable(), 
-        merge: (v, t) => domain.Translate(v ?? 0, t ?? 0)).ToVector();
-    }
-
-    public static ValueArray<Number> Translate(
-      this INumberRangeDomain domain, 
-      in ValueArray<Number> value, 
-      in NumberTranslationVector delta)
-    {
-      if (delta.Length > value.Length)
-      {
-        throw new ArgumentException(nameof(delta));
-      }
-
-      return value.GetInternalEnumerable().Zip(
-        col2: delta.GetInternalEnumerable(), 
-        merge: (v, t) => domain.Translate(v ?? throw new ArgumentException(nameof(value)), t ?? 0)).ToValueArray();
-    }
   }
 }

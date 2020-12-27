@@ -235,5 +235,12 @@ namespace Arnible.MathModeling
     {
       return GetInternalEnumerable().Where(predicate);
     }
+
+    public IEnumerable<TResult> ZipDefensive<TResult>(
+      ValueArray<T> col2,
+      Func<T, T, TResult> merge)
+    {
+      return GetInternalEnumerable().ZipDefensive(col2.GetInternalEnumerable(), merge);
+    }
   }
 }

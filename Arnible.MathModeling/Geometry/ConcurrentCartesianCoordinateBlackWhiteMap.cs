@@ -3,7 +3,16 @@ using System.Collections.Generic;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public class ConcurrentCartesianCoordinateBlackWhiteMap
+  public interface ICartesianCoordinateBlackWhiteMap
+  {
+    uint DimensionsCount { get; }
+    
+    uint MarkedPointsCount { get; }
+
+    bool IsMarked(in ValueArray<Number> point);
+  }
+  
+  public class ConcurrentCartesianCoordinateBlackWhiteMap : ICartesianCoordinateBlackWhiteMap
   {
     private readonly ValueArray<Number> _leftBottomMapCorner;
     private readonly ValueArray<Number> _rightTopMapCorner;
@@ -59,6 +68,10 @@ namespace Arnible.MathModeling.Geometry
       _normalizedStep = rightTopMapCorner.Substract(leftBottomMapCorner).Select(v => v / precision).ToValueArray();
       _points = new List<byte[]>();
     }
+    
+    //
+    // Properties
+    //
 
     public uint DimensionsCount => _leftBottomMapCorner.Length;
 
@@ -72,6 +85,10 @@ namespace Arnible.MathModeling.Geometry
         }
       }
     }
+    
+    //
+    // Query operations
+    //
 
     private IEnumerable<byte> NormalizeCoordinate(ValueArray<Number> point)
     {
@@ -97,9 +114,44 @@ namespace Arnible.MathModeling.Geometry
         }
         else
         {
-          Number normalized = (v - left) / _normalizedStep[i];
-          yield return (byte) Math.Floor((double)normalized);
+          if (v == left)
+          {
+            yield return 0;
+          }
+          else
+          {
+            Number normalized = (v - left) / _normalizedStep[i];
+            yield return (byte) Math.Floor((double)normalized);  
+          }
         }
+      }
+    }
+    
+    public bool IsMarked(in ValueArray<Number> point)
+    {
+      byte[] normalizedPoint = System.Linq.Enumerable.ToArray(NormalizeCoordinate(point));
+      lock (_points)
+      {
+        int pos = _points.BinarySearch(normalizedPoint, PointsComparer.Current);
+        return pos >= 0;
+      }
+    }
+    
+    //
+    // Operations
+    //
+
+    private bool MarkPoint(byte[] normalizedPoint)
+    {
+      int pos = _points.BinarySearch(normalizedPoint, PointsComparer.Current);
+      if (pos < 0)
+      {
+        _points.Insert(~pos, normalizedPoint);
+        return true;
+      }
+      else
+      {
+        return false;
       }
     }
 
@@ -108,26 +160,22 @@ namespace Arnible.MathModeling.Geometry
       byte[] normalizedPoint = System.Linq.Enumerable.ToArray(NormalizeCoordinate(point));
       lock (_points)
       {
-        int pos = _points.BinarySearch(normalizedPoint, PointsComparer.Current);
-        if (pos < 0)
-        {
-          _points.Insert(~pos, normalizedPoint);
-          return true;
-        }
-        else
-        {
-          return false;
-        }
+        return MarkPoint(normalizedPoint);
       }
     }
-
-    public bool IsMarked(in ValueArray<Number> point)
+    
+    public void MarkPoints(IEnumerable<ValueArray<Number>> points)
     {
-      byte[] normalizedPoint = System.Linq.Enumerable.ToArray(NormalizeCoordinate(point));
+      IReadOnlyList<byte[]> normalizedPoints = points
+        .Select(p => System.Linq.Enumerable.ToArray(NormalizeCoordinate(p)))
+        .ToReadOnlyList();
+      
       lock (_points)
       {
-        int pos = _points.BinarySearch(normalizedPoint, PointsComparer.Current);
-        return pos >= 0;
+        foreach (byte[] p in normalizedPoints)
+        {
+          MarkPoint(p);
+        }
       }
     }
   }

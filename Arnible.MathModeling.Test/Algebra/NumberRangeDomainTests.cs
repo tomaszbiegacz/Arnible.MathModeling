@@ -62,22 +62,6 @@ namespace Arnible.MathModeling.Algebra.Test
     }
 
     [Fact]
-    public void Vector_Translate_Subset()
-    {
-      NumberVector src = new NumberVector(0.1, 0.2, 0.3);
-      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
-      AreEqual(new NumberVector(0.3, 1, 0.3), _range.Translate(src, delta));
-    }
-
-    [Fact]
-    public void Vector_Translate_Superset()
-    {
-      NumberVector src = new NumberVector(0.1);
-      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
-      AreEqual(new NumberVector(0.3, 0.9), _range.Translate(src, delta));
-    }
-
-    [Fact]
     public void Array_IsValid_True()
     {
       var src = new Number[] {0.1, 0.2};
@@ -99,14 +83,6 @@ namespace Arnible.MathModeling.Algebra.Test
       var src = new Number[] {0.1, 0.9};
       NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3);
       IsFalse(_range.IsValidTranslation(src, delta));
-    }
-
-    [Fact]
-    public void Array_Translate_Superset()
-    {
-      var src = new Number[] {0.1, 0.2, 0.1};
-      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
-      AreEqual(new Number[]{0.3, 1, 0.1}, _range.Translate(src, delta));
     }
 
     [Fact]
@@ -195,6 +171,42 @@ namespace Arnible.MathModeling.Algebra.Test
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] { 0.2, 0 }, 
         gradient: new Number[] { -2.4, 0.1 });
+      AreEqual(0.5, translation);
+    }
+    
+    [Fact]
+    public void GetMaximumValidTranslationRatio_Empty_Vector()
+    {
+      var translation = _range.GetMaximumValidTranslationRatio(
+        value: new Number[] {1, 0.2, 0.1}, 
+        transaction: new NumberTranslationVector(0.2, 0.3));
+      AreEqual(0, translation);
+    }
+    
+    [Fact]
+    public void GetMaximumValidTranslationRatio_Null_Vector()
+    {
+      var translation = _range.GetMaximumValidTranslationRatio(
+        value: new Number[] {1, 0.2, 0.1}, 
+        transaction: new NumberTranslationVector(0, 0));
+      IsNull(translation);
+    }
+    
+    [Fact]
+    public void GetMaximumValidTranslationRatio_ScaledUp_Vector()
+    {
+      var translation = _range.GetMaximumValidTranslationRatio(
+        value: new Number[] {0, 0, 0.1}, 
+        transaction: new NumberTranslationVector(0.2, 0.1));
+      AreEqual(5, translation);
+    }
+    
+    [Fact]
+    public void GetMaximumValidTranslationRatio_ScaledDown_Vector()
+    {
+      var translation = _range.GetMaximumValidTranslationRatio(
+        value: new Number[] { 0.2, 0, 0.1 }, 
+        transaction: new NumberTranslationVector( -2.4, 0.1 ));
       AreEqual(0.5, translation);
     }
 

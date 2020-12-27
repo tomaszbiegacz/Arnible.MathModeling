@@ -6,7 +6,7 @@ namespace Arnible.MathModeling.Optimization
 {
   public class GoldenSectionConstrained : IUnimodalOptimization
   {
-    private const double Ratio = 0.618;
+    public const double Ratio = 0.618;
     
     private NumberValueWithDerivative1 _a;
     private NumberValueWithDerivative1 _b;

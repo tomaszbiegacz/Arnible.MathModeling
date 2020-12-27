@@ -13,6 +13,7 @@ namespace Arnible.MathModeling.Algebra.Test
       IsTrue(v == 0);
       AreEqual(1u, v.Length);
       AreExactlyEqual(0, v[0]);
+      AreEqual(0, v.GetLengthSquare());
       AreEqual("0", v.ToString());
 
       AreEqual(default, v);
@@ -29,6 +30,7 @@ namespace Arnible.MathModeling.Algebra.Test
       IsFalse(v != 2);
       AreExactlyEqual(2d, v[0]);
       AreEqual(1u, v.Length);
+      AreEqual(4, v.GetLengthSquare());
       AreEqual("2", v.ToString());
     }
 
@@ -39,7 +41,18 @@ namespace Arnible.MathModeling.Algebra.Test
       IsFalse(v == 0);
       AreEquals(new Number[] { 2, 3, 4 }, v);
       AreEqual(3u, v.Length);
+      AreEqual(4+9+16, v.GetLengthSquare());
       AreEqual("[2 3 4]", v.ToString());
+    }
+    
+    [Fact]
+    public void Constructor_FromArray()
+    {
+      ValueArray<Number> src = new Number[] {1, 3};
+      ValueArray<Number> dst = new Number[] {3, 5};
+
+      NumberTranslationVector v = new NumberTranslationVector(startingPoint: src, destinationPoint: dst);
+      AreEqual(dst, v.Translate(src));
     }
 
     [Fact]
@@ -80,6 +93,35 @@ namespace Arnible.MathModeling.Algebra.Test
       var t = new NumberTranslationVector(2, 3);
       var v = new Number[] { 1, 2, 3 };
       AreEqual(new Number[] { 3, 5, 3 }, t.Translate(v));
+    }
+    
+    [Fact]
+    public void GetNormalized_Zero()
+    {
+      NumberTranslationVector v = default;
+      AreEqual(v, v.GetNormalized());
+    }
+    
+    [Fact]
+    public void GetNormalized_One()
+    {
+      NumberTranslationVector v = new NumberTranslationVector(0, 1);
+      AreEqual(v, v.GetNormalized());
+    }
+    
+    [Fact]
+    public void GetNormalized_Simple()
+    {
+      NumberTranslationVector v = new NumberTranslationVector(2);
+      AreEqual(new NumberTranslationVector(1), v.GetNormalized());
+      AreNotEqual(v, v.GetNormalized());
+    }
+    
+    [Fact]
+    public void GetNormalized_Complex()
+    {
+      NumberTranslationVector v = new NumberTranslationVector(3, 4);
+      AreEqual(new NumberTranslationVector(0.6, 0.8), v.GetNormalized());
     }
   }
 }

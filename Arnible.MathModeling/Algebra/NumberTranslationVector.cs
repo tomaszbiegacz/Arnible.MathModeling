@@ -26,19 +26,27 @@ namespace Arnible.MathModeling.Algebra
   {
     private readonly NumberVector _change;
 
+    private NumberTranslationVector(in NumberVector change)
+    {
+      _change = change;
+    }
+    
     public NumberTranslationVector(params Number[] parameters)
       : this(new NumberVector(parameters))
     {
       // intentionally empty
     }
 
-    public NumberTranslationVector(in NumberVector change)
+    public NumberTranslationVector(ValueArray<Number> startingPoint, ValueArray<Number> destinationPoint)
+    : this(startingPoint.ZipDefensive(destinationPoint, (s, d) => d - s).ToVector())
     {
-      _change = change;
+      // intentionally empty
     }
-
-    public static implicit operator NumberTranslationVector(in Number v) => new NumberTranslationVector(v);
+    
     public static implicit operator NumberTranslationVector(in double v) => new NumberTranslationVector(v);
+    public static implicit operator NumberTranslationVector(in Number v) => new NumberTranslationVector(v);
+    public static implicit operator NumberTranslationVector(in NumberVector v) => new NumberTranslationVector(v);
+    public static implicit operator NumberTranslationVector(in Number[] v) => new NumberTranslationVector(v);
 
     //
     // Properties
@@ -118,11 +126,21 @@ namespace Arnible.MathModeling.Algebra
     IEnumerator IEnumerable.GetEnumerator() => _change.GetEnumerator();    
 
     //
-    // Operations
+    // Operators
     //
-
+    
     public static NumberTranslationVector operator *(in NumberTranslationVector a, in Number b) => new NumberTranslationVector(b * a._change);
     public static NumberTranslationVector operator *(in Number a, in NumberTranslationVector b) => new NumberTranslationVector(a * b._change);
+    
+    //
+    // Query operators
+    //
+    
+    public Number GetLengthSquare() => _change.GetLengthSquare();
+    
+    //
+    // Operations
+    //
 
     public NumberVector Translate(in NumberVector src) => src + _change;
 
