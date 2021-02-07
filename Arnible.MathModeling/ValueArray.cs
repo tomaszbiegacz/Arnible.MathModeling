@@ -50,7 +50,9 @@ namespace Arnible.MathModeling
       return hc;
     }
     public int GetHashCodeValue() => GetHashCode();
-    
+
+    public static implicit operator ReadOnlySpan<T>(in ValueArray<T> src) => src._values;
+
     //
     // Serializer
     //

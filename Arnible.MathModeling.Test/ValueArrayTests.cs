@@ -97,5 +97,34 @@ namespace Arnible.MathModeling.Test
         new Number[] { 1, 5 }, 
         2));
     }
+
+    [Fact]
+    public void SumDefensive()
+    {
+      ValueArray<Number> v1 = new Number[] {1, 2};
+      ValueArray<Number> v2 = new Number[] {3, 5};
+      ValueArray<Number> expected = new Number[] {4, 7};
+
+      AreEqual(expected, new[] {v1, v2}.SumDefensive());
+    }
+    
+    [Fact]
+    public void SumDefensiveToScalar()
+    {
+      ValueArray<Number> v1 = new Number[] {1, 2};
+      Number expected = 3;
+
+      AreEqual(expected, v1.SumDefensive());
+    }
+    
+    [Fact]
+    public void Multiply()
+    {
+      ValueArray<Number> v1 = new Number[] {1, 2};
+      Number v2 = 3;
+      ValueArray<Number> expected = new Number[] {3, 6};
+
+      AreEqual(expected, v1.Multiply(in v2));
+    }
   }
 }

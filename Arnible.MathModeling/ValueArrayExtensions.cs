@@ -5,7 +5,7 @@ namespace Arnible.MathModeling
 {
   public static class ValueArrayExtensions
   {
-    public static ValueArray<Number> ToValueArray(this IEnumerable<Number> numbers, in uint length)
+    public static ValueArray<Number> ToValueArray(this IEnumerable<Number> numbers, uint length)
     {
       ValueArray<Number> items = numbers.ToValueArray();
       if (items.Length > length)
@@ -17,7 +17,7 @@ namespace Arnible.MathModeling
       return items.GetInternalEnumerable().Concat(LinqEnumerable.Repeat<Number>(0, toAdd)).ToValueArray();
     }
 
-    public static ValueArray<Number> ToValueArray(in this ValueArray<Number> numbers, in uint length)
+    public static ValueArray<Number> ToValueArray(this ValueArray<Number> numbers, uint length)
     {
       return numbers.GetInternalEnumerable().ToValueArray(length);
     }
@@ -26,7 +26,7 @@ namespace Arnible.MathModeling
     // Operators
     //
     
-    public static ValueArray<Number> Substract(this in ValueArray<Number> a, in ValueArray<Number> b)
+    public static ValueArray<Number> Substract(this ValueArray<Number> a, ValueArray<Number> b)
     {
       if (a.Length != b.Length)
       {
@@ -41,7 +41,7 @@ namespace Arnible.MathModeling
       return new ValueArray<Number>(result);
     }
     
-    public static ValueArray<Number> Add(this in ValueArray<Number> a, in ValueArray<Number> b)
+    public static ValueArray<Number> Add(this ValueArray<Number> a, ValueArray<Number> b)
     {
       if (a.Length != b.Length)
       {
@@ -56,11 +56,51 @@ namespace Arnible.MathModeling
       return new ValueArray<Number>(result);
     }
     
+    public static ValueArray<Number> SumDefensive(this IEnumerable<ValueArray<Number>> arg)
+    {
+      Number[]? result = null;
+      foreach (ValueArray<Number> item in arg)
+      {
+        if (result == null)
+        {
+          result = System.Linq.Enumerable.ToArray(item.GetInternalEnumerable());
+        }
+        else
+        {
+          if (result.Length != item.Length)
+          {
+            throw new ArgumentException(nameof(arg));
+          }
+          for (uint i = 0; i < result.Length; ++i)
+          {
+            result[i] += item[i];
+          }
+        }
+      }
+
+      if (result == null)
+      {
+        throw new ArgumentException(nameof(arg));
+      }
+      return result;
+    }
+
+    public static ValueArray<Number> Multiply(this ValueArray<Number> arg, in Number value)
+    {
+      Number[] result = new Number[arg.Length];
+      for (uint i = 0; i < arg.Length; ++i)
+      {
+        result[i] = arg[i] * value;
+      }
+
+      return result;
+    }
+    
     //
     // Operations
     //
 
-    public static Number DistanceSquareTo(in this ValueArray<Number> arg, in ValueArray<Number> other)
+    public static Number DistanceSquareTo(this ValueArray<Number> arg, ValueArray<Number> other)
     {
       if (arg.Length != other.Length)
       {
@@ -72,36 +112,74 @@ namespace Arnible.MathModeling
         merge: (a, b) => (a - b).ToPower(2)).SumWithDefault();
     }
 
-    public static ValueArray<Number> AddAtPos(in this ValueArray<Number> arg, uint pos, Number value)
+    public static ValueArray<Number> AddAtPos(this ValueArray<Number> arg, uint pos, in Number value)
     {
-      return arg.GetInternalEnumerable().Select((i, v) => i == pos ? v + value : v).ToValueArray();
+      Number[] result = new Number[arg.Length];
+      for (uint i = 0; i < arg.Length; ++i)
+      {
+        result[i] = arg[i];
+        if (i == pos)
+        {
+          result[i] += value;
+        }
+      }
+
+      return result;
     }
     
-    public static ValueArray<Number> SetAtPos(in this ValueArray<Number> arg, uint pos, Number value)
+    public static ValueArray<Number> SetAtPos(this ValueArray<Number> arg, uint pos, in Number value)
     {
-      return arg.GetInternalEnumerable().Select((i, v) => i == pos ? value : v).ToValueArray();
+      Number[] result = new Number[arg.Length];
+      for (uint i = 0; i < arg.Length; ++i)
+      {
+        if (i == pos)
+        {
+          result[i] = value;
+        }
+        else
+        {
+          result[i] = arg[i];
+        }
+      }
+
+      return result;
     }
 
     public static ValueArray<Number> TranslateCoordinate(
-      in this ValueArray<Number> start,
+      this ValueArray<Number> start,
       ValueArray<Number> direction,
-      Number value)
+      in Number value)
     {
-      return start.Select((i, v) => v + direction[i] * value).ToValueArray();
+      if (start.Length != direction.Length)
+      {
+        throw new ArgumentException(nameof(direction));
+      }
+      Number[] result = new Number[start.Length];
+      for (uint i = 0; i < start.Length; ++i)
+      {
+        result[i] = start[i] + direction[i] * value;
+      }
+
+      return result;
     }
 
     //
     // IEnumerable implementation (to avoid boxing)
     //
 
-    public static IEnumerable<Number> ExcludeAt(in this ValueArray<Number> x, uint pos)
+    public static ValueArray<Number> ExcludeAt(in this ValueArray<Number> x, uint pos)
     {
-      return x.GetInternalEnumerable().ExcludeAt(pos);
+      return x.GetInternalEnumerable().ExcludeAt(pos).ToValueArray();
     }
 
     public static Number ProductDefensive(in this ValueArray<Number> arg)
     {
       return arg.GetInternalEnumerable().ProductDefensive();
+    }
+    
+    public static Number SumDefensive(in this ValueArray<Number> arg)
+    {
+      return arg.GetInternalEnumerable().SumDefensive();
     }
   }
 }
