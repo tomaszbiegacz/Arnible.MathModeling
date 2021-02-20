@@ -71,5 +71,13 @@ namespace Arnible.MathModeling.Geometry
     {
       return Sqrt(point.Coordinates.Select(d => d * d).SumDefensive());
     }
+
+    /// <summary>
+    /// Assuming that cartesian point describes vector, calculate derivative ratios by moving along it
+    /// </summary>
+    public static NumberVector GetDirectionDerivativeRatios(in this CartesianCoordinate point)
+    {
+      return point.ToSpherical().Angles.GetCartesianAxisViewsRatios();
+    }
   }
 }

@@ -68,7 +68,7 @@ namespace Arnible.MathModeling.Geometry.Test
       NumberVector vector = HypersphericalCoordinateOnAxisView.GetIdentityVector(dimensionsCount);
       AreEqual(dimensionsCount, vector.Length);
 
-      IsTrue(vector.All(v => v > 0));
+      IsTrue(vector.All(v => v > 0 && v <= 1));
       AreEquals(NumberVector.Repeat(HypersphericalCoordinateOnAxisView.GetIdentityVectorRatio(dimensionsCount), dimensionsCount), vector);      
       AreEqual(1d, vector.Select(v => v * v).SumDefensive());
     }

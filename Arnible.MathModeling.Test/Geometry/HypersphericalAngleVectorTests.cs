@@ -1,4 +1,5 @@
 ﻿using System;
+using Arnible.MathModeling.Algebra;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 using static Arnible.MathModeling.xunit.AssertHelpers;
@@ -175,6 +176,53 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var a = new HypersphericalAngleVector(original1, original2);
       AreEqual(new HypersphericalAngleVector(result1, result2), a.Mirror);
+    }
+
+    [Fact]
+    public void IdentityVector_2()
+    {
+      var a = HypersphericalAngleVector.GetIdentityVector(2);
+      AreEqual(1, a.Length);
+      AreEqual(π_4, a[0]);
+
+      var radios = a.GetCartesianAxisViewsRatios();
+      AreEqual(2, radios.Length);
+      AreEqual(Math.Sqrt(2) / 2, radios[0]);
+      AreEqual(radios[0], radios[1]);
+    }
+
+    private static void IsIdentityRadiosVector(NumberVector radios)
+    {
+      for (uint i = 0; i < radios.Length; ++i)
+      {
+        IsGreaterEqualThan(0, radios[i]);
+        IsLowerEqualThan(1, radios[i]);
+      }
+      AreEqual(1, radios.Select(r => r*r).SumDefensive());
+    }
+    
+    [Fact]
+    public void IdentityVector_3()
+    {
+      var a = HypersphericalAngleVector.GetIdentityVector(3);
+      AreEqual(2, a.Length);
+      AreEqual(π_4, a[0]);
+
+      var radios = a.GetCartesianAxisViewsRatios();
+      AreEqual(3, radios.Length);
+      IsIdentityRadiosVector(radios);
+    }
+    
+    [Fact]
+    public void IdentityVector_4()
+    {
+      var a = HypersphericalAngleVector.GetIdentityVector(4);
+      AreEqual(3, a.Length);
+      AreEqual(π_4, a[0]);
+
+      var radios = a.GetCartesianAxisViewsRatios();
+      AreEqual(4, radios.Length);
+      IsIdentityRadiosVector(radios);
     }
   }
 }

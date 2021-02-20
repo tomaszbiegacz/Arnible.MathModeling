@@ -21,7 +21,7 @@ namespace Arnible.MathModeling
     {
       return numbers.GetInternalEnumerable().ToValueArray(length);
     }
-    
+
     //
     // Operators
     //

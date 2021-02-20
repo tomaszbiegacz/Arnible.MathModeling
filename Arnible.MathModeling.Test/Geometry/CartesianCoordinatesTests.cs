@@ -36,5 +36,42 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate v2 = new NumberVector(1, 1, 8.65956056235496E-17);
       AreEqual(v1, v2);
     }
+
+    [Fact]
+    public void GetDirectionDerivativeRatios_Identity_2()
+    {
+      CartesianCoordinate c = new NumberVector(1, 1);
+      var actual = c.GetDirectionDerivativeRatios();
+
+      var expected = HypersphericalAngleVector.GetIdentityVector(2).GetCartesianAxisViewsRatios();
+      AreEqual(expected, actual);
+    }
+    
+    [Fact]
+    public void GetDirectionDerivativeRatios_Identity_3()
+    {
+      CartesianCoordinate c = new NumberVector(4, 4, 4);
+      var actual = c.GetDirectionDerivativeRatios();
+
+      var expected = HypersphericalAngleVector.GetIdentityVector(3).GetCartesianAxisViewsRatios();
+      AreEqual(expected, actual);
+    }
+    
+    [Fact]
+    public void GetDirectionDerivativeRatios_Random()
+    {
+      CartesianCoordinate c = new NumberVector(1, 2, -3);
+      var radios = c.GetDirectionDerivativeRatios();
+      
+      for (uint i = 0; i < 2; ++i)
+      {
+        IsGreaterEqualThan(0, radios[i]);
+        IsLowerEqualThan(1, radios[i]);
+      }
+      IsGreaterEqualThan(-1, radios[2]);
+      IsLowerEqualThan(0, radios[2]);
+      
+      AreEqual(1, radios.Select(r => r*r).SumDefensive());
+    }
   }
 }

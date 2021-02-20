@@ -18,6 +18,9 @@ namespace Arnible.MathModeling.Geometry
       return angles.GetCartesianAxisViewsRatios().GetInternalEnumerable().Select(v => new Derivative1Value(v));
     }
 
+    /// <summary>
+    /// Get identity vector coefficients
+    /// </summary>
     public static NumberVector GetIdentityVector(in uint dimensionsCount)
     {
       switch(dimensionsCount)
@@ -31,6 +34,9 @@ namespace Arnible.MathModeling.Geometry
       return HypersphericalAngleVector.GetIdentityVector(in dimensionsCount).GetCartesianAxisViewsRatios();
     }
 
+    /// <summary>
+    /// Return ratio of an identity vector. All coefficients should be equal to it
+    /// </summary>
     public static Number GetIdentityVectorRatio(in uint dimensionsCount)
     {
       switch (dimensionsCount)

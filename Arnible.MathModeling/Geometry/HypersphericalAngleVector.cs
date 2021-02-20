@@ -24,10 +24,10 @@ namespace Arnible.MathModeling.Geometry
       return new HypersphericalAngleVector(NumberVector.NonZeroValueAt(pos: in anglePos, value: in value));
     }    
 
-    private static IEnumerable<Number> Normalize(IEnumerable<Number> values)
+    private static IEnumerable<Number> Normalize(IEnumerable<Number> angles)
     {
       bool isFirst = true;
-      foreach (Number v in values)
+      foreach (Number v in angles)
       {
         if (isFirst)
         {
@@ -41,9 +41,9 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    internal static HypersphericalAngleVector Create(IEnumerable<Number> parameters)
+    internal static HypersphericalAngleVector Create(IEnumerable<Number> angles)
     {
-      return new HypersphericalAngleVector(Normalize(parameters).ToVector());
+      return new HypersphericalAngleVector(Normalize(angles).ToVector());
     }
 
     public static HypersphericalAngleVector GetIdentityVector(in uint dimensionsCount)
