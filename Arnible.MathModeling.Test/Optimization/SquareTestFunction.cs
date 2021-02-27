@@ -5,9 +5,9 @@ namespace Arnible.MathModeling.Optimization.Test
   /// </summary>
   public class SquareTestFunction : INumberFunctionWithDerivative
   {
-    public NumberValueWithDerivative1 ValueWithDerivative(in Number x)
+    public FunctionPointWithDerivative ValueWithDerivative(in Number x)
     {
-      return new NumberValueWithDerivative1(
+      return new FunctionPointWithDerivative(
         x: x,
         y: (x - 1).ToPower(2) + 3,
         first: 2*(x-1)

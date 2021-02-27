@@ -7,9 +7,9 @@ namespace Arnible.MathModeling.Optimization.Test
   /// </summary>
   public class SinTestFunction : INumberFunctionWithDerivative
   {
-    public NumberValueWithDerivative1 ValueWithDerivative(in Number x)
+    public FunctionPointWithDerivative ValueWithDerivative(in Number x)
     {
-      return new NumberValueWithDerivative1(
+      return new FunctionPointWithDerivative(
         x: x,
         y: Math.Sin((double)x) + 3,
         first: Math.Cos((double)x)

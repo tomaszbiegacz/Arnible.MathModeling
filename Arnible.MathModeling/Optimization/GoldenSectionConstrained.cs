@@ -8,14 +8,14 @@ namespace Arnible.MathModeling.Optimization
   {
     public const double Ratio = 0.618;
     
-    private NumberValueWithDerivative1 _a;
-    private NumberValueWithDerivative1 _b;
+    private FunctionPointWithDerivative _a;
+    private FunctionPointWithDerivative _b;
     private readonly IMathModelingLogger _logger;
 
     public GoldenSectionConstrained(
       INumberFunctionWithDerivative f,
-      NumberValueWithDerivative1 a,
-      NumberValueWithDerivative1 b,
+      in FunctionPointWithDerivative a,
+      in FunctionPointWithDerivative b,
       IMathModelingLogger logger)
     {
       Update(in a, in b);
@@ -23,7 +23,7 @@ namespace Arnible.MathModeling.Optimization
       _logger = logger;
     }
 
-    protected void Update(in NumberValueWithDerivative1 a, in NumberValueWithDerivative1 b)
+    protected void Update(in FunctionPointWithDerivative a, in FunctionPointWithDerivative b)
     {
       if (a.Y < b.Y)
       {
@@ -38,8 +38,8 @@ namespace Arnible.MathModeling.Optimization
     }
 
     protected INumberFunctionWithDerivative F { get; }
-    protected ref readonly NumberValueWithDerivative1 BorderSmaller => ref _a;
-    protected ref readonly NumberValueWithDerivative1 BorderGreater => ref _b;
+    protected ref readonly FunctionPointWithDerivative BorderSmaller => ref _a;
+    protected ref readonly FunctionPointWithDerivative BorderGreater => ref _b;
     
     public bool IsOptimal => _a.X == _b.X;
     
@@ -67,7 +67,7 @@ namespace Arnible.MathModeling.Optimization
       return true;
     }
 
-    private void MoveNext(string prefix, in NumberValueWithDerivative1 c)
+    private void MoveNext(string prefix, in FunctionPointWithDerivative c)
     {
       Sign daSign = _a.First.GetSign();
       Sign dbSign = _b.First.GetSign();
@@ -162,8 +162,8 @@ namespace Arnible.MathModeling.Optimization
     }
 
     protected void Log(
-      in string message,
-      in NumberValueWithDerivative1 c)
+      string message,
+      in FunctionPointWithDerivative c)
     {
       _logger.Log($"  [{_a.ToStringValue()}, {_b.ToStringValue()}] {message}, c:{c.ToStringValue()}");
     }

@@ -3,33 +3,37 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using Xunit.Abstractions;
 
 namespace Arnible.MathModeling.xunit
 {
-  public sealed class XunitLogger : IMathModelingLogger, ILogger, IDisposable, IAsyncDisposable
+  public sealed class XunitLogger : IMathModelingLogger, ILogger, IDisposable
   {
     private readonly ITestOutputHelper _output;
     private readonly StringBuilder _stringBuffer;
-    private readonly FileInfo _logFile;
 
     public XunitLogger(ITestOutputHelper output)
     {
       _output = output;
       _stringBuffer = new StringBuilder();
-      _logFile = new FileInfo(Path.GetTempFileName());
-      
-      _output.WriteLine($"Log file: {_logFile.FullName}");
+
+      IsLoggerEnabled = true;
+      SaveLogsToFile = false;
     }
+
+    public bool IsLoggerEnabled { get; set; }
+    public bool SaveLogsToFile { get; set; }
 
     //
     // IMathModelingLogger
     //
 
-    public void Log(in string message)
+    public void Log(string message)
     {
-      _stringBuffer.AppendLine(message);
+      if (IsLoggerEnabled)
+      {
+        _stringBuffer.AppendLine(message);  
+      }
     }
 
     //
@@ -38,11 +42,13 @@ namespace Arnible.MathModeling.xunit
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
     {
-      // ReSharper disable once HeapView.PossibleBoxingAllocation
-      Log(state?.ToString() ?? string.Empty);
+      if (IsLoggerEnabled)
+      {
+        Log(formatter(state, exception));
+      }
     }
 
-    public bool IsEnabled(LogLevel logLevel) => true;
+    public bool IsEnabled(LogLevel logLevel) => IsLoggerEnabled;
 
     public IDisposable BeginScope<TState>(TState state) => this;
 
@@ -50,24 +56,38 @@ namespace Arnible.MathModeling.xunit
     // IDisposable
     //
 
+    /// <summary>
+    /// Write logs to ITestOutputHelper and to file
+    /// </summary>
     public void Dispose()
     {
-      // do nothing
-    }
+      if (IsLoggerEnabled)
+      {
+        string logs = _stringBuffer.ToString();
+        _stringBuffer.Clear();
 
-    public async ValueTask DisposeAsync()
-    {
-      const int maxLength = 9000;
-      string logs = _stringBuffer.ToString();
-      if (logs.Length > maxLength)
-      {
-        _output.WriteLine(logs.Substring(0, maxLength));
+        FileInfo? logFile = null;
+        if (SaveLogsToFile)
+        {
+          logFile = new FileInfo(Path.GetTempFileName());
+          _output.WriteLine($"Log file: {logFile.FullName}");
+        }
+      
+        const int maxLength = 9000;
+        if (logs.Length > maxLength)
+        {
+          _output.WriteLine(logs.Substring(0, maxLength));
+        }
+        else
+        {
+          _output.WriteLine(logs);  
+        }
+
+        if (logFile != null)
+        {
+          File.WriteAllText(logFile.FullName, logs);
+        } 
       }
-      else
-      {
-        _output.WriteLine(logs);  
-      }
-      await File.WriteAllTextAsync(_logFile.FullName, logs);
     }
   }
 }

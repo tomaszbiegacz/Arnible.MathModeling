@@ -6,14 +6,10 @@ using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Optimization.Test
 {
-  public class GoldenSectionConstrainedTests
+  public class GoldenSectionConstrainedTests : TestsWithLogger
   {
-    // ReSharper disable once NotAccessedField.Local
-    private readonly ITestOutputHelper _output;
-
-    public GoldenSectionConstrainedTests(ITestOutputHelper output)
+    public GoldenSectionConstrainedTests(ITestOutputHelper output) : base(output)
     {
-      _output = output;
     }
 
     [Fact]
@@ -23,7 +19,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(-1);
       var b = f.ValueWithDerivative(2);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       AreExactlyEqual(2, method.X);
       AreExactlyEqual(4, method.Y);
 
@@ -40,7 +36,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(1.5);
       var b = f.ValueWithDerivative(2);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       AreExactlyEqual(1.5, method.X);
 
       uint i = OptimizationHelper.FindOptimal(method);
@@ -56,7 +52,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(1);
       var b = f.ValueWithDerivative(2);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       AreExactlyEqual(1, method.X);
 
       uint i = OptimizationHelper.FindOptimal(method);
@@ -72,7 +68,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(0.5);
       var b = f.ValueWithDerivative(-2);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       AreExactlyEqual(0.5, method.X);
 
       uint i = OptimizationHelper.FindOptimal(method);
@@ -88,7 +84,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(1);
       var b = f.ValueWithDerivative(-2);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       AreExactlyEqual(1, method.X);
 
       uint i = OptimizationHelper.FindOptimal(method);
@@ -108,7 +104,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(-1);
       var b = f.ValueWithDerivative(2);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       AreExactlyEqual(-1, method.X);
       AreExactlyEqual(-1, method.Y);
 
@@ -129,7 +125,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(-1.3 * Math.PI);
       var b = f.ValueWithDerivative(0.4 * Math.PI);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       AreExactlyEqual(a.X, method.X);
       AreExactlyEqual(a.Y, method.Y);
 
@@ -146,7 +142,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(0.3 * Math.PI);
       var b = f.ValueWithDerivative(Math.PI);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       AreExactlyEqual(b.X, method.X);
       AreExactlyEqual(b.Y, method.Y);
       IsGreaterThan(b.Y, a.Y);
@@ -164,7 +160,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(0);
       var b = f.ValueWithDerivative(0.7 * Math.PI);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       AreExactlyEqual(a.X, method.X);
       AreExactlyEqual(a.Y, method.Y);
       IsGreaterThan(a.Y, b.Y);
@@ -190,7 +186,7 @@ namespace Arnible.MathModeling.Optimization.Test
       IsLowerThan(0, a.First);
       IsGreaterThan(0, b.First);
       
-      var method = new GoldenSectionConstrained(f: f, a: a, b: b, new DeafLogger());
+      var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       AreExactlyEqual(a.X, method.X);
       AreExactlyEqual(a.Y, method.Y);
 

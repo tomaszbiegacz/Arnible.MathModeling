@@ -6,7 +6,7 @@ namespace Arnible.MathModeling.xunit
 {
   public sealed class DeafLogger : IMathModelingLogger, ILogger, IDisposable
   {
-    public void Log(in string message)
+    public void Log(string message)
     {
       // intentionally empty
     }
@@ -16,10 +16,8 @@ namespace Arnible.MathModeling.xunit
       // intentionally empty
     }
 
-    public bool IsEnabled(LogLevel logLevel)
-    {
-      return true;
-    }
+    public bool IsLoggerEnabled => false;
+    public bool IsEnabled(LogLevel logLevel) => false;
 
     public IDisposable BeginScope<TState>(TState state)
     {

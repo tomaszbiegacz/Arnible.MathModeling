@@ -2,6 +2,7 @@
 {
   public interface IMathModelingLogger
   {
-    void Log(in string message);
+    bool IsLoggerEnabled { get; }
+    void Log(string message);
   }
 }

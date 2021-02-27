@@ -1,20 +1,60 @@
 using System;
 using System.Threading;
+using Arnible.MathModeling.Algebra;
 using Arnible.MathModeling.Export;
 
 namespace Arnible.MathModeling.Optimization
 {
   public class UnimodalSecant : IUnimodalOptimization
   {
+    public static UnimodalSecantAnalysis AnalyseApplicability(
+      in FunctionPointWithDerivative a,
+      in FunctionPointWithDerivative b)
+    {
+      Sign aSign = a.First.GetSign();
+      Sign bSign = b.First.GetSign();
+      if (aSign == Sign.Negative && bSign == Sign.Positive)
+      {
+        return UnimodalSecantAnalysis.HasMinimum;
+      }
+      else if (aSign == Sign.Positive && bSign == Sign.Negative)
+      {
+        return UnimodalSecantAnalysis.HasMaximum;
+      }
+      else
+      {
+        return UnimodalSecantAnalysis.Unknown;
+      }
+    }
+
+    public static FunctionPointWithDerivative CalculateMinimum(
+      INumberFunctionWithDerivative f,
+      in FunctionPointWithDerivative a,
+      in FunctionPointWithDerivative b)
+    {
+      if (a.First >= 0 || b.First <= 0)
+      {
+        throw new ArgumentException($"Something went wrong {a.ToStringValue()}, {b.ToStringValue()}");
+      }
+
+      Number step = a.First * (b.X - a.X) / (b.First - a.First);
+      if (step == 0)
+      {
+        throw new InvalidOperationException($"Something went wrong {a.ToStringValue()}, {b.ToStringValue()}");
+      }
+      
+      return f.ValueWithDerivative(a.X - step);
+    }
+    
     private readonly INumberFunctionWithDerivative _f;
-    private NumberValueWithDerivative1 _a;
-    private NumberValueWithDerivative1 _b;
+    private FunctionPointWithDerivative _a;
+    private FunctionPointWithDerivative _b;
     private readonly IMathModelingLogger _logger;
 
     public UnimodalSecant(
       INumberFunctionWithDerivative f,
-      NumberValueWithDerivative1 a,
-      NumberValueWithDerivative1 b,
+      in FunctionPointWithDerivative a,
+      in FunctionPointWithDerivative b,
       IMathModelingLogger logger)
     {
       if (a.First < 0)
@@ -46,25 +86,6 @@ namespace Arnible.MathModeling.Optimization
 
     public Number Width => (_b.X - _a.X).Abs();
 
-    internal static NumberValueWithDerivative1 ConsiderPoint(
-      in INumberFunctionWithDerivative f,
-      in NumberValueWithDerivative1 a,
-      in NumberValueWithDerivative1 b)
-    {
-      if (a.First >= 0 || b.First <= 0)
-      {
-        throw new ArgumentException($"Something went wrong {a.ToStringValue()}, {b.ToStringValue()}");
-      }
-
-      Number step = a.First * (b.X - a.X) / (b.First - a.First);
-      if (step == 0)
-      {
-        throw new InvalidOperationException($"Something went wrong {a.ToStringValue()}, {b.ToStringValue()}");
-      }
-      
-      return f.ValueWithDerivative(a.X - step);
-    }
-
     public bool MoveNext()
     {
       if (IsOptimal || IsPolimodal)
@@ -72,7 +93,7 @@ namespace Arnible.MathModeling.Optimization
         return false;
       }
 
-      NumberValueWithDerivative1 c = ConsiderPoint(in _f, in _a, in _b);
+      FunctionPointWithDerivative c = CalculateMinimum(_f, in _a, in _b);
       if (c.First == 0)
       {
         if (c.Y > Y)
@@ -127,8 +148,8 @@ namespace Arnible.MathModeling.Optimization
     }
     
     private void Log(
-      in string message,
-      in NumberValueWithDerivative1 c)
+      string message,
+      in FunctionPointWithDerivative c)
     {
       _logger.Log($"  [{_a.ToStringValue()}, {_b.ToStringValue()}] {message}, c:{c.ToStringValue()}");
     }

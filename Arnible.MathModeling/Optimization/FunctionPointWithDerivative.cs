@@ -1,8 +1,8 @@
 namespace Arnible.MathModeling.Optimization
 {
-  public readonly struct NumberValueWithDerivative1 : IValueObject
+  public readonly struct FunctionPointWithDerivative : IValueObject
   {
-    public NumberValueWithDerivative1(Number x, Number y, Number first)
+    public FunctionPointWithDerivative(in Number x, in Number y, in Number first)
     {
       X = x;
       Y = y;

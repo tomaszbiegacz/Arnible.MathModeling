@@ -7,10 +7,10 @@ namespace Arnible.MathModeling.Optimization
   {
     public PolimodalGoldenSecant(
       INumberFunctionWithDerivative f,
-      NumberValueWithDerivative1 a,
-      NumberValueWithDerivative1 b,
+      in FunctionPointWithDerivative a,
+      in FunctionPointWithDerivative b,
       IMathModelingLogger logger)
-    : base (f, a, b, logger)
+    : base (f, in a, in b, logger)
     {
       // intentionally empty
     }
@@ -25,8 +25,8 @@ namespace Arnible.MathModeling.Optimization
         return false;
       }
       
-      NumberValueWithDerivative1 a;
-      NumberValueWithDerivative1 b;
+      FunctionPointWithDerivative a;
+      FunctionPointWithDerivative b;
       if (d1Sign < d2Sign)
       {
         a = BorderSmaller;
@@ -37,7 +37,7 @@ namespace Arnible.MathModeling.Optimization
         a = BorderGreater;
         b = BorderSmaller;
       }
-      NumberValueWithDerivative1 c = UnimodalSecant.ConsiderPoint(F, in a, in b);
+      FunctionPointWithDerivative c = UnimodalSecant.CalculateMinimum(F, in a, in b);
       if (c.First == 0)
       {
         if (c.Y > Y)

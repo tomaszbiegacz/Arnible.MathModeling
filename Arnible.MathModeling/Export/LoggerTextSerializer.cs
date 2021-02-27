@@ -14,6 +14,7 @@ namespace Arnible.MathModeling.Export
     {
       _writer = writer;
       _logsBuffer = new ConcurrentQueue<string>();
+      IsLoggerEnabled = true;
     }
 
     public async Task Flush()
@@ -40,9 +41,14 @@ namespace Arnible.MathModeling.Export
     // IMathModelingLogger
     //
 
-    public void Log(in string message)
+    public bool IsLoggerEnabled { get; }
+
+    public void Log(string message)
     {
-      _logsBuffer.Enqueue(message);
+      if (IsLoggerEnabled)
+      {
+        _logsBuffer.Enqueue(message);
+      }
     }
   }
 }
