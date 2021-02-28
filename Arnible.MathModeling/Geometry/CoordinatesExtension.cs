@@ -73,11 +73,21 @@ namespace Arnible.MathModeling.Geometry
     }
 
     /// <summary>
-    /// Assuming that cartesian point describes vector, calculate derivative ratios by moving along it
+    /// Calculate derivative ratios by moving along the vector
     /// </summary>
-    public static NumberVector GetDirectionDerivativeRatios(in this CartesianCoordinate point)
+    public static NumberVector GetDirectionDerivativeRatios(in this NumberVector direction)
     {
+      CartesianCoordinate point = direction;
       return point.ToSpherical().Angles.GetCartesianAxisViewsRatios();
+    }
+    
+    /// <summary>
+    /// Calculate derivative ratios by moving along the array vector
+    /// </summary>
+    public static ValueArray<Number> GetDirectionDerivativeRatios(in this ValueArray<Number> direction)
+    {
+      CartesianCoordinate point = direction;
+      return point.ToSpherical().Angles.GetCartesianAxisViewsRatios().ToValueArray(direction.Length);
     }
   }
 }

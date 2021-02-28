@@ -5,6 +5,9 @@ namespace Arnible.MathModeling.Optimization.Test
   /// </summary>
   public class SquareReversedTestFunction : INumberFunctionWithDerivative
   {
+    public Number MinValue => -100;
+    public Number MaxValue => 100;
+    
     public FunctionPointWithDerivative ValueWithDerivative(in Number x)
     {
       return new FunctionPointWithDerivative(

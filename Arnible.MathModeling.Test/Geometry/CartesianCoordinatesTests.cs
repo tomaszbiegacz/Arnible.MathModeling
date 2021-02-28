@@ -40,7 +40,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void GetDirectionDerivativeRatios_Identity_2()
     {
-      CartesianCoordinate c = new NumberVector(1, 1);
+      NumberVector c = new NumberVector(1, 1);
       var actual = c.GetDirectionDerivativeRatios();
 
       var expected = HypersphericalAngleVector.GetIdentityVector(2).GetCartesianAxisViewsRatios();
@@ -50,7 +50,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void GetDirectionDerivativeRatios_Identity_3()
     {
-      CartesianCoordinate c = new NumberVector(4, 4, 4);
+      NumberVector c = new NumberVector(4, 4, 4);
       var actual = c.GetDirectionDerivativeRatios();
 
       var expected = HypersphericalAngleVector.GetIdentityVector(3).GetCartesianAxisViewsRatios();
@@ -60,8 +60,9 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void GetDirectionDerivativeRatios_Random()
     {
-      CartesianCoordinate c = new NumberVector(1, 2, -3);
+      ValueArray<Number> c = new Number[] { 1, 2, -3 };
       var radios = c.GetDirectionDerivativeRatios();
+      AreEqual(3, radios.Length);
       
       for (uint i = 0; i < 2; ++i)
       {
