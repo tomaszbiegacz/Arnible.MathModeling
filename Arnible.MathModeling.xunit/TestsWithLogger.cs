@@ -17,7 +17,7 @@ namespace Arnible.MathModeling.xunit
       _logger.IsLoggerEnabled = false;
     }
 
-    protected void BackupLogs()
+    protected void BackupLogsToFile()
     {
       _logger.SaveLogsToFile = true;
     }

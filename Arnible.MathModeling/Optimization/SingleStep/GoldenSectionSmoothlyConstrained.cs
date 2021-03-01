@@ -15,7 +15,7 @@ namespace Arnible.MathModeling.Optimization.SingleStep
       IMathModelingLogger logger)
     {
       _logger = logger;
-      IterationLimit = 100;
+      IterationLimit = 10;
     }
 
     public Number Optimize(

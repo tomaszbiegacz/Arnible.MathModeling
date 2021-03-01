@@ -12,5 +12,17 @@ namespace Arnible.MathModeling
     {
       return new Number[count];
     }
+    
+    public static bool IsZero(in this ValueArray<Number> src)
+    {
+      for(uint i=0; i<src.Length; i++)
+      {
+        if(src[i] != 0)
+        {
+          return false;
+        }
+      }
+      return true;
+    }
   }
 }
