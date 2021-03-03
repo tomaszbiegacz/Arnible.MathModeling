@@ -95,9 +95,9 @@ namespace Arnible.MathModeling.Geometry
 
     public HypersphericalCoordinateOnAxisView ToCartesianView() => new HypersphericalCoordinateOnAxisView(this);
 
-    public HypersphericalCoordinate TranslateByAngle(in uint anglePos, in Number delta)
+    public HypersphericalCoordinate TranslateByAngle(uint anglePos, in Number delta)
     {
-      var angleDelta = HypersphericalAngleVector.CreateOrthogonalDirection(in anglePos, in delta);
+      var angleDelta = HypersphericalAngleVector.CreateOrthogonalDirection(anglePos, in delta);
       var angles = Angles + angleDelta;
       return new HypersphericalCoordinate(R, in angles);
     }

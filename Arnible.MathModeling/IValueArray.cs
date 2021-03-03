@@ -7,6 +7,6 @@ namespace Arnible.MathModeling
   {
     uint Length { get; }
 
-    ref readonly T this[in uint index] { get; }
+    ref readonly T this[uint index] { get; }
   }
 }

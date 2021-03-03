@@ -26,7 +26,7 @@ namespace Arnible.MathModeling.Algebra
   {
     private readonly NumberVector _change;
 
-    private NumberTranslationVector(in NumberVector change)
+    private NumberTranslationVector(NumberVector change)
     {
       _change = change;
     }
@@ -45,8 +45,8 @@ namespace Arnible.MathModeling.Algebra
     
     public static implicit operator NumberTranslationVector(in double v) => new NumberTranslationVector(v);
     public static implicit operator NumberTranslationVector(in Number v) => new NumberTranslationVector(v);
-    public static implicit operator NumberTranslationVector(in NumberVector v) => new NumberTranslationVector(v);
-    public static implicit operator NumberTranslationVector(in Number[] v) => new NumberTranslationVector(v);
+    public static implicit operator NumberTranslationVector(NumberVector v) => new NumberTranslationVector(v);
+    public static implicit operator NumberTranslationVector(Number[] v) => new NumberTranslationVector(v);
 
     //
     // Properties
@@ -54,7 +54,7 @@ namespace Arnible.MathModeling.Algebra
 
     public uint Length => _change.Length;
 
-    public ref readonly Number this[in uint pos]
+    public ref readonly Number this[uint pos]
     {
       get
       {

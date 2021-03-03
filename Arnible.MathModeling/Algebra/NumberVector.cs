@@ -27,7 +27,7 @@ namespace Arnible.MathModeling.Algebra
     readonly static Number ZeroValue = 0d;
     readonly static IReadOnlyCollection<Number> ZeroVector = new Number[] { 0 };
 
-    public static NumberVector Repeat(in Number value, in uint length)
+    public static NumberVector Repeat(in Number value, uint length)
     {
       if (value == 0)
       {
@@ -39,7 +39,7 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public static NumberVector NonZeroValueAt(in uint pos, in Number value)
+    public static NumberVector NonZeroValueAt(uint pos, in Number value)
     {
       if (value == 0)
       {
@@ -49,7 +49,7 @@ namespace Arnible.MathModeling.Algebra
       return new NumberVector(LinqEnumerable.Repeat<Number>(0, pos).Append(value).ToValueArray());
     }
 
-    public static NumberVector NonZeroValueAt(in UnmanagedArray<bool> pos, Number value)
+    public static NumberVector NonZeroValueAt(UnmanagedArray<bool> pos, Number value)
     {
       if (value == 0)
       {
@@ -59,7 +59,7 @@ namespace Arnible.MathModeling.Algebra
       return Create(pos.Select(v => v ? value : 0));
     }
 
-    public static NumberVector NonZeroValueAt(in UnmanagedArray<Sign> pos, Number value)
+    public static NumberVector NonZeroValueAt(UnmanagedArray<Sign> pos, Number value)
     {
       if (value == 0)
       {
@@ -71,7 +71,7 @@ namespace Arnible.MathModeling.Algebra
 
     private readonly ValueArray<Number> _values;
 
-    private static ValueArray<Number> GetNormalizedVector(in IEnumerable<Number> parameters)
+    private static ValueArray<Number> GetNormalizedVector(IEnumerable<Number> parameters)
     {
       List<Number> result = new List<Number>(parameters ?? LinqEnumerable.Empty<Number>());
       while (result.Count > 0 && result[^1] == 0)
@@ -81,7 +81,7 @@ namespace Arnible.MathModeling.Algebra
       return result.ToValueArray();
     }
 
-    internal static NumberVector Create(in IEnumerable<Number> parameters)
+    internal static NumberVector Create(IEnumerable<Number> parameters)
     {
       return new NumberVector(GetNormalizedVector(parameters));
     }
@@ -104,7 +104,7 @@ namespace Arnible.MathModeling.Algebra
     // Properties
     //            
 
-    public Number GetOrDefault(in uint pos)
+    public Number GetOrDefault(uint pos)
     {
       if (pos >= Length)
         return 0;
@@ -128,7 +128,7 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public ref readonly Number this[in uint pos]
+    public ref readonly Number this[uint pos]
     {
       get
       {
@@ -155,9 +155,7 @@ namespace Arnible.MathModeling.Algebra
     // IEquatable
     //
 
-    public bool Equals(in NumberVector other) => _values.GetInternalEnumerable().SequenceEqual(other._values.GetInternalEnumerable());
-
-    public bool Equals(NumberVector other) => Equals(in other);
+    public bool Equals(NumberVector other) => _values.GetInternalEnumerable().SequenceEqual(other._values.GetInternalEnumerable());
 
     public bool Equals(in Number other)
     {
@@ -227,8 +225,8 @@ namespace Arnible.MathModeling.Algebra
     }
     public int GetHashCodeValue() => GetHashCode();
 
-    public static bool operator ==(in NumberVector a, in NumberVector b) => a.Equals(in b);
-    public static bool operator !=(in NumberVector a, in NumberVector b) => !a.Equals(in b);
+    public static bool operator ==(in NumberVector a, in NumberVector b) => a.Equals(b);
+    public static bool operator !=(in NumberVector a, in NumberVector b) => !a.Equals(b);
 
     public static bool operator ==(in Number a, in NumberVector b) => b.Equals(in a);
     public static bool operator !=(in Number a, in NumberVector b) => !b.Equals(in a);
@@ -254,12 +252,12 @@ namespace Arnible.MathModeling.Algebra
       return GetInternalEnumerable().Select(v => v * v).SumWithDefault();
     }
 
-    public NumberVector Transform(in Func<Number, Number> transformation)
+    public NumberVector Transform(Func<Number, Number> transformation)
     {
       return Create(GetInternalEnumerable().Select(transformation));
     }
 
-    public NumberVector Transform(in Func<uint, Number, Number> transformation)
+    public NumberVector Transform(Func<uint, Number, Number> transformation)
     {
       return Create(GetInternalEnumerable().Select(transformation));
     }
@@ -268,22 +266,22 @@ namespace Arnible.MathModeling.Algebra
     // Arithmetic operators
     //
 
-    public static NumberVector operator +(in NumberVector a, in NumberVector b)
+    public static NumberVector operator +(NumberVector a, NumberVector b)
     {
       return a.GetInternalEnumerable().Zip(b.GetInternalEnumerable(), (va, vb) => (va ?? 0) + (vb ?? 0)).ToVector();
     }
 
-    public static NumberVector operator -(in NumberVector a, in NumberVector b)
+    public static NumberVector operator -(NumberVector a, NumberVector b)
     {
       return a.GetInternalEnumerable().Zip(b.GetInternalEnumerable(), (va, vb) => (va ?? 0) - (vb ?? 0)).ToVector();
     }
 
-    public static NumberVector operator /(in NumberVector a, Number b)
+    public static NumberVector operator /(NumberVector a, Number b)
     {
       return new NumberVector(a.GetInternalEnumerable().Select(v => v / b).ToValueArray());
     }
 
-    public static NumberVector operator *(in NumberVector a, Number b)
+    public static NumberVector operator *(NumberVector a, Number b)
     {
       if (b == 0)
       {
@@ -295,7 +293,7 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public static NumberVector operator *(in Number a, in NumberVector b) => b * a;
+    public static NumberVector operator *(in Number a, NumberVector b) => b * a;
     
     //
     // IEnumerable extensions (to avoid boxing)
@@ -306,7 +304,7 @@ namespace Arnible.MathModeling.Algebra
       return GetInternalEnumerable().All(predicate);
     }
     
-    public IEnumerable<TResult> Select<TResult>(in Func<Number, TResult> selector)
+    public IEnumerable<TResult> Select<TResult>(Func<Number, TResult> selector)
     {
       return GetInternalEnumerable().Select(selector);
     }
@@ -326,7 +324,7 @@ namespace Arnible.MathModeling.Algebra
       return _values;
     }
     
-    public IEnumerable<Number> Where(in Func<Number, bool> predicate)
+    public IEnumerable<Number> Where(Func<Number, bool> predicate)
     {
       return GetInternalEnumerable().Where(predicate);
     }
