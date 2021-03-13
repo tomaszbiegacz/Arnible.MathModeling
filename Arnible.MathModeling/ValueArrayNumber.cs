@@ -24,5 +24,58 @@ namespace Arnible.MathModeling
       }
       return true;
     }
+    
+    public static (ValueArray<Number>, ValueArray<Number>) SplitValuesBySign(this ValueArray<Number> src)
+    {
+      Number[] positive = new Number[src.Length];
+      Number[] negative = new Number[src.Length];
+      
+      for(uint i=0; i<src.Length; ++i)
+      {
+        ref readonly Number value = ref src[i];
+        if(value >= 0)
+        {
+          positive[i] = value;
+        }
+        else
+        {
+          negative[i] = value;
+        }
+      }
+      
+      return (negative, positive);
+    }
+    
+    public static ValueArray<Number> GetNegativeValues(this ValueArray<Number> src)
+    {
+      Number[] negative = new Number[src.Length];
+      
+      for(uint i=0; i<src.Length; ++i)
+      {
+        ref readonly Number value = ref src[i];
+        if(value < 0)
+        {
+          negative[i] = value;
+        }
+      }
+      
+      return negative;
+    }
+    
+    public static ValueArray<Number> GetPositiveValues(this ValueArray<Number> src)
+    {
+      Number[] positive = new Number[src.Length];
+      
+      for(uint i=0; i<src.Length; ++i)
+      {
+        ref readonly Number value = ref src[i];
+        if(value > 0)
+        {
+          positive[i] = value;
+        }
+      }
+      
+      return positive;
+    }
   }
 }

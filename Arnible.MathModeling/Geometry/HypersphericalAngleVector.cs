@@ -72,8 +72,8 @@ namespace Arnible.MathModeling.Geometry
 
     private HypersphericalAngleVector(NumberVector angles)
     {      
-      var first = angles.First;
-      if (first > Angle.HalfCycle || first <= -1 * Angle.HalfCycle)
+      Number first = angles.First;
+      if (first > Angle.HalfCycle || first < -1 * Angle.HalfCycle)
       {
         throw new ArgumentException($"Invalid first angular coordinate: {first}");
       }

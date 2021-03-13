@@ -21,6 +21,11 @@ namespace Arnible.MathModeling
     {
       return numbers.GetInternalEnumerable().ToValueArray(length);
     }
+    
+    public static T[] ToArray<T>(this ValueArray<T> numbers) where T : struct, IValueObject
+    {
+     return System.Linq.Enumerable.ToArray(numbers.GetInternalEnumerable()); 
+    }
 
     //
     // Operators

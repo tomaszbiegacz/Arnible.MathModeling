@@ -10,6 +10,11 @@ namespace Arnible.MathModeling
     {
       return src.GetInternalEnumerable().MedianDefensive();
     }
+    
+    public static Number MinDefensive(in this ValueArray<Number> src)
+    {
+      return src.GetInternalEnumerable().MinDefensive();
+    }
 
     public static Number MaxDefensive(in this ValueArray<Number> src)
     {
