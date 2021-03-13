@@ -1,3 +1,4 @@
+using Arnible.Linq;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 

@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Arnible.Linq.Test
 {
-  public class AggregateReadOnlySpanExtensionsTests
+  public class SumReadOnlySpanExtensionsTests
   {
     [Fact]
     public void double_SumWithDefault_Empty()

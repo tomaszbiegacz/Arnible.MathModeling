@@ -1,6 +1,7 @@
 ﻿using Arnible.MathModeling.Polynomials;
 using System;
 using static Arnible.MathModeling.Polynomials.MetaMath;
+using Arnible.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {

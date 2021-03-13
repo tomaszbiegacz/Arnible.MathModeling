@@ -106,4 +106,8 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Arnible.Linq\Arnible.Linq.csproj" />
+  </ItemGroup>
+
 </Project>

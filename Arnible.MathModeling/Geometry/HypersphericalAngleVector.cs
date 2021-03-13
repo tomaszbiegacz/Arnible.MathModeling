@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using static Arnible.MathModeling.MetaMath;
+using Arnible.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {

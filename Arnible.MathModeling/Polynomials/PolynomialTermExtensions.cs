@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Arnible.Linq;
 
 namespace Arnible.MathModeling.Polynomials
 {

@@ -2,7 +2,7 @@
 
 namespace Arnible.Linq
 {
-  public static class AggregateReadOnlySpanExtensions
+  public static class SumReadOnlySpanExtensions
   {
     public static double SumWithDefault<T>(in this ReadOnlySpan<T> src, Func<T, double> func)
     {
