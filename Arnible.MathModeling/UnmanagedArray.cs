@@ -7,7 +7,6 @@ namespace Arnible.MathModeling
 {
   public readonly struct UnmanagedArray<T> : IUnmanagedArray<T> where T : unmanaged
   {
-    private static IEnumerable<T> _empty = LinqEnumerable.Empty<T>().ToReadOnlyList();
     private readonly T[] _items;
 
     internal UnmanagedArray(T[] items)
@@ -24,7 +23,7 @@ namespace Arnible.MathModeling
       return $"[{string.Join(',', GetEnumerator())}]";
     }
     
-    internal IEnumerable<T> GetInternalEnumerable() => _items ?? _empty;
+    internal IEnumerable<T> GetInternalEnumerable() => _items ?? LinqArray<T>.Empty;
 
     public T this[in uint index]
     {

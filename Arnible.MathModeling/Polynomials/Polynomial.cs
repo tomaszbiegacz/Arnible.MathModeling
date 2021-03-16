@@ -178,9 +178,9 @@ namespace Arnible.MathModeling.Polynomials
      * Operators
      */
 
-    public static explicit operator PolynomialTerm(Polynomial v) => v.GetInternalEnumerable().SingleOrDefault();
+    public static explicit operator PolynomialTerm(Polynomial v) => v.GetInternalEnumerable().SingleOrNone() ?? 0;
 
-    public static explicit operator double(Polynomial v) => (double) v.GetInternalEnumerable().SingleOrDefault();
+    public static explicit operator double(Polynomial v) => (double) (v.GetInternalEnumerable().SingleOrNone() ?? 0);
 
     // +
 

@@ -5,7 +5,7 @@ namespace Arnible.Linq
 {
   public static class OrderByExtensions
   {
-    class BuildinComparerStruct<T> : IComparer<T> where T : struct, IComparable<T>
+    class BuildInComparerStruct<T> : IComparer<T> where T : struct, IComparable<T>
     {
       public int Compare(T x, T y) => x.CompareTo(y);
     }
@@ -15,15 +15,17 @@ namespace Arnible.Linq
      */
 
     public static System.Linq.IOrderedEnumerable<TSource> Order<TSource>(
-      this IEnumerable<TSource> collection) where TSource : struct, IComparable<TSource>
+      this IEnumerable<TSource> collection
+      ) where TSource : struct, IComparable<TSource>
     {
-      return System.Linq.Enumerable.OrderBy(collection, i => i, new BuildinComparerStruct<TSource>());
+      return System.Linq.Enumerable.OrderBy(collection, i => i, new BuildInComparerStruct<TSource>());
     }
 
     public static System.Linq.IOrderedEnumerable<TSource> OrderDescending<TSource>(
-      this IEnumerable<TSource> collection) where TSource : struct, IComparable<TSource>
+      this IEnumerable<TSource> collection
+      ) where TSource : struct, IComparable<TSource>
     {
-      return System.Linq.Enumerable.OrderByDescending(collection, i => i, new BuildinComparerStruct<TSource>());
+      return System.Linq.Enumerable.OrderByDescending(collection, i => i, new BuildInComparerStruct<TSource>());
     }
 
     public static System.Linq.IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(

@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void ToSequncesWithReturning()
     {
-      IsEmpty(LinqEnumerable.Empty<int>().ToSequencesWithReturning());
+      IsEmpty(LinqArray<int>.Empty.ToSequencesWithReturning());
 
       var result = Materialize(new[] { 1, 2 }.ToSequencesWithReturning()).ToReadOnlyList();
       AssertContainsCollection(result, 1, 1);

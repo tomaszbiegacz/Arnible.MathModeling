@@ -93,7 +93,7 @@ namespace Arnible.MathModeling.Polynomials
           return commonVariables.Select(kv => new VariableTerm(variable: kv.Key, power: kv.Value));
         }
       }
-      return LinqEnumerable.Empty<VariableTerm>();
+      return LinqArray<VariableTerm>.Empty;
     }
 
     private static PolynomialDivision SimplifyByDividingNumeratorByDenominator(Polynomial numerator, Polynomial denominator)

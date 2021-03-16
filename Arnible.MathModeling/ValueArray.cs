@@ -23,7 +23,7 @@ namespace Arnible.MathModeling
     IValueObject 
     where T : struct, IValueObject
   {
-    private static IEnumerable<T> _empty = LinqEnumerable.Empty<T>().ToReadOnlyList();
+    private static IEnumerable<T> _empty = LinqArray<T>.Empty;
     private readonly T[] _values;
 
     internal ValueArray(T[] items)

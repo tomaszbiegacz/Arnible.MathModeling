@@ -8,49 +8,6 @@ namespace Arnible.MathModeling
   public static class LinqEnumerable
   {
     /*
-     * Extraction
-     */
-
-    public static T First<T>(this IEnumerable<T> source)
-    {
-      return System.Linq.Enumerable.First(source);
-    }
-
-    public static T FirstOrDefault<T>(this IEnumerable<T> source)
-    {
-      return System.Linq.Enumerable.FirstOrDefault(source);
-    }
-    
-    public static T Last<T>(this IEnumerable<T> source)
-    {
-      return System.Linq.Enumerable.Last(source);
-    }
-
-    /// <summary>
-    /// Returns the only element of a sequence
-    /// and throws an exception if there is not exactly one item in sequence.
-    /// </summary>
-    public static T Single<T>(this IEnumerable<T> source)
-    {
-      return System.Linq.Enumerable.Single(source);
-    }
-
-    /// <summary>
-    /// Returns the only element of a sequence or default 
-    /// and throws an exception if there are more than one element in sequence.
-    /// </summary>
-    public static T SingleOrDefault<T>(this IEnumerable<T> source)
-    {
-      return System.Linq.Enumerable.SingleOrDefault(source);
-    }
-
-    public static IEnumerable<T> Where<T>(this IEnumerable<T> source, in Func<T, bool> predicate)
-    {
-      return System.Linq.Enumerable.Where(source, predicate);
-    }
-
-
-    /*
      * Materialization
      */
 
@@ -69,30 +26,19 @@ namespace Arnible.MathModeling
       return new UnmanagedArray<T>(System.Linq.Enumerable.ToArray(source));
     }
 
+    
     public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
     {
       return System.Linq.Enumerable.ToArray(source);
     }
 
+    
     public static List<T> ToList<T>(this IEnumerable<T> source)
     {
       return System.Linq.Enumerable.ToList(source);
     }
 
-    public static IDictionary<TKey, TSource> ToDictionary<TKey, TSource>(
-      this IEnumerable<TSource> source, 
-      in Func<TSource, TKey> keySelector)
-    {
-      return System.Linq.Enumerable.ToDictionary(source, keySelector);
-    }
-
-    public static IDictionary<TKey, TValue> ToDictionary<TSource, TKey, TValue>(
-      this IEnumerable<TSource> source,
-      in Func<TSource, TKey> keySelector,
-      in Func<TSource, TValue> valueSelector)
-    {
-      return System.Linq.Enumerable.ToDictionary(source, keySelector, valueSelector);
-    }
+    
 
     /*
      * Creation
@@ -130,8 +76,6 @@ namespace Arnible.MathModeling
         yield return item;
       }
     }
-
-    public static IEnumerable<T> Empty<T>() => System.Linq.Enumerable.Empty<T>();
 
     /*
      * Adding items

@@ -42,7 +42,23 @@ namespace Arnible.Linq.Test
     }
     
     [Fact]
-    public void OrderByDescending_Default()
+    public void IEnumerable_Order_Default()
+    {
+      AreEquals(
+        new[] { 1, 2, 3 }, 
+        (new[] { 3, 1, 2 }).Order());
+    }
+    
+    [Fact]
+    public void IEnumerable_OrderDescending_Default()
+    {
+      AreEquals(
+        new[] { 3, 2, 1 }, 
+        (new[] { 3, 1, 2 }).OrderDescending());
+    }
+    
+    [Fact]
+    public void IEnumerable_OrderByDescending_Default()
     {
       AreEquals(
         new[] { new ForOrdering(3), new ForOrdering(2), new ForOrdering(1) }, 
@@ -50,7 +66,7 @@ namespace Arnible.Linq.Test
     }
 
     [Fact]
-    public void OrderByDescending_WithThen()
+    public void IEnumerable_OrderByDescending_WithThen()
     {
       AreEquals(
         new[] { new ForOrdering(2), new ForOrdering(3), new ForOrdering(1) },

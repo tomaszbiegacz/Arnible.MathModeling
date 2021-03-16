@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Arnible.Linq;
+using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Test
@@ -20,7 +21,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Product_Default()
     {
-      AreEqual(1d, LinqEnumerable.Empty<double>().ProductWithDefault());
+      AreEqual(1d, LinqArray<double>.Empty.ProductWithDefault());
     }
   }
 }

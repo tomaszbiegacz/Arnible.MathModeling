@@ -74,7 +74,7 @@ namespace Arnible.MathModeling.Algebra
 
     private static ValueArray<Number> GetNormalizedVector(IEnumerable<Number> parameters)
     {
-      List<Number> result = new List<Number>(parameters ?? LinqEnumerable.Empty<Number>());
+      List<Number> result = new List<Number>(parameters ?? LinqArray<Number>.Empty);
       while (result.Count > 0 && result[^1] == 0)
       {
         result.RemoveAt(result.Count - 1);
