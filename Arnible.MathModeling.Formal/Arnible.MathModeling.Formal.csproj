@@ -79,7 +79,9 @@
     <Compile Include="..\Arnible.MathModeling\LinqAggregateBasic.tt.cs" Link="LinqAggregateBasic.tt.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqArray.cs" Link="LinqArray.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqComparable.cs" Link="LinqComparable.cs" />
-    <Compile Include="..\Arnible.MathModeling\LinqEnumerable.cs" Link="LinqEnumerable.cs" />
+    <Compile Include="..\Arnible.MathModeling\LinqEnumerableExtensions.cs">
+      <Link>LinqEnumerableExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\LinqPredicate.cs" Link="LinqPredicate.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqProduct.tt.cs" Link="LinqProduct.tt.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqSequence.cs" Link="LinqSequence.cs" />

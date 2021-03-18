@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Arnible.Linq;
 
 namespace Arnible.MathModeling
 {
@@ -7,7 +8,7 @@ namespace Arnible.MathModeling
   {
     public static IEnumerable<int> Indexes<T>(this IReadOnlyList<T> arg)
     {
-      return LinqEnumerable.RangeInt((uint)arg.Count);
+      return LinqEnumerable.RangeInt((ushort)arg.Count);
     }
 
     public static IEnumerable<uint> Indexes<T>(in this ValueArray<T> arg) where T : struct, IValueObject
