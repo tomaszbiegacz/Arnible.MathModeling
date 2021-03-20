@@ -10,10 +10,6 @@ namespace Arnible.Linq
       public int Compare(T x, T y) => x.CompareTo(y);
     }
     
-    /*
-     * Order
-     */
-
     public static System.Linq.IOrderedEnumerable<TSource> Order<TSource>(
       this IEnumerable<TSource> collection
       ) where TSource : struct, IComparable<TSource>

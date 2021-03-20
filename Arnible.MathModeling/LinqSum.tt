@@ -5,10 +5,7 @@
 
 Dictionary<string, string> generatedTypes = new Dictionary<string, string>
 {
-    {"double", "double"},
-    {"Number", "Number"},
-    {"int", "long"},
-    {"uint", "ulong"},
+  {"Number", "Number"}
 };
 
 #>

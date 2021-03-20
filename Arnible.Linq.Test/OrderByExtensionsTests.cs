@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace Arnible.Linq.Test
@@ -34,16 +33,11 @@ namespace Arnible.Linq.Test
       }
       public int GetHashCodeValue() => GetHashCode();
     }
-    
-    static void AreEquals<T>(IEnumerable<T> expected, IEnumerable<T> actual)  where T: IEquatable<T>
-    {
-      Assert.True(expected.SequenceEqual(actual));
-    }
-    
+
     [Fact]
     public void IEnumerable_Order_Default()
     {
-      AreEquals(
+      AssertExtensions.AreEquals(
         new[] { 1, 2, 3 }, 
         (new[] { 3, 1, 2 }).Order());
     }
@@ -51,7 +45,7 @@ namespace Arnible.Linq.Test
     [Fact]
     public void IEnumerable_OrderDescending_Default()
     {
-      AreEquals(
+      AssertExtensions.AreEquals(
         new[] { 3, 2, 1 }, 
         (new[] { 3, 1, 2 }).OrderDescending());
     }
@@ -59,7 +53,7 @@ namespace Arnible.Linq.Test
     [Fact]
     public void IEnumerable_OrderByDescending_Default()
     {
-      AreEquals(
+      AssertExtensions.AreEquals(
         new[] { new ForOrdering(3), new ForOrdering(2), new ForOrdering(1) }, 
         (new[] { new ForOrdering(1), new ForOrdering(2), new ForOrdering(3) }).OrderByDescending(i => i.Root, i => i.Reminder));
     }
@@ -67,7 +61,7 @@ namespace Arnible.Linq.Test
     [Fact]
     public void IEnumerable_OrderByDescending_WithThen()
     {
-      AreEquals(
+      AssertExtensions.AreEquals(
         new[] { new ForOrdering(2), new ForOrdering(3), new ForOrdering(1) },
         (new[] { new ForOrdering(1), new ForOrdering(2), new ForOrdering(3) }).OrderByDescending(i => i.Root).ThenOrderBy(i => i.Reminder));
     }

@@ -110,4 +110,8 @@
     <ProjectReference Include="..\Arnible.Linq\Arnible.Linq.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Number" />
+  </ItemGroup>
+
 </Project>
