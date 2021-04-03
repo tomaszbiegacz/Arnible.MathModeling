@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Arnible.Linq;
 
 namespace Arnible.MathModeling.Algebra
 {
@@ -10,7 +11,8 @@ namespace Arnible.MathModeling.Algebra
     public BoolArray(IEnumerable<bool> values)
     {
       Values = values.ToUnmanagedArray();
-      _valueCount = Values.Where(s => s).Count();
+      // ReSharper disable once HeapView.BoxingAllocation
+      _valueCount = Values.Count(s => s);
     }
 
     /*

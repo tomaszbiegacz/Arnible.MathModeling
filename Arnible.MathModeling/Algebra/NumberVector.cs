@@ -300,9 +300,9 @@ namespace Arnible.MathModeling.Algebra
     // IEnumerable extensions (to avoid boxing)
     //
 
-    public bool All(in Func<Number, bool> predicate)
+    public bool AllWithDefault(in Func<Number, bool> predicate)
     {
-      return GetInternalEnumerable().All(predicate);
+      return GetInternalEnumerable().AllWithDefault(predicate);
     }
     
     public IEnumerable<TResult> Select<TResult>(Func<Number, TResult> selector)

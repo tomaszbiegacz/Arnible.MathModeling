@@ -75,7 +75,7 @@ namespace Arnible.MathModeling.Geometry
     /// </summary>
     public static HypersphericalAngleQuantified GetAllDirectionChangePositive(uint anglesCount)
     {
-      return GetQuantifiedDirections(anglesCount, 2).Where(d => d.Angles.All(a => a == 1)).Single();
+      return GetQuantifiedDirections(anglesCount, 2).Where(d => d.Angles.AllWithDefault(a => a == 1)).Single();
     }
 
     private readonly byte _rightAngleResolution;
@@ -99,11 +99,11 @@ namespace Arnible.MathModeling.Geometry
       if (angles.Count > 0)
       {
         uint anglePos;
-        uint? firstAnglePos = angles.IndexOf(a => a == rightAngleResolution);
+        ushort? firstAnglePos = angles.FirstIndexOfOrNull(a => a == rightAngleResolution);
         if (firstAnglePos > 0)
         {
           result = 1;
-          anglePos = firstAnglePos.Value + 1;
+          anglePos = firstAnglePos.Value + 1u;
         }
         else
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Arnible.Linq;
 
 namespace Arnible.MathModeling.Algebra
 {
@@ -7,7 +8,7 @@ namespace Arnible.MathModeling.Algebra
   {
     public static bool IsValid(this INumberRangeDomain domain, in ValueArray<Number> values)
     {
-      return values.All(v => domain.IsValid(v));
+      return values.AllWithDefault(v => domain.IsValid(v));
     }
     
     //
@@ -30,7 +31,7 @@ namespace Arnible.MathModeling.Algebra
     {
       return value.GetInternalEnumerable().Zip(
         col2: delta.GetInternalEnumerable(), 
-        merge: (v, t) => domain.IsValidTranslation(v ?? 0, t ?? 0)).All();
+        merge: (v, t) => domain.IsValidTranslation(v ?? 0, t ?? 0)).AllWithDefault();
     }
 
     public static bool IsValidTranslation(
@@ -46,7 +47,7 @@ namespace Arnible.MathModeling.Algebra
       {
         return value.GetInternalEnumerable().Zip(
           col2: delta.GetInternalEnumerable(), 
-          merge: (v, t) => domain.IsValidTranslation(v ?? throw new ArgumentException(nameof(value)), t ?? 0)).All();
+          merge: (v, t) => domain.IsValidTranslation(v ?? throw new ArgumentException(nameof(value)), t ?? 0)).AllWithDefault();
       }
     }
 

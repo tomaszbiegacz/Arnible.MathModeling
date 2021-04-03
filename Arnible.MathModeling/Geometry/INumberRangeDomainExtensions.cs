@@ -18,7 +18,7 @@ namespace Arnible.MathModeling.Geometry
     {
       domain.Validate(value.ToCartesianView().Coordinates);
       NumberVector coordinates = delta.Translate(value).ToCartesianView().Coordinates;
-      return coordinates.All(v => domain.IsValid(v));
+      return coordinates.AllWithDefault(v => domain.IsValid(v));
     }
 
     //

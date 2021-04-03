@@ -74,5 +74,22 @@ namespace Arnible.Linq
       }
       return result;
     }
+    
+    public static System.Linq.IOrderedEnumerable<TSource> ThenOrderByDescending<TSource, TKey>(
+      this System.Linq.IOrderedEnumerable<TSource> source,
+      params Func<TSource, TKey>[] keySelector)
+    {
+      if (keySelector.Length == 0)
+      {
+        throw new ArgumentException(nameof(keySelector));
+      }
+
+      System.Linq.IOrderedEnumerable<TSource> result = source;
+      foreach (Func<TSource, TKey> ks in keySelector)
+      {
+        result = System.Linq.Enumerable.ThenByDescending(result, ks);
+      }
+      return result;
+    }
   }
 }

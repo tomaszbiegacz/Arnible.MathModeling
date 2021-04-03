@@ -91,7 +91,10 @@ namespace Arnible.MathModeling
     // IEquatable
     //    
 
-    public bool Equals(ValueArray<T> other) => GetInternalEnumerable().SequenceEqual(other.GetInternalEnumerable());
+    public bool Equals(ValueArray<T> other)
+    {
+      return System.Linq.Enumerable.SequenceEqual(GetInternalEnumerable(), other.GetInternalEnumerable());
+    }
 
     public override bool Equals(object obj)
     {
@@ -185,9 +188,9 @@ namespace Arnible.MathModeling
       return GetInternalEnumerable().AggregateCombinations(in groupSize, in aggregator);
     }
     
-    public bool All(Func<T, bool> predicate)
+    public bool AllWithDefault(Func<T, bool> predicate)
     {
-      return GetInternalEnumerable().All(predicate);
+      return GetInternalEnumerable().AllWithDefault(predicate);
     }
 
     public bool Any(Func<T, bool> predicate)

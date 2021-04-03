@@ -6,11 +6,6 @@ namespace Arnible.MathModeling
 {
   public static class LinqSequence
   {
-    public static bool SequenceEqual<T>(this IEnumerable<T> source, IEnumerable<T> other)
-    {
-      return System.Linq.Enumerable.SequenceEqual(source, other);
-    }
-
     public static IEnumerable<IEnumerable<T>> ToSequencesWithReturning<T>(this IEnumerable<T> items, in uint length)
     {
       if (items == null)

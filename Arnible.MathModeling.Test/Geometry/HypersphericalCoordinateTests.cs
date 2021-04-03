@@ -1,4 +1,5 @@
 ﻿using System;
+using Arnible.Linq;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 using static Arnible.MathModeling.xunit.AssertHelpers;
@@ -66,7 +67,8 @@ namespace Arnible.MathModeling.Geometry.Test
       {
         var axisCc = new HypersphericalCoordinate(hc.R, cartesianCoordinatesAngles[pos]).ToCartesianView();
         AreEqual(hc.R, axisCc.Coordinates[pos]);
-        AreEqual(1u, axisCc.Coordinates.Where(v => v != 0).Count());
+        // ReSharper disable once HeapView.BoxingAllocation
+        AreEqual(1u, axisCc.Coordinates.Count(v => v != 0));
       }
     }
 

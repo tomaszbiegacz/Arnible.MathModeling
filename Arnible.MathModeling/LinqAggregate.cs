@@ -136,14 +136,6 @@ namespace Arnible.MathModeling
     }
 
     /// <summary>
-    /// Returns total items count in the sequence
-    /// </summary>
-    public static uint Count<T>(this IEnumerable<T> source)
-    {
-      return (uint)System.Linq.Enumerable.LongCount(source);
-    }
-
-    /// <summary>
     /// Applies a specified function to the corresponding elements of two sequences,
     /// producing a sequence of the results.
     /// </summary>

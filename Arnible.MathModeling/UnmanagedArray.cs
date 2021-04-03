@@ -84,7 +84,8 @@ namespace Arnible.MathModeling
 
     public bool SequenceEqual(in UnmanagedArray<T> other)
     {
-      return GetInternalEnumerable().SequenceEqual(other.GetInternalEnumerable());
+      // UnmanagedArray will get removed anyway
+      return System.Linq.Enumerable.SequenceEqual(GetInternalEnumerable(), other.GetInternalEnumerable());
     }
   }
 }
