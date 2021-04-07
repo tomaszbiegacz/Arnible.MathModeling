@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Arnible.MathModeling.Geometry;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 

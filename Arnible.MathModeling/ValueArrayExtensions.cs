@@ -8,14 +8,14 @@ namespace Arnible.MathModeling
   {
     public static ValueArray<Number> ToValueArray(this IEnumerable<Number> numbers, uint length)
     {
-      ValueArray<Number> items = numbers.ToValueArray();
+      ValueArray<Number> items = numbers.ToArray();
       if (items.Length > length)
       {
         throw new ArgumentException(nameof(length));
       }
 
       uint toAdd = length - items.Length;
-      return items.GetInternalEnumerable().Concat(LinqEnumerable.Repeat<Number>(0, toAdd)).ToValueArray();
+      return items.GetInternalEnumerable().Concat(LinqEnumerable.Repeat<Number>(0, toAdd)).ToArray();
     }
 
     public static ValueArray<Number> ToValueArray(this ValueArray<Number> numbers, uint length)
@@ -175,7 +175,7 @@ namespace Arnible.MathModeling
 
     public static ValueArray<Number> ExcludeAt(in this ValueArray<Number> x, uint pos)
     {
-      return x.GetInternalEnumerable().ExcludeAt(pos).ToValueArray();
+      return x.GetInternalEnumerable().ExcludeAt(pos).ToArray();
     }
 
     public static Number ProductDefensive(in this ValueArray<Number> arg)

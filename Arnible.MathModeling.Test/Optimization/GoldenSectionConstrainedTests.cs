@@ -1,4 +1,5 @@
 using System;
+using Arnible.MathModeling.Analysis.Optimization;
 using Arnible.MathModeling.xunit;
 using Xunit;
 using Xunit.Abstractions;

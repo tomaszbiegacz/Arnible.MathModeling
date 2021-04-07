@@ -30,73 +30,23 @@ namespace Arnible.MathModeling.Test
     }
 
     [Fact]
-    public void Indexes()
-    {
-      AreEquals(LinqEnumerable.RangeUint(0, 3), new Number[] { 1, 2, 3 }.ToValueArray().Indexes());
-    }
-
-    [Fact]
     public void ToArray_All()
     {
-      AreEqual(new ValueArray<Number>(new Number[] { 1, 2, 3 }), new Number[] { 1d, 2d, 3d }.ToValueArray());
+      AreEqual(new ValueArray<Number>(new Number[] { 1, 2, 3 }), new Number[] { 1d, 2d, 3d }.ToArray());
     }
 
     [Fact]
     public void ToArray_WithDefaults()
     {
-      AreEqual(new Number[] { 1, 2, 3, 0, 0 }.ToValueArray(), new Number[] { 1d, 2d, 3d }.ToValueArray(5));
-    }
-
-    [Fact]
-    public void IndexesWhere()
-    {
-      AreEquals(new[] { 0u, 2u }, new Number[] { 1, 2, 3 }.ToValueArray().IndexesWhere(v => v != 2));
+      AreEqual(new Number[] { 1, 2, 3, 0, 0 }.ToArray(), new Number[] { 1d, 2d, 3d }.ToValueArray(5));
     }
 
     [Fact]
     public void DistanceSquareTo()
     {
-      var a1 = new Number[] { 1, 2, 3 }.ToValueArray();
-      var a2 = new Number[] { 2, 1, 1 }.ToValueArray();
+      ValueArray<Number> a1 = new Number[] { 1, 2, 3 }.ToArray();
+      ValueArray<Number> a2 = new Number[] { 2, 1, 1 }.ToArray();
       AreEqual(6d, a1.DistanceSquareTo(a2));
-    }
-
-    [Fact]
-    public void SubsetFromIndexes()
-    {
-      AreEquals(new Number[] { 1, 3 }, new Number[] { 1, 2, 3 }.ToValueArray().SubsetFromIndexes(new[] { 0u, 2u }));
-    }
-    
-    [Fact]
-    public void Add()
-    {
-      AreEquals(new Number[] { 2, 5 }, new Number[] { 1, 2 }.ToValueArray().Add(new Number[] { 1, 3 }));
-    }
-    
-    [Fact]
-    public void Substract()
-    {
-      AreEquals(new Number[] { 0, -1 }, new Number[] { 1, 2 }.ToValueArray().Substract(new Number[] { 1, 3 }));
-    }
-    
-    [Fact]
-    public void AddAtPos()
-    {
-      AreEquals(new Number[] { 1, 5 }, new Number[] { 1, 2 }.ToValueArray().AddAtPos(1, 3));
-    }
-    
-    [Fact]
-    public void SetAtPos()
-    {
-      AreEquals(new Number[] { 1, 3 }, new Number[] { 1, 2 }.ToValueArray().SetAtPos(1, 3));
-    }
-    
-    [Fact]
-    public void TranslateCoordinate()
-    {
-      AreEquals(new Number[] { 3, 13 }, new Number[] { 1, 3 }.ToValueArray().TranslateCoordinate(
-        new Number[] { 1, 5 }, 
-        2));
     }
 
     [Fact]

@@ -21,19 +21,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Arnible.MathModeling\Algebra\INumberRangeDomain.cs" Link="Algebra\INumberRangeDomain.cs" />
-    <Compile Include="..\Arnible.MathModeling\Algebra\INumberRangeDomainExtensions.cs" Link="Algebra\INumberRangeDomainExtensions.cs" />
-    <Compile Include="..\Arnible.MathModeling\Algebra\NumberTranslationVector.cs" Link="Algebra\NumberTranslationVector.cs" />
-    <Compile Include="..\Arnible.MathModeling\Algebra\NumberVector.cs" Link="Algebra\NumberVector.cs" />
-    <Compile Include="..\Arnible.MathModeling\Algebra\NumberVectorExtensions.cs" Link="Algebra\NumberVectorExtensions.cs" />
-    <Compile Include="..\Arnible.MathModeling\Algebra\Sign.cs" Link="Algebra\Sign.cs" />
-    <Compile Include="..\Arnible.MathModeling\Algebra\SignExtensions.cs">
-      <Link>Algebra\SignExtensions.cs</Link>
+    <Compile Include="..\Arnible.MathModeling\INumberRangeDomain.cs" Link="INumberRangeDomain.cs" />
+    <Compile Include="..\Arnible.MathModeling\Geometry\NumberVector.cs" Link="Geometry\NumberVector.cs" />
+    <Compile Include="..\Arnible.MathModeling\Sign.cs" Link="Sign.cs" />
+    <Compile Include="..\Arnible.MathModeling\SignExtensions.cs">
+      <Link>SignExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Arnible.MathModeling\Angle.cs" Link="Angle.cs" />
-    <Compile Include="..\Arnible.MathModeling\Derivative1Value.cs" Link="Derivative1Value.cs" />
-    <Compile Include="..\Arnible.MathModeling\Derivative2Value.cs" Link="Derivative2Value.cs" />
-    <Compile Include="..\Arnible.MathModeling\DerivativeOperator.cs" Link="DerivativeOperator.cs" />
+    <Compile Include="..\Arnible.MathModeling\Analysis\Derivative1Value.cs" Link="Analysis\Derivative1Value.cs" />
+    <Compile Include="..\Arnible.MathModeling\Analysis\Derivative2Value.cs" Link="Analysis\Derivative2Value.cs" />
+    <Compile Include="..\Arnible.MathModeling\Analysis\DerivativeOperator.cs" Link="Analysis\DerivativeOperator.cs" />
     <Compile Include="..\Arnible.MathModeling\DoubleExtension.cs" Link="DoubleExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\Export\IMathModelingLogger.cs" Link="Export\IMathModelingLogger.cs" />
     <Compile Include="..\Arnible.MathModeling\Export\IRecordFieldSerializer.cs">
@@ -58,6 +55,9 @@
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinateOnRectangularViewWithDerivative.cs" Link="Geometry\HypersphericalCoordinateOnRectangularViewWithDerivative.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalDirectionOnRectangularView.cs" Link="Geometry\HypersphericalDirectionOnRectangularView.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\ICoordinate.cs" Link="Geometry\ICoordinate.cs" />
+    <Compile Include="..\Arnible.MathModeling\Geometry\NumberVectorExtensions.cs">
+      <Link>Geometry\NumberVectorExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\Geometry\PolarCoordinate.cs" Link="Geometry\PolarCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\QuantifiedDirectionsFactory.cs" Link="Geometry\QuantifiedDirectionsFactory.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\RectangularCoordinate.cs" Link="Geometry\RectangularCoordinate.cs" />
@@ -69,13 +69,7 @@
     </Compile>
     <Compile Include="..\Arnible.MathModeling\LinqAggregate.cs" Link="LinqAggregate.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqAggregateBasic.tt.cs" Link="LinqAggregateBasic.tt.cs" />
-    <Compile Include="..\Arnible.MathModeling\LinqArray.cs" Link="LinqArray.cs" />
-    <Compile Include="..\Arnible.MathModeling\LinqComparable.cs" Link="LinqComparable.cs" />
-    <Compile Include="..\Arnible.MathModeling\LinqEnumerableExtensions.cs">
-      <Link>LinqEnumerableExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\Arnible.MathModeling\LinqProduct.tt.cs" Link="LinqProduct.tt.cs" />
-    <Compile Include="..\Arnible.MathModeling\LinqSequence.cs" Link="LinqSequence.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqSum.tt.cs" Link="LinqSum.tt.cs" />
     <Compile Include="..\Arnible.MathModeling\MetaMath.cs" Link="MetaMath.cs" />
     <Compile Include="..\Arnible.MathModeling\NumericFormatting.cs" Link="NumericFormatting.cs" />
@@ -97,8 +91,8 @@
     <Compile Include="..\Arnible.MathModeling\ValueArrayExtensions.cs">
       <Link>ValueArrayExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Arnible.MathModeling\ValueWithDerivative1.cs">
-      <Link>ValueWithDerivative1.cs</Link>
+    <Compile Include="..\Arnible.MathModeling\Analysis\ValueWithDerivative1.cs">
+      <Link>Analysis\ValueWithDerivative1.cs</Link>
     </Compile>
   </ItemGroup>
 

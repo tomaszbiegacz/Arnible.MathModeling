@@ -258,7 +258,7 @@ void Print_MedianDefensive(string typeName)
     /// </summary>
     public static <#= typeName #> MedianDefensive(this IEnumerable<<#= typeName #>> x)
     {
-      List<<#= typeName #>> items = x.ToList();
+      List<<#= typeName #>> items = new(x);
       if(items.Count == 0)
       {
         throw new ArgumentException(nameof(x));

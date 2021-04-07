@@ -66,7 +66,7 @@ namespace Arnible.MathModeling.Geometry
       _leftBottomMapCorner = leftBottomMapCorner;
       _rightTopMapCorner = rightTopMapCorner;
       _precision = precision;
-      _normalizedStep = rightTopMapCorner.Substract(leftBottomMapCorner).Select(v => v / precision).ToValueArray();
+      _normalizedStep = rightTopMapCorner.Substract(leftBottomMapCorner).Select(v => v / precision).ToArray();
       _points = new List<byte[]>();
     }
     
@@ -169,7 +169,7 @@ namespace Arnible.MathModeling.Geometry
     {
       IReadOnlyList<byte[]> normalizedPoints = points
         .Select(p => System.Linq.Enumerable.ToArray(NormalizeCoordinate(p)))
-        .ToReadOnlyList();
+        .ToArray();
       
       lock (_points)
       {

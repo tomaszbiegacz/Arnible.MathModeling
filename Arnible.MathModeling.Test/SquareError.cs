@@ -1,4 +1,5 @@
-﻿using Arnible.MathModeling.Geometry;
+﻿using Arnible.MathModeling.Analysis;
+using Arnible.MathModeling.Geometry;
 using static Arnible.MathModeling.MetaMath;
 
 namespace Arnible.MathModeling.Test

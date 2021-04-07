@@ -94,7 +94,7 @@ namespace Arnible.MathModeling
       {
         throw new ArgumentException(nameof(items));
       }
-      IReadOnlyList<TInput> x = items.ToReadOnlyList();
+      IReadOnlyList<TInput> x = items.ToArray();
       if (x.Count < groupSize)
       {
         throw new ArgumentException($"x.Length: {x.Count} where groupCount: {groupSize}");
@@ -119,7 +119,7 @@ namespace Arnible.MathModeling
       {
         throw new ArgumentException(nameof(items));
       }
-      IReadOnlyList<T> x = items.ToReadOnlyList();
+      IReadOnlyList<T> x = items.ToArray();
       if (aggregator == null)
       {
         throw new ArgumentException(nameof(aggregator));

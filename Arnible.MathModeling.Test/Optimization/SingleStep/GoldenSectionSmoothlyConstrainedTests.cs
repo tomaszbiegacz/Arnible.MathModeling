@@ -1,4 +1,6 @@
 using System;
+using Arnible.MathModeling.Analysis.Optimization;
+using Arnible.MathModeling.Analysis.Optimization.SingleStep;
 using Arnible.MathModeling.Optimization.Test;
 using Arnible.MathModeling.xunit;
 using Xunit;

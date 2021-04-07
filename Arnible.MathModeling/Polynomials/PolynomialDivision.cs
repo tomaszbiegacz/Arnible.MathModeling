@@ -71,7 +71,7 @@ namespace Arnible.MathModeling.Polynomials
       else
       {
         IReadOnlyCollection<VariableTerm> commonVariables =
-          GetCommonIdentityVariables(numerator: numerator, denominator: denominator).ToReadOnlyList();
+          GetCommonIdentityVariables(numerator: numerator, denominator: denominator).ToArray();
         if (commonVariables.Count > 0)
         {
           numerator = numerator.ReduceByCommon(commonVariables);

@@ -1,3 +1,5 @@
+using Arnible.MathModeling.Analysis.Optimization;
+
 namespace Arnible.MathModeling.Optimization.Test
 {
   /// <summary>

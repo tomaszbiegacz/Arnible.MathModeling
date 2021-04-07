@@ -1,4 +1,5 @@
 ﻿using System;
+using Arnible.MathModeling.Geometry;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 
@@ -49,7 +50,7 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Vector_IsValid_True()
     {
       NumberVector src = new NumberVector(0.1, 0.2, 0.3);
-      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3);
+      NumberVector delta = new NumberVector(0.2, 0.3);
       IsTrue(_range.IsValidTranslation(src, delta));
     }
 
@@ -57,7 +58,7 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Vector_IsValid_False()
     {
       NumberVector src = new NumberVector(0.1, 0.2, 0.3);
-      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.9);
+      NumberVector delta = new NumberVector(0.2, 0.9);
       IsFalse(_range.IsValidTranslation(src, delta));
     }
 
@@ -65,7 +66,7 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Array_IsValid_True()
     {
       var src = new Number[] {0.1, 0.2};
-      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3);
+      var delta = new Number[] {0.2, 0.3};
       IsTrue(_range.IsValidTranslation(src, delta));
     }
 
@@ -73,7 +74,7 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Array_IsValid_False()
     {
       var src = new Number[] {0.1, 0.2};
-      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3, 0.1);
+      var delta = new Number[] {0.2, 0.3, 0.1};
       IsFalse(_range.IsValidTranslation(src, delta));
     }
 
@@ -81,15 +82,15 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Array_IsValid_False_Overflow()
     {
       var src = new Number[] {0.1, 0.9};
-      NumberTranslationVector delta = new NumberTranslationVector(0.2, 0.3);
+      var delta = new Number[] {0.2, 0.3};
       IsFalse(_range.IsValidTranslation(src, delta));
     }
 
     [Fact]
     public void GetValidTranslation_Passthrough()
     {
-      var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.2), new NumberTranslationVector(0.2, 0.3));
-      AreEqual(new NumberTranslationVector(0.2, 0.3), translation);
+      var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.2), new NumberVector(0.2, 0.3));
+      AreEqual(new NumberVector(0.2, 0.3), translation);
     }
 
     [Fact]
@@ -102,15 +103,15 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void GetValidTranslation_Default()
     {
-      var translation = _range.GetValidTranslation(new NumberVector(1, 0.2), new NumberTranslationVector(0.2, 0.3));
+      var translation = _range.GetValidTranslation(new NumberVector(1, 0.2), new NumberVector(0.2, 0.3));
       AreEqual(0, translation);
     }
 
     [Fact]
     public void GetValidTranslation_Half()
     {
-      var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.8), new NumberTranslationVector(0.2, 0.4));
-      AreEqual(new NumberTranslationVector(0.1, 0.2), translation);
+      var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.8), new NumberVector(0.2, 0.4));
+      AreEqual(new NumberVector(0.1, 0.2), translation);
     }
 
     [Fact]
@@ -179,7 +180,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {1, 0.2, 0.1}, 
-        transaction: new NumberTranslationVector(0.2, 0.3));
+        transaction: new NumberVector(0.2, 0.3));
       AreEqual(0, translation);
     }
     
@@ -188,7 +189,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {1, 0.2, 0.1}, 
-        transaction: new NumberTranslationVector(0, 0));
+        transaction: new NumberVector(0, 0));
       IsNull(translation);
     }
     
@@ -197,7 +198,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {0, 0, 0.1}, 
-        transaction: new NumberTranslationVector(0.2, 0.1));
+        transaction: new NumberVector(0.2, 0.1));
       AreEqual(5, translation);
     }
     
@@ -206,7 +207,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] { 0.2, 0, 0.1 }, 
-        transaction: new NumberTranslationVector( -2.4, 0.1 ));
+        transaction: new NumberVector( -2.4, 0.1 ));
       AreEqual(0.5, translation);
     }
 

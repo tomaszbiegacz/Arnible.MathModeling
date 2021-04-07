@@ -1,3 +1,4 @@
+using Arnible.MathModeling.Analysis.Optimization;
 using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Optimization.Test

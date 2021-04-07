@@ -1,5 +1,5 @@
-﻿using Arnible.MathModeling.Algebra;
-using System;
+﻿using System;
+using Arnible.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {

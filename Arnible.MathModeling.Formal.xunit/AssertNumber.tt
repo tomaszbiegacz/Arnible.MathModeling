@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using Xunit;
 using Arnible.MathModeling.Polynomials;
 using System.Globalization;
+using Arnible.MathModeling.Analysis;
+using Arnible.Linq;
 
 namespace Arnible.MathModeling.xunit
 {

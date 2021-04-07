@@ -1,5 +1,6 @@
 ﻿using System;
 using Arnible.Linq;
+using Arnible.MathModeling.Analysis;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 using static Arnible.MathModeling.xunit.AssertHelpers;
@@ -49,7 +50,7 @@ namespace Arnible.MathModeling.Geometry.Test
       const double φ = Math.PI / 3;                           // x to r
       AreEqual(φ, hc.Angles.Single());
 
-      var derrivatives = hc.ToCartesianView().DerivativeByR().ToValueArray();
+      var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
       AreEqual(2, derrivatives.Length);
       AreEqual(0.5, derrivatives[0].First);                 // x
       AreEqual(Math.Sqrt(3) / 2, derrivatives[1].First);    // y
@@ -60,7 +61,7 @@ namespace Arnible.MathModeling.Geometry.Test
 
     private static void VerifyCartesianCoordinateAngle(HypersphericalCoordinate hc, CartesianCoordinate cc)
     {
-      var cartesianCoordinatesAngles = hc.ToCartesianView().CartesianCoordinatesAngles().ToValueArray();
+      var cartesianCoordinatesAngles = hc.ToCartesianView().CartesianCoordinatesAngles().ToArray();
       AreEqual(cartesianCoordinatesAngles.Length, cc.DimensionsCount);
 
       for (uint pos = 0; pos < cc.DimensionsCount; ++pos)
@@ -84,7 +85,7 @@ namespace Arnible.MathModeling.Geometry.Test
       double φ = (double)hc.Angles[0];    // r to y
       double θ = (double)hc.Angles[1];    // r to xy
 
-      var derrivatives = hc.ToCartesianView().DerivativeByR().ToValueArray();
+      var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
       AreEqual(3, derrivatives.Length);
       AreEqual(Math.Cos(θ) * Math.Cos(φ), derrivatives[0].First);   // x
       AreEqual(Math.Cos(θ) * Math.Sin(φ), derrivatives[1].First);   // y
@@ -108,7 +109,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AreEqual(φ, hc.Angles[0]);
       AreEqual(θ, hc.Angles[1]);
 
-      ValueArray<Derivative1Value> derrivatives = hc.ToCartesianView().DerivativeByR().ToValueArray();
+      ValueArray<Derivative1Value> derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
       AreEqual(3, derrivatives.Length);
       AreEqual(Math.Sqrt(2) / 4, derrivatives[0].First);      // x
       AreEqual(Math.Sqrt(2) / 4, derrivatives[1].First);      // y

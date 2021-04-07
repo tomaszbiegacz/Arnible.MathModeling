@@ -1,4 +1,5 @@
 ﻿using System;
+using Arnible.MathModeling.Analysis;
 
 namespace Arnible.MathModeling.Geometry
 {

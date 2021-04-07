@@ -85,7 +85,7 @@ namespace Arnible.MathModeling.Geometry
     {
       Id = id;
       _rightAngleResolution = rightAngleResolution;
-      _angles = angles.ToReadOnlyList();
+      _angles = angles.ToArray();
       if (_angles.Where(a => a == rightAngleResolution).Count() > 1)
       {
         throw new ArgumentException(nameof(angles));

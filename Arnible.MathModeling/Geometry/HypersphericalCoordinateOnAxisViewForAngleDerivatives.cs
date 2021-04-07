@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using static Arnible.MathModeling.MetaMath;
 using Arnible.Linq;
+using Arnible.MathModeling.Analysis;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -25,7 +26,7 @@ namespace Arnible.MathModeling.Geometry
       IReadOnlyCollection<Number> angles = anglesVector
         .GetInternalEnumerable()
         .Concat(LinqEnumerable.Repeat<Number>(0, anglesCount - anglesVector.Length))
-        .ToReadOnlyList();
+        .ToArray();
 
       var cartesianDimensions = new List<Number>();
       Number replacement = r;
@@ -62,7 +63,7 @@ namespace Arnible.MathModeling.Geometry
       cartesianDimensions.Add(replacement);
       cartesianDimensions.Reverse();
 
-      return cartesianDimensions.Concat(LinqEnumerable.Repeat<Number>(0, (uint)(cartesianDimensions.Count - anglesCount - 1))).ToValueArray();
+      return cartesianDimensions.Concat(LinqEnumerable.Repeat<Number>(0, (uint)(cartesianDimensions.Count - anglesCount - 1))).ToArray();
     }
 
     private readonly ValueArray<Number> _angleDerivatives;

@@ -39,7 +39,7 @@ namespace Arnible.MathModeling.xunit
 
     public static void AreEquals(
       IEnumerable<Number> expected,
-      in NumberTranslationVector actual)
+      in NumberVector actual)
     {
       AssertNumber.AreEquals(expected, actual.GetInternalEnumerable());
     }

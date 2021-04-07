@@ -8,8 +8,50 @@ namespace Arnible.MathModeling.Geometry
   public static class INumberRangeDomainExtensions
   {
     //
+    // Validate
+    //
+    
+    public static void Validate(this INumberRangeDomain domain, NumberVector value)
+    {
+      domain.Validate(value.GetInternalEnumerable());
+    }
+    
+    //
     // IsValidTranslation
     //
+    
+    public static bool IsValidTranslation(
+      this INumberRangeDomain domain, 
+      in NumberVector value, 
+      in NumberVector delta)
+    {
+      return value.GetInternalEnumerable().Zip(
+        col2: delta.GetInternalEnumerable(), 
+        merge: (v, t) => Arnible.MathModeling.INumberRangeDomainExtensions.IsValidTranslation(
+          domain,
+          v ?? 0, 
+          t ?? 0)).AllWithDefault();
+    }
+
+    public static bool IsValidTranslation(
+      this INumberRangeDomain domain,
+      ValueArray<Number> value,
+      ValueArray<Number> delta)
+    {
+      if (delta.Length > value.Length)
+      {
+        return false;
+      }
+      else
+      {
+        return value.GetInternalEnumerable().Zip(
+          col2: delta.GetInternalEnumerable(), 
+          merge: (v, t) => Arnible.MathModeling.INumberRangeDomainExtensions.IsValidTranslation(
+            domain,
+            v ?? throw new ArgumentException(nameof(value)), 
+            t ?? 0)).AllWithDefault();
+      }
+    }
 
     public static bool IsValidTranslation(
       this INumberRangeDomain domain,
@@ -33,7 +75,7 @@ namespace Arnible.MathModeling.Geometry
       domain.Validate(value.ToCartesianView().Coordinates);
       IReadOnlyList<uint> nonZeroAngles = LinqEnumerable.RangeUint(0, delta.Length)
         .Where(i => delta[i] != 0)
-        .ToReadOnlyList();
+        .ToArray();
       
       if (nonZeroAngles.Count != 1)
       {

@@ -1,7 +1,7 @@
-﻿using Arnible.MathModeling.Algebra;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Arnible.Linq;
+using Arnible.MathModeling.Analysis;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -131,7 +131,7 @@ namespace Arnible.MathModeling.Geometry
     public IEnumerable<HypersphericalAngleVector> CartesianCoordinatesAngles()
     {
       uint anglesCount = _p.Angles.Length;
-      List<Number> x = LinqEnumerable.Repeat<Number>(0, anglesCount).ToList();
+      List<Number> x = new(LinqEnumerable.Repeat<Number>(0, anglesCount));
 
       yield return x.ToAngleVector();
       for (int i = 0; i < anglesCount; ++i)

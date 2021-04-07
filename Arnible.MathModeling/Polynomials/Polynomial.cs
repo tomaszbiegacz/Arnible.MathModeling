@@ -47,7 +47,7 @@ namespace Arnible.MathModeling.Polynomials
 
     private static Polynomial CreateSimplified(IEnumerable<PolynomialTerm> terms)
     {
-      return new Polynomial(PolynomialTerm.Simplify(terms.ToValueArray()));
+      return new Polynomial(PolynomialTerm.Simplify(terms.ToArray()));
     }
 
     public static implicit operator Polynomial(PolynomialTerm v) => new Polynomial(v);
@@ -237,7 +237,7 @@ namespace Arnible.MathModeling.Polynomials
       else
       {
         // no need for simplification
-        return new Polynomial(b.GetInternalEnumerable().Select(t => a * t).ToValueArray());
+        return new Polynomial(b.GetInternalEnumerable().Select(t => a * t).ToArray());
       }
     }
 
@@ -252,7 +252,7 @@ namespace Arnible.MathModeling.Polynomials
       else
       {
         // no need for simplification
-        return new Polynomial(b.GetInternalEnumerable().Select(t => a * t).ToValueArray());
+        return new Polynomial(b.GetInternalEnumerable().Select(t => a * t).ToArray());
       }
     }
 
@@ -300,7 +300,7 @@ namespace Arnible.MathModeling.Polynomials
     internal Polynomial ReduceByCommon(IEnumerable<VariableTerm> terms)
     {
       // no need to simplify
-      return new Polynomial(_terms.Select(t => t.ReduceByCommon(terms)).ToValueArray());
+      return new Polynomial(_terms.Select(t => t.ReduceByCommon(terms)).ToArray());
     }
 
     public static Polynomial operator %(Polynomial a, Polynomial b)
@@ -353,10 +353,10 @@ namespace Arnible.MathModeling.Polynomials
 
       PolynomialTerm denominator = b.GetInternalEnumerable().First();
       Polynomial denominatorSuffix =
-        new Polynomial(b.GetInternalEnumerable().SkipExactly(1).ToValueArray()); // no need for simplification
+        new Polynomial(b.GetInternalEnumerable().SkipExactly(1).ToArray()); // no need for simplification
       var resultTerms = new List<PolynomialTerm>();
       reminder = TryReduce(this, denominator, denominatorSuffix, resultTerms);
-      return new Polynomial(resultTerms.ToValueArray()); // no need for simplification
+      return new Polynomial(resultTerms.ToArray()); // no need for simplification
     }
 
     public bool TryDivideBy(Polynomial b, out Polynomial result)
@@ -446,7 +446,7 @@ namespace Arnible.MathModeling.Polynomials
       if (remaining.Count > 0)
       {
         // no need for simplification
-        result += new Polynomial(remaining.ToValueArray());
+        result += new Polynomial(remaining.ToArray());
       }
 
       return result;
