@@ -3,28 +3,23 @@
   /// <summary>
   /// Dump number range domain without validation for formal tests
   /// </summary>
-  public class NumberRangeDomain : INumberRangeDomain
+  public record NumberRangeDomain(in Number Minimum, in Number Maximum) : INumberRangeDomain
   {
-    public Number Minimum { get; }
-
-    public Number Maximum { get; }
-
-    public NumberRangeDomain(in Number minimum, in Number maximum)
-    {
-      Minimum = minimum;
-      Maximum = maximum;
-    }
+    public Number Minimum { get; } = Minimum;
+    public Number Maximum { get; } = Maximum;
 
     public double Width => (double)(Maximum - Minimum);
 
     public Number Translate(in Number value, in Number delta) => value + delta;
 
     public Number GetValidTranslationRatio(in Number value, in Number delta) => 1;
+    
     public Number? GetMaximumValidTranslationRatio(in Number value, in Number delta) => null;
     
     public bool IsValid(in Number value) => true;
 
     public Number GetValidTranslationRatioForLastAngle(in Number radius, in Number currentAngle, in Number angleDelta) => 1;
-    public bool IsValidTranslation(in Number value, in Sign direction) => true;
+    
+    public bool IsValidTranslation(in Number value, Sign direction) => true;
   }
 }

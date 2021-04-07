@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace Arnible.MathModeling
 {
   public interface IFinitaryOperation<TNumber> where TNumber: struct
   {
-    TNumber Value(in IEnumerable<TNumber> x);
+    TNumber Value(in ReadOnlySpan<TNumber> x);
   }  
 }

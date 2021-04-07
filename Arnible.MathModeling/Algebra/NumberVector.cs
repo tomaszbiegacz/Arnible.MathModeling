@@ -50,26 +50,6 @@ namespace Arnible.MathModeling.Algebra
       return new NumberVector(LinqEnumerable.Repeat<Number>(0, pos).Append(value).ToValueArray());
     }
 
-    public static NumberVector NonZeroValueAt(UnmanagedArray<bool> pos, Number value)
-    {
-      if (value == 0)
-      {
-        throw new ArgumentException(nameof(value));
-      }
-
-      return Create(pos.Select(v => v ? value : 0));
-    }
-
-    public static NumberVector NonZeroValueAt(UnmanagedArray<Sign> pos, Number value)
-    {
-      if (value == 0)
-      {
-        throw new ArgumentException(nameof(value));
-      }
-
-      return Create(pos.Select(v => v == Sign.None ? 0 : (int)v * value));
-    }
-
     private readonly ValueArray<Number> _values;
 
     private static ValueArray<Number> GetNormalizedVector(IEnumerable<Number> parameters)

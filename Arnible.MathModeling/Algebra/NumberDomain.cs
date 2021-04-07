@@ -13,6 +13,7 @@
     public Number Translate(in Number value, in Number delta) => value + delta;    
 
     public Number GetValidTranslationRatioForLastAngle(in Number radius, in Number currentAngle, in Number angleDelta) => angleDelta;
-    public bool IsValidTranslation(in Number value, in Sign direction) => true;
+    
+    public bool IsValidTranslation(in Number value, Sign direction) => true;
   }
 }

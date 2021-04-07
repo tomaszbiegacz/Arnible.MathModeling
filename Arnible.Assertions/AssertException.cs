@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Arnible.Assert
+namespace Arnible.Assertions
 {
   public class AssertException : Exception
   {
@@ -10,7 +10,7 @@ namespace Arnible.Assert
     {
       return "[" + string.Join(',', actual.ToArray()) + "]";
     }
-    
+
     public AssertException(string message)
       : base(message)
     {

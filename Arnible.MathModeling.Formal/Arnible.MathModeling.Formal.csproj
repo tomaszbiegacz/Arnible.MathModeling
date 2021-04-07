@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Arnible.MathModeling</RootNamespace>
+    <LangVersion>9</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -15,6 +16,10 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\Arnible.MathModeling\Algebra\INumberRangeDomain.cs" Link="Algebra\INumberRangeDomain.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\INumberRangeDomainExtensions.cs" Link="Algebra\INumberRangeDomainExtensions.cs" />
@@ -22,18 +27,6 @@
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVector.cs" Link="Algebra\NumberVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\NumberVectorExtensions.cs" Link="Algebra\NumberVectorExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Algebra\Sign.cs" Link="Algebra\Sign.cs" />
-    <Compile Include="..\Arnible.MathModeling\Algebra\SignArray.cs">
-      <Link>Algebra\SignArray.cs</Link>
-    </Compile>
-    <Compile Include="..\Arnible.MathModeling\Algebra\SignArrayCache.cs">
-      <Link>Algebra\SignArrayCache.cs</Link>
-    </Compile>
-    <Compile Include="..\Arnible.MathModeling\Algebra\SignArrayCacheOrthogonal.cs">
-      <Link>Algebra\SignArrayCacheOrthogonal.cs</Link>
-    </Compile>
-    <Compile Include="..\Arnible.MathModeling\Algebra\SignArrayEnumerable.cs">
-      <Link>Algebra\SignArrayEnumerable.cs</Link>
-    </Compile>
     <Compile Include="..\Arnible.MathModeling\Algebra\SignExtensions.cs">
       <Link>Algebra\SignExtensions.cs</Link>
     </Compile>
@@ -70,7 +63,6 @@
     <Compile Include="..\Arnible.MathModeling\Geometry\RectangularCoordinate.cs" Link="Geometry\RectangularCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\IBinaryOperation.cs" Link="IBinaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IFinitaryOperation.cs" Link="IFinitaryOperation.cs" />
-    <Compile Include="..\Arnible.MathModeling\IUnmanagedArray.cs" Link="IUnmanagedArray.cs" />
     <Compile Include="..\Arnible.MathModeling\IValueArray.cs" Link="IValueArray.cs" />
     <Compile Include="..\Arnible.MathModeling\IValueObject.cs">
       <Link>IValueObject.cs</Link>
@@ -101,7 +93,6 @@
     <Compile Include="..\Arnible.MathModeling\Polynomials\PolynomialTermExtensions.cs" Link="Polynomials\PolynomialTermExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Polynomials\Term.cs" Link="Polynomials\Term.cs" />
     <Compile Include="..\Arnible.MathModeling\Polynomials\VariableTerm.cs" Link="Polynomials\VariableTerm.cs" />
-    <Compile Include="..\Arnible.MathModeling\UnmanagedArray.cs" Link="UnmanagedArray.cs" />
     <Compile Include="..\Arnible.MathModeling\ValueArray.cs" Link="ValueArray.cs" />
     <Compile Include="..\Arnible.MathModeling\ValueArrayExtensions.cs">
       <Link>ValueArrayExtensions.cs</Link>
@@ -116,6 +107,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Arnible.Assertions\Arnible.Assertions.csproj" />
     <ProjectReference Include="..\Arnible.Linq\Arnible.Linq.csproj" />
   </ItemGroup>
 

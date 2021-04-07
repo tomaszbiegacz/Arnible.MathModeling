@@ -8,7 +8,7 @@ namespace Arnible.MathModeling.Algebra
   {
     public static bool IsValid(this INumberRangeDomain domain, in ValueArray<Number> values)
     {
-      return values.AllWithDefault(v => domain.IsValid(v));
+      return values.AllWithDefault(v => domain.IsValid(in v));
     }
     
     //
@@ -59,7 +59,7 @@ namespace Arnible.MathModeling.Algebra
       this INumberRangeDomain domain, 
       in Number value)
     {
-      if (!domain.IsValid(value))
+      if (!domain.IsValid(in value))
       {
         throw new ArgumentException($"Invalid value: {value}");
       }

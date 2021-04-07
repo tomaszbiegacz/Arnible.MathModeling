@@ -1,6 +1,4 @@
-﻿using Arnible.Linq;
-
-namespace Arnible.MathModeling.Polynomials
+﻿namespace Arnible.MathModeling.Polynomials
 {
   public static class IPolynomialOperationExtensions
   {
@@ -9,7 +7,7 @@ namespace Arnible.MathModeling.Polynomials
       params PolynomialTerm[] variables)
     {
       return new PolynomialFinitaryOperation(
-        variables: variables.Select(pt => (char)pt),
+        variables: variables,
         valueCalculation: x => operation.Value(x));
     }
     
@@ -18,7 +16,7 @@ namespace Arnible.MathModeling.Polynomials
       params PolynomialTerm[] variables)
     {
       return new PolynomialFinitaryOperation(
-        variables: variables.Select(pt => (char)pt),
+        variables: variables,
         valueCalculation: x => operation.Value(x));
     }
     
@@ -27,7 +25,7 @@ namespace Arnible.MathModeling.Polynomials
       params PolynomialTerm[] variables)
     {
       return new PolynomialFinitaryOperation(
-        variables: variables.Select(pt => (char)pt),
+        variables: variables,
         valueCalculation: x => operation.Value(x));
     }
     
@@ -36,7 +34,7 @@ namespace Arnible.MathModeling.Polynomials
       params PolynomialTerm[] variables)
     {
       return new PolynomialFinitaryOperation(
-        variables: variables.Select(pt => (char)pt),
+        variables: variables,
         valueCalculation: x => operation.Value(x));
     }
   }

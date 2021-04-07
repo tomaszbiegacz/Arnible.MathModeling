@@ -21,12 +21,6 @@ namespace Arnible.MathModeling
       return new ValueArray<T>(System.Linq.Enumerable.ToArray(source));
     }
 
-    public static UnmanagedArray<T> ToUnmanagedArray<T>(this IEnumerable<T> source) where T : unmanaged
-    {
-      return new UnmanagedArray<T>(System.Linq.Enumerable.ToArray(source));
-    }
-
-    
     public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
     {
       return System.Linq.Enumerable.ToArray(source);

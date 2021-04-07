@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Arnible.Assert
+namespace Arnible.Assertions
 {
   public static class AllExtensions
   {

@@ -161,9 +161,9 @@ namespace Arnible.MathModeling.Algebra
       }
     }
 
-    public bool IsValidTranslation(in Number value, in Sign direction)
+    public bool IsValidTranslation(in Number value, Sign direction)
     {
-      if (IsValid(value))
+      if (IsValid(in value))
       {
         switch (direction)
         {

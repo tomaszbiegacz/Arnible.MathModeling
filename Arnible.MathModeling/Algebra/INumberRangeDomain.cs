@@ -37,6 +37,6 @@
     /// <summary>
     /// Checks whether given translation is valid
     /// </summary>
-    bool IsValidTranslation(in Number value, in Sign direction);
+    bool IsValidTranslation(in Number value, Sign direction);
   }
 }

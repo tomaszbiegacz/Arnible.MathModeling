@@ -1,6 +1,6 @@
 using System;
 
-namespace Arnible.Assert
+namespace Arnible.Assertions
 {
   public static class EqualExtensions
   {

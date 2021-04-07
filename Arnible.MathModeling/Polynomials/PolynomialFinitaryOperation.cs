@@ -1,46 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Polynomials
 {
   class PolynomialFinitaryOperation : IFinitaryOperation<double>
   {
     private readonly Func<IReadOnlyDictionary<char, double>, double> _valueCalculation;
-    private readonly UnmanagedArray<char> _variables;
+    private readonly ReadOnlyArray<PolynomialTerm> _variables;
 
     public PolynomialFinitaryOperation(
-      in IEnumerable<char> variables,
-      in Func<IReadOnlyDictionary<char, double>, double> valueCalculation)
+      ReadOnlyArray<PolynomialTerm> variables,
+      Func<IReadOnlyDictionary<char, double>, double> valueCalculation)
     {
-      _variables = variables.ToUnmanagedArray();
+      _variables = variables;
       _valueCalculation = valueCalculation;
     }
 
-    public double Value(in IEnumerable<double> x)
+    public double Value(in ReadOnlySpan<double> x)
     {
-      // possibly move it at class level to reduce GC at the cost of thread safety
+      x.AssertLength(_variables.Length);
+      
       var args = new Dictionary<char, double>();
-
-      using (var xEnum = x.GetEnumerator())
+      for(ushort i=0; i<_variables.Length; ++i)
       {
-        int i = -1;
-        while (xEnum.MoveNext())
-        {
-          i++;
-          if (i >= _variables.Length)
-          {
-            throw new ArgumentException(
-              $"Too many arguments, expected {_variables.Length.ToString()}, got {i.ToString()}.");
-          }
-
-          args[_variables[(uint) i]] = xEnum.Current;
-        }
-
-        if (i + 1 < _variables.Length)
-        {
-          throw new ArgumentException(
-            $"too few arguments, expected {_variables.Length.ToString()}, got {i.ToString()}.");
-        }
+        args[(char)_variables[i]] = x[i];
+        
       }
 
       return _valueCalculation(args);
