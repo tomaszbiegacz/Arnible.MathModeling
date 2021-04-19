@@ -94,7 +94,7 @@ namespace Arnible.MathModeling.Polynomials
     }
     public int GetHashCodeValue() => GetHashCode();
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is PolynomialDivision pd)
       {

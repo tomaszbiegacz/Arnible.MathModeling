@@ -22,7 +22,7 @@ namespace Arnible.MathModeling.Geometry
 
     public static implicit operator HypersphericalCoordinateOnRectangularView(in HypersphericalCoordinateOnRectangularViewWithDerivative v) => v._view;
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is HypersphericalCoordinateOnRectangularViewWithDerivative casted)
       {

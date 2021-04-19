@@ -5,7 +5,7 @@ namespace Arnible.MathModeling
     int GetHashCode();
     int GetHashCodeValue();
 
-    string ToString();
+    string? ToString();
     string ToStringValue();
   }
 }

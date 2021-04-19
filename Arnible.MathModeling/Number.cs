@@ -1,6 +1,6 @@
-﻿using Arnible.MathModeling.Export;
-using System;
+﻿using System;
 using System.Globalization;
+using Arnible.Export;
 
 namespace Arnible.MathModeling
 {
@@ -32,39 +32,12 @@ namespace Arnible.MathModeling
 
     public static implicit operator Number(in double v) => new Number(in v);
     public static explicit operator double(in Number v) => v._value;
-    
-    //
-    // Serializer
-    //
-
-    class Serializer : IRecordWriter<Number>
-    {
-      private readonly IRecordFieldSerializer _serializer;
-      public Serializer(in IRecordFieldSerializer serializer)
-      {
-        _serializer = serializer;
-      }
-      public void Write(in Number record)
-      {
-        _serializer.Write(string.Empty, record._value);
-      }
-
-      public void WriteNull()
-      {
-        _serializer.WriteNull(string.Empty);
-      }
-    }
-    
-    public static IRecordWriter<Number> CreateSerializer(IRecordFieldSerializer serializer)
-    {
-      return new Serializer(in serializer);
-    }
 
     //
     // Object
     //
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is Number v)
       {
@@ -88,6 +61,18 @@ namespace Arnible.MathModeling
     }
     public override string ToString() => ToString(CultureInfo.InvariantCulture);
     public string ToStringValue() => ToString();
+    
+    //
+    // Serializable
+    //
+    
+    public class Serializer : ValueRecordSerializerSimple<Number>
+    {
+      public override void Serialize(IRecordFieldSerializer serializer, in Number? record)
+      {
+        serializer.Write(string.Empty, record?._value);
+      }
+    }
 
     //
     // Operators

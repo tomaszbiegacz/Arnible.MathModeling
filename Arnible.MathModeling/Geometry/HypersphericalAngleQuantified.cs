@@ -131,7 +131,7 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(HypersphericalAngleQuantified other) => Id == other.Id;
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is HypersphericalAngleQuantified objCast)
         return Equals(objCast);

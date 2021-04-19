@@ -25,8 +25,20 @@ namespace Arnible.MathModeling.Geometry
     {
       public static PointsComparer Current { get; } = new PointsComparer();
       
-      public int Compare(byte[] x, byte[] y)
+      public int Compare(byte[]? x, byte[]? y)
       {
+        if(x is null || y is null)
+        {
+          if(x is null && y is null)
+          {
+            return 0;
+          }
+          else
+          {
+            throw new ArgumentException(nameof(y));
+          }
+        }
+        
         if (x.Length != y.Length)
         {
           throw new ArgumentException(nameof(y));

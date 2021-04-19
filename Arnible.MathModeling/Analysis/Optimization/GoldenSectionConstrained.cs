@@ -1,6 +1,4 @@
 using System;
-using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Export;
 
 namespace Arnible.MathModeling.Analysis.Optimization
 {
@@ -10,13 +8,13 @@ namespace Arnible.MathModeling.Analysis.Optimization
     
     private FunctionPointWithDerivative _a;
     private FunctionPointWithDerivative _b;
-    private readonly IMathModelingLogger _logger;
+    private readonly ISimpleLogger _logger;
 
     public GoldenSectionConstrained(
       INumberFunctionWithDerivative f,
       in FunctionPointWithDerivative a,
       in FunctionPointWithDerivative b,
-      IMathModelingLogger logger)
+      ISimpleLogger logger)
     {
       Update(in a, in b);
       F = f;

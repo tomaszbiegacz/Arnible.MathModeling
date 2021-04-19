@@ -1,6 +1,3 @@
-using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Export;
-
 namespace Arnible.MathModeling.Analysis.Optimization
 {
   public class PolimodalGoldenSecant : GoldenSectionConstrained
@@ -9,7 +6,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
       INumberFunctionWithDerivative f,
       in FunctionPointWithDerivative a,
       in FunctionPointWithDerivative b,
-      IMathModelingLogger logger)
+      ISimpleLogger logger)
     : base (f, in a, in b, logger)
     {
       // intentionally empty

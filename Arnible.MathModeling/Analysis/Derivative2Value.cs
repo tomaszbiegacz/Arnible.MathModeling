@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Analysis
 
     public static implicit operator Derivative1Value(in Derivative2Value v) => new Derivative1Value(v.First);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is Derivative2Value typed2)
       {

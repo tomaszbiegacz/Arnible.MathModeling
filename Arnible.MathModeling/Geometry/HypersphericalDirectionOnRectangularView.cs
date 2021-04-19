@@ -30,7 +30,7 @@ namespace Arnible.MathModeling.Geometry
       RatioY = ratioY;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is HypersphericalDirectionOnRectangularView casted)
       {

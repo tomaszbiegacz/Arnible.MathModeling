@@ -75,7 +75,7 @@ namespace Arnible.MathModeling.Geometry
       return rc._p;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is HypersphericalCoordinateOnAxisView casted)
       {

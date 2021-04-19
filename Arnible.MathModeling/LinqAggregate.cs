@@ -12,7 +12,7 @@ namespace Arnible.MathModeling
     public static IDictionary<TKey, TResult> AggregateBy<TSource, TKey, TResult>(
       this IEnumerable<TSource> source,
       Func<TSource, TKey> keySelector,
-      Func<IEnumerable<TSource>, TResult> aggregator)
+      Func<IEnumerable<TSource>, TResult> aggregator) where TKey: notnull
     {
       return System.Linq.Enumerable.GroupBy(source, keySelector).ToDictionary(g => g.Key, g => aggregator(g));
     }
@@ -23,7 +23,7 @@ namespace Arnible.MathModeling
     public static IDictionary<TKey, TResult> AggregateCommonBy<TSource, TKey, TResult>(
       this IEnumerable<IEnumerable<TSource>> source,
       Func<TSource, TKey> keySelector,
-      Func<IEnumerable<TSource>, TResult> aggregator)
+      Func<IEnumerable<TSource>, TResult> aggregator) where TKey: notnull
     {
       Dictionary<TKey, List<TSource>> groupByKey = new Dictionary<TKey, List<TSource>>();
 
@@ -33,7 +33,7 @@ namespace Arnible.MathModeling
         foreach (TSource item in sequence)
         {
           TKey key = keySelector(item);
-          List<TSource> groupedItems;
+          List<TSource>? groupedItems;
           if (!groupByKey.TryGetValue(key, out groupedItems))
           {
             groupedItems = new List<TSource>();
@@ -209,7 +209,7 @@ namespace Arnible.MathModeling
     public static IDictionary<TKey, TMergeResult> ZipCommon<TKey, TResult, TMergeResult>(
       this IDictionary<TKey, TResult> source,
       IDictionary<TKey, TResult> other,
-      Func<TResult, TResult, TMergeResult> merge)
+      Func<TResult, TResult, TMergeResult> merge) where TKey: notnull
     {
       var result = new Dictionary<TKey, TMergeResult>();
       foreach (TKey key in source.Keys)

@@ -18,7 +18,7 @@ namespace Arnible.MathModeling.Polynomials
       Power = power;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is VariableTerm v)
       {

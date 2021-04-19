@@ -1,7 +1,7 @@
-﻿using Arnible.MathModeling.Export;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Arnible.Export;
 using Arnible.Linq;
 
 namespace Arnible.MathModeling
@@ -53,39 +53,8 @@ namespace Arnible.MathModeling
     public int GetHashCodeValue() => GetHashCode();
 
     public static implicit operator ReadOnlySpan<T>(ValueArray<T> src) => src._values;
-
-    //
-    // Serializer
-    //
-
-    class Serializer : IRecordWriter<ValueArray<T>>
-    {
-      private readonly IRecordWriterReadOnlyCollection<T> _serializer;
-
-      public Serializer(
-        in IRecordFieldSerializer serializer, 
-        in Func<IRecordFieldSerializer, IRecordWriter<T>> writerFactory)
-      {
-        _serializer = serializer.GetReadOnlyCollectionSerializer(string.Empty, in writerFactory);
-      }
-      
-      public void Write(in ValueArray<T> record)
-      {
-        _serializer.Write(record._values);
-      }
-
-      public void WriteNull()
-      {
-        // intentionally empty
-      }
-    }
     
-    public static IRecordWriter<ValueArray<T>> CreateSerializer(
-      IRecordFieldSerializer serializer,
-      Func<IRecordFieldSerializer, IRecordWriter<T>> writerFactory)
-    {
-      return new Serializer(serializer, writerFactory);
-    }
+    public IReadOnlyList<T> List => _values ?? LinqArray<T>.Empty;
     
     //
     // IEquatable
@@ -96,7 +65,7 @@ namespace Arnible.MathModeling
       return System.Linq.Enumerable.SequenceEqual(GetInternalEnumerable(), other.GetInternalEnumerable());
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is ValueArray<T> v)
       {

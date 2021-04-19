@@ -1,6 +1,7 @@
 using System;
 using Arnible.MathModeling.Analysis.Optimization;
 using Arnible.MathModeling.xunit;
+using Arnible.Xunit;
 using Xunit;
 using Xunit.Abstractions;
 using static Arnible.MathModeling.xunit.AssertNumber;

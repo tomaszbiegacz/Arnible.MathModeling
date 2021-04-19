@@ -1,18 +1,14 @@
-using System;
-using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Export;
-
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
 {
   public class GoldenSectionSmoothlyConstrained : ISingleStepOptimization
   {
     public const double Ratio = 0.618;
     
-    private readonly IMathModelingLogger _logger;
+    private readonly ISimpleLogger _logger;
     public uint IterationLimit { get; set; }
     
     public GoldenSectionSmoothlyConstrained(
-      IMathModelingLogger logger)
+      ISimpleLogger logger)
     {
       _logger = logger;
       IterationLimit = 10;

@@ -74,7 +74,7 @@ namespace Arnible.MathModeling.Polynomials
 
     public bool Equals(IndeterminateExpression other) => Equals(in other);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is IndeterminateExpression v)
       {

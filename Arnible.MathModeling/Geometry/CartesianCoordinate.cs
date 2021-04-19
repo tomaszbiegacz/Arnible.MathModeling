@@ -61,7 +61,7 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(CartesianCoordinate other) => Equals(in other);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if(obj is CartesianCoordinate typed)
       {

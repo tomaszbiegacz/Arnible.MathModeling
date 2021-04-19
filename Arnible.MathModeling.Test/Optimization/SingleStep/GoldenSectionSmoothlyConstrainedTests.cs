@@ -3,6 +3,7 @@ using Arnible.MathModeling.Analysis.Optimization;
 using Arnible.MathModeling.Analysis.Optimization.SingleStep;
 using Arnible.MathModeling.Optimization.Test;
 using Arnible.MathModeling.xunit;
+using Arnible.Xunit;
 using Xunit;
 using Xunit.Abstractions;
 using static Arnible.MathModeling.xunit.AssertNumber;

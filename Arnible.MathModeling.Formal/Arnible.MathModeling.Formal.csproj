@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Arnible.MathModeling</RootNamespace>
     <LangVersion>9</LangVersion>
     <Nullable>enable</Nullable>
@@ -13,11 +13,6 @@
     <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
     <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,16 +27,6 @@
     <Compile Include="..\Arnible.MathModeling\Analysis\Derivative2Value.cs" Link="Analysis\Derivative2Value.cs" />
     <Compile Include="..\Arnible.MathModeling\Analysis\DerivativeOperator.cs" Link="Analysis\DerivativeOperator.cs" />
     <Compile Include="..\Arnible.MathModeling\DoubleExtension.cs" Link="DoubleExtension.cs" />
-    <Compile Include="..\Arnible.MathModeling\Export\IMathModelingLogger.cs" Link="Export\IMathModelingLogger.cs" />
-    <Compile Include="..\Arnible.MathModeling\Export\IRecordFieldSerializer.cs">
-      <Link>Export\IRecordFieldSerializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Arnible.MathModeling\Export\IRecordWriter.cs">
-      <Link>Export\IRecordWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\Arnible.MathModeling\Export\IRecordWriterReadOnlyCollection.cs">
-      <Link>Export\IRecordWriterReadOnlyCollection.cs</Link>
-    </Compile>
     <Compile Include="..\Arnible.MathModeling\Geometry\CartesianCoordinate.cs" Link="Geometry\CartesianCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleQuantified.cs" Link="Geometry\HypersphericalAngleQuantified.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleTranslationVector.cs" Link="Geometry\HypersphericalAngleTranslationVector.cs" />
@@ -102,6 +87,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Arnible.Assertions\Arnible.Assertions.csproj" />
+    <ProjectReference Include="..\Arnible.Export\Arnible.Export.csproj" />
     <ProjectReference Include="..\Arnible.Linq\Arnible.Linq.csproj" />
   </ItemGroup>
 

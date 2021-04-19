@@ -54,7 +54,7 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(HypersphericalCoordinate other) => Equals(in other);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is HypersphericalCoordinate typed)
       {
