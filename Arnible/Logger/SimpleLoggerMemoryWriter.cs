@@ -52,6 +52,7 @@ namespace Arnible.Logger
     
     public async Task Flush(Stream output, CancellationToken cancellationToken)
     {
+      _writer.Position = 0;
       await _writer.CopyToAsync(output, 1024, cancellationToken);
 
       // reset buffer position

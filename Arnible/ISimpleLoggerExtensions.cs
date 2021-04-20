@@ -13,7 +13,7 @@ namespace Arnible
     
     public static void Log(this ISimpleLogger logger, string message)
     {
-      logger.Write(message.AsMemory().Span);
+      logger.Write(message.AsSpan());
       logger.Write(_newLine.Span);
     }
   }
