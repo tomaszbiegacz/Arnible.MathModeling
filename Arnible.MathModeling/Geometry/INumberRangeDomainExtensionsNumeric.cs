@@ -32,7 +32,7 @@ namespace Arnible.MathModeling.Geometry
       return value.GetInternalEnumerable().ZipValue(
         col2: transaction.GetInternalEnumerable(), 
         merge: (v, t) => domain.GetMaximumValidTranslationRatio(v ?? 0, t ?? 0)
-      ).MinOrDefault();
+      ).MinOrNone();
     }
 
     public static NumberVector GetValidTranslation(

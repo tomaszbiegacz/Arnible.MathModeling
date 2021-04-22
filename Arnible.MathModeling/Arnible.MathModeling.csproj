@@ -8,88 +8,12 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <TransformOnBuild>true</TransformOnBuild>
-    <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
-    <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="LinqAggregateBasic.tt.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>LinqAggregateBasic.tt</DependentUpon>
-    </None>
-    <None Include="LinqAggregateNumber.tt.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>LinqAggregateNumber.tt</DependentUpon>
-    </None>
-    <None Include="LinqAverage.tt.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>LinqAverage.tt</DependentUpon>
-    </None>
-    <None Update="LinqAggregate.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>LinqAggregate.tt.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>    
-    <None Update="LinqAggregateBasic.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>LinqAggregateBasic.tt.cs</LastGenOutput>
-    </None>
-    <None Update="LinqAggregateNumber.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>LinqAggregateNumber.tt.cs</LastGenOutput>
-    </None>
-    <None Update="LinqAverage.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>LinqAverage.tt.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="LinqAggregateBasic.tt.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>LinqAggregateBasic.tt</DependentUpon>
-    </Compile>
-    <Compile Update="LinqAggregateNumber.tt.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>LinqAggregateNumber.tt</DependentUpon>
-    </Compile>
-    <Compile Update="LinqAverage.tt.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>LinqAverage.tt</DependentUpon>
-    </Compile>
-    <Compile Update="LinqProduct.tt.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LinqProduct.tt</DependentUpon>
-    </Compile>
-    <Compile Update="LinqAggregate.tt.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LinqAggregate.tt</DependentUpon>
-    </Compile>
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Arnible.Assertions\Arnible.Assertions.csproj" />
     <ProjectReference Include="..\Arnible.Export\Arnible.Export.csproj" />
     <ProjectReference Include="..\Arnible.Linq\Arnible.Linq.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Linq" />
   </ItemGroup>
 
 </Project>

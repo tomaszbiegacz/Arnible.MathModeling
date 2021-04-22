@@ -147,6 +147,8 @@ namespace Arnible.MathModeling
     
     public Number Add(in Number component) => this._value + component._value;
     public Number Multiply(in Number factor) => this._value * factor._value;
+    
+    public Number Inverse() => -1 * this._value;
 
     //
     // IComparable

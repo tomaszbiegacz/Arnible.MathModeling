@@ -17,7 +17,7 @@ namespace Arnible.MathModeling.Algebra
       return value.GetInternalEnumerable().ZipDefensive(
         col2: gradient.GetInternalEnumerable(), 
         merge: (v, t) => domain.GetMaximumValidTranslationRatio(v, t)
-        ).MinOrDefault();
+        ).MinOrNone();
     }
   }
 }

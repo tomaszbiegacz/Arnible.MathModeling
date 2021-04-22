@@ -1,3 +1,4 @@
+using Arnible.Linq;
 namespace Arnible.MathModeling
 {
   public static class ValueArrayExtensionsNotFormal
@@ -6,11 +7,6 @@ namespace Arnible.MathModeling
     // Number specialization
     //
 
-    public static Number MedianDefensive(in this ValueArray<Number> src)
-    {
-      return src.GetInternalEnumerable().MedianDefensive();
-    }
-    
     public static Number MinDefensive(in this ValueArray<Number> src)
     {
       return src.GetInternalEnumerable().MinDefensive();

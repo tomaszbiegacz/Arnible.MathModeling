@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Arnible.Linq
 {
-  public static class MinDefensiveExtensions
+  public static class MaxDefensiveExtensions
   {
     /// <summary>
-    /// Finds minimum value or throw ArgumentException if passed enumerable is empty
+    /// Finds maximum value or throw ArgumentException if passed enumerable is empty
     /// </summary>
-    public static T MinDefensive<T>(this IEnumerable<T> x) where T: notnull, IComparable<T>
+    public static T MaxDefensive<T>(this IEnumerable<T> x) where T: notnull, IComparable<T>
     {      
       bool isResultKnown = false;
       T result = default;
@@ -16,7 +16,7 @@ namespace Arnible.Linq
       {
         if (isResultKnown)
         {
-          if (v.CompareTo(result) < 0)
+          if (v.CompareTo(result) > 0)
           {
             result = v;
           }

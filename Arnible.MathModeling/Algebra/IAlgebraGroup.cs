@@ -7,5 +7,7 @@ namespace Arnible.MathModeling.Algebra
     ref readonly T Zero { get; }
     
     T Add(in T component);
+    
+    T Inverse();
   }
 }

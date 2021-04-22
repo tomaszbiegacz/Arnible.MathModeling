@@ -205,6 +205,8 @@ namespace Arnible.MathModeling.Algebra.Polynomials
     public static Polynomial operator +(double a, Polynomial b) => b + a;
     
     public Polynomial Add(in Polynomial component) => this + component;
+    
+    public Polynomial Inverse() => -1 * this;
 
     // -
 

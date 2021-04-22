@@ -18,6 +18,7 @@ namespace Arnible.MathModeling
   [Serializable]
   public readonly struct Number : 
     IAlgebraUnitRing<Number>,
+    IComparable<Number>,
     IValueObject
   {    
     static readonly Number _one = 1;
@@ -177,6 +178,8 @@ namespace Arnible.MathModeling
     public ref readonly Number Zero => ref _zero;
     
     public Number Add(in Number component) => this._value + component._value;
+    
+    public Number Inverse() => -1 * this._value;
     public Number Multiply(in Number factor) => this._value * factor._value;
 
     //

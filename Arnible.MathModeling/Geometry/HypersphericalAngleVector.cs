@@ -265,5 +265,7 @@ namespace Arnible.MathModeling.Geometry
     public ref readonly HypersphericalAngleVector Zero => ref _zero;
 
     public HypersphericalAngleVector Add(in HypersphericalAngleVector component) => this + component;
+    
+    public HypersphericalAngleVector Inverse() => throw new NotImplementedException();
   }
 }
