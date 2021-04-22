@@ -109,11 +109,11 @@ namespace Arnible.MathModeling.Geometry.Test
       AreEqual(φ, hc.Angles[0]);
       AreEqual(θ, hc.Angles[1]);
 
-      ValueArray<Derivative1Value> derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
-      AreEqual(3, derrivatives.Length);
-      AreEqual(Math.Sqrt(2) / 4, derrivatives[0].First);      // x
-      AreEqual(Math.Sqrt(2) / 4, derrivatives[1].First);      // y
-      AreEqual(Math.Sqrt(3) / 2, derrivatives[2].First);      // z
+      Derivative1Value[] derivatives = hc.ToCartesianView().DerivativeByR().ToArray();
+      AreEqual(3, derivatives.Length);
+      AreEqual(Math.Sqrt(2) / 4, derivatives[0].First);      // x
+      AreEqual(Math.Sqrt(2) / 4, derivatives[1].First);      // y
+      AreEqual(Math.Sqrt(3) / 2, derivatives[2].First);      // z
 
       AreEqual(cc, hc.ToCartesianView());
     }

@@ -8,18 +8,18 @@ namespace Arnible.MathModeling.Analysis
   public static class DerivativeOperator
   {    
     private static Number Derivative2Ingredient(
-      in ValueArray<Derivative2Value> args, 
-      in uint pos)
+      IReadOnlyList<Derivative2Value> args, 
+      ushort pos)
     {
       Number result = args[pos].Second;
-      for (uint i = 0; i < pos; ++i)
+      for (ushort i = 0; i < pos; ++i)
       {
         result *= args[i].First;
       }
-      if (pos + 1 < args.Length)
+      if (pos + 1 < args.Count)
       {
         Number remainder = 1;
-        for (uint i = pos + 1; i < args.Length; ++i)
+        for (ushort i = (ushort)(pos + 1); i < args.Count; ++i)
         {
           remainder *= args[i].First;
         }
@@ -32,18 +32,18 @@ namespace Arnible.MathModeling.Analysis
     /// Simply multiplication of the first derivatives from both enums (composed functions).
     /// </summary>    
     public static IEnumerable<Derivative1Value> ForEachElementComposition(
-      this IEnumerable<Derivative1Value> valueDerrivativeByParameters,
+      this IEnumerable<Derivative1Value> valueDerivativeByParameters,
       IEnumerable<Derivative1Value> parametersDerivatives)
     {
-      return valueDerrivativeByParameters.ZipDefensive(parametersDerivatives, (a, b) => new Derivative1Value(a.First * b.First));
+      return valueDerivativeByParameters
+          .ZipDefensive(parametersDerivatives, (a, b) => new Derivative1Value(a.First * b.First));
     }
 
     /// <summary>
     /// Calculates up to second derivatives composition.
     /// </summary>    
-    public static Derivative2Value ForComposition(this IEnumerable<Derivative2Value> derivatives)
+    public static Derivative2Value ForComposition(this IReadOnlyList<Derivative2Value> args)
     {
-      var args = derivatives.ToArray();
       return new Derivative2Value(
         first: args.Select(d => d.First).ProductDefensive(),
         second: args.Indexes().Select(pos => Derivative2Ingredient(args, pos)).SumDefensive());
@@ -63,29 +63,28 @@ namespace Arnible.MathModeling.Analysis
     public static Derivative1Value ForComposition(params Derivative1Value[] args) => args.ForComposition();
 
     /// <summary>
-    /// Calculate derivative as a sum of (value derivate and other values product) for each value.
+    /// Calculate derivative as a sum of (value derivative and other values product) for each value.
     /// </summary>    
     public static Derivative1Value ForProductByParameter(
-      in ValueArray<Number> productValues, 
-      IEnumerable<Derivative1Value> valueDerrivativeByParameter)
+      IReadOnlyList<Number> productValues, 
+      IReadOnlyList<Derivative1Value> valueDerivativeByParameter)
     {
-      if (productValues.Length < 1)
+      if (productValues.Count < 1)
       {
         throw new ArgumentException(nameof(productValues));
       }
-      var valueDerivatives = valueDerrivativeByParameter.ToArray();
-      if (valueDerivatives.Length != productValues.Length)
+      if (valueDerivativeByParameter.Count != productValues.Count)
       {
-        throw new ArgumentException(nameof(valueDerrivativeByParameter));
+        throw new ArgumentException(nameof(valueDerivativeByParameter));
       }
 
       Number result = 0;
-      for (uint i = 0; i < productValues.Length; ++i)
+      for (ushort i = 0; i < productValues.Count; ++i)
       {
-        Number derivative = valueDerivatives[i].First;
+        Number derivative = valueDerivativeByParameter[i].First;
         if (derivative != 0)
         {
-          result += productValues.GetInternalEnumerable().ExcludeAt(i).ProductWithDefault() * derivative;
+          result += productValues.ExcludeAt(i).ProductWithDefault() * derivative;
         }
       }
       return new Derivative1Value(in result);

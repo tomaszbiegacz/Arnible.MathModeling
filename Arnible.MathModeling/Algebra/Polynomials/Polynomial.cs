@@ -8,27 +8,29 @@ using Arnible.Linq.Algebra;
 
 namespace Arnible.MathModeling.Algebra.Polynomials
 {
+  /// <summary>
+  /// Polynomial representation as a list of polynomial terms.
+  /// Size IntPtr, there is no need to pass it via "in".
+  /// </summary>
   public readonly struct Polynomial :
     IEquatable<PolynomialDivision>,
-    IEquatable<Polynomial>,
     IEnumerable<PolynomialTerm>,
     IPolynomialOperation,
-    IAlgebraUnitRing<Polynomial>,
-    IValueObject
+    IAlgebraUnitRing<Polynomial>
   {
     static readonly Polynomial _one = 1;
     static readonly Polynomial _zero = 0;
     
     const char InPlaceVariableReplacement = '$';
 
-    private readonly ValueArray<PolynomialTerm> _terms;
+    private readonly ReadOnlyArray<PolynomialTerm> _terms;
 
     internal Polynomial(params PolynomialTerm[] terms)
     {
       _terms = PolynomialTerm.Simplify(terms);
     }
 
-    private Polynomial(ValueArray<PolynomialTerm> terms)
+    private Polynomial(ReadOnlyArray<PolynomialTerm> terms)
     {
       _terms = terms;
     }
@@ -52,7 +54,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
 
     private static Polynomial CreateSimplified(IEnumerable<PolynomialTerm> terms)
     {
-      return new Polynomial(PolynomialTerm.Simplify(terms.ToArray()));
+      return new Polynomial(PolynomialTerm.Simplify(terms));
     }
 
     public static implicit operator Polynomial(PolynomialTerm v) => new Polynomial(v);
@@ -61,43 +63,15 @@ namespace Arnible.MathModeling.Algebra.Polynomials
 
     public bool Equals(Polynomial other)
     {
-      if (IsConstant && other.IsConstant)
-      {
-        double a = (double) this;
-        double b = (double) other;
-        return a.NumericEquals(b);
-      }
-
-      if (IsSingleTerm != other.IsSingleTerm)
-      {
-        return false;
-      }
-
-      Polynomial result = this - other;
-      if (!result.IsConstant)
-      {
-        return false;
-      }
-      else
-      {
-        double comparisionResult = (double) result;
-        return comparisionResult.NumericEquals(0);
-      }
+      return _terms.Equals(other._terms);
     }
-
-    public bool Equals(PolynomialDivision other) => other.IsPolynomial ? Equals((Polynomial) other) : false;
 
     public override int GetHashCode()
     {
-      int result = 0;
-      foreach (var v in _terms)
-      {
-        result ^= v.GetHashCode();
-      }
-
-      return result;
+      return _terms.GetHashCode();
     }
-    public int GetHashCodeValue() => GetHashCode();
+
+    public bool Equals(PolynomialDivision other) => other.IsPolynomial && Equals((Polynomial) other);
 
     public override bool Equals(object? obj)
     {
@@ -114,6 +88,8 @@ namespace Arnible.MathModeling.Algebra.Polynomials
         return false;
       }
     }
+    
+    
 
     public string ToString(CultureInfo cultureInfo)
     {
@@ -142,7 +118,6 @@ namespace Arnible.MathModeling.Algebra.Polynomials
     }
 
     public override string ToString() => ToString(CultureInfo.InvariantCulture);
-    public string ToStringValue() => ToString();
 
     public static bool operator ==(Polynomial a, Polynomial b) => a.Equals(b);
     public static bool operator !=(Polynomial a, Polynomial b) => !a.Equals(b);
@@ -175,7 +150,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
 
     internal Dictionary<char, uint> GetIdentityVariableTerms()
     {
-      return _terms.Select(t => t.GetIdentityVariableTerms())
+      return _terms.AsList().Select(t => t.GetIdentityVariableTerms())
         .AggregateCommonBy(v => v.Variable, vc => vc.Select(v => v.Power).MinDefensive());
     }
 
@@ -186,20 +161,20 @@ namespace Arnible.MathModeling.Algebra.Polynomials
     public ref readonly Polynomial One => ref _one;
     public ref readonly Polynomial Zero => ref _zero;
 
-    public static explicit operator PolynomialTerm(Polynomial v) => v.GetInternalEnumerable().SingleOrNone() ?? 0;
+    public static explicit operator PolynomialTerm(Polynomial v) => v._terms.AsList().SingleOrNone() ?? 0;
 
-    public static explicit operator double(Polynomial v) => (double) (v.GetInternalEnumerable().SingleOrNone() ?? 0);
+    public static explicit operator double(Polynomial v) => (double) (v._terms.AsList().SingleOrNone() ?? 0);
 
     // +
 
     public static Polynomial operator +(Polynomial a, Polynomial b)
     {
-      return CreateSimplified(a.GetInternalEnumerable().Concat(b.GetInternalEnumerable()));
+      return CreateSimplified(a._terms.AsList().Concat(b._terms.AsList()));
     }
 
     public static Polynomial operator +(Polynomial a, double b)
     {
-      return CreateSimplified(a.GetInternalEnumerable().Append(b));
+      return CreateSimplified(a._terms.AsList().Append(b));
     }
 
     public static Polynomial operator +(double a, Polynomial b) => b + a;
@@ -212,12 +187,12 @@ namespace Arnible.MathModeling.Algebra.Polynomials
 
     public static Polynomial operator -(Polynomial a, Polynomial b)
     {
-      return CreateSimplified(a.GetInternalEnumerable().Concat(b.GetInternalEnumerable().Select(v => -1 * v)));
+      return CreateSimplified(a._terms.AsList().Concat(b._terms.AsList().Select(v => -1 * v)));
     }
 
     public static Polynomial operator -(Polynomial a, double b)
     {
-      return CreateSimplified(a.GetInternalEnumerable().Append(-1 * b));
+      return CreateSimplified(a._terms.AsList().Append(-1 * b));
     }
 
     public static Polynomial operator -(double a, Polynomial b) => -1 * b + a;
@@ -249,7 +224,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
       else
       {
         // no need for simplification
-        return new Polynomial(b.GetInternalEnumerable().Select(t => a * t).ToArray());
+        return new Polynomial(b._terms.AsList().Select(t => a * t).ToArray());
       }
     }
 
@@ -264,7 +239,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
       else
       {
         // no need for simplification
-        return new Polynomial(b.GetInternalEnumerable().Select(t => a * t).ToArray());
+        return new Polynomial(b._terms.AsList().Select(t => a * t).ToArray());
       }
     }
 
@@ -314,7 +289,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
     internal Polynomial ReduceByCommon(IEnumerable<VariableTerm> terms)
     {
       // no need to simplify
-      return new Polynomial(_terms.Select(t => t.ReduceByCommon(terms)).ToArray());
+      return new Polynomial(_terms.AsList().Select(t => t.ReduceByCommon(terms)).ToArray());
     }
 
     public static Polynomial operator %(Polynomial a, Polynomial b)
@@ -365,9 +340,9 @@ namespace Arnible.MathModeling.Algebra.Polynomials
         return 0;
       }
 
-      PolynomialTerm denominator = b.GetInternalEnumerable().First();
+      PolynomialTerm denominator = b._terms.AsList().First();
       Polynomial denominatorSuffix =
-        new Polynomial(b.GetInternalEnumerable().SkipExactly(1).ToArray()); // no need for simplification
+        new Polynomial(b._terms.AsList().SkipExactly(1).ToArray()); // no need for simplification
       var resultTerms = new List<PolynomialTerm>();
       reminder = TryReduce(this, denominator, denominatorSuffix, resultTerms);
       return new Polynomial(resultTerms.ToArray()); // no need for simplification
@@ -396,7 +371,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
 
     public Polynomial DerivativeBy(char name)
     {
-      return CreateSimplified(GetInternalEnumerable().SelectMany(v => v.DerivativeBy(name)));
+      return CreateSimplified(_terms.AsList().SelectMany(v => v.DerivativeBy(name)));
     }
 
     public Polynomial DerivativeBy(PolynomialTerm name) => DerivativeBy((char) name);
@@ -476,7 +451,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
      * IPolynomialOperation
      */
 
-    public IEnumerable<char> Variables => GetInternalEnumerable().SelectMany(kv => kv.Variables);
+    public IEnumerable<char> Variables => _terms.AsList().SelectMany(kv => kv.Variables);
 
     public double Value(IReadOnlyDictionary<char, double> x)
     {
@@ -486,7 +461,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
       }
       else
       {
-        return _terms.Select(t => t.Value(x)).SumDefensive();
+        return _terms.AsList().Select(t => t.Value(x)).SumDefensive();
       }
     }
 
@@ -497,7 +472,5 @@ namespace Arnible.MathModeling.Algebra.Polynomials
     public IEnumerator<PolynomialTerm> GetEnumerator() => _terms.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => _terms.GetEnumerator();
-
-    internal IEnumerable<PolynomialTerm> GetInternalEnumerable() => _terms.GetInternalEnumerable();
   }
 }

@@ -30,11 +30,17 @@ namespace Arnible.MathModeling.Algebra.Polynomials
       }
     }
 
-    public bool Equals(VariableTerm other) => Variable == other.Variable && Power == other.Power;
+    public bool Equals(VariableTerm other)
+    {
+      return Variable == other.Variable && Power == other.Power;
+    }
 
     public override int GetHashCode()
     {
-      return Variable.GetHashCode() ^ Power.GetHashCode();
+      HashCode hashCode = new HashCode();
+      hashCode.Add(Variable);
+      hashCode.Add(Power);
+      return hashCode.ToHashCode();
     }
 
     public override string ToString()

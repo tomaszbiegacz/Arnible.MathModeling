@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Arnible.Assertions;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 
@@ -13,16 +14,16 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     public void Constructor_Default()
     {
       PolynomialDivision v = default;
-      AreEqual(0, v);
+      EqualExtensions.AssertEqualTo(0, v);
       IsTrue(v == 0);
       IsTrue(v.IsPolynomial);
       IsTrue(v.IsConstant);
-      AreEqual("0", v.ToString());
+      EqualExtensions.AssertEqualTo("0", v.ToString());
 
       AreExactlyEqual(0, (double)v.DerivativeBy('a'));
 
-      AreEqual(0, 2 * v);
-      AreEqual(0, v / 2);
+      EqualExtensions.AssertEqualTo(0, 2 * v);
+      EqualExtensions.AssertEqualTo(0, v / 2);
 
       AreExactlyEqual(0, v.GetOperation().Value());
     }
@@ -34,17 +35,17 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       IsFalse(v == 0);
       IsTrue(v.IsPolynomial);
       IsTrue(v.IsConstant);
-      AreEqual("2", v.ToString());
+      EqualExtensions.AssertEqualTo("2", v.ToString());
 
-      AreEqual(2, v);
-      AreEqual(2, (double)v);
-      AreNotEqual(1, v);
-      AreNotEqual(0, v);
+      EqualExtensions.AssertEqualTo(2, v);
+      EqualExtensions.AssertEqualTo(2, (double)v);
+      IsFalse(1 == v);
+      IsFalse(0 == v);
 
       AreExactlyEqual(0, (double)v.DerivativeBy('a'));
 
-      AreEqual(4, 2 * v);
-      AreEqual(1, v / 2);
+      EqualExtensions.AssertEqualTo(4, 2 * v);
+      EqualExtensions.AssertEqualTo(1, v / 2);
 
       AreExactlyEqual(2, v.GetOperation().Value());
     }
@@ -56,15 +57,15 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       IsFalse(v == 0);
       IsFalse(v.IsConstant);
       IsTrue(v.IsPolynomial);
-      AreEqual("a", v.ToString());
+      EqualExtensions.AssertEqualTo("a", v.ToString());
 
-      AreEqual('a', (PolynomialTerm)v);
+      EqualExtensions.AssertEqualTo('a', (PolynomialTerm)v);
 
       AreExactlyEqual(1, (double)v.DerivativeBy('a'));
       AreExactlyEqual(0, (double)v.DerivativeBy('b'));
 
-      AreEqual(2 * Term.a, 2 * v);
-      AreEqual(0.5 * Term.a, v / 2);
+      EqualExtensions.AssertEqualTo(2 * Term.a, 2 * v);
+      EqualExtensions.AssertEqualTo(0.5 * Term.a, v / 2);
 
       AreExactlyEqual(5, v.GetOperation('a').Value(5));
     }
@@ -76,7 +77,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       PolynomialDivision v = _x / constant;
       IsTrue(v.IsPolynomial);
       IsFalse(v.IsConstant);
-      AreEqual("x", v.ToString());
+      EqualExtensions.AssertEqualTo("x", v.ToString());
     }
 
     [Fact]
@@ -87,13 +88,13 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       IsFalse(v.IsPolynomial);
       IsFalse(v.IsConstant);
 
-      AreEqual(5, v.GetOperation('x', 'y').Value(10, 2));
+      EqualExtensions.AssertEqualTo(5, v.GetOperation('x', 'y').Value(10, 2));
     }    
 
     [Fact]
     public void Equality_Equals()
     {
-      AreEqual(_x / _y, 'x' / (PolynomialTerm)'y');
+      EqualExtensions.AssertEqualTo(_x / _y, 'x' / (PolynomialTerm)'y');
     }
 
     [Fact]
@@ -102,27 +103,27 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       PolynomialTerm zero = 0;
 
       IsExactlyZero((double)(zero / _x));
-      AreEqual(zero / _x, zero / _y);
-      AreEqual(0 * (_x / _y), zero / _y);
+      EqualExtensions.AssertEqualTo(zero / _x, zero / _y);
+      EqualExtensions.AssertEqualTo(0 * (_x / _y), zero / _y);
     }
 
     [Fact]
     public void Equality_NumeratorNotEqual()
     {
-      AreNotEqual((_x + 1) / _y, _x / _y);
+      IsFalse((_x + 1) / _y == _x / _y);
     }
 
     [Fact]
     public void Equality_DenominatorNotEqual()
     {
-      AreNotEqual(_x / (_y + 1), _x / _y);
+      IsFalse(_x / (_y + 1) == _x / _y);
     }
 
     [Fact]
     public void Value_Simple()
     {
       var v = (_x + 1) / (_x - 3);
-      AreEqual(3, v.Value(new Dictionary<char, double>
+      EqualExtensions.AssertEqualTo(3, v.Value(new Dictionary<char, double>
       {
         { 'x', 5 }
       }));
@@ -132,8 +133,8 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     public void Derivative_Simple()
     {
       var expression = 1 + (_y + _x + 1) / (2 * _x + 1);
-      AreEqual(-1 * (2 * _y + 1) / (4 * _x * _x + 4 * _x + 1), expression.DerivativeBy(_x));
-      AreEqual(1 / (2 * _x + 1), expression.DerivativeBy(_y));
+      EqualExtensions.AssertEqualTo(-1 * (2 * _y + 1) / (4 * _x * _x + 4 * _x + 1), expression.DerivativeBy(_x));
+      EqualExtensions.AssertEqualTo(1 / (2 * _x + 1), expression.DerivativeBy(_y));
 
       IsExactlyZero((double)expression.DerivativeBy(_y).DerivativeBy(_y));
     }
@@ -142,8 +143,8 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     public void Derivative2_Simple()
     {
       var expression = (_x * _x * _y) / (2 * _x + 1);
-      AreEqual((2 * _x * _y * (_x + 1)) / (4 * _x * _x + 4 * _x + 1), expression.DerivativeBy('x'));
-      AreEqual((2 * _y) / (8 * _x * _x * _x + 12 * _x * _x + 6 * _x + 1), expression.Derivative2By('x'));
+      EqualExtensions.AssertEqualTo((2 * _x * _y * (_x + 1)) / (4 * _x * _x + 4 * _x + 1), expression.DerivativeBy('x'));
+      EqualExtensions.AssertEqualTo((2 * _y) / (8 * _x * _x * _x + 12 * _x * _x + 6 * _x + 1), expression.Derivative2By('x'));
       IsExactlyZero((double)expression.Derivative2By('y'));
     }
 
@@ -152,31 +153,31 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       var denominator = (_x + _y - _x * _y);
       var denominatorExpected = _x * _x * _y * _y - 2 * _x * _x * _y - 2 * _x * _y * _y + _x * _x + _y * _y + 2 * _x * _y;
-      AreEqual(denominatorExpected, denominator * denominator);
+      EqualExtensions.AssertEqualTo(denominatorExpected, denominator * denominator);
 
       var expression = (_x * _y) / denominator;
-      AreEqual((_y * _y) / denominatorExpected, expression.DerivativeBy('x'));
+      EqualExtensions.AssertEqualTo((_y * _y) / denominatorExpected, expression.DerivativeBy('x'));
     }
 
     [Fact]
     public void Composition_Square()
     {
       PolynomialDivision entry = (_x + 1) / (_x - 1);
-      AreEqual((_y + 2) / _y, entry.Composition((char)_x, _y + 1));
+      EqualExtensions.AssertEqualTo((_y + 2) / _y, entry.Composition((char)_x, _y + 1));
     }
 
     [Fact]
     public void Composition_Division()
     {
       PolynomialDivision entry = _x / (_x + 1);
-      AreEqual(_y / (_x + _y), entry.Composition(_x, _y / _x));
+      EqualExtensions.AssertEqualTo(_y / (_x + _y), entry.Composition(_x, _y / _x));
     }
 
     [Fact]
     public void Simplify_Polynomial_Division_x2_minus_1()
     {
       var expression = (_x * _x - _y * _y) / (_x - _y);
-      AreEqual(_x + _y, (Polynomial)expression);
+      EqualExtensions.AssertEqualTo(_x + _y, (Polynomial)expression);
     }
 
     [Fact]
@@ -184,21 +185,21 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       var expression = _x * _x - _y * _y;
       var polymialDivision = (_x - _y) / (_x + 3);
-      AreEqual((_x + 3) * (_x + _y), expression / polymialDivision);
+      EqualExtensions.AssertEqualTo((_x + 3) * (_x + _y), expression / polymialDivision);
     }
 
     [Fact]
     public void Simplify_Multiplication_x_plus_1()
     {
       var expression = 1 / (_x * _x - 1);
-      AreEqual(1 / (_x - 1), expression * (_x + 1));
+      EqualExtensions.AssertEqualTo(1 / (_x - 1), expression * (_x + 1));
     }
 
     [Fact]
     public void Simplify_Division_x_plus_1()
     {
       var expression = (_x * _x - 1) / (_x + 3);
-      AreEqual((_x - 1) / (_x + 3), expression / (_x + 1));
+      EqualExtensions.AssertEqualTo((_x - 1) / (_x + 3), expression / (_x + 1));
     }
 
     [Fact]
@@ -206,13 +207,13 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       var numerator = _x * _x;
       var denominator = 2 * _x - _x * _x;
-      AreEqual(_x / (2 - _x), numerator / denominator);
+      EqualExtensions.AssertEqualTo(_x / (2 - _x), numerator / denominator);
     }
 
     [Fact]
     public void Operator_Minus_Polynomial()
     {
-      AreEqual(_x / (_x + 1), 1 - 1 / (_x + 1));
+      EqualExtensions.AssertEqualTo(_x / (_x + 1), 1 - 1 / (_x + 1));
     }
 
     [Fact]
@@ -220,7 +221,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       var a = _x / (_x - 2);
       var b = 1 / (_x + 2);
-      AreEqual((_x * _x + _x + 2) / (_x * _x - 4), a - b);
+      EqualExtensions.AssertEqualTo((_x * _x + _x + 2) / (_x * _x - 4), a - b);
     }
 
     [Fact]
@@ -228,13 +229,13 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       var a = _x / (_x - 2);
       var b = 1 / (_x - 2);
-      AreEqual((_x - 1) / (_x - 2), a - b);
+      EqualExtensions.AssertEqualTo((_x - 1) / (_x - 2), a - b);
     }
 
     [Fact]
     public void Operator_Multiply_Polynomial()
     {
-      AreEqual((1 - 2 * _x + _x * _x) / (1 + _x), (1 - _x) / (1 + _x) * (1 - _x));
+      EqualExtensions.AssertEqualTo((1 - 2 * _x + _x * _x) / (1 + _x), (1 - _x) / (1 + _x) * (1 - _x));
     }
 
     [Fact]
@@ -242,13 +243,13 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       var a = (_x - 1) / (_x - 2);
       var b = (_x + 1) / (_x + 2);
-      AreEqual((_x * _x - 1) / (_x * _x - 4), a * b);
+      EqualExtensions.AssertEqualTo((_x * _x - 1) / (_x * _x - 4), a * b);
     }
 
     [Fact]
     public void Operator_Divide_Polynomial()
     {
-      AreEqual(1 / (1 - _x * _x), 1 / (1 - _x) / (1 + _x));
+      EqualExtensions.AssertEqualTo(1 / (1 - _x * _x), 1 / (1 - _x) / (1 + _x));
     }
 
     [Fact]
@@ -256,7 +257,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       var a = (_x - 1) / (2 * _x + 3);
       var b = (_x - 2) / (2 * _x + 3);
-      AreEqual((_x - 1) / (_x - 2), a / b);
+      EqualExtensions.AssertEqualTo((_x - 1) / (_x - 2), a / b);
     }
 
     [Fact]
@@ -264,7 +265,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       var a = (_x - 1) / (_x + 2);
       var b = (_x - 2) / (_x + 1);
-      AreEqual((_x * _x - 1) / (_x * _x - 4), a / b);
+      EqualExtensions.AssertEqualTo((_x * _x - 1) / (_x * _x - 4), a / b);
     }
 
     [Fact]
@@ -275,10 +276,10 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       var expr = numerator / denominator;
 
       // shortcommings of current library
-      AreEqual((_x * _x - 1) / (_x * _x + _x - 2), expr);
+      EqualExtensions.AssertEqualTo((_x * _x - 1) / (_x * _x + _x - 2), expr);
 
       // test
-      AreEqual((_x + 1) / (_x + 2), expr.ReduceBy(_x - 1));
+      EqualExtensions.AssertEqualTo((_x + 1) / (_x + 2), expr.ReduceBy(_x - 1));
     }
 
     [Fact]
@@ -291,7 +292,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       // test
       PolynomialDivision result;
       IsTrue(expr.TryDivideBy(_x - 1, out result));
-      AreEqual(1 / (_x + 2), result);
+      EqualExtensions.AssertEqualTo(1 / (_x + 2), result);
     }
 
     [Fact]
@@ -313,14 +314,14 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       // test
       PolynomialDivision result;
       IsTrue(numerator.TryDivideBy(_x - 1, out result));
-      AreEqual(_x + 2, result);
+      EqualExtensions.AssertEqualTo(_x + 2, result);
     }
 
     [Fact]
     public void Power_By_2()
     {
       var expr = (_x + 1) / (_x - 3);
-      AreEqual((_x * _x + 2 * _x + 1) / (_x * _x - 6 * _x + 9), expr.ToPower(2));
+      EqualExtensions.AssertEqualTo((_x * _x + 2 * _x + 1) / (_x * _x - 6 * _x + 9), expr.ToPower(2));
     }
   }
 }

@@ -20,25 +20,6 @@ namespace Arnible.MathModeling.xunit
         Print_NumberExtension("PolynomialTerm");
 #>
         
-    //
-    // Formal extensions
-    //
-
-    public static void AreDerivativesEqual(in PolynomialDivision value, in Number term, in Derivative1Value actual)
-    {
-      PolynomialTerm termSingle = (PolynomialTerm)term;
-      PolynomialDivision firstDerivative = value.DerivativeBy(termSingle);
-      AreEqual<Number>(firstDerivative, actual.First);
-    }
-
-    public static void IsZero(in Polynomial value)
-    {      
-      AreEqual<Polynomial>(0, in value);
-    }
-
-    public static void IsZero(in PolynomialDivision value)
-    {      
-      AreEqual<PolynomialDivision>(0, in value);
-    }
+    
   }
 }

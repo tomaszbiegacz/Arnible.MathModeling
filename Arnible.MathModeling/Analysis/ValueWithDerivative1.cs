@@ -1,6 +1,6 @@
 namespace Arnible.MathModeling.Analysis
 {
-  public readonly struct ValueWithDerivative1 : IDerivative1, IValueObject
+  public readonly struct ValueWithDerivative1 : IDerivative1
   {
     public ValueWithDerivative1(in Number value, in Number first)
     {
@@ -8,19 +8,7 @@ namespace Arnible.MathModeling.Analysis
       First = first;
     }
 
-    public static explicit operator Derivative1Value(in ValueWithDerivative1 v) => new Derivative1Value(v.First);
-
-    public override string ToString()
-    {
-      return $"[{First.ToString()}]";
-    }
-    public string ToStringValue() => ToString();
-
-    public override int GetHashCode()
-    {
-      return First.GetHashCode();
-    }
-    public int GetHashCodeValue() => GetHashCode();
+    public static implicit operator Derivative1Value(in ValueWithDerivative1 v) => new Derivative1Value(v.First);
 
     //
     // Properties
@@ -29,5 +17,14 @@ namespace Arnible.MathModeling.Analysis
     public Number Value { get; }
 
     public Number First { get; }
+    
+    //
+    // Object
+    //
+
+    public override string ToString()
+    {
+      return $"{Value.ToString()} [{First.ToString()}]";
+    }
   }
 }

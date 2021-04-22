@@ -39,6 +39,10 @@ namespace Arnible
     public static implicit operator ReadOnlySpan<T>(ReadOnlyArray<T> v) => v._src ?? _emptyArray;
     
     private IReadOnlyList<T> Src => _src ?? _emptyArray;
+    
+    /// <summary>
+    /// Shorthand for quick and dirty code relying on linq.
+    /// </summary>
     public IReadOnlyList<T>AsList() => Src;
     public IEnumerator<T> GetEnumerator() => Src.GetEnumerator();
 
@@ -62,12 +66,14 @@ namespace Arnible
 
     public bool Equals(ReadOnlyArray<T> other)
     {
-      if(_src is null || other._src is null)
+      bool isThisEmpty = IsEmpty;
+      bool isOtherEmpty = other.IsEmpty; 
+      if(isThisEmpty || isOtherEmpty)
       {
         // both needs to be null
-        return _src == other._src;
+        return isThisEmpty == isOtherEmpty;
       }
-      else if(_src.Length != other._src.Length)
+      else if(_src!.Length != other._src!.Length)
       {
         return false;
       }

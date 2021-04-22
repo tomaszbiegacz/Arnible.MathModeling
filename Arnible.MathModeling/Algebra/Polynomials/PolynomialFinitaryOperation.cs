@@ -4,7 +4,7 @@ using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Algebra.Polynomials
 {
-  class PolynomialFinitaryOperation : IFinitaryOperation<double>
+  record PolynomialFinitaryOperation : IFinitaryOperation<double>
   {
     private readonly Func<IReadOnlyDictionary<char, double>, double> _valueCalculation;
     private readonly ReadOnlyArray<PolynomialTerm> _variables;

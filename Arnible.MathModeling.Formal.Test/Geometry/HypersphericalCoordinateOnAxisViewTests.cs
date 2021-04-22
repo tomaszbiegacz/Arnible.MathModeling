@@ -1,4 +1,5 @@
-﻿using Arnible.Linq;
+﻿using Arnible.Assertions;
+using Arnible.Linq;
 using Arnible.MathModeling.Algebra.Polynomials;
 using Xunit;
 using static Arnible.MathModeling.Algebra.Polynomials.MetaMath;
@@ -40,7 +41,7 @@ namespace Arnible.MathModeling.Geometry.Test
         {
           PolynomialDivision coordinate = (PolynomialDivision)view.Coordinates[coordinatePos];
           PolynomialDivision expected = coordinate.DerivativeBy(angleTerm);
-          AreEqual(expected, derivatives[coordinatePos].First);
+          derivatives[coordinatePos].First.AssertEqualTo(expected);
         }
       }
     }

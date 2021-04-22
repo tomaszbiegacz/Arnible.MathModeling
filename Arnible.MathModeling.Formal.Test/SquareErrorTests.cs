@@ -1,5 +1,6 @@
 ﻿using Arnible.MathModeling.Geometry;
 using Arnible.MathModeling.Algebra.Polynomials;
+using Arnible.MathModeling.Analysis;
 using Xunit;
 using static Arnible.MathModeling.Algebra.Polynomials.Term;
 using static Arnible.MathModeling.xunit.AssertNumber;
@@ -9,6 +10,13 @@ namespace Arnible.MathModeling.Test
   public class SquareErrorTests
   {
     private readonly SquareError _error = new SquareError();
+    
+    static void AreDerivativesEqual(in PolynomialDivision value, in Number term, in Derivative1Value actual)
+    {
+      PolynomialTerm termSingle = (PolynomialTerm)term;
+      PolynomialDivision firstDerivative = value.DerivativeBy(termSingle);
+      AreEqual<Number>(firstDerivative, actual.First);
+    }
 
     [Fact]
     public void Value()

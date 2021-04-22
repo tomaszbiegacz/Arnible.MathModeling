@@ -1,6 +1,6 @@
 namespace Arnible.MathModeling.Analysis.Optimization
 {
-  public readonly struct FunctionPointWithDerivative : IValueObject
+  public readonly struct FunctionPointWithDerivative
   {
     public FunctionPointWithDerivative(in Number x, in Number y, in Number first)
     {
@@ -15,15 +15,9 @@ namespace Arnible.MathModeling.Analysis.Optimization
     
     public Number First { get; }
 
-    public override int GetHashCode()
-    {
-      return X.GetHashCode() ^ Y.GetHashCode() ^ First.GetHashCode();
-    }
-    public int GetHashCodeValue() => GetHashCode();
-
     public string ToStringValue()
     {
-      return $"(x: {X.ToStringValue()}, y: {Y.ToStringValue()}, d: {First.ToStringValue()})";
+      return $"({X.ToStringValue()}, {Y.ToStringValue()}) [{First.ToStringValue()}]";
     }
   }
 }

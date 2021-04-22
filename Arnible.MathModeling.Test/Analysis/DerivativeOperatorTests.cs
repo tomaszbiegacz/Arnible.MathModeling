@@ -1,9 +1,8 @@
 ﻿using Arnible.Linq;
-using Arnible.MathModeling.Analysis;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 
-namespace Arnible.MathModeling.Test
+namespace Arnible.MathModeling.Analysis.Test
 {
   public class DerivativeOperatorTests
   {
@@ -14,8 +13,8 @@ namespace Arnible.MathModeling.Test
       var v1d = new Derivative1Value(3);
 
       var d = DerivativeOperator.ForProductByParameter(
-        productValues: v1,
-        valueDerrivativeByParameter: new[] { v1d });
+        productValues: new[] { v1 },
+        valueDerivativeByParameter: new[] { v1d });
 
       AreEqual(3d, d.First);
     }
@@ -31,7 +30,7 @@ namespace Arnible.MathModeling.Test
 
       var d = DerivativeOperator.ForProductByParameter(
         productValues: new[] { v1, v2 },
-        valueDerrivativeByParameter: new[] { v1d, v2d });
+        valueDerivativeByParameter: new[] { v1d, v2d });
 
       AreEqual(3d * 7 + 2 * 11, d.First);
     }

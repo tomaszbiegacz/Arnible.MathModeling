@@ -5,10 +5,9 @@ using Arnible.Linq;
 namespace Arnible.MathModeling.Algebra.Polynomials
 {
   public readonly struct IndeterminateExpression : 
-    IEquatable<IndeterminateExpression>, 
+    IValueEquatable<IndeterminateExpression>, 
     IComparable<IndeterminateExpression>, 
-    IPolynomialOperation,
-    IValueObject
+    IPolynomialOperation
   {
     private readonly ElementaryUnaryOperation _modifier;
 
@@ -54,7 +53,6 @@ namespace Arnible.MathModeling.Algebra.Polynomials
           throw new InvalidOperationException("Unknown modifier: " + _modifier);
       }
     }
-    public string ToStringValue() => ToString();
 
     public int CompareTo(IndeterminateExpression other)
     {

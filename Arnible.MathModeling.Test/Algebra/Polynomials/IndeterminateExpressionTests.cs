@@ -1,4 +1,5 @@
 ﻿using System;
+using Arnible.Assertions;
 using Xunit;
 using static Arnible.MathModeling.Algebra.Polynomials.MetaMath;
 using static Arnible.MathModeling.xunit.AssertNumber;
@@ -19,8 +20,8 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
         var _ = (char) v;
       });
 
-      AreEqual("1", v.ToString());
-      AreEqual(v, v.ToPower(2));
+      EqualExtensions.AssertEqualTo("1", v.ToString());
+      EqualExtensions.AssertEqualTo(v, v.ToPower(2));
 
       AreExactlyEqual(1, v.GetOperation().Value());
 
@@ -38,14 +39,14 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       IndeterminateExpression v = 'v';
       IsFalse(v.IsOne);
       IsFalse(v.HasUnaryModifier);
-      AreEqual('v', (char)v);
+      EqualExtensions.AssertEqualTo('v', (char)v);
 
-      AreEqual("v", v.ToString());
-      AreEqual("v²", v.ToPower(2).ToString());
+      EqualExtensions.AssertEqualTo("v", v.ToString());
+      EqualExtensions.AssertEqualTo("v²", v.ToPower(2).ToString());
 
       AreExactlyEqual(5, v.GetOperation('v').Value(5));
 
-      AreEqual(2 * (PolynomialTerm)v, v.ToPower(2).DerivativeBy('v'));
+      EqualExtensions.AssertEqualTo(2 * (PolynomialTerm)v, v.ToPower(2).DerivativeBy('v'));
 
       AreExactlyEqual(23, v.SimplifyForConstant(23));
     }
@@ -61,13 +62,13 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
         var _ = (char) v;
       });
 
-      AreEqual("Sin(v)", v.ToString());
-      AreEqual("Sin²(v)", v.ToPower(2).ToString());
+      EqualExtensions.AssertEqualTo("Sin(v)", v.ToString());
+      EqualExtensions.AssertEqualTo("Sin²(v)", v.ToPower(2).ToString());
 
       AreExactlyEqual(0, v.GetOperation('v').Value(0));
       AreExactlyEqual(1, v.GetOperation('v').Value(Math.PI / 2));
 
-      AreEqual(2 * Cos(Term.v) * Sin(Term.v), v.ToPower(2).DerivativeBy('v'));
+      EqualExtensions.AssertEqualTo(2 * Cos(Term.v) * Sin(Term.v), v.ToPower(2).DerivativeBy('v'));
 
       AreExactlyEqual(0, v.SimplifyForConstant(0));
       AreExactlyEqual(1, v.SimplifyForConstant(Math.PI / 2));
@@ -84,13 +85,13 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
         var _ = (char) v;
       });
 
-      AreEqual("Cos(v)", v.ToString());
-      AreEqual("Cos²(v)", v.ToPower(2).ToString());
+      EqualExtensions.AssertEqualTo("Cos(v)", v.ToString());
+      EqualExtensions.AssertEqualTo("Cos²(v)", v.ToPower(2).ToString());
 
       AreExactlyEqual(1, v.GetOperation('v').Value(0));
       AreExactlyEqual(0, v.GetOperation('v').Value(Math.PI / 2));
 
-      AreEqual(-2 * Cos(Term.v) * Sin(Term.v), v.ToPower(2).DerivativeBy('v'));
+      EqualExtensions.AssertEqualTo(-2 * Cos(Term.v) * Sin(Term.v), v.ToPower(2).DerivativeBy('v'));
 
       AreExactlyEqual(1, v.SimplifyForConstant(0));
       AreExactlyEqual(0, v.SimplifyForConstant(Math.PI / 2));
@@ -105,19 +106,19 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       IndeterminateExpression sinA = IndeterminateExpression.Sin('a');
       IndeterminateExpression sinB = IndeterminateExpression.Sin('b');
 
-      AreEqual(-1, a.CompareTo(b));
-      AreEqual(0, a.CompareTo(a));
-      AreEqual(1, b.CompareTo(a));
+      EqualExtensions.AssertEqualTo(-1, a.CompareTo(b));
+      EqualExtensions.AssertEqualTo(0, a.CompareTo(a));
+      EqualExtensions.AssertEqualTo(1, b.CompareTo(a));
 
-      AreEqual(-1, sinA.CompareTo(sinB));
-      AreEqual(0, sinA.CompareTo(sinA));
-      AreEqual(1, sinB.CompareTo(sinA));
+      EqualExtensions.AssertEqualTo(-1, sinA.CompareTo(sinB));
+      EqualExtensions.AssertEqualTo(0, sinA.CompareTo(sinA));
+      EqualExtensions.AssertEqualTo(1, sinB.CompareTo(sinA));
 
-      AreEqual(-1, a.CompareTo(sinA));
-      AreEqual(-1, a.CompareTo(sinB));
+      EqualExtensions.AssertEqualTo(-1, a.CompareTo(sinA));
+      EqualExtensions.AssertEqualTo(-1, a.CompareTo(sinB));
 
-      AreEqual(1, sinA.CompareTo(a));
-      AreEqual(1, sinB.CompareTo(a));
+      EqualExtensions.AssertEqualTo(1, sinA.CompareTo(a));
+      EqualExtensions.AssertEqualTo(1, sinB.CompareTo(a));
     }
   }
 }
