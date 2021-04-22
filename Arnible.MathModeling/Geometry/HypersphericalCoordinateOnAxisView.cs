@@ -49,7 +49,7 @@ namespace Arnible.MathModeling.Geometry
       }
 
       var angles = HypersphericalAngleVector.GetIdentityVector(dimensionsCount);
-      double lastAngle = (double)angles[angles.Length - 1];
+      double lastAngle = (double)angles[(ushort)(angles.Length - 1)];
       return Math.Sin(lastAngle);
     }
 
@@ -144,7 +144,7 @@ namespace Arnible.MathModeling.Geometry
 
     public IEnumerable<Derivative1Value> DerivativeByR() => DerivativeByR(_p.Angles);
 
-    public HypersphericalCoordinateOnRectangularView GetRectangularView(uint axisA, uint axisB)
+    public HypersphericalCoordinateOnRectangularView GetRectangularView(ushort axisA, ushort axisB)
     {
       if (axisA == axisB)
       {
@@ -164,7 +164,7 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public HypersphericalCoordianteOnLineView GetLineView(uint axis)
+    public HypersphericalCoordianteOnLineView GetLineView(ushort axis)
     {
       if (R == 0)
       {

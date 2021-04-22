@@ -76,7 +76,7 @@ namespace Arnible.MathModeling.Geometry
       }
 
       PolynomialDivision result = (PolynomialDivision)source;
-      for(uint i=0; i<c1.Coordinates.Length; ++i)
+      for(ushort i=0; i<c1.Coordinates.Length; ++i)
       {
         var cartesianDimension = (PolynomialTerm)c1.Coordinates[i];
         result = result.Composition(cartesianDimension, (PolynomialDivision)c2.Coordinates[i]);

@@ -1,4 +1,6 @@
-﻿using Arnible.MathModeling.Algebra;
+﻿using Arnible.Assertions;
+using Arnible.Linq;
+using Arnible.MathModeling.Algebra;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 
@@ -34,7 +36,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       CartesianCoordinate v1 = new NumberVector(1, 1, 0);
       CartesianCoordinate v2 = new NumberVector(1, 1, 8.65956056235496E-17);
-      AreEqual(v1, v2);
+      EqualExtensions.AssertEqualTo(v1, v2);
     }
 
     [Fact]
@@ -44,7 +46,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var actual = c.GetDirectionDerivativeRatios();
 
       var expected = HypersphericalAngleVector.GetIdentityVector(2).GetCartesianAxisViewsRatios();
-      AreEqual(expected, actual);
+      EqualExtensions.AssertEqualTo(expected, actual);
     }
     
     [Fact]
@@ -54,7 +56,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var actual = c.GetDirectionDerivativeRatios();
 
       var expected = HypersphericalAngleVector.GetIdentityVector(3).GetCartesianAxisViewsRatios();
-      AreEqual(expected, actual);
+      EqualExtensions.AssertEqualTo(expected, actual);
     }
     
     [Fact]
@@ -62,9 +64,9 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       ValueArray<Number> c = new Number[] { 1, 2, -3 };
       var radios = c.GetDirectionDerivativeRatios();
-      AreEqual(3, radios.Length);
+      EqualExtensions.AssertEqualTo(3u, radios.Length);
       
-      for (uint i = 0; i < 2; ++i)
+      for (ushort i = 0; i < 2; ++i)
       {
         IsGreaterEqualThan(0, radios[i]);
         IsLowerEqualThan(1, radios[i]);
@@ -72,7 +74,7 @@ namespace Arnible.MathModeling.Geometry.Test
       IsGreaterEqualThan(-1, radios[2]);
       IsLowerEqualThan(0, radios[2]);
       
-      AreEqual(1, radios.Select(r => r*r).SumDefensive());
+      EqualExtensions.AssertEqualTo(1, radios.AsList().Select(r => r*r).SumDefensive());
     }
   }
 }

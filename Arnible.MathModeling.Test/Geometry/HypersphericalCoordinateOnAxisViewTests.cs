@@ -1,4 +1,6 @@
-﻿using Arnible.MathModeling.Algebra;
+﻿using Arnible.Assertions;
+using Arnible.Linq;
+using Arnible.MathModeling.Algebra;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 using static Arnible.MathModeling.xunit.AssertHelpers;
@@ -13,22 +15,22 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = new CartesianCoordinate(1, 2, 3, 4);
 
       HypersphericalCoordinateOnAxisView view = cc.ToSphericalView();
-      AreEqual(cc.Coordinates, view.Coordinates);
-      AreEqual(cc.DimensionsCount, view.DimensionsCount);
+      EqualExtensions.AssertEqualTo(cc.Coordinates, view.Coordinates);
+      EqualExtensions.AssertEqualTo(cc.DimensionsCount, view.DimensionsCount);
 
       HypersphericalCoordinate hc = view;
-      AreEqual(view.R, hc.R);
-      AreEqual(view.Angles, hc.Angles);
-      AreEqual(view.DimensionsCount, hc.DimensionsCount);
+      EqualExtensions.AssertEqualTo(view.R, hc.R);
+      EqualExtensions.AssertEqualTo(view.Angles, hc.Angles);
+      EqualExtensions.AssertEqualTo(view.DimensionsCount, hc.DimensionsCount);
 
       HypersphericalCoordinateOnAxisView view2 = hc.ToCartesianView();
-      AreEqual(hc.R, view2.R);
-      AreEqual(hc.Angles, view2.Angles);
-      AreEqual(hc.DimensionsCount, view2.DimensionsCount);
+      EqualExtensions.AssertEqualTo(hc.R, view2.R);
+      EqualExtensions.AssertEqualTo(hc.Angles, view2.Angles);
+      EqualExtensions.AssertEqualTo(hc.DimensionsCount, view2.DimensionsCount);
 
       CartesianCoordinate cc2 = view2;
-      AreEqual(cc.Coordinates, cc2.Coordinates);
-      AreEqual(cc.DimensionsCount, cc2.DimensionsCount);
+      EqualExtensions.AssertEqualTo(cc.Coordinates, cc2.Coordinates);
+      EqualExtensions.AssertEqualTo(cc.DimensionsCount, cc2.DimensionsCount);
     }
 
     [Fact]
@@ -38,7 +40,7 @@ namespace Arnible.MathModeling.Geometry.Test
       HypersphericalCoordinateOnAxisView view = cc.ToSphericalView();
 
       var rcView = view.GetRectangularView(1, 3);
-      AreEqual(view.R, rcView.R);
+      EqualExtensions.AssertEqualTo(view.R, rcView.R);
       AreExactlyEqual(2, rcView.X);
       AreExactlyEqual(4, rcView.Y);
     }
@@ -50,8 +52,8 @@ namespace Arnible.MathModeling.Geometry.Test
       HypersphericalCoordinateOnAxisView view = cc.ToSphericalView();
 
       var rcView = view.GetLineView(1);
-      AreEqual(view.R, rcView.R);
-      AreEqual(2d, rcView.X);
+      EqualExtensions.AssertEqualTo(view.R, rcView.R);
+      EqualExtensions.AssertEqualTo(2d, rcView.X);
     }
 
     [Theory]
@@ -66,11 +68,11 @@ namespace Arnible.MathModeling.Geometry.Test
     public void GetIdentityVector(uint dimensionsCount)
     {
       NumberVector vector = HypersphericalCoordinateOnAxisView.GetIdentityVector(dimensionsCount);
-      AreEqual(dimensionsCount, vector.Length);
+      EqualExtensions.AssertEqualTo(dimensionsCount, vector.Length);
 
       IsTrue(vector.AllWithDefault(v => v > 0 && v <= 1));
-      AreEquals(NumberVector.Repeat(HypersphericalCoordinateOnAxisView.GetIdentityVectorRatio(dimensionsCount), dimensionsCount), vector);      
-      AreEqual(1d, vector.Select(v => v * v).SumDefensive());
+      NumberVector.Repeat(HypersphericalCoordinateOnAxisView.GetIdentityVectorRatio(dimensionsCount), dimensionsCount).GetInternalEnumerable().AssertSequenceEqual(vector.GetInternalEnumerable().ToArray());      
+      EqualExtensions.AssertEqualTo(1d, vector.Select(v => v * v).SumDefensive());
     }
   }
 }

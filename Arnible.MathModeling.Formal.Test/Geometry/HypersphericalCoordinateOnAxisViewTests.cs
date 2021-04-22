@@ -19,7 +19,7 @@ namespace Arnible.MathModeling.Geometry.Test
 
       var derivatives = view.DerivativeByR().ToArray();
       AreEqual(cartesianPoint.DimensionsCount, derivatives.Length);
-      for (uint dimensionPos = 0; dimensionPos < cartesianPoint.DimensionsCount; ++dimensionPos)
+      for (ushort dimensionPos = 0; dimensionPos < cartesianPoint.DimensionsCount; ++dimensionPos)
       {
         var symbol = (PolynomialDivision)cartesianPoint.Coordinates[dimensionPos];
         AreEqual(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[dimensionPos].First);
@@ -32,12 +32,12 @@ namespace Arnible.MathModeling.Geometry.Test
       var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(α, β, γ, δ));
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 
-      for (uint anglePos = 0; anglePos < sphericalPoint.Angles.Length; ++anglePos)
+      for (ushort anglePos = 0; anglePos < sphericalPoint.Angles.Length; ++anglePos)
       {
         PolynomialTerm angleTerm = (PolynomialTerm)sphericalPoint.Angles[anglePos];
         var derivatives = view.GetCartesianAxisViewsRatiosDerivativesByAngle(anglesCount: 4, anglePos: anglePos).ToArray();
         AreEqual(view.DimensionsCount, derivatives.Length);
-        for (uint coordinatePos = 0; coordinatePos < view.Coordinates.Length; ++coordinatePos)
+        for (ushort coordinatePos = 0; coordinatePos < view.Coordinates.Length; ++coordinatePos)
         {
           PolynomialDivision coordinate = (PolynomialDivision)view.Coordinates[coordinatePos];
           PolynomialDivision expected = coordinate.DerivativeBy(angleTerm);

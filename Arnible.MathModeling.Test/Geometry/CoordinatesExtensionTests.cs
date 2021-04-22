@@ -1,5 +1,6 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
+using Arnible.Assertions;
 using Xunit;
 using static Arnible.MathModeling.xunit.AssertNumber;
 using static Arnible.MathModeling.xunit.AssertHelpers;
@@ -97,8 +98,8 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = cartesian.ToVector();
       var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
 
-      AreEqual(cc.AddDimension(), sc.AddDimension().ToCartesianView());
-      AreEqual(sc.AddDimension(), cc.AddDimension().ToSphericalView());
+      EqualExtensions.AssertEqualTo(cc.AddDimension(), sc.AddDimension().ToCartesianView());
+      EqualExtensions.AssertEqualTo(sc.AddDimension(), cc.AddDimension().ToSphericalView());
     }
   }
 }

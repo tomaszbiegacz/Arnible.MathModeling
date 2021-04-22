@@ -73,7 +73,7 @@ namespace Arnible.MathModeling.Geometry
       HypersphericalAngleTranslationVector delta)
     {
       domain.Validate(value.ToCartesianView().Coordinates);
-      IReadOnlyList<uint> nonZeroAngles = LinqEnumerable.RangeUint(0, delta.Length)
+      IReadOnlyList<ushort> nonZeroAngles = LinqEnumerable.RangeUshort(0, delta.Length)
         .Where(i => delta[i] != 0)
         .ToArray();
       
@@ -86,7 +86,7 @@ namespace Arnible.MathModeling.Geometry
         throw new InvalidOperationException($"Something went wrong, only last angle should be not empty, in {delta}");
       }
 
-      uint anglePos = delta.Length - 1;
+      ushort anglePos = (ushort)(delta.Length - 1);
       Number ratio = domain.GetValidTranslationRatioForLastAngle(
         radius: value.R,
         currentAngle: value.Angles.GetOrDefault(anglePos),

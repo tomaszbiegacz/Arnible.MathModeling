@@ -37,7 +37,7 @@ namespace Arnible.MathModeling.Geometry
       if (r > 0)
       {
         var angles = new List<Number>();
-        for (uint i = p.DimensionsCount; i > 2; i--)
+        for (ushort i = p.DimensionsCount; i > 2; i--)
         {
           Number radius2 = pc2.TakeExactly(i).SumDefensive();
           if (radius2 == 0)
@@ -46,7 +46,7 @@ namespace Arnible.MathModeling.Geometry
           }
           else
           {
-            Number angleSin = pc.GetOrDefault(i - 1) / Sqrt(radius2);
+            Number angleSin = pc.GetOrDefault((ushort)(i - 1)) / Sqrt(radius2);
             double angle = Asin(angleSin);
             angles.Add(angle);
           }
@@ -84,10 +84,10 @@ namespace Arnible.MathModeling.Geometry
     /// <summary>
     /// Calculate derivative ratios by moving along the array vector
     /// </summary>
-    public static ValueArray<Number> GetDirectionDerivativeRatios(in this ValueArray<Number> direction)
+    public static ReadOnlyArray<Number> GetDirectionDerivativeRatios(in this ValueArray<Number> direction)
     {
       CartesianCoordinate point = direction;
-      return point.ToSpherical().Angles.GetCartesianAxisViewsRatios().ToValueArray(direction.Length);
+      return point.ToSpherical().Angles.GetCartesianAxisViewsRatios().ToArray(direction.Length);
     }
   }
 }

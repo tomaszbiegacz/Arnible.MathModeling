@@ -23,9 +23,7 @@ namespace Arnible.MathModeling.Geometry
   public readonly struct NumberVector : 
     IEquatable<NumberVector>,
     IComparable<NumberVector>,
-    IEquatable<Number>, 
-    IValueArray<Number>,
-    IValueObject
+    IEquatable<Number>
   {
     readonly static Number ZeroValue = 0d;
     readonly static IReadOnlyCollection<Number> ZeroVector = new Number[] { 0 };
@@ -52,9 +50,9 @@ namespace Arnible.MathModeling.Geometry
       return new NumberVector(LinqEnumerable.Repeat<Number>(0, pos).Append(value).ToArray());
     }
 
-    private readonly ValueArray<Number> _values;
+    private readonly ReadOnlyArray<Number> _values;
 
-    private static ValueArray<Number> GetNormalizedVector(IEnumerable<Number> parameters)
+    private static ReadOnlyArray<Number> GetNormalizedVector(IEnumerable<Number> parameters)
     {
       List<Number> result = new List<Number>(parameters ?? LinqArray<Number>.Empty);
       while (result.Count > 0 && result[^1] == 0)
@@ -75,7 +73,7 @@ namespace Arnible.MathModeling.Geometry
       // intentionally empty
     }
 
-    private NumberVector(ValueArray<Number> parameters)
+    private NumberVector(ReadOnlyArray<Number> parameters)
     {
       _values = parameters;
     }
@@ -87,7 +85,7 @@ namespace Arnible.MathModeling.Geometry
     // Properties
     //            
 
-    public Number GetOrDefault(uint pos)
+    public Number GetOrDefault(ushort pos)
     {
       if (pos >= Length)
         return 0;
@@ -107,11 +105,11 @@ namespace Arnible.MathModeling.Geometry
       }
       else
       {
-        return _values.GetInternalEnumerable();
+        return _values.AsList();
       }
     }
 
-    public ref readonly Number this[uint pos]
+    public ref readonly Number this[ushort pos]
     {
       get
       {
@@ -126,19 +124,19 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public uint Length => Math.Max(1, _values.Length);
+    public ushort Length => Math.Max((ushort)1, _values.Length);
 
     public Number First => GetInternalEnumerable().First();
 
     public IEnumerator<Number> GetEnumerator() => GetInternalEnumerable().GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator() => GetInternalEnumerable().GetEnumerator();
+    
 
     //
     // IEquatable
     //
 
-    public bool Equals(NumberVector other) => _values.GetInternalEnumerable().SequenceEqual(other._values.GetInternalEnumerable());
+    public bool Equals(NumberVector other) => _values.AsList().SequenceEqual(other._values.AsList());
 
     public bool Equals(in Number other)
     {
@@ -184,7 +182,7 @@ namespace Arnible.MathModeling.Geometry
     public override string ToString() => ToString(CultureInfo.InvariantCulture);
     public string ToStringValue() => ToString();
 
-    public ValueArray<Number> ToValueArray(uint length)
+    public ReadOnlyArray<Number> ToArray(uint length)
     {
       if (length < _values.Length)
       {
@@ -198,7 +196,7 @@ namespace Arnible.MathModeling.Geometry
       }
       else
       {
-        return _values.Append(0, diff).ToArray();
+        return _values.AsList().Append(0, diff).ToArray();
       }
     }
 
@@ -302,11 +300,6 @@ namespace Arnible.MathModeling.Geometry
       return GetInternalEnumerable().TakeExactly(count);
     }
 
-    public ValueArray<Number> ToValueArray()
-    {
-      return _values;
-    }
-    
     public IEnumerable<Number> Where(Func<Number, bool> predicate)
     {
       return GetInternalEnumerable().Where(predicate);

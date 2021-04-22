@@ -14,10 +14,8 @@ namespace Arnible.MathModeling.Geometry
   [Serializable]
   public readonly struct HypersphericalAngleVector : 
     IEquatable<HypersphericalAngleVector>, 
-    IEquatable<Number>, 
-    IValueArray<Number>,
-    IAlgebraGroup<HypersphericalAngleVector>,
-    IValueObject
+    IEquatable<Number>,
+    IAlgebraGroup<HypersphericalAngleVector>
   {
     static readonly HypersphericalAngleVector _zero = 0;
     
@@ -98,11 +96,11 @@ namespace Arnible.MathModeling.Geometry
     // Properties
     //    
 
-    public ref readonly Number this[uint pos] => ref _angles[pos];
+    public ref readonly Number this[ushort pos] => ref _angles[pos];
 
-    public uint Length => _angles.Length;
+    public ushort Length => _angles.Length;
 
-    public Number GetOrDefault(uint pos) => _angles.GetOrDefault(pos);
+    public Number GetOrDefault(ushort pos) => _angles.GetOrDefault(pos);
 
     //
     // IArray
@@ -111,8 +109,7 @@ namespace Arnible.MathModeling.Geometry
     internal IEnumerable<Number> GetInternalEnumerable() => _angles.GetInternalEnumerable();
 
     public IEnumerator<Number> GetEnumerator() => _angles.GetEnumerator();
-
-    IEnumerator IEnumerable.GetEnumerator() => _angles.GetEnumerator();    
+    
 
     //
     // IEquatable
@@ -160,7 +157,7 @@ namespace Arnible.MathModeling.Geometry
     // query operators
     //
 
-    public HypersphericalAngleVector GetOrthogonalDirection(uint anglePos)
+    public HypersphericalAngleVector GetOrthogonalDirection(ushort anglePos)
     {
       ref readonly Number angle = ref _angles[anglePos];
       return new HypersphericalAngleVector(NumberVector.NonZeroValueAt(pos: anglePos, value: in angle));

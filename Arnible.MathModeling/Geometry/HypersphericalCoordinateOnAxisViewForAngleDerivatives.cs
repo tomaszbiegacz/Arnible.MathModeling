@@ -97,7 +97,7 @@ namespace Arnible.MathModeling.Geometry
     // Operations
     //
 
-    public HypersphericalCoordinateOnRectangularViewWithDerivative GetRectangularViewDerivativeByAngle(in uint axisA, in uint axisB)
+    public HypersphericalCoordinateOnRectangularViewWithDerivative GetRectangularViewDerivativeByAngle(ushort axisA, ushort axisB)
     {
       return new HypersphericalCoordinateOnRectangularViewWithDerivative(
         view: View.GetRectangularView(axisA: axisA, axisB: axisB),

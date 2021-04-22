@@ -11,8 +11,7 @@ namespace Arnible.MathModeling.Geometry
   public readonly struct CartesianCoordinate : 
     IEquatable<CartesianCoordinate>, 
     ICartesianCoordinate, 
-    ICoordinate<CartesianCoordinate>,
-    IValueObject
+    ICoordinate<CartesianCoordinate>
   {
     public static CartesianCoordinate ForAxis(uint dimensionsCount, uint axisNumber, Number value)
     {
@@ -89,7 +88,7 @@ namespace Arnible.MathModeling.Geometry
     // Properties
     //
 
-    public uint DimensionsCount => Coordinates.Length;
+    public ushort DimensionsCount => Coordinates.Length;
 
     //
     // Operations
