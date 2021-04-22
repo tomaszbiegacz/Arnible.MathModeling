@@ -44,7 +44,7 @@ namespace Arnible.Export
     private static object CreateSerializer(Type recordSerializerOpenType, Type[] genericTypes)
     {
       Type closedType = recordSerializerOpenType.MakeGenericType(genericTypes);
-      return Activator.CreateInstance(closedType);
+      return Activator.CreateInstance(closedType) ?? throw new InvalidOperationException("CreateInstance returned null");
     }
     
     public RecordWriterBuilder RegisterGenericValueSerializer(Type genericValueOpenType, Type recordSerializerOpenType)

@@ -37,11 +37,11 @@ namespace Arnible.Export.RecordPerTextRow
     }
 
     public void WriteValue(
-      NamespaceWithName prefix,
+      NamespaceWithName? prefix,
       in ReadOnlySpan<char> fieldName, 
       in ReadOnlySpan<char> value)
     {
-      if(IsHeaderSerialized)
+      if(IsHeaderSerialized || prefix is null)
       {
         _writer.WriteValue(in value);
       }
@@ -66,7 +66,7 @@ namespace Arnible.Export.RecordPerTextRow
     }
     
     public void WriteNull(
-      NamespaceWithName prefix,
+      NamespaceWithName? prefix,
       in ReadOnlySpan<char> fieldName)
     {
       WriteValue(prefix, in fieldName, String.Empty); 

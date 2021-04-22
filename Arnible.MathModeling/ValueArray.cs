@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Arnible.Export;
 using Arnible.Linq;
+using Arnible.Linq.Combinatorics;
 
 namespace Arnible.MathModeling
 {

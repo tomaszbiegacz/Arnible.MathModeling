@@ -1,4 +1,4 @@
-﻿using Arnible.MathModeling.Polynomials;
+﻿using Arnible.MathModeling.Algebra.Polynomials;
 
 namespace Arnible.MathModeling
 {

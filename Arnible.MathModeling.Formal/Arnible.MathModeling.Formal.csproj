@@ -16,6 +16,60 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Arnible.MathModeling\Algebra\IAlgebraGroup.cs">
+      <Link>Algebra\IAlgebraGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\IAlgebraUnitRing.cs">
+      <Link>Algebra\IAlgebraUnitRing.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\ElementaryUnaryOperation.cs">
+      <Link>Algebra\Polynomials\ElementaryUnaryOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\IndeterminateExpression.cs">
+      <Link>Algebra\Polynomials\IndeterminateExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\IPolynomialOperation.cs">
+      <Link>Algebra\Polynomials\IPolynomialOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\IPolynomialOperationExtensions.cs">
+      <Link>Algebra\Polynomials\IPolynomialOperationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\MetaMath.cs">
+      <Link>Algebra\Polynomials\MetaMath.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\Polynomial.cs">
+      <Link>Algebra\Polynomials\Polynomial.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\PolynomialDivision.cs">
+      <Link>Algebra\Polynomials\PolynomialDivision.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\PolynomialFinitaryOperation.cs">
+      <Link>Algebra\Polynomials\PolynomialFinitaryOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\PolynomialTerm.cs">
+      <Link>Algebra\Polynomials\PolynomialTerm.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\PolynomialTermAnalysisExtensions.cs">
+      <Link>Algebra\Polynomials\PolynomialTermAnalysisExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\Term.cs">
+      <Link>Algebra\Polynomials\Term.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\VariableTerm.cs">
+      <Link>Algebra\Polynomials\VariableTerm.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\ProductDefensiveExtensions.cs">
+      <Link>Algebra\ProductDefensiveExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\ProductWithDefaultExtensions.cs">
+      <Link>Algebra\ProductWithDefaultExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\SumDefensiveExtensions.cs">
+      <Link>Algebra\SumDefensiveExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\SumWithDefaultExtensions.cs">
+      <Link>Algebra\SumWithDefaultExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\INumberRangeDomain.cs" Link="INumberRangeDomain.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\NumberVector.cs" Link="Geometry\NumberVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Sign.cs" Link="Sign.cs" />
@@ -52,26 +106,10 @@
     <Compile Include="..\Arnible.MathModeling\IValueObject.cs">
       <Link>IValueObject.cs</Link>
     </Compile>
-    <Compile Include="..\Arnible.MathModeling\LinqAggregate.cs" Link="LinqAggregate.cs" />
     <Compile Include="..\Arnible.MathModeling\LinqAggregateBasic.tt.cs" Link="LinqAggregateBasic.tt.cs" />
-    <Compile Include="..\Arnible.MathModeling\LinqProduct.tt.cs" Link="LinqProduct.tt.cs" />
-    <Compile Include="..\Arnible.MathModeling\LinqSum.tt.cs" Link="LinqSum.tt.cs" />
     <Compile Include="..\Arnible.MathModeling\MetaMath.cs" Link="MetaMath.cs" />
     <Compile Include="..\Arnible.MathModeling\NumericFormatting.cs" Link="NumericFormatting.cs" />
     <Compile Include="..\Arnible.MathModeling\OperationExtension.cs" Link="OperationExtension.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\ElementaryUnaryOperation.cs" Link="Polynomials\ElementaryUnaryOperation.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\IndeterminateExpression.cs" Link="Polynomials\IndeterminateExpression.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\IPolynomialOperation.cs" Link="Polynomials\IPolynomialOperation.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\IPolynomialOperationExtensions.cs" Link="Polynomials\IPolynomialOperationExtensions.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\MetaMath.cs" Link="Polynomials\MetaMath.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\Polynomial.cs" Link="Polynomials\Polynomial.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\PolynomialDivision.cs" Link="Polynomials\PolynomialDivision.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\PolynomialExtension.cs" Link="Polynomials\PolynomialExtension.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\PolynomialFinitaryOperation.cs" Link="Polynomials\PolynomialFinitaryOperation.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\PolynomialTerm.cs" Link="Polynomials\PolynomialTerm.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\PolynomialTermExtensions.cs" Link="Polynomials\PolynomialTermExtensions.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\Term.cs" Link="Polynomials\Term.cs" />
-    <Compile Include="..\Arnible.MathModeling\Polynomials\VariableTerm.cs" Link="Polynomials\VariableTerm.cs" />
     <Compile Include="..\Arnible.MathModeling\ValueArray.cs" Link="ValueArray.cs" />
     <Compile Include="..\Arnible.MathModeling\ValueArrayExtensions.cs">
       <Link>ValueArrayExtensions.cs</Link>
@@ -79,10 +117,6 @@
     <Compile Include="..\Arnible.MathModeling\Analysis\ValueWithDerivative1.cs">
       <Link>Analysis\ValueWithDerivative1.cs</Link>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Polynomials\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -12,6 +12,9 @@ Dictionary<string, string> generatedTypes = new Dictionary<string, string>
 #>
 using System;
 using System.Collections.Generic;
+using Arnible.Linq;
+using Arnible.Linq.Algebra;
+using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling
 {
@@ -28,7 +31,7 @@ foreach(var kv in generatedTypes)
     /// </summary>
     public static <#= kv.Value #> AverageDefensive(this IEnumerable<<#= kv.Key #>> x)
     {
-      IReadOnlyList<<#= kv.Key #>> items = x.ToReadOnlyList();
+      IReadOnlyList<<#= kv.Key #>> items = x.ToArray();
       if (items.Count == 0)
       {
         throw new ArgumentException(nameof(x));

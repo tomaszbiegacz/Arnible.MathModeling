@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using Arnible.Export;
+using Arnible.Linq.Algebra;
+using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling
 {
@@ -15,10 +17,12 @@ namespace Arnible.MathModeling
   /// </remarks>  
   [Serializable]
   public readonly struct Number : 
-    IEquatable<Number>, 
-    IComparable<Number>, 
+    IAlgebraUnitRing<Number>,
     IValueObject
   {    
+    static readonly Number _one = 1;
+    static readonly Number _zero = 0;
+    
     private readonly double _value;
 
     private Number(in double value)
@@ -168,6 +172,12 @@ namespace Arnible.MathModeling
     public static Number operator *(in uint a, in Number b) => a * b._value;    
 
     public Number ToPower(in uint b) => DoubleExtension.ToPower(in _value, in b);
+    
+    public ref readonly Number One => ref _one;
+    public ref readonly Number Zero => ref _zero;
+    
+    public Number Add(in Number component) => this._value + component._value;
+    public Number Multiply(in Number factor) => this._value * factor._value;
 
     //
     // IComparable

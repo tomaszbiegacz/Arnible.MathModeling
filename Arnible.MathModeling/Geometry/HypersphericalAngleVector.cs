@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using static Arnible.MathModeling.MetaMath;
 using Arnible.Linq;
+using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -15,8 +16,11 @@ namespace Arnible.MathModeling.Geometry
     IEquatable<HypersphericalAngleVector>, 
     IEquatable<Number>, 
     IValueArray<Number>,
+    IAlgebraGroup<HypersphericalAngleVector>,
     IValueObject
   {
+    static readonly HypersphericalAngleVector _zero = 0;
+    
     private readonly NumberVector _angles;
     
     public static HypersphericalAngleVector CreateOrthogonalDirection(uint anglePos, in Number value)
@@ -233,7 +237,7 @@ namespace Arnible.MathModeling.Geometry
 
     private static IEnumerable<Number> AddAngles(NumberVector a, NumberVector b)
     {
-      return Normalize(a.GetInternalEnumerable().Zip(
+      return Normalize(a.GetInternalEnumerable().ZipValue(
         col2: b.GetInternalEnumerable(), 
         merge: (v1, v2) => (v1 ?? 0) + (v2 ?? 0)));      
     }
@@ -257,5 +261,9 @@ namespace Arnible.MathModeling.Geometry
     {
       return new HypersphericalAngleVector(ScaleAngles(b, a).ToVector());
     }
+    
+    public ref readonly HypersphericalAngleVector Zero => ref _zero;
+
+    public HypersphericalAngleVector Add(in HypersphericalAngleVector component) => this + component;
   }
 }

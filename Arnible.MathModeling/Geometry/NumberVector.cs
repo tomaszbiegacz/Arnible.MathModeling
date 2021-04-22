@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using Arnible.Linq;
+using Arnible.Linq.Algebra;
+using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -249,12 +251,12 @@ namespace Arnible.MathModeling.Geometry
 
     public static NumberVector operator +(NumberVector a, NumberVector b)
     {
-      return a.GetInternalEnumerable().Zip(b.GetInternalEnumerable(), (va, vb) => (va ?? 0) + (vb ?? 0)).ToVector();
+      return a.GetInternalEnumerable().ZipValue(b.GetInternalEnumerable(), (va, vb) => (va ?? 0) + (vb ?? 0)).ToVector();
     }
 
     public static NumberVector operator -(NumberVector a, NumberVector b)
     {
-      return a.GetInternalEnumerable().Zip(b.GetInternalEnumerable(), (va, vb) => (va ?? 0) - (vb ?? 0)).ToVector();
+      return a.GetInternalEnumerable().ZipValue(b.GetInternalEnumerable(), (va, vb) => (va ?? 0) - (vb ?? 0)).ToVector();
     }
 
     public static NumberVector operator /(NumberVector a, Number b)

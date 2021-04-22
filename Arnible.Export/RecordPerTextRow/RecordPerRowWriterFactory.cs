@@ -26,13 +26,15 @@ namespace Arnible.Export.RecordPerTextRow
         collectionFieldSerializerType = typeof(RecordPerRowReferenceCollectionFieldSerializer<>)
           .MakeGenericType(fieldType);
       }
-      return (ICollectionFieldSerializer<TField>)Activator.CreateInstance(collectionFieldSerializerType, parent);
+      
+      object result = Activator.CreateInstance(collectionFieldSerializerType, parent) ?? throw new InvalidOperationException("CreateInstance returned null");
+      return (ICollectionFieldSerializer<TField>)result;
     }
     
     public IReferenceRecordSerializer<TField> GetReferenceSerializer<TField>() where TField: class?
     {
       Type fieldType = typeof(TField);
-      if(_serializersFactories.TryGetValue(fieldType, out Func<Type[], object> factory))
+      if(_serializersFactories.TryGetValue(fieldType, out Func<Type[], object>? factory))
       {
         return (IReferenceRecordSerializer<TField>)factory(Type.EmptyTypes);
       }
@@ -51,7 +53,7 @@ namespace Arnible.Export.RecordPerTextRow
     public IValueRecordSerializer<TField> GetValueSerializer<TField>() where TField: struct
     {
       Type fieldType = typeof(TField);
-      if(_serializersFactories.TryGetValue(fieldType, out Func<Type[], object> factory))
+      if(_serializersFactories.TryGetValue(fieldType, out Func<Type[], object>? factory))
       {
         return (IValueRecordSerializer<TField>)factory(Type.EmptyTypes);
       }

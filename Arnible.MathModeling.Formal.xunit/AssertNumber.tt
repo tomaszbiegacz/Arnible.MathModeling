@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
-using Arnible.MathModeling.Polynomials;
+using Arnible.MathModeling.Algebra.Polynomials;
 using System.Globalization;
 using Arnible.MathModeling.Analysis;
 using Arnible.Linq;

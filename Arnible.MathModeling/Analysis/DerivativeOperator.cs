@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Arnible.Linq;
+using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling.Analysis
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Arnible.Linq;
+using Arnible.Linq.Combinatorics;
 
 namespace Arnible.MathModeling.Geometry
 {

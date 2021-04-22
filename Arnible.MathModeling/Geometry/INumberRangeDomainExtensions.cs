@@ -25,7 +25,7 @@ namespace Arnible.MathModeling.Geometry
       in NumberVector value, 
       in NumberVector delta)
     {
-      return value.GetInternalEnumerable().Zip(
+      return value.GetInternalEnumerable().ZipValue(
         col2: delta.GetInternalEnumerable(), 
         merge: (v, t) => Arnible.MathModeling.INumberRangeDomainExtensions.IsValidTranslation(
           domain,
@@ -44,7 +44,7 @@ namespace Arnible.MathModeling.Geometry
       }
       else
       {
-        return value.GetInternalEnumerable().Zip(
+        return value.GetInternalEnumerable().ZipValue(
           col2: delta.GetInternalEnumerable(), 
           merge: (v, t) => Arnible.MathModeling.INumberRangeDomainExtensions.IsValidTranslation(
             domain,

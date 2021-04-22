@@ -1,4 +1,5 @@
 ﻿using System;
+using Arnible.Linq;
 
 namespace Arnible.MathModeling.Algebra
 {

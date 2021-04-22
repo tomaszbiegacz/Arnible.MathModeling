@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Arnible.Export.RecordPerTextRow
 {
@@ -298,7 +299,7 @@ namespace Arnible.Export.RecordPerTextRow
     // Fields writers 
     //
     
-    private bool NextRecordWriter<T>(out T? result) where T: class
+    private bool NextRecordWriter<T>([MaybeNullWhen(false)] out T? result) where T: class
     {
       if(_currentWriter == _writersCache.Count)
       {

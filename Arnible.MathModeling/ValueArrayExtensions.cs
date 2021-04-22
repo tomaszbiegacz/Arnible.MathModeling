@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Arnible.Linq;
+using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling
 {
@@ -61,7 +62,7 @@ namespace Arnible.MathModeling
       }
       return new ValueArray<Number>(result);
     }
-    
+
     public static ValueArray<Number> SumDefensive(this IEnumerable<ValueArray<Number>> arg)
     {
       Number[]? result = null;

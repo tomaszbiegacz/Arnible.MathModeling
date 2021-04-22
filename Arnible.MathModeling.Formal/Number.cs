@@ -1,15 +1,19 @@
-﻿using Arnible.MathModeling.Polynomials;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Arnible.Linq.Algebra;
+using Arnible.MathModeling.Algebra;
+using Arnible.MathModeling.Algebra.Polynomials;
 
 namespace Arnible.MathModeling
 {
   public readonly struct Number : 
-    IEquatable<Number>, 
-    IComparable<Number>, 
+    IAlgebraUnitRing<Number>, 
     IValueObject
   {
+    static readonly Number _one = 1;
+    static readonly Number _zero = 0;
+    
     private readonly PolynomialDivision _value;
 
     private Number(in PolynomialDivision value)
@@ -137,6 +141,12 @@ namespace Arnible.MathModeling
 
 
     public Number ToPower(in uint b) => _value.ToPower(in b);
+    
+    public ref readonly Number One => ref _one;
+    public ref readonly Number Zero => ref _zero;
+    
+    public Number Add(in Number component) => this._value + component._value;
+    public Number Multiply(in Number factor) => this._value * factor._value;
 
     //
     // IComparable

@@ -1,3 +1,5 @@
+using Arnible.Linq;
+
 namespace Arnible.MathModeling.Geometry
 {
   public static class INumberRangeDomainExtensionsNumeric
@@ -7,7 +9,7 @@ namespace Arnible.MathModeling.Geometry
       in ValueArray<Number> value,
       in NumberVector delta)
     {
-      return value.GetInternalEnumerable().Zip(
+      return value.GetInternalEnumerable().ZipValue(
         col2: delta.GetInternalEnumerable(), 
         merge: (v, t) => domain.GetValidTranslationRatio(v ?? 0, t ?? 0)).MinDefensive();
     }
@@ -17,7 +19,7 @@ namespace Arnible.MathModeling.Geometry
       in NumberVector value,
       in NumberVector delta)
     {
-      return value.GetInternalEnumerable().Zip(
+      return value.GetInternalEnumerable().ZipValue(
         col2: delta.GetInternalEnumerable(), 
         merge: (v, t) => domain.GetValidTranslationRatio(v ?? 0, t ?? 0)).MinDefensive();
     }
@@ -27,7 +29,7 @@ namespace Arnible.MathModeling.Geometry
       in ValueArray<Number> value,
       in NumberVector transaction)
     {
-      return value.GetInternalEnumerable().Zip(
+      return value.GetInternalEnumerable().ZipValue(
         col2: transaction.GetInternalEnumerable(), 
         merge: (v, t) => domain.GetMaximumValidTranslationRatio(v ?? 0, t ?? 0)
       ).MinOrDefault();
