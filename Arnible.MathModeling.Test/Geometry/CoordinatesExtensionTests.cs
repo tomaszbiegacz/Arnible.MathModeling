@@ -1,9 +1,9 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
 using Arnible.Assertions;
+using Arnible.MathModeling.Test;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
-using static Arnible.MathModeling.xunit.AssertHelpers;
+using Arnible.Linq;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -43,9 +43,9 @@ namespace Arnible.MathModeling.Geometry.Test
       var pc = rc.ToPolar();
       HypersphericalCoordinate sc = cc.ToSphericalView();
 
-      AreEqual(2u, sc.DimensionsCount);
-      AreExactlyEqual(pc.R, sc.R);
-      AreExactlyEqual(pc.Φ, sc.Angles.Single());
+      EqualExtensions.AssertEqualTo(2u, sc.DimensionsCount);
+      EqualExtensions.AssertEqualTo<double>((double)pc.R, (double)sc.R);
+      EqualExtensions.AssertEqualTo<double>((double)pc.Φ, (double)sc.Angles.Single());
     }
 
     [Theory]
@@ -57,8 +57,8 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = cartesian.ToVector();
 
       HypersphericalCoordinate sc = cc.ToSphericalView();
-      AreEqual(r, sc.R);
-      AreEquals(angles, sc.Angles);
+      EqualExtensions.AssertEqualTo(r, sc.R);
+      sc.Angles.GetInternalEnumerable().AssertSequenceEqual(angles);
     }
 
     [Theory]
@@ -73,8 +73,8 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = cartesian.ToVector();
 
       HypersphericalCoordinate sc = cc.ToSpherical();
-      AreEqual(r, sc.R);
-      AreEquals(angles, sc.Angles);
+      EqualExtensions.AssertEqualTo(r, sc.R);
+      sc.Angles.GetInternalEnumerable().AssertSequenceEqual(angles);
     }
 
     [Theory]
@@ -86,7 +86,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
 
       var cc = sc.ToCartesianView();
-      AreEquals(cartesian, cc.Coordinates);
+      cc.Coordinates.GetInternalEnumerable().AssertSequenceEqual(cartesian);
     }
 
     [Theory]

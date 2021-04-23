@@ -6,11 +6,11 @@ namespace Arnible.MathModeling.Geometry
   {
     public static Number GetValidTranslationRatio(
       this INumberRangeDomain domain,
-      in ValueArray<Number> value,
-      in NumberVector delta)
+      ReadOnlyArray<Number> value,
+      ReadOnlyArray<Number> delta)
     {
-      return value.GetInternalEnumerable().ZipValue(
-        col2: delta.GetInternalEnumerable(), 
+      return value.AsList().ZipValue(
+        col2: delta.AsList(), 
         merge: (v, t) => domain.GetValidTranslationRatio(v ?? 0, t ?? 0)).MinDefensive();
     }
     
@@ -26,10 +26,10 @@ namespace Arnible.MathModeling.Geometry
     
     public static Number? GetMaximumValidTranslationRatio(
       this INumberRangeDomain domain,
-      in ValueArray<Number> value,
+      ReadOnlyArray<Number> value,
       in NumberVector transaction)
     {
-      return value.GetInternalEnumerable().ZipValue(
+      return value.AsList().ZipValue(
         col2: transaction.GetInternalEnumerable(), 
         merge: (v, t) => domain.GetMaximumValidTranslationRatio(v ?? 0, t ?? 0)
       ).MinOrNone();

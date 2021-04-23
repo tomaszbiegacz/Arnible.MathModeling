@@ -1,6 +1,7 @@
 ﻿using System;
+using Arnible.Assertions;
+using Arnible.MathModeling.Test;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -14,8 +15,8 @@ namespace Arnible.MathModeling.Geometry.Test
       RectangularCoordinate rc = default;
       PolarCoordinate pc = rc.ToPolar();
 
-      AreExactlyEqual(0, pc.R);
-      AreExactlyEqual(0, pc.Φ);
+      EqualExtensions.AssertEqualTo<double>(0, (double)pc.R);
+      EqualExtensions.AssertEqualTo<double>(0, (double)pc.Φ);
     }
 
     [Theory]
@@ -26,8 +27,8 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       PolarCoordinate pc = (new RectangularCoordinate(x, y)).ToPolar();
 
-      AreEqual(r, pc.R);
-      AreEqual(φ, pc.Φ);
+      EqualExtensions.AssertEqualTo(r, pc.R);
+      EqualExtensions.AssertEqualTo(φ, pc.Φ);
     }
   }
 }

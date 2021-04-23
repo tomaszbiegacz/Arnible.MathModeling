@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Arnible.Assertions;
 using Arnible.Linq;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -45,7 +44,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, -1);       //  -45    + -    xy
       AssertDirection(directions, 1);        //   45    + +    xy
 
-      IsEmpty(directions);
+      IsEmptyExtensions.AssertIsEmpty(directions);
       
     }
 
@@ -81,7 +80,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, -1, 1);    // -45  45       + - +      xyz     - + -
       AssertDirection(directions, 1, 1);     //  45  45       + + +      xyz     - - -
 
-      IsEmpty(directions);
+      IsEmptyExtensions.AssertIsEmpty(directions);
     }
 
     [Fact]
@@ -148,7 +147,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, -1, 1, 1);     // -45  45  45      + - + +     xyza    - + - -
       AssertDirection(directions, 1, 1, 1);      //  45  45  45      + + + +     xyza    - - - -    
 
-      IsEmpty(directions);
+      IsEmptyExtensions.AssertIsEmpty(directions);
     }
 
     [Fact]
@@ -199,7 +198,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, -1);       //  -45    + -    xy
       AssertDirection(directions, 1);        //   45    + +    xy
 
-      IsEmpty(directions);
+      IsEmptyExtensions.AssertIsEmpty(directions);
     }
   }
 }

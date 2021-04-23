@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Arnible.MathModeling.Formal.xunit\Arnible.MathModeling.Formal.xunit.csproj" />
     <ProjectReference Include="..\Arnible.MathModeling.Formal\Arnible.MathModeling.Formal.csproj" />
   </ItemGroup>
 

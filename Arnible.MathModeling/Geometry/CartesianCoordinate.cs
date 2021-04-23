@@ -43,9 +43,9 @@ namespace Arnible.MathModeling.Geometry
       return new CartesianCoordinate(new[] { rc.X, rc.Y }.ToVector());
     }
 
-    public static implicit operator CartesianCoordinate(in ValueArray<Number> rc)
+    public static implicit operator CartesianCoordinate(in ReadOnlyArray<Number> rc)
     {
-      return new CartesianCoordinate(rc.GetInternalEnumerable().ToVector());
+      return new CartesianCoordinate(rc.AsList().ToVector());
     }
 
     public static implicit operator CartesianCoordinate(in NumberVector rc)

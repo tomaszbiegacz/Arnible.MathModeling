@@ -1,8 +1,8 @@
 ﻿using Arnible.Assertions;
 using Arnible.Linq;
 using Arnible.MathModeling.Algebra;
+using Arnible.MathModeling.Test;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -14,10 +14,10 @@ namespace Arnible.MathModeling.Geometry.Test
       var rc = new RectangularCoordinate(3, 4);
       CartesianCoordinate cc = rc;
 
-      AreEqual(2u, cc.DimensionsCount);
-      AreEqual(2u, cc.Coordinates.Length);
-      AreExactlyEqual(3, cc.Coordinates[0]);
-      AreExactlyEqual(4, cc.Coordinates[1]);
+      EqualExtensions.AssertEqualTo(2u, cc.DimensionsCount);
+      EqualExtensions.AssertEqualTo(2u, cc.Coordinates.Length);
+      EqualExtensions.AssertEqualTo<double>(3, (double)cc.Coordinates[0]);
+      EqualExtensions.AssertEqualTo<double>(4, (double)cc.Coordinates[1]);
     }
 
     [Fact]
@@ -25,10 +25,10 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       CartesianCoordinate cc = new NumberVector(2, 3, 4);
 
-      AreEqual(3u, cc.DimensionsCount);
-      AreExactlyEqual(2, cc.Coordinates[0]);
-      AreExactlyEqual(3, cc.Coordinates[1]);
-      AreExactlyEqual(4, cc.Coordinates[2]);
+      EqualExtensions.AssertEqualTo(3u, cc.DimensionsCount);
+      EqualExtensions.AssertEqualTo<double>(2, (double)cc.Coordinates[0]);
+      EqualExtensions.AssertEqualTo<double>(3, (double)cc.Coordinates[1]);
+      EqualExtensions.AssertEqualTo<double>(4, (double)cc.Coordinates[2]);
     }
 
     [Fact]
@@ -62,17 +62,17 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void GetDirectionDerivativeRatios_Random()
     {
-      ValueArray<Number> c = new Number[] { 1, 2, -3 };
+      ReadOnlyArray<Number> c = new Number[] { 1, 2, -3 };
       var radios = c.GetDirectionDerivativeRatios();
       EqualExtensions.AssertEqualTo(3u, radios.Length);
       
       for (ushort i = 0; i < 2; ++i)
       {
-        IsGreaterEqualThan(0, radios[i]);
-        IsLowerEqualThan(1, radios[i]);
+        IsLowerThanExtensions.AssertIsLowerThan(0, radios[i]);
+        IsGreaterThanExtensions.AssertIsGreaterThan(1, radios[i]);
       }
-      IsGreaterEqualThan(-1, radios[2]);
-      IsLowerEqualThan(0, radios[2]);
+      IsLowerThanExtensions.AssertIsLowerThan(-1, radios[2]);
+      IsGreaterThanExtensions.AssertIsGreaterThan(0, radios[2]);
       
       EqualExtensions.AssertEqualTo(1, radios.AsList().Select(r => r*r).SumDefensive());
     }

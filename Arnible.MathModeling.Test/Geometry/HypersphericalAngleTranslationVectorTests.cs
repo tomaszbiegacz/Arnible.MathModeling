@@ -1,7 +1,6 @@
 ﻿using Arnible.Assertions;
+using Arnible.MathModeling.Test;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
-using static Arnible.MathModeling.xunit.AssertHelpers;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -11,10 +10,10 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Constructor_Default()
     {
       HypersphericalAngleTranslationVector v = default;
-      IsTrue(v == 0);
-      AreEqual(1u, v.Length);
-      AreExactlyEqual(0, v[0]);
-      AreEqual("0", v.ToString());
+      ConditionExtensions.AssertIsTrue(v == 0);
+      EqualExtensions.AssertEqualTo(1u, v.Length);
+      EqualExtensions.AssertEqualTo<double>(0, (double)v[0]);
+      EqualExtensions.AssertEqualTo("0", v.ToString());
 
       EqualExtensions.AssertEqualTo(default, v);
       EqualExtensions.AssertEqualTo(default, new HypersphericalAngleTranslationVector());
@@ -25,10 +24,10 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Constructor_Single()
     {
       HypersphericalAngleTranslationVector v = 2;
-      IsFalse(v == 0);
-      IsTrue(v == 2);
-      IsFalse(v != 2);
-      AreExactlyEqual(2, v[0]);
+      ConditionExtensions.AssertIsFalse(v == 0);
+      ConditionExtensions.AssertIsTrue(v == 2);
+      ConditionExtensions.AssertIsFalse(v != 2);
+      EqualExtensions.AssertEqualTo<double>(2, (double)v[0]);
       EqualExtensions.AssertEqualTo(1u, v.Length);
       EqualExtensions.AssertEqualTo("2", v.ToString());
     }
@@ -37,7 +36,7 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Constructor_Explicit()
     {
       HypersphericalAngleTranslationVector v = new HypersphericalAngleTranslationVector(2, 1, -1);
-      IsFalse(v == 0);
+      ConditionExtensions.AssertIsFalse(v == 0);
       EqualExtensions.AssertEqualTo(3u, v.Length);
       EqualExtensions.AssertEqualTo("[2 1 -1]", v.ToString());
     }

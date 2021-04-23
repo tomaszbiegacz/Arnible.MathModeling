@@ -1,10 +1,10 @@
 using System;
+using Arnible.Assertions;
 using Arnible.MathModeling.Analysis.Optimization;
-using Arnible.MathModeling.xunit;
+using Arnible.MathModeling.Test;
 using Arnible.Xunit;
 using Xunit;
 using Xunit.Abstractions;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Optimization.Test
 {
@@ -22,15 +22,15 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(2);
       
       var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      AreExactlyEqual(2, method.X);
-      AreExactlyEqual(4, method.Y);
+      EqualExtensions.AssertEqualTo<double>(2, (double)method.X);
+      EqualExtensions.AssertEqualTo<double>(4, (double)method.Y);
       
-      IsTrue(method.MoveNext());
-      AreEqual(1, method.X);
-      AreEqual(3, method.Y);
+      ConditionExtensions.AssertIsTrue(method.MoveNext());
+      EqualExtensions.AssertEqualTo(1, method.X);
+      EqualExtensions.AssertEqualTo(3, method.Y);
       
-      IsTrue(method.IsOptimal);
-      IsFalse(method.MoveNext());
+      ConditionExtensions.AssertIsTrue(method.IsOptimal);
+      ConditionExtensions.AssertIsFalse(method.MoveNext());
     }
     
     /*
@@ -45,16 +45,16 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(2);
       
       var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      AreExactlyEqual(-1, method.X);
-      AreExactlyEqual(-1, method.Y);
+      EqualExtensions.AssertEqualTo<double>(-1, (double)method.X);
+      EqualExtensions.AssertEqualTo<double>(-1, (double)method.Y);
 
-      IsFalse(method.IsOptimal);
-      IsFalse(method.IsPolimodal);
+      ConditionExtensions.AssertIsFalse(method.IsOptimal);
+      ConditionExtensions.AssertIsFalse(method.IsPolimodal);
       
-      IsFalse(method.MoveNext());
+      ConditionExtensions.AssertIsFalse(method.MoveNext());
 
-      IsFalse(method.IsOptimal);
-      IsTrue(method.IsPolimodal);
+      ConditionExtensions.AssertIsFalse(method.IsOptimal);
+      ConditionExtensions.AssertIsTrue(method.IsPolimodal);
     }
     
     /*
@@ -69,16 +69,16 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(0.4 * Math.PI);
       
       var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      AreExactlyEqual(a.X, method.X);
-      AreExactlyEqual(a.Y, method.Y);
+      EqualExtensions.AssertEqualTo<double>((double)a.X, (double)method.X);
+      EqualExtensions.AssertEqualTo<double>((double)a.Y, (double)method.Y);
       
       Number width = method.Width;
       Number value = method.Y;
 
       uint i = OptimizationHelper.FindOptimal(method);
       
-      AreEqual(2, method.Y);
-      AreEqual(6, i);
+      EqualExtensions.AssertEqualTo(2, method.Y);
+      EqualExtensions.AssertEqualTo(6, i);
     }
     
     [Fact]
@@ -89,17 +89,17 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(Math.PI);
       
       var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      AreExactlyEqual(b.X, method.X);
-      AreExactlyEqual(b.Y, method.Y);
-      IsGreaterThan(b.Y, a.Y);
+      EqualExtensions.AssertEqualTo<double>((double)b.X, (double)method.X);
+      EqualExtensions.AssertEqualTo<double>((double)b.Y, (double)method.Y);
+      IsLowerThanExtensions.AssertIsLowerThan(b.Y, a.Y);
 
-      IsFalse(method.IsOptimal);
-      IsFalse(method.IsPolimodal);
+      ConditionExtensions.AssertIsFalse(method.IsOptimal);
+      ConditionExtensions.AssertIsFalse(method.IsPolimodal);
       
-      IsFalse(method.MoveNext());
+      ConditionExtensions.AssertIsFalse(method.MoveNext());
 
-      IsFalse(method.IsOptimal);
-      IsTrue(method.IsPolimodal);
+      ConditionExtensions.AssertIsFalse(method.IsOptimal);
+      ConditionExtensions.AssertIsTrue(method.IsPolimodal);
     }
     
     [Fact]
@@ -110,17 +110,17 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(0.7 * Math.PI);
       
       var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      AreExactlyEqual(a.X, method.X);
-      AreExactlyEqual(a.Y, method.Y);
-      IsGreaterThan(a.Y, b.Y);
+      EqualExtensions.AssertEqualTo<double>((double)a.X, (double)method.X);
+      EqualExtensions.AssertEqualTo<double>((double)a.Y, (double)method.Y);
+      IsLowerThanExtensions.AssertIsLowerThan(a.Y, b.Y);
 
-      IsFalse(method.IsOptimal);
-      IsFalse(method.IsPolimodal);
+      ConditionExtensions.AssertIsFalse(method.IsOptimal);
+      ConditionExtensions.AssertIsFalse(method.IsPolimodal);
       
-      IsFalse(method.MoveNext());
+      ConditionExtensions.AssertIsFalse(method.MoveNext());
 
-      IsFalse(method.IsOptimal);
-      IsTrue(method.IsPolimodal);
+      ConditionExtensions.AssertIsFalse(method.IsOptimal);
+      ConditionExtensions.AssertIsTrue(method.IsPolimodal);
     }
     
     /*
@@ -134,21 +134,21 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(1.4 * Math.PI);
       var b = f.ValueWithDerivative(4.4 * Math.PI);
       
-      IsLowerThan(b.Y, a.Y);
-      IsLowerThan(0, a.First);
-      IsGreaterThan(0, b.First);
+      IsGreaterThanExtensions.AssertIsGreaterThan(b.Y, a.Y);
+      IsGreaterThanExtensions.AssertIsGreaterThan(0, a.First);
+      IsLowerThanExtensions.AssertIsLowerThan(0, b.First);
       
       var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      AreExactlyEqual(a.X, method.X);
-      AreExactlyEqual(a.Y, method.Y);
+      EqualExtensions.AssertEqualTo<double>((double)a.X, (double)method.X);
+      EqualExtensions.AssertEqualTo<double>((double)a.Y, (double)method.Y);
 
-      IsFalse(method.IsOptimal);
-      IsFalse(method.IsPolimodal);
+      ConditionExtensions.AssertIsFalse(method.IsOptimal);
+      ConditionExtensions.AssertIsFalse(method.IsPolimodal);
       
-      IsFalse(method.MoveNext());
+      ConditionExtensions.AssertIsFalse(method.MoveNext());
 
-      IsFalse(method.IsOptimal);
-      IsTrue(method.IsPolimodal);
+      ConditionExtensions.AssertIsFalse(method.IsOptimal);
+      ConditionExtensions.AssertIsTrue(method.IsPolimodal);
     }
   }
 }

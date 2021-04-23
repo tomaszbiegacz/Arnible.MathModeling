@@ -2,7 +2,6 @@
 using System;
 using Arnible.Assertions;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -14,14 +13,14 @@ namespace Arnible.MathModeling.Geometry.Test
     public void HypersphericalCoordinate_IsValidTranslation_ok()
     {
       HypersphericalCoordinate hc = new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.HalfRightAngle));
-      IsTrue(_range.IsValidTranslation(hc, new HypersphericalAngleTranslationVector(Angle.HalfRightAngle)));
+      ConditionExtensions.AssertIsTrue(_range.IsValidTranslation(hc, new HypersphericalAngleTranslationVector(Angle.HalfRightAngle)));
     }
 
     [Fact]
     public void HypersphericalCoordinate_IsValidTranslation_false()
     {
       HypersphericalCoordinate hc = new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.HalfRightAngle));
-      IsFalse(_range.IsValidTranslation(hc, new HypersphericalAngleTranslationVector(Angle.RightAngle)));
+      ConditionExtensions.AssertIsFalse(_range.IsValidTranslation(hc, new HypersphericalAngleTranslationVector(Angle.RightAngle)));
     }
 
     [Fact]

@@ -1,8 +1,8 @@
 ﻿using System;
 using Arnible.Assertions;
+using Arnible.MathModeling.Test;
 using Xunit;
 using static Arnible.MathModeling.Algebra.Polynomials.MetaMath;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 {
@@ -13,9 +13,9 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       IndeterminateExpression v = default;
 
-      IsTrue(v.IsOne);
-      IsFalse(v.HasUnaryModifier);
-      Throws<InvalidOperationException>(() =>
+      ConditionExtensions.AssertIsTrue(v.IsOne);
+      ConditionExtensions.AssertIsFalse(v.HasUnaryModifier);
+      Assert.Throws<InvalidOperationException>(() =>
       {
         var _ = (char) v;
       });
@@ -23,41 +23,41 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       EqualExtensions.AssertEqualTo("1", v.ToString());
       EqualExtensions.AssertEqualTo(v, v.ToPower(2));
 
-      AreExactlyEqual(1, v.GetOperation().Value());
+      EqualExtensions.AssertEqualTo<double>(1, v.GetOperation().Value());
 
-      Throws<InvalidOperationException>(() =>
+      Assert.Throws<InvalidOperationException>(() =>
       {
         var _ = v.DerivativeBy('a');
       });
 
-      AreExactlyEqual(12, v.SimplifyForConstant(12));
+      EqualExtensions.AssertEqualTo<double>(12, v.SimplifyForConstant(12));
     }
 
     [Fact]
     public void Constructor_Identity()
     {
       IndeterminateExpression v = 'v';
-      IsFalse(v.IsOne);
-      IsFalse(v.HasUnaryModifier);
+      ConditionExtensions.AssertIsFalse(v.IsOne);
+      ConditionExtensions.AssertIsFalse(v.HasUnaryModifier);
       EqualExtensions.AssertEqualTo('v', (char)v);
 
       EqualExtensions.AssertEqualTo("v", v.ToString());
       EqualExtensions.AssertEqualTo("v²", v.ToPower(2).ToString());
 
-      AreExactlyEqual(5, v.GetOperation('v').Value(5));
+      EqualExtensions.AssertEqualTo<double>(5, v.GetOperation('v').Value(5));
 
       EqualExtensions.AssertEqualTo(2 * (PolynomialTerm)v, v.ToPower(2).DerivativeBy('v'));
 
-      AreExactlyEqual(23, v.SimplifyForConstant(23));
+      EqualExtensions.AssertEqualTo<double>(23, v.SimplifyForConstant(23));
     }
 
     [Fact]
     public void Constructor_Sin()
     {
       IndeterminateExpression v = IndeterminateExpression.Sin('v');
-      IsFalse(v.IsOne);
-      IsTrue(v.HasUnaryModifier);
-      Throws<InvalidOperationException>(() =>
+      ConditionExtensions.AssertIsFalse(v.IsOne);
+      ConditionExtensions.AssertIsTrue(v.HasUnaryModifier);
+      Assert.Throws<InvalidOperationException>(() =>
       {
         var _ = (char) v;
       });
@@ -65,22 +65,22 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       EqualExtensions.AssertEqualTo("Sin(v)", v.ToString());
       EqualExtensions.AssertEqualTo("Sin²(v)", v.ToPower(2).ToString());
 
-      AreExactlyEqual(0, v.GetOperation('v').Value(0));
-      AreExactlyEqual(1, v.GetOperation('v').Value(Math.PI / 2));
+      EqualExtensions.AssertEqualTo<double>(0, v.GetOperation('v').Value(0));
+      EqualExtensions.AssertEqualTo<double>(1, v.GetOperation('v').Value(Math.PI / 2));
 
       EqualExtensions.AssertEqualTo(2 * Cos(Term.v) * Sin(Term.v), v.ToPower(2).DerivativeBy('v'));
 
-      AreExactlyEqual(0, v.SimplifyForConstant(0));
-      AreExactlyEqual(1, v.SimplifyForConstant(Math.PI / 2));
+      EqualExtensions.AssertEqualTo<double>(0, v.SimplifyForConstant(0));
+      EqualExtensions.AssertEqualTo<double>(1, v.SimplifyForConstant(Math.PI / 2));
     }
 
     [Fact]
     public void Constructor_Cos()
     {
       IndeterminateExpression v = IndeterminateExpression.Cos('v');
-      IsFalse(v.IsOne);
-      IsTrue(v.HasUnaryModifier);
-      Throws<InvalidOperationException>(() =>
+      ConditionExtensions.AssertIsFalse(v.IsOne);
+      ConditionExtensions.AssertIsTrue(v.HasUnaryModifier);
+      Assert.Throws<InvalidOperationException>(() =>
       {
         var _ = (char) v;
       });
@@ -88,13 +88,13 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       EqualExtensions.AssertEqualTo("Cos(v)", v.ToString());
       EqualExtensions.AssertEqualTo("Cos²(v)", v.ToPower(2).ToString());
 
-      AreExactlyEqual(1, v.GetOperation('v').Value(0));
-      AreExactlyEqual(0, v.GetOperation('v').Value(Math.PI / 2));
+      EqualExtensions.AssertEqualTo<double>(1, v.GetOperation('v').Value(0));
+      EqualExtensions.AssertEqualTo<double>(0, v.GetOperation('v').Value(Math.PI / 2));
 
       EqualExtensions.AssertEqualTo(-2 * Cos(Term.v) * Sin(Term.v), v.ToPower(2).DerivativeBy('v'));
 
-      AreExactlyEqual(1, v.SimplifyForConstant(0));
-      AreExactlyEqual(0, v.SimplifyForConstant(Math.PI / 2));
+      EqualExtensions.AssertEqualTo<double>(1, v.SimplifyForConstant(0));
+      EqualExtensions.AssertEqualTo<double>(0, v.SimplifyForConstant(Math.PI / 2));
     }
 
     [Fact]

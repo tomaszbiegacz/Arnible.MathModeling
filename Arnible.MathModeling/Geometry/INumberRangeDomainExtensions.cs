@@ -35,8 +35,8 @@ namespace Arnible.MathModeling.Geometry
 
     public static bool IsValidTranslation(
       this INumberRangeDomain domain,
-      ValueArray<Number> value,
-      ValueArray<Number> delta)
+      ReadOnlyArray<Number> value,
+      ReadOnlyArray<Number> delta)
     {
       if (delta.Length > value.Length)
       {
@@ -44,8 +44,8 @@ namespace Arnible.MathModeling.Geometry
       }
       else
       {
-        return value.GetInternalEnumerable().ZipValue(
-          col2: delta.GetInternalEnumerable(), 
+        return value.AsList().ZipValue(
+          col2: delta.AsList(), 
           merge: (v, t) => Arnible.MathModeling.INumberRangeDomainExtensions.IsValidTranslation(
             domain,
             v ?? throw new ArgumentException(nameof(value)), 

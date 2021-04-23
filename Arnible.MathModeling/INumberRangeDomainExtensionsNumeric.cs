@@ -11,11 +11,11 @@ namespace Arnible.MathModeling.Algebra
 
     public static Number? GetMaximumValidTranslationRatio(
       this INumberRangeDomain domain,
-      in ValueArray<Number> value,
-      in ValueArray<Number> gradient)
+      ReadOnlyArray<Number> value,
+      ReadOnlyArray<Number> gradient)
     {
-      return value.GetInternalEnumerable().ZipDefensive(
-        col2: gradient.GetInternalEnumerable(), 
+      return value.AsList().ZipDefensive(
+        col2: gradient.AsList(), 
         merge: (v, t) => domain.GetMaximumValidTranslationRatio(v, t)
         ).MinOrNone();
     }

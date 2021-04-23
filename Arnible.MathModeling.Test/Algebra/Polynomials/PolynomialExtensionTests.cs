@@ -1,6 +1,5 @@
 ﻿using Arnible.Assertions;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 {

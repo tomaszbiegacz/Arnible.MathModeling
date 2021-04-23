@@ -6,9 +6,9 @@ namespace Arnible.MathModeling
 {
   public static class INumberRangeDomainExtensions
   {
-    public static bool IsValid(this INumberRangeDomain domain, in ValueArray<Number> values)
+    public static bool IsValid(this INumberRangeDomain domain, ReadOnlyArray<Number> values)
     {
-      return values.AllWithDefault(v => domain.IsValid(in v));
+      return values.AsList().AllWithDefault(v => domain.IsValid(in v));
     }
     
     //

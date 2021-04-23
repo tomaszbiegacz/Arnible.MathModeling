@@ -26,7 +26,7 @@ namespace Arnible.Export.Test
 
     public Number NumberValue { get; set; }
     
-    public ValueArray<Number> NumberArray { get; set; }
+    public ReadOnlyArray<Number> NumberArray { get; set; }
     
     //
     // Serialization

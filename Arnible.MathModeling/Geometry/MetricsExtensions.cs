@@ -7,25 +7,25 @@ namespace Arnible.MathModeling.Geometry
 {
   public static class MetricsExtensions
   {
-    private static IEnumerable<Number> AxisDistance(ValueArray<Number> src, ValueArray<Number> dst)
+    private static IEnumerable<Number> AxisDistance(ReadOnlyArray<Number> src, ReadOnlyArray<Number> dst)
     {
       if (src.Length != dst.Length)
       {
         throw new ArgumentException(nameof(dst));
       }
       
-      for (uint i = 0; i < src.Length; ++i)
+      for (ushort i = 0; i < src.Length; ++i)
       {
         yield return Math.Abs((double) (dst[i] - src[i]));
       }
     }
     
-    public static Number ManhattanDistance(this in ValueArray<Number> src, in ValueArray<Number> dst)
+    public static Number ManhattanDistance(this ReadOnlyArray<Number> src, ReadOnlyArray<Number> dst)
     {
       return AxisDistance(src, dst).SumDefensive();
     }
     
-    public static Number ChebyshevDistance(this in ValueArray<Number> src, in ValueArray<Number> dst)
+    public static Number ChebyshevDistance(this ReadOnlyArray<Number> src, ReadOnlyArray<Number> dst)
     {
       return AxisDistance(src, dst).MaxDefensive();
     }

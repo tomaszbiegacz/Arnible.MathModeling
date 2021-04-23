@@ -2,9 +2,8 @@
 using Arnible.Assertions;
 using Arnible.Linq;
 using Arnible.MathModeling.Analysis;
+using Arnible.MathModeling.Test;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
-using static Arnible.MathModeling.xunit.AssertHelpers;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -16,9 +15,9 @@ namespace Arnible.MathModeling.Geometry.Test
       var pc = new PolarCoordinate(3, 1);
       HypersphericalCoordinate hc = pc;
 
-      AreEqual(2u, hc.DimensionsCount);
-      AreExactlyEqual(3, hc.R);
-      AreExactlyEqual(1, hc.Angles.Single());
+      EqualExtensions.AssertEqualTo(2u, hc.DimensionsCount);
+      EqualExtensions.AssertEqualTo<double>(3, (double)hc.R);
+      EqualExtensions.AssertEqualTo<double>(1, (double)hc.Angles.Single());
     }
 
     [Fact]
@@ -26,9 +25,9 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var hc = new HypersphericalCoordinate(3, new HypersphericalAngleVector(1, 0.5));
 
-      AreEqual(3u, hc.DimensionsCount);
-      AreExactlyEqual(3d, hc.R);
-      AreEquals(new Number[] { 1, 0.5 }, hc.Angles);
+      EqualExtensions.AssertEqualTo(3u, hc.DimensionsCount);
+      EqualExtensions.AssertEqualTo<double>(3d, (double)hc.R);
+      hc.Angles.GetInternalEnumerable().AssertSequenceEqual(new Number[] { 1, 0.5 });
     }
 
     [Fact]

@@ -1,9 +1,8 @@
 ﻿using Arnible.Assertions;
 using Arnible.Linq;
 using Arnible.MathModeling.Algebra;
+using Arnible.MathModeling.Test;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
-using static Arnible.MathModeling.xunit.AssertHelpers;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -41,8 +40,8 @@ namespace Arnible.MathModeling.Geometry.Test
 
       var rcView = view.GetRectangularView(1, 3);
       EqualExtensions.AssertEqualTo(view.R, rcView.R);
-      AreExactlyEqual(2, rcView.X);
-      AreExactlyEqual(4, rcView.Y);
+      EqualExtensions.AssertEqualTo<double>(2, (double)rcView.X);
+      EqualExtensions.AssertEqualTo<double>(4, (double)rcView.Y);
     }
 
     [Fact]
@@ -70,7 +69,7 @@ namespace Arnible.MathModeling.Geometry.Test
       NumberVector vector = HypersphericalCoordinateOnAxisView.GetIdentityVector(dimensionsCount);
       EqualExtensions.AssertEqualTo(dimensionsCount, vector.Length);
 
-      IsTrue(vector.AllWithDefault(v => v > 0 && v <= 1));
+      ConditionExtensions.AssertIsTrue(vector.AllWithDefault(v => v > 0 && v <= 1));
       NumberVector.Repeat(HypersphericalCoordinateOnAxisView.GetIdentityVectorRatio(dimensionsCount), dimensionsCount).GetInternalEnumerable().AssertSequenceEqual(vector.GetInternalEnumerable().ToArray());      
       EqualExtensions.AssertEqualTo(1d, vector.Select(v => v * v).SumDefensive());
     }

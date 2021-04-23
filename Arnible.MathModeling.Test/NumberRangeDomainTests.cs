@@ -2,7 +2,6 @@
 using Arnible.Assertions;
 using Arnible.MathModeling.Geometry;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
@@ -21,7 +20,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [InlineData(-1, -0.6, -1)]
     public void Translate(double currentValue, double evaluatedDelta, double expectedValue)
     {
-      AreEqual(expectedValue, _range.Translate(currentValue, evaluatedDelta));
+      EqualExtensions.AssertEqualTo(expectedValue, _range.Translate(currentValue, evaluatedDelta));
     }
 
     [Theory]
@@ -38,13 +37,13 @@ namespace Arnible.MathModeling.Algebra.Test
     [InlineData(0.4, -2.8, 0.5)]
     public void GetValidTranslationRatio(double currentValue, double evaluatedDelta, double expectedRatio)
     {
-      AreEqual(expectedRatio, _range.GetValidTranslationRatio(currentValue, evaluatedDelta));
+      EqualExtensions.AssertEqualTo(expectedRatio, _range.GetValidTranslationRatio(currentValue, evaluatedDelta));
     }
 
     [Fact]
     public void Width()
     {
-      AreEqual(2, _range.Width);
+      EqualExtensions.AssertEqualTo(2, _range.Width);
     }
 
     [Fact]
@@ -52,7 +51,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       NumberVector src = new NumberVector(0.1, 0.2, 0.3);
       NumberVector delta = new NumberVector(0.2, 0.3);
-      IsTrue(_range.IsValidTranslation(src, delta));
+      ConditionExtensions.AssertIsTrue(_range.IsValidTranslation(src, delta));
     }
 
     [Fact]
@@ -60,7 +59,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       NumberVector src = new NumberVector(0.1, 0.2, 0.3);
       NumberVector delta = new NumberVector(0.2, 0.9);
-      IsFalse(_range.IsValidTranslation(src, delta));
+      ConditionExtensions.AssertIsFalse(_range.IsValidTranslation(src, delta));
     }
 
     [Fact]
@@ -68,7 +67,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var src = new Number[] {0.1, 0.2};
       var delta = new Number[] {0.2, 0.3};
-      IsTrue(_range.IsValidTranslation(src, delta));
+      ConditionExtensions.AssertIsTrue(_range.IsValidTranslation(src, delta));
     }
 
     [Fact]
@@ -76,7 +75,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var src = new Number[] {0.1, 0.2};
       var delta = new Number[] {0.2, 0.3, 0.1};
-      IsFalse(_range.IsValidTranslation(src, delta));
+      ConditionExtensions.AssertIsFalse(_range.IsValidTranslation(src, delta));
     }
 
     [Fact]
@@ -84,7 +83,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var src = new Number[] {0.1, 0.9};
       var delta = new Number[] {0.2, 0.3};
-      IsFalse(_range.IsValidTranslation(src, delta));
+      ConditionExtensions.AssertIsFalse(_range.IsValidTranslation(src, delta));
     }
 
     [Fact]
@@ -120,7 +119,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       INumberRangeDomain range = new NumberRangeDomain(0, 1);
       Number ratio = range.GetValidTranslationRatioForLastAngle(radius: 1, currentAngle: Angle.HalfRightAngle, angleDelta: Angle.HalfRightAngle);
-      AreExactlyEqual(1, ratio);
+      EqualExtensions.AssertEqualTo<double>(1, (double)ratio);
     }
 
     [Fact]
@@ -155,7 +154,7 @@ namespace Arnible.MathModeling.Algebra.Test
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {1, 0.2}, 
         gradient: new Number[] {0, 0});
-      IsNull(translation);
+      IsNullExtensions.AssertIsNull(translation);
     }
     
     [Fact]
@@ -191,7 +190,7 @@ namespace Arnible.MathModeling.Algebra.Test
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {1, 0.2, 0.1}, 
         transaction: new NumberVector(0, 0));
-      IsNull(translation);
+      IsNullExtensions.AssertIsNull(translation);
     }
     
     [Fact]
@@ -215,37 +214,37 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void IsValidTranslation_None_Invalid()
     {
-      IsFalse(_range.IsValidTranslation(-2, Sign.None));
+      ConditionExtensions.AssertIsFalse(_range.IsValidTranslation(-2, Sign.None));
     }
     
     [Fact]
     public void IsValidTranslation_None_Valid()
     {
-      IsTrue(_range.IsValidTranslation(-1, Sign.None));
+      ConditionExtensions.AssertIsTrue(_range.IsValidTranslation(-1, Sign.None));
     }
     
     [Fact]
     public void IsValidTranslation_Negative_Invalid()
     {
-      IsFalse(_range.IsValidTranslation(-1, Sign.Negative));
+      ConditionExtensions.AssertIsFalse(_range.IsValidTranslation(-1, Sign.Negative));
     }
     
     [Fact]
     public void IsValidTranslation_Negative_Valid()
     {
-      IsTrue(_range.IsValidTranslation(-0.9, Sign.Negative));
+      ConditionExtensions.AssertIsTrue(_range.IsValidTranslation(-0.9, Sign.Negative));
     }
     
     [Fact]
     public void IsValidTranslation_Positive_Invalid()
     {
-      IsFalse(_range.IsValidTranslation(1, Sign.Positive));
+      ConditionExtensions.AssertIsFalse(_range.IsValidTranslation(1, Sign.Positive));
     }
     
     [Fact]
     public void IsValidTranslation_Positive_Valid()
     {
-      IsTrue(_range.IsValidTranslation(0.9, Sign.Positive));
+      ConditionExtensions.AssertIsTrue(_range.IsValidTranslation(0.9, Sign.Positive));
     }
   }
 }

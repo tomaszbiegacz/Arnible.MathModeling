@@ -1,9 +1,9 @@
-﻿using Arnible.MathModeling.Geometry;
+﻿using Arnible.Assertions;
+using Arnible.MathModeling.Geometry;
 using Arnible.MathModeling.Algebra.Polynomials;
 using Arnible.MathModeling.Analysis;
 using Xunit;
 using static Arnible.MathModeling.Algebra.Polynomials.Term;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Test
 {
@@ -15,13 +15,13 @@ namespace Arnible.MathModeling.Test
     {
       PolynomialTerm termSingle = (PolynomialTerm)term;
       PolynomialDivision firstDerivative = value.DerivativeBy(termSingle);
-      AreEqual<Number>(firstDerivative, actual.First);
+      EqualExtensions.AssertEqualTo<Number>(firstDerivative, actual.First);
     }
 
     [Fact]
     public void Value()
     {
-      AreEqual((x - y).ToPower(2), _error.Value(x, y));
+      EqualExtensions.AssertEqualTo((x - y).ToPower(2), _error.Value(x, y));
     }
 
     [Fact]

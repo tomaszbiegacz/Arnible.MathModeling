@@ -1,6 +1,6 @@
 ﻿using Arnible.Assertions;
+using Arnible.MathModeling.Test;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 {
@@ -14,63 +14,63 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       Polynomial v = default;
 
-      IsTrue(v == 0);
-      IsTrue(v.IsSingleTerm);
-      IsTrue(v.IsConstant);
+      ConditionExtensions.AssertIsTrue(v == 0);
+      ConditionExtensions.AssertIsTrue(v.IsSingleTerm);
+      ConditionExtensions.AssertIsTrue(v.IsConstant);
       EqualExtensions.AssertEqualTo("0", v.ToString());
 
       EqualExtensions.AssertEqualTo(0, v);
-      AreExactlyEqual(0, (double)v);
-      IsFalse(1 == v);
+      EqualExtensions.AssertEqualTo<double>(0, (double)v);
+      ConditionExtensions.AssertIsFalse(1 == v);
 
       EqualExtensions.AssertEqualTo(0, v.DerivativeBy('a'));
 
       EqualExtensions.AssertEqualTo(0, 2 * v);
       EqualExtensions.AssertEqualTo(0, v / 2);
 
-      AreExactlyEqual(0, v.GetOperation().Value());
+      EqualExtensions.AssertEqualTo<double>(0, v.GetOperation().Value());
     }
 
     [Fact]
     public void Constructor_Constant()
     {
       Polynomial v = 2;
-      IsFalse(v == 0);
-      IsTrue(v.IsSingleTerm);
-      IsTrue(v.IsConstant);
+      ConditionExtensions.AssertIsFalse(v == 0);
+      ConditionExtensions.AssertIsTrue(v.IsSingleTerm);
+      ConditionExtensions.AssertIsTrue(v.IsConstant);
       EqualExtensions.AssertEqualTo("2", v.ToString());
 
       EqualExtensions.AssertEqualTo(2, v);
-      AreExactlyEqual(2, (double)v);
-      IsFalse(1 == v);
-      IsFalse(0 == v);
+      EqualExtensions.AssertEqualTo<double>(2, (double)v);
+      ConditionExtensions.AssertIsFalse(1 == v);
+      ConditionExtensions.AssertIsFalse(0 == v);
 
       EqualExtensions.AssertEqualTo(0, v.DerivativeBy('a'));
 
       EqualExtensions.AssertEqualTo(4, 2 * v);
       EqualExtensions.AssertEqualTo(1, v / 2);
 
-      AreExactlyEqual(2, v.GetOperation().Value());
+      EqualExtensions.AssertEqualTo<double>(2, v.GetOperation().Value());
     }
 
     [Fact]
     public void Constructor_Variable()
     {
       Polynomial v = 'a';
-      IsFalse(v == 0);
-      IsTrue(v.IsSingleTerm);
-      IsFalse(v.IsConstant);
+      ConditionExtensions.AssertIsFalse(v == 0);
+      ConditionExtensions.AssertIsTrue(v.IsSingleTerm);
+      ConditionExtensions.AssertIsFalse(v.IsConstant);
       EqualExtensions.AssertEqualTo("a", v.ToString());
 
       EqualExtensions.AssertEqualTo('a', (PolynomialTerm)v);
 
-      AreExactlyEqual(1, (double)v.DerivativeBy('a'));
-      AreExactlyEqual(0, (double)v.DerivativeBy('b'));
+      EqualExtensions.AssertEqualTo<double>(1, (double)v.DerivativeBy('a'));
+      EqualExtensions.AssertEqualTo<double>(0, (double)v.DerivativeBy('b'));
 
       EqualExtensions.AssertEqualTo(2 * Term.a, 2 * v);
       EqualExtensions.AssertEqualTo(0.5 * Term.a, v / 2);
 
-      AreExactlyEqual(5, v.GetOperation('a').Value(5));
+      EqualExtensions.AssertEqualTo<double>(5, v.GetOperation('a').Value(5));
     }
 
     [Fact]
@@ -80,7 +80,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 
       EqualExtensions.AssertEqualTo(_x * _x - 1, poly);
       EqualExtensions.AssertEqualTo(2 * _x, poly.DerivativeBy(_x));
-      AreExactlyEqual(0, (double)poly.DerivativeBy('y'));
+      EqualExtensions.AssertEqualTo<double>(0, (double)poly.DerivativeBy('y'));
     }
 
     [Fact]

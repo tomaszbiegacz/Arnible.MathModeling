@@ -122,7 +122,7 @@ namespace Arnible.MathModeling.Geometry
 
     public NumberVector Coordinates { get; }
 
-    public uint DimensionsCount => Coordinates.Length;
+    public ushort DimensionsCount => Coordinates.Length;
 
     //
     // Operators

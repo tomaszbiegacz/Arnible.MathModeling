@@ -1,5 +1,5 @@
+using Arnible.Assertions;
 using Arnible.MathModeling.Analysis.Optimization;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Optimization.Test
 {
@@ -14,9 +14,9 @@ namespace Arnible.MathModeling.Optimization.Test
       while(!method.IsOptimal)
       {
         i++;
-        IsTrue(method.MoveNext());
-        IsLowerThan(width, method.Width);
-        IsLowerEqualThan(value, method.Y);
+        ConditionExtensions.AssertIsTrue(method.MoveNext());
+        IsGreaterThanExtensions.AssertIsGreaterThan(width, method.Width);
+        IsGreaterThanExtensions.AssertIsGreaterEqualThan(value, method.Y);
 
         width = method.Width;
         value = method.Y;

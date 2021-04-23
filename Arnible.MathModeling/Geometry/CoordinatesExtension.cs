@@ -84,7 +84,7 @@ namespace Arnible.MathModeling.Geometry
     /// <summary>
     /// Calculate derivative ratios by moving along the array vector
     /// </summary>
-    public static ReadOnlyArray<Number> GetDirectionDerivativeRatios(in this ValueArray<Number> direction)
+    public static ReadOnlyArray<Number> GetDirectionDerivativeRatios(in this ReadOnlyArray<Number> direction)
     {
       CartesianCoordinate point = direction;
       return point.ToSpherical().Angles.GetCartesianAxisViewsRatios().ToArray(direction.Length);

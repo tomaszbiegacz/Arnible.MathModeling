@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Arnible.Assertions;
 using Arnible.MathModeling.Geometry;
+using Arnible.MathModeling.Test;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Algebra.Test
 {
@@ -12,39 +12,39 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Constructor_Default()
     {
       NumberVector v = default;
-      IsTrue(v == 0);
-      AreEqual(1u, v.Length);
-      AreExactlyEqual(0, v[0]);
-      AreEqual("0", v.ToString());
+      ConditionExtensions.AssertIsTrue(v == 0);
+      EqualExtensions.AssertEqualTo(1u, v.Length);
+      EqualExtensions.AssertEqualTo<double>(0, (double)v[0]);
+      EqualExtensions.AssertEqualTo("0", v.ToString());
 
       EqualExtensions.AssertEqualTo(default, v);
       EqualExtensions.AssertEqualTo(default, new NumberVector());
       EqualExtensions.AssertEqualTo(default, new NumberVector(new Number[0]));
       EqualExtensions.AssertEqualTo(default, NumberVector.Repeat(value: 0, length: 5));
 
-      AreExactlyEqual(0, v.GetOrDefault(1));
+      EqualExtensions.AssertEqualTo<double>(0, (double)v.GetOrDefault(1));
     }
 
     [Fact]
     public void Constructor_Single()
     {
       NumberVector v = 2;
-      IsFalse(v == 0);
-      IsTrue(v == 2);
-      IsFalse(v != 2);
-      AreExactlyEqual(2, v[0]);
+      ConditionExtensions.AssertIsFalse(v == 0);
+      ConditionExtensions.AssertIsTrue(v == 2);
+      ConditionExtensions.AssertIsFalse(v != 2);
+      EqualExtensions.AssertEqualTo<double>(2, (double)v[0]);
       EqualExtensions.AssertEqualTo(1u, v.Length);
       EqualExtensions.AssertEqualTo("2", v.ToString());
 
-      AreExactlyEqual(2, v.GetOrDefault(0));
-      AreExactlyEqual(0, v.GetOrDefault(1));
+      EqualExtensions.AssertEqualTo<double>(2, (double)v.GetOrDefault(0));
+      EqualExtensions.AssertEqualTo<double>(0, (double)v.GetOrDefault(1));
     }
 
     [Fact]
     public void Constructor_Explicit()
     {
       NumberVector v = new NumberVector(2, 3, 4);
-      IsFalse(v == 0);
+      ConditionExtensions.AssertIsFalse(v == 0);
       v.GetInternalEnumerable().AssertSequenceEqual(new Number[] { 2, 3, 4 });
       EqualExtensions.AssertEqualTo(3u, v.Length);
       EqualExtensions.AssertEqualTo("[2 3 4]", v.ToString());
@@ -63,13 +63,13 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void NotEqual_Values()
     {
-      IsFalse(new NumberVector(1, 2) == new NumberVector(1, 3));
+      ConditionExtensions.AssertIsFalse(new NumberVector(1, 2) == new NumberVector(1, 3));
     }
 
     [Fact]
     public void NotEqual_Dimensions()
     {
-      IsFalse(default == new NumberVector(1));
+      ConditionExtensions.AssertIsFalse(default == new NumberVector(1));
     }
 
     [Fact]
@@ -186,14 +186,14 @@ namespace Arnible.MathModeling.Algebra.Test
     public void ToArray_SameSize()
     {
       var v = new NumberVector(1, 2, 3);
-      SequenceEqualExtensions.AssertSequenceEqual(v.GetInternalEnumerable().ToValueArray(3).GetInternalEnumerable(), new Number[] { 1d, 2, 3 });
+      v.GetInternalEnumerable().ToValueArray(3).GetInternalEnumerable().AssertSequenceEqual(new Number[] { 1d, 2, 3 });
     }
 
     [Fact]
     public void ToArray_GreaterSize()
     {
       var v = new NumberVector(1, 2, 3);
-      SequenceEqualExtensions.AssertSequenceEqual(v.GetInternalEnumerable().ToValueArray(4).GetInternalEnumerable(), new Number[] { 1d, 2, 3, 0 });
+      v.GetInternalEnumerable().ToValueArray(4).GetInternalEnumerable().AssertSequenceEqual(new Number[] { 1d, 2, 3, 0 });
     }
   }
 }

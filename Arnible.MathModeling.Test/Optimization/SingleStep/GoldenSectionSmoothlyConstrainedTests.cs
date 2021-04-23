@@ -1,12 +1,11 @@
 using System;
+using Arnible.Assertions;
 using Arnible.MathModeling.Analysis.Optimization;
 using Arnible.MathModeling.Analysis.Optimization.SingleStep;
 using Arnible.MathModeling.Optimization.Test;
-using Arnible.MathModeling.xunit;
 using Arnible.Xunit;
 using Xunit;
 using Xunit.Abstractions;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Optimization.SingleStep.Test
 {
@@ -33,7 +32,7 @@ namespace Arnible.MathModeling.Optimization.SingleStep.Test
       var b = f.ValueWithDerivative(3);
 
       Number actual = optimizer.Optimize(f, in a, b.X);
-      AreEqual(1, actual);
+      EqualExtensions.AssertEqualTo(1, actual);
     }
     
     [Fact]
@@ -100,8 +99,8 @@ namespace Arnible.MathModeling.Optimization.SingleStep.Test
       var a = f.ValueWithDerivative(-1.1 * Math.PI);
       var b = f.ValueWithDerivative(2 * Math.PI);
       
-      IsLowerThan(0, a.First);
-      IsGreaterThan(0, b.First);
+      IsGreaterThanExtensions.AssertIsGreaterThan(0, a.First);
+      IsLowerThanExtensions.AssertIsLowerThan(0, b.First);
       
       double actual = (double)optimizer.Optimize(f, in a, b.X);
       Assert.Equal(-0.5 * Math.PI, actual, precision: 1);

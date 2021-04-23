@@ -1,5 +1,5 @@
-﻿using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
+﻿using Arnible.Assertions;
+using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
@@ -8,21 +8,12 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Basic()
     {
-      AreEqual<Number>(default, 0);
-      AreEqual<Number>(2, 2);
-      AreEqual<Number>(-2, -2);
+      EqualExtensions.AssertEqualTo<Number>(default, 0);
+      EqualExtensions.AssertEqualTo<Number>(2, 2);
+      EqualExtensions.AssertEqualTo<Number>(-2, -2);
 
-      AreNotEqual<Number>(2, 0);
-      AreNotEqual<Number>(0, -2);
-    }
-    
-    [Fact]
-    public void Basic_Array()
-    {
-      AreEqual<ValueArray<Number>>(new Number[] { 2 }, new Number[] { 2.0 });
-      
-      AreNotEqual<ValueArray<Number>>(new Number[] { 2 }, new Number[] { 2.1 });
-      AreNotEqual<ValueArray<Number>>(new Number[] { 2 }, new Number[] { 2, 3 });
+      ConditionExtensions.AssertIsFalse(2 == 0);
+      ConditionExtensions.AssertIsFalse(0 == -2);
     }
 
     [Theory]
@@ -32,14 +23,14 @@ namespace Arnible.MathModeling.Test
     [InlineData(0.8660254037844386, 0.86602540378443871)]
     public void Equal_Rounding(double first, double second)
     {
-      AreExactlyNotEqual(first, second);
-      AreEqual<Number>(first, second);
+      ConditionExtensions.AssertIsFalse(first.Equals(second));
+      EqualExtensions.AssertEqualTo<Number>(first, second);
     }
     
     [Fact]
     public void Rounding_Array()
     {
-      AreEqual<ValueArray<Number>>(new Number[] { 0 }, new Number[] { 8.65956056235496E-17 });
+      EqualExtensions.AssertEqualTo<ValueArray<Number>>(new Number[] { 0 }, new Number[] { 8.65956056235496E-17 });
     }
 
     [Theory]
@@ -49,8 +40,8 @@ namespace Arnible.MathModeling.Test
       Number nf = first;
       Number ns = second;
 
-      IsTrue(first < second);
-      IsFalse(nf < ns);
+      ConditionExtensions.AssertIsTrue(first < second);
+      ConditionExtensions.AssertIsFalse(nf < ns);
     }
 
     [Theory]
@@ -60,8 +51,8 @@ namespace Arnible.MathModeling.Test
       Number nf = first;
       Number ns = second;
 
-      IsTrue(first < second);
-      IsTrue(nf < ns);
+      ConditionExtensions.AssertIsTrue(first < second);
+      ConditionExtensions.AssertIsTrue(nf < ns);
     }
 
     [Theory]
@@ -71,8 +62,8 @@ namespace Arnible.MathModeling.Test
       Number nf = first;
       Number ns = second;
 
-      IsFalse(first < second);
-      IsFalse(nf < ns);
+      ConditionExtensions.AssertIsFalse(first < second);
+      ConditionExtensions.AssertIsFalse(nf < ns);
     }
 
     [Theory]
@@ -82,8 +73,8 @@ namespace Arnible.MathModeling.Test
       Number nf = first;
       Number ns = second;
 
-      IsFalse(first <= second);
-      IsTrue(nf <= ns);
+      ConditionExtensions.AssertIsFalse(first <= second);
+      ConditionExtensions.AssertIsTrue(nf <= ns);
     }
 
     [Theory]
@@ -93,8 +84,8 @@ namespace Arnible.MathModeling.Test
       Number nf = first;
       Number ns = second;
 
-      IsTrue(first <= second);
-      IsTrue(nf <= ns);
+      ConditionExtensions.AssertIsTrue(first <= second);
+      ConditionExtensions.AssertIsTrue(nf <= ns);
     }
 
     [Theory]
@@ -104,8 +95,8 @@ namespace Arnible.MathModeling.Test
       Number nf = first;
       Number ns = second;
 
-      IsFalse(first <= second);
-      IsFalse(nf <= ns);
+      ConditionExtensions.AssertIsFalse(first <= second);
+      ConditionExtensions.AssertIsFalse(nf <= ns);
     }
 
     [Theory]
@@ -115,8 +106,8 @@ namespace Arnible.MathModeling.Test
       Number nf = first;
       Number ns = second;
 
-      IsTrue(first > second);
-      IsFalse(nf > ns);
+      ConditionExtensions.AssertIsTrue(first > second);
+      ConditionExtensions.AssertIsFalse(nf > ns);
     }
 
     [Theory]
@@ -126,8 +117,8 @@ namespace Arnible.MathModeling.Test
       Number nf = first;
       Number ns = second;
 
-      IsTrue(first > second);
-      IsTrue(nf > ns);
+      ConditionExtensions.AssertIsTrue(first > second);
+      ConditionExtensions.AssertIsTrue(nf > ns);
     }
 
     [Theory]
@@ -137,8 +128,8 @@ namespace Arnible.MathModeling.Test
       Number nf = first;
       Number ns = second;
 
-      IsFalse(first > second);
-      IsFalse(nf > ns);
+      ConditionExtensions.AssertIsFalse(first > second);
+      ConditionExtensions.AssertIsFalse(nf > ns);
     }
 
     [Theory]
@@ -148,8 +139,8 @@ namespace Arnible.MathModeling.Test
       Number nf = first;
       Number ns = second;
 
-      IsFalse(first >= second);
-      IsTrue(nf >= ns);
+      ConditionExtensions.AssertIsFalse(first >= second);
+      ConditionExtensions.AssertIsTrue(nf >= ns);
     }
 
     [Theory]
@@ -159,8 +150,8 @@ namespace Arnible.MathModeling.Test
       Number nf = first;
       Number ns = second;
 
-      IsTrue(first >= second);
-      IsTrue(nf >= ns);
+      ConditionExtensions.AssertIsTrue(first >= second);
+      ConditionExtensions.AssertIsTrue(nf >= ns);
     }
 
     [Theory]
@@ -170,32 +161,32 @@ namespace Arnible.MathModeling.Test
       Number nf = first;
       Number ns = second;
 
-      IsFalse(first >= second);
-      IsFalse(nf >= ns);
+      ConditionExtensions.AssertIsFalse(first >= second);
+      ConditionExtensions.AssertIsFalse(nf >= ns);
     }
 
     [Fact]
     public void IntegralSigned()
     {
       Number v = -1;
-      IsTrue(v == -1);
-      IsFalse(v == 0);
+      ConditionExtensions.AssertIsTrue(v == -1);
+      ConditionExtensions.AssertIsFalse(v == 0);
     }
 
     [Fact]
     public void IntegralUnsigned()
     {
       Number v = 1;
-      IsTrue(v == 1U);
-      IsFalse(v == 0U);
+      ConditionExtensions.AssertIsTrue(v == 1U);
+      ConditionExtensions.AssertIsFalse(v == 0U);
     }
 
     [Fact]
     public void IntegralLong()
     {
       Number v = 1;
-      IsTrue(v == 1L);
-      IsFalse(v == 0L);
+      ConditionExtensions.AssertIsTrue(v == 1L);
+      ConditionExtensions.AssertIsFalse(v == 0L);
     }
   }
 }
