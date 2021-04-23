@@ -2,9 +2,9 @@ using System;
 
 namespace Arnible.Assertions
 {
-  public static class IsLowerThanExtensions
+  public static class IsLessThanExtensions
   {
-    public static void AssertIsLowerThan<T>(this T currentValue, T baseValue) where T: IComparable<T>
+    public static void AssertIsLessThan<T>(this T currentValue, T baseValue) where T: IComparable<T>
     {
       if(baseValue.CompareTo(currentValue) <= 0)
       {
@@ -12,7 +12,7 @@ namespace Arnible.Assertions
       }
     }
     
-    public static void AssertIsLowerEqualThan<T>(this T currentValue, T baseValue) where T: IComparable<T>
+    public static void AssertIsLessEqualThan<T>(this T currentValue, T baseValue) where T: IComparable<T>
     {
       if(baseValue.CompareTo(currentValue) < 0)
       {

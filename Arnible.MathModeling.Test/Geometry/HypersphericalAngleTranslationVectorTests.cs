@@ -11,13 +11,13 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       HypersphericalAngleTranslationVector v = default;
       ConditionExtensions.AssertIsTrue(v == 0);
-      EqualExtensions.AssertEqualTo(1u, v.Length);
-      EqualExtensions.AssertEqualTo<double>(0, (double)v[0]);
-      EqualExtensions.AssertEqualTo("0", v.ToString());
+      IsEqualToExtensions.AssertIsEqualTo(1u, v.Length);
+      IsEqualToExtensions.AssertIsEqualTo<double>(0, (double)v[0]);
+      IsEqualToExtensions.AssertIsEqualTo("0", v.ToString());
 
-      EqualExtensions.AssertEqualTo(default, v);
-      EqualExtensions.AssertEqualTo(default, new HypersphericalAngleTranslationVector());
-      EqualExtensions.AssertEqualTo(default, new HypersphericalAngleTranslationVector(new Number[0]));
+      IsEqualToExtensions.AssertIsEqualTo(default, v);
+      IsEqualToExtensions.AssertIsEqualTo(default, new HypersphericalAngleTranslationVector());
+      IsEqualToExtensions.AssertIsEqualTo(default, new HypersphericalAngleTranslationVector(new Number[0]));
     }
 
     [Fact]
@@ -27,9 +27,9 @@ namespace Arnible.MathModeling.Geometry.Test
       ConditionExtensions.AssertIsFalse(v == 0);
       ConditionExtensions.AssertIsTrue(v == 2);
       ConditionExtensions.AssertIsFalse(v != 2);
-      EqualExtensions.AssertEqualTo<double>(2, (double)v[0]);
-      EqualExtensions.AssertEqualTo(1u, v.Length);
-      EqualExtensions.AssertEqualTo("2", v.ToString());
+      IsEqualToExtensions.AssertIsEqualTo<double>(2, (double)v[0]);
+      IsEqualToExtensions.AssertIsEqualTo(1u, v.Length);
+      IsEqualToExtensions.AssertIsEqualTo("2", v.ToString());
     }
 
     [Fact]
@@ -37,8 +37,8 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       HypersphericalAngleTranslationVector v = new HypersphericalAngleTranslationVector(2, 1, -1);
       ConditionExtensions.AssertIsFalse(v == 0);
-      EqualExtensions.AssertEqualTo(3u, v.Length);
-      EqualExtensions.AssertEqualTo("[2 1 -1]", v.ToString());
+      IsEqualToExtensions.AssertIsEqualTo(3u, v.Length);
+      IsEqualToExtensions.AssertIsEqualTo("[2 1 -1]", v.ToString());
     }
 
     [Fact]
@@ -46,7 +46,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var t = new HypersphericalAngleTranslationVector(Angle.HalfCycle, 0, -1 * Angle.HalfRightAngle);
       var v = new HypersphericalAngleVector(Angle.RightAngle, 1, Angle.HalfRightAngle);
-      EqualExtensions.AssertEqualTo(new HypersphericalAngleVector(-1 * Angle.RightAngle, 1, 0), t.Translate(v));
+      IsEqualToExtensions.AssertIsEqualTo(new HypersphericalAngleVector(-1 * Angle.RightAngle, 1, 0), t.Translate(v));
     }
 
     [Fact]
@@ -54,7 +54,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var t = new HypersphericalAngleTranslationVector(Angle.HalfCycle);
       var v = new HypersphericalAngleVector(Angle.RightAngle, 1, Angle.HalfRightAngle);
-      EqualExtensions.AssertEqualTo(new HypersphericalAngleVector(-1 * Angle.RightAngle, 1, Angle.HalfRightAngle), t.Translate(v));
+      IsEqualToExtensions.AssertIsEqualTo(new HypersphericalAngleVector(-1 * Angle.RightAngle, 1, Angle.HalfRightAngle), t.Translate(v));
     }
 
     [Fact]
@@ -62,7 +62,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var t = new HypersphericalAngleTranslationVector(Angle.HalfCycle, 0, -1 * Angle.HalfRightAngle);
       var v = new HypersphericalAngleVector(Angle.RightAngle, 1);
-      EqualExtensions.AssertEqualTo(new HypersphericalAngleVector(-1 * Angle.RightAngle, 1, -1 * Angle.HalfRightAngle), t.Translate(v));
+      IsEqualToExtensions.AssertIsEqualTo(new HypersphericalAngleVector(-1 * Angle.RightAngle, 1, -1 * Angle.HalfRightAngle), t.Translate(v));
     }
   }
 }

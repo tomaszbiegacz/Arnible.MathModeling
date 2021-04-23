@@ -8,9 +8,9 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Basic()
     {
-      EqualExtensions.AssertEqualTo<Number>(default, 0);
-      EqualExtensions.AssertEqualTo<Number>(2, 2);
-      EqualExtensions.AssertEqualTo<Number>(-2, -2);
+      IsEqualToExtensions.AssertIsEqualTo<Number>(default, 0);
+      IsEqualToExtensions.AssertIsEqualTo<Number>(2, 2);
+      IsEqualToExtensions.AssertIsEqualTo<Number>(-2, -2);
 
       ConditionExtensions.AssertIsFalse(2 == 0);
       ConditionExtensions.AssertIsFalse(0 == -2);
@@ -24,13 +24,13 @@ namespace Arnible.MathModeling.Test
     public void Equal_Rounding(double first, double second)
     {
       ConditionExtensions.AssertIsFalse(first.Equals(second));
-      EqualExtensions.AssertEqualTo<Number>(first, second);
+      IsEqualToExtensions.AssertIsEqualTo<Number>(first, second);
     }
     
     [Fact]
     public void Rounding_Array()
     {
-      EqualExtensions.AssertEqualTo<ValueArray<Number>>(new Number[] { 0 }, new Number[] { 8.65956056235496E-17 });
+      IsEqualToExtensions.AssertIsEqualTo<ValueArray<Number>>(new Number[] { 0 }, new Number[] { 8.65956056235496E-17 });
     }
 
     [Theory]

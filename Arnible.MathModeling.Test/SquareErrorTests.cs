@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Test
     [InlineData(-1, 1, 4)]
     public void Value(double x, double y, double expected)
     {
-      EqualExtensions.AssertEqualTo(expected, _error.Value(x, y));
+      IsEqualToExtensions.AssertIsEqualTo(expected, _error.Value(x, y));
     }
 
     [Theory]
@@ -26,8 +26,8 @@ namespace Arnible.MathModeling.Test
     public void DerivativeByX(double x, double y, double first, double second)
     {
       var derivative = _error.DerivativeByX(new RectangularCoordinate(x, y));
-      EqualExtensions.AssertEqualTo(first, derivative.First);
-      EqualExtensions.AssertEqualTo(second, derivative.Second);
+      IsEqualToExtensions.AssertIsEqualTo(first, derivative.First);
+      IsEqualToExtensions.AssertIsEqualTo(second, derivative.Second);
     }
 
     [Theory]
@@ -37,8 +37,8 @@ namespace Arnible.MathModeling.Test
     public void DerivativeByY(double x, double y, double first, double second)
     {
       var derivative = _error.DerivativeByY(new RectangularCoordinate(x, y));
-      EqualExtensions.AssertEqualTo(first, derivative.First);
-      EqualExtensions.AssertEqualTo(second, derivative.Second);
+      IsEqualToExtensions.AssertIsEqualTo(first, derivative.First);
+      IsEqualToExtensions.AssertIsEqualTo(second, derivative.Second);
     }    
 
     [Theory]
@@ -49,8 +49,8 @@ namespace Arnible.MathModeling.Test
     {
       PolarCoordinate p = new RectangularCoordinate(x, y).ToPolar();
       var derivative = _error.DerivativeByR(p);
-      EqualExtensions.AssertEqualTo(first, derivative.First);
-      EqualExtensions.AssertEqualTo(second, derivative.Second);
+      IsEqualToExtensions.AssertIsEqualTo(first, derivative.First);
+      IsEqualToExtensions.AssertIsEqualTo(second, derivative.Second);
     }
 
     [Theory]
@@ -61,8 +61,8 @@ namespace Arnible.MathModeling.Test
     {
       PolarCoordinate p = new RectangularCoordinate(x, y).ToPolar();
       var derivative = _error.DerivativeByΦ(p);
-      EqualExtensions.AssertEqualTo(first, derivative.First);
-      EqualExtensions.AssertEqualTo(second, derivative.Second);
+      IsEqualToExtensions.AssertIsEqualTo(first, derivative.First);
+      IsEqualToExtensions.AssertIsEqualTo(second, derivative.Second);
     }
   }
 }

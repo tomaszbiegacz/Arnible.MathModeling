@@ -40,13 +40,13 @@ namespace Arnible.Export.RecordPerTextRow.Test
       }
 
       string[] lines = result.Split('\n');
-      lines.Length.AssertEqualTo(2);
-      lines[0].Split('\t').AssertSequenceEqual(new[]
+      lines.Length.AssertIsEqualTo(2);
+      lines[0].Split('\t').AssertSequenceEqualsTo(new[]
       {
         "ByteValue", "SbyteValue", "UShortValue", "ShortValue", "UIntValue", "IntValue", "ULongValue", "LongValue", 
         "StringValue", "DoubleValue", "NumberValue", "NumberArray_0", "NumberArray_1"
       });
-      lines[1].AssertEqualTo("1\t-1\t2\t-2\t3\t-3\t4\t-4\tvalue\t1.1\t1.2\t1.3\t1.4");
+      lines[1].AssertIsEqualTo("1\t-1\t2\t-2\t3\t-3\t4\t-4\tvalue\t1.1\t1.2\t1.3\t1.4");
     }
     
     [Fact]
@@ -70,9 +70,9 @@ namespace Arnible.Export.RecordPerTextRow.Test
       }
 
       string[] lines = result.Split('\n');
-      lines.Length.AssertEqualTo(2);
-      lines[0].Split('\t').AssertSequenceEqual(new[] { "RootValue", "Record_Value", "Nullable_NotPresentValue", "Nullable_NotPresentOther", "OtherValue" });
-      lines[1].AssertEqualTo("1\t2\t\t\t3");
+      lines.Length.AssertIsEqualTo(2);
+      lines[0].Split('\t').AssertSequenceEqualsTo(new[] { "RootValue", "Record_Value", "Nullable_NotPresentValue", "Nullable_NotPresentOther", "OtherValue" });
+      lines[1].AssertIsEqualTo("1\t2\t\t\t3");
     }
     
     [Fact]
@@ -101,9 +101,9 @@ namespace Arnible.Export.RecordPerTextRow.Test
       }
       
       string[] lines = result.Split('\n');
-      lines.Length.AssertEqualTo(2);
-      lines[0].Split('\t').AssertSequenceEqual(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther" });
-      lines[1].AssertEqualTo("2\t3\t1\t5");
+      lines.Length.AssertIsEqualTo(2);
+      lines[0].Split('\t').AssertSequenceEqualsTo(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther" });
+      lines[1].AssertIsEqualTo("2\t3\t1\t5");
     }
   }
 }

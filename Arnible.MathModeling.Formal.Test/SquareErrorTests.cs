@@ -15,13 +15,13 @@ namespace Arnible.MathModeling.Test
     {
       PolynomialTerm termSingle = (PolynomialTerm)term;
       PolynomialDivision firstDerivative = value.DerivativeBy(termSingle);
-      EqualExtensions.AssertEqualTo<Number>(firstDerivative, actual.First);
+      IsEqualToExtensions.AssertIsEqualTo<Number>(firstDerivative, actual.First);
     }
 
     [Fact]
     public void Value()
     {
-      EqualExtensions.AssertEqualTo((x - y).ToPower(2), _error.Value(x, y));
+      IsEqualToExtensions.AssertIsEqualTo((x - y).ToPower(2), _error.Value(x, y));
     }
 
     [Fact]

@@ -32,7 +32,7 @@ namespace Arnible.MathModeling.Optimization.SingleStep.Test
       var b = f.ValueWithDerivative(3);
 
       Number actual = optimizer.Optimize(f, in a, b.X);
-      EqualExtensions.AssertEqualTo(1, actual);
+      IsEqualToExtensions.AssertIsEqualTo(1, actual);
     }
     
     [Fact]
@@ -100,7 +100,7 @@ namespace Arnible.MathModeling.Optimization.SingleStep.Test
       var b = f.ValueWithDerivative(2 * Math.PI);
       
       IsGreaterThanExtensions.AssertIsGreaterThan(0, a.First);
-      IsLowerThanExtensions.AssertIsLowerThan(0, b.First);
+      IsLessThanExtensions.AssertIsLessThan(0, b.First);
       
       double actual = (double)optimizer.Optimize(f, in a, b.X);
       Assert.Equal(-0.5 * Math.PI, actual, precision: 1);

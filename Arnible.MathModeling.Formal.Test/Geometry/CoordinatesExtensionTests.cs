@@ -19,7 +19,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var hc = new HypersphericalCoordinate(r, new HypersphericalAngleVector(φ));
       var actual = expression.ToSpherical(cc, hc);
 
-      EqualExtensions.AssertEqualTo(expected, actual);
+      IsEqualToExtensions.AssertIsEqualTo(expected, actual);
     }
   }
 }

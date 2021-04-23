@@ -1,12 +1,13 @@
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Arnible.Assertions;
 
-namespace Arnible.MathModeling
+namespace Arnible.Assertions
 {
-  public static class SequenceEqualExtensions
+  public static class SequenceEqualsToExtensions
   {
-    public static void AssertSequenceEqual(this IEnumerable<Number> actual, IReadOnlyList<double> expected)
+    public static void AssertSequenceEqualsTo<T>(this IEnumerable<T> actual, IReadOnlyList<T> expected)
+      where T: IEquatable<T>
     {
       var actualMaterialized = actual.ToArray();
       if(actualMaterialized.Length != expected.Count)
@@ -14,7 +15,7 @@ namespace Arnible.MathModeling
         throw new AssertException(
           $"Expected length {expected.Count} got {actualMaterialized.Length}", 
           AssertException.ToString(actualMaterialized)
-        );
+          );
       }
       for(ushort i=0; i<expected.Count; ++i)
       {
@@ -23,7 +24,7 @@ namespace Arnible.MathModeling
           throw new AssertException(
             $"At position {i} expected {expected[i]} got {actualMaterialized[i]}", 
             AssertException.ToString(actualMaterialized)
-          );
+            );
         }
       }
     }

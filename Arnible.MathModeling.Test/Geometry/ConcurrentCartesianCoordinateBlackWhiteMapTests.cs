@@ -13,8 +13,8 @@ namespace Arnible.MathModeling.Geometry.Test
         rightTopMapCorner: new Number[] {2, 3, 4},
         precision: 1);
       
-      EqualExtensions.AssertEqualTo(3, map.DimensionsCount);
-      EqualExtensions.AssertEqualTo(0, map.MarkedPointsCount);
+      IsEqualToExtensions.AssertIsEqualTo(3, map.DimensionsCount);
+      IsEqualToExtensions.AssertIsEqualTo(0, map.MarkedPointsCount);
       ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] {0, -1, -2}));
       ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 0, 0, 0 }));
       ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
@@ -22,7 +22,7 @@ namespace Arnible.MathModeling.Geometry.Test
       
       ConditionExtensions.AssertIsTrue(map.MarkPoint(new Number[] { 0, 0, 0 }));
       
-      EqualExtensions.AssertEqualTo(1, map.MarkedPointsCount);
+      IsEqualToExtensions.AssertIsEqualTo(1, map.MarkedPointsCount);
       ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] {0, -1, -2}));
       ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] { 0, 0, 0 }));
       ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] { 1, 1, 1 }));
@@ -38,8 +38,8 @@ namespace Arnible.MathModeling.Geometry.Test
         precision: 2);
       // middle: new Number[] {1, 1, 1}
       
-      EqualExtensions.AssertEqualTo(3, map.DimensionsCount);
-      EqualExtensions.AssertEqualTo(0, map.MarkedPointsCount);
+      IsEqualToExtensions.AssertIsEqualTo(3, map.DimensionsCount);
+      IsEqualToExtensions.AssertIsEqualTo(0, map.MarkedPointsCount);
       ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] {0, -1, -2}));
       ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 0, 0, 0 }));
       ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
@@ -47,7 +47,7 @@ namespace Arnible.MathModeling.Geometry.Test
       
       ConditionExtensions.AssertIsTrue(map.MarkPoint(new Number[] { 0, 0, 0 }));
       
-      EqualExtensions.AssertEqualTo(1, map.MarkedPointsCount);
+      IsEqualToExtensions.AssertIsEqualTo(1, map.MarkedPointsCount);
       ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] {0, -1, -2}));
       ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] { 0, 0, 0 }));
       ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
@@ -62,8 +62,8 @@ namespace Arnible.MathModeling.Geometry.Test
         rightTopMapCorner: new Number[] {2, 3, 4},
         precision: 3);
 
-      EqualExtensions.AssertEqualTo(3, map.DimensionsCount);
-      EqualExtensions.AssertEqualTo(0, map.MarkedPointsCount);
+      IsEqualToExtensions.AssertIsEqualTo(3, map.DimensionsCount);
+      IsEqualToExtensions.AssertIsEqualTo(0, map.MarkedPointsCount);
       ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] {0, -1, -2}));
       ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 0, 0, 0 }));
       ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
@@ -71,7 +71,7 @@ namespace Arnible.MathModeling.Geometry.Test
       
       ConditionExtensions.AssertIsTrue(map.MarkPoint(new Number[] { 0, 0, 0 }));
       
-      EqualExtensions.AssertEqualTo(1, map.MarkedPointsCount);
+      IsEqualToExtensions.AssertIsEqualTo(1, map.MarkedPointsCount);
       ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] {0, -1, -2}));
       ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] { 0, 0, 0 }));
       ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] { 0.1, 0.1, 0.1 }));

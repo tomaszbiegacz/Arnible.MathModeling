@@ -15,22 +15,22 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 
       ConditionExtensions.AssertIsTrue(v == 0);
       ConditionExtensions.AssertIsTrue(v.IsConstant);
-      EqualExtensions.AssertEqualTo("0", v.ToString());
+      IsEqualToExtensions.AssertIsEqualTo("0", v.ToString());
 
-      EqualExtensions.AssertEqualTo(0u, v.PowerSum);
-      EqualExtensions.AssertEqualTo(0, v.GreatestPowerIndeterminate.Variable);
-      EqualExtensions.AssertEqualTo(0u, v.GreatestPowerIndeterminate.Power);
+      IsEqualToExtensions.AssertIsEqualTo(0u, v.PowerSum);
+      IsEqualToExtensions.AssertIsEqualTo(0, v.GreatestPowerIndeterminate.Variable);
+      IsEqualToExtensions.AssertIsEqualTo(0u, v.GreatestPowerIndeterminate.Power);
 
-      EqualExtensions.AssertEqualTo(0, v);
-      EqualExtensions.AssertEqualTo(0, (double)v);
+      IsEqualToExtensions.AssertIsEqualTo(0, v);
+      IsEqualToExtensions.AssertIsEqualTo(0, (double)v);
       ConditionExtensions.AssertIsFalse(1 == v);
 
       IsEmptyExtensions.AssertIsEmpty(v.DerivativeBy('a'));
 
-      EqualExtensions.AssertEqualTo(0, 2 * v);
-      EqualExtensions.AssertEqualTo(0, v / 2);
+      IsEqualToExtensions.AssertIsEqualTo(0, 2 * v);
+      IsEqualToExtensions.AssertIsEqualTo(0, v / 2);
 
-      EqualExtensions.AssertEqualTo<double>(0, v.GetOperation().Value());
+      IsEqualToExtensions.AssertIsEqualTo<double>(0, v.GetOperation().Value());
     }
 
     [Fact]
@@ -40,23 +40,23 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 
       ConditionExtensions.AssertIsFalse(v == 0);
       ConditionExtensions.AssertIsTrue(v.IsConstant);
-      EqualExtensions.AssertEqualTo("2", v.ToString());
+      IsEqualToExtensions.AssertIsEqualTo("2", v.ToString());
 
-      EqualExtensions.AssertEqualTo(0u, v.PowerSum);
-      EqualExtensions.AssertEqualTo(0, v.GreatestPowerIndeterminate.Variable);
-      EqualExtensions.AssertEqualTo(0u, v.GreatestPowerIndeterminate.Power);
+      IsEqualToExtensions.AssertIsEqualTo(0u, v.PowerSum);
+      IsEqualToExtensions.AssertIsEqualTo(0, v.GreatestPowerIndeterminate.Variable);
+      IsEqualToExtensions.AssertIsEqualTo(0u, v.GreatestPowerIndeterminate.Power);
 
-      EqualExtensions.AssertEqualTo(2, v);
-      EqualExtensions.AssertEqualTo<double>(2, (double)v);
+      IsEqualToExtensions.AssertIsEqualTo(2, v);
+      IsEqualToExtensions.AssertIsEqualTo<double>(2, (double)v);
       ConditionExtensions.AssertIsFalse(1 == v);
       ConditionExtensions.AssertIsFalse(0 == v);
 
       IsEmptyExtensions.AssertIsEmpty(v.DerivativeBy('a'));
 
-      EqualExtensions.AssertEqualTo(4, 2 * v);
-      EqualExtensions.AssertEqualTo(1, v / 2);
+      IsEqualToExtensions.AssertIsEqualTo(4, 2 * v);
+      IsEqualToExtensions.AssertIsEqualTo(1, v / 2);
 
-      EqualExtensions.AssertEqualTo<double>(2, v.GetOperation().Value());
+      IsEqualToExtensions.AssertIsEqualTo<double>(2, v.GetOperation().Value());
     }
 
     [Fact]
@@ -66,20 +66,20 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       ConditionExtensions.AssertIsFalse(v == 0);
       ConditionExtensions.AssertIsFalse(v.IsConstant);
 
-      EqualExtensions.AssertEqualTo(1u, v.PowerSum);
-      EqualExtensions.AssertEqualTo('a', v.GreatestPowerIndeterminate.Variable);
-      EqualExtensions.AssertEqualTo(1u, v.GreatestPowerIndeterminate.Power);
+      IsEqualToExtensions.AssertIsEqualTo(1u, v.PowerSum);
+      IsEqualToExtensions.AssertIsEqualTo('a', v.GreatestPowerIndeterminate.Variable);
+      IsEqualToExtensions.AssertIsEqualTo(1u, v.GreatestPowerIndeterminate.Power);
 
-      EqualExtensions.AssertEqualTo("a", v.ToString());
+      IsEqualToExtensions.AssertIsEqualTo("a", v.ToString());
       ConditionExtensions.AssertIsFalse('b' == v);
 
-      EqualExtensions.AssertEqualTo(1, v.DerivativeBy('a').Single());
+      IsEqualToExtensions.AssertIsEqualTo(1, v.DerivativeBy('a').Single());
       IsEmptyExtensions.AssertIsEmpty(v.DerivativeBy('b'));
 
-      EqualExtensions.AssertEqualTo(2 * Term.a, 2 * v);
-      EqualExtensions.AssertEqualTo(0.5 * Term.a, v / 2);
+      IsEqualToExtensions.AssertIsEqualTo(2 * Term.a, 2 * v);
+      IsEqualToExtensions.AssertIsEqualTo(0.5 * Term.a, v / 2);
 
-      EqualExtensions.AssertEqualTo<double>(5, v.GetOperation('a').Value(5));
+      IsEqualToExtensions.AssertIsEqualTo<double>(5, v.GetOperation('a').Value(5));
     }
 
     [Fact]
@@ -89,31 +89,31 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 
       ConditionExtensions.AssertIsFalse(v == 0);
       ConditionExtensions.AssertIsFalse(v.IsConstant);
-      EqualExtensions.AssertEqualTo("2.1ac³", v.ToString());
+      IsEqualToExtensions.AssertIsEqualTo("2.1ac³", v.ToString());
 
-      EqualExtensions.AssertEqualTo(4u, v.PowerSum);
-      EqualExtensions.AssertEqualTo('c', v.GreatestPowerIndeterminate.Variable);
-      EqualExtensions.AssertEqualTo(3u, v.GreatestPowerIndeterminate.Power);      
+      IsEqualToExtensions.AssertIsEqualTo(4u, v.PowerSum);
+      IsEqualToExtensions.AssertIsEqualTo('c', v.GreatestPowerIndeterminate.Variable);
+      IsEqualToExtensions.AssertIsEqualTo(3u, v.GreatestPowerIndeterminate.Power);      
 
-      EqualExtensions.AssertEqualTo(2.1 * Term.c.ToPower(3), v.DerivativeBy('a').Single());
+      IsEqualToExtensions.AssertIsEqualTo(2.1 * Term.c.ToPower(3), v.DerivativeBy('a').Single());
       IsEmptyExtensions.AssertIsEmpty(v.DerivativeBy('b'));
-      EqualExtensions.AssertEqualTo(6.3 * Term.c.ToPower(2) * Term.a.ToPower(1), v.DerivativeBy('c').Single());
+      IsEqualToExtensions.AssertIsEqualTo(6.3 * Term.c.ToPower(2) * Term.a.ToPower(1), v.DerivativeBy('c').Single());
 
-      EqualExtensions.AssertEqualTo(6.3 * Term.c.ToPower(2), v.DerivativeBy('a').DerivativeBy('c').Single());
+      IsEqualToExtensions.AssertIsEqualTo(6.3 * Term.c.ToPower(2), v.DerivativeBy('a').DerivativeBy('c').Single());
 
-      EqualExtensions.AssertEqualTo(-4.2 * Term.a * Term.c.ToPower(3), -2 * v);
+      IsEqualToExtensions.AssertIsEqualTo(-4.2 * Term.a * Term.c.ToPower(3), -2 * v);
 
-      EqualExtensions.AssertEqualTo(2.1 * 5 * 8, v.GetOperation('a', 'c').Value(5, 2));
+      IsEqualToExtensions.AssertIsEqualTo(2.1 * 5 * 8, v.GetOperation('a', 'c').Value(5, 2));
     }
 
     [Fact]
     public void Multiply_Inline()
     {
       PolynomialTerm x = 'x';
-      EqualExtensions.AssertEqualTo(4 * Term.x.ToPower(2), 4 * x * x);
-      EqualExtensions.AssertEqualTo("4x²", (4 * x * x).ToString());
+      IsEqualToExtensions.AssertIsEqualTo(4 * Term.x.ToPower(2), 4 * x * x);
+      IsEqualToExtensions.AssertIsEqualTo("4x²", (4 * x * x).ToString());
 
-      EqualExtensions.AssertEqualTo(16, (x * x).GetOperation('x').Value(4));
+      IsEqualToExtensions.AssertIsEqualTo(16, (x * x).GetOperation('x').Value(4));
     }
 
     [Fact]
@@ -121,7 +121,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       PolynomialTerm v1 = 2 * Term.a * Term.c.ToPower(3);
       PolynomialTerm v2 = 3 * Term.a.ToPower(2) * Term.d.ToPower(2);
-      EqualExtensions.AssertEqualTo(6 * Term.a.ToPower(3) * Term.d.ToPower(2) * Term.c.ToPower(3), v1 * v2);
+      IsEqualToExtensions.AssertIsEqualTo(6 * Term.a.ToPower(3) * Term.d.ToPower(2) * Term.c.ToPower(3), v1 * v2);
     }
 
     [Fact]
@@ -141,28 +141,28 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 
       var expected = new PolynomialTerm[] { a * b * c, a * a, b * b, a * b, a, 2 * b, 3 };
       var before   = new PolynomialTerm[] { 1, b, 2, b, a, a * b, a * b * c, a * a, b * b };
-      EqualExtensions.AssertEqualTo(expected, PolynomialTerm.Simplify(before));
+      IsEqualToExtensions.AssertIsEqualTo(expected, PolynomialTerm.Simplify(before));
     }
 
     [Fact]
     public void Power_ByZero()
     {
       PolynomialTerm x = 'x';
-      EqualExtensions.AssertEqualTo(1, x.ToPower(0));
+      IsEqualToExtensions.AssertIsEqualTo(1, x.ToPower(0));
     }
 
     [Fact]
     public void Power_ByOne()
     {
       PolynomialTerm x = 'x';
-      EqualExtensions.AssertEqualTo(x, x.ToPower(1));
+      IsEqualToExtensions.AssertIsEqualTo(x, x.ToPower(1));
     }
 
     [Fact]
     public void Power_ByTwo()
     {
       PolynomialTerm x = 'x';
-      EqualExtensions.AssertEqualTo(x * x, x.ToPower(2));
+      IsEqualToExtensions.AssertIsEqualTo(x * x, x.ToPower(2));
     }
 
     [Fact]
@@ -177,7 +177,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       PolynomialTerm x = 'x';
       ConditionExtensions.AssertIsTrue((2 * x).TryDivide(2, out PolynomialTerm r));
-      EqualExtensions.AssertEqualTo(x, r);
+      IsEqualToExtensions.AssertIsEqualTo(x, r);
     }
 
     [Fact]
@@ -193,7 +193,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       PolynomialTerm x = 'x';
       ConditionExtensions.AssertIsTrue((9 * x).TryDivide(x, out PolynomialTerm r));
-      EqualExtensions.AssertEqualTo(9, r);
+      IsEqualToExtensions.AssertIsEqualTo(9, r);
     }
 
     [Fact]
@@ -209,54 +209,54 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       PolynomialTerm x = 'x';
       PolynomialTerm y = 'y';
       ConditionExtensions.AssertIsTrue((2 * x.ToPower(3) * y.ToPower(2)).TryDivide(0.5 * x, out PolynomialTerm r));
-      EqualExtensions.AssertEqualTo(4 * x.ToPower(2) * y.ToPower(2), r);
+      IsEqualToExtensions.AssertIsEqualTo(4 * x.ToPower(2) * y.ToPower(2), r);
     }
 
     [Fact]
     public void Composition_SinWithZero()
     {
       var sinExpression = MetaMath.Sin(Term.α) + 1;
-      EqualExtensions.AssertEqualTo(1, sinExpression.Composition(Term.α, 0));
+      IsEqualToExtensions.AssertIsEqualTo(1, sinExpression.Composition(Term.α, 0));
     }
 
     [Fact]
     public void Composition_CosWithZero()
     {
       var sinExpression = MetaMath.Cos(Term.α) + 1;
-      EqualExtensions.AssertEqualTo(2, sinExpression.Composition(Term.α, 0));
+      IsEqualToExtensions.AssertIsEqualTo(2, sinExpression.Composition(Term.α, 0));
     }
 
     [Fact]
     public void Composition_SinCosWithZero()
     {
       var sinExpression = MetaMath.Sin(Term.α)* MetaMath.Cos(Term.α) + 1;
-      EqualExtensions.AssertEqualTo(1, sinExpression.Composition(Term.α, 0));
+      IsEqualToExtensions.AssertIsEqualTo(1, sinExpression.Composition(Term.α, 0));
     }
 
     [Fact]
     public void Sin_Variable()
     {
-      EqualExtensions.AssertEqualTo(IndeterminateExpression.Sin('a'), PolynomialTerm.Sin(Term.a));
+      IsEqualToExtensions.AssertIsEqualTo(IndeterminateExpression.Sin('a'), PolynomialTerm.Sin(Term.a));
     }
 
     [Fact]
     public void Sin_Constant()
     {
       PolynomialTerm term = Math.PI / 2;
-      EqualExtensions.AssertEqualTo(1, PolynomialTerm.Sin(term));
+      IsEqualToExtensions.AssertIsEqualTo(1, PolynomialTerm.Sin(term));
     }
 
     [Fact]
     public void Cos_Variable()
     {
-      EqualExtensions.AssertEqualTo(IndeterminateExpression.Cos('a'), PolynomialTerm.Cos(Term.a));
+      IsEqualToExtensions.AssertIsEqualTo(IndeterminateExpression.Cos('a'), PolynomialTerm.Cos(Term.a));
     }
 
     [Fact]
     public void Cos_Constant()
     {
       PolynomialTerm term = 0;
-      EqualExtensions.AssertEqualTo(1, PolynomialTerm.Cos(term));
+      IsEqualToExtensions.AssertIsEqualTo(1, PolynomialTerm.Cos(term));
     }
   }
 }

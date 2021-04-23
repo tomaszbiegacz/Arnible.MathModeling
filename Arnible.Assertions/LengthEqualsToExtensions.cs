@@ -2,9 +2,9 @@ using System;
 
 namespace Arnible.Assertions
 {
-  public static class LengthExtensions
+  public static class LengthEqualsToExtensions
   {
-    public static void AssertLength<T>(in this ReadOnlySpan<T> src, ushort length)
+    public static void AssertLengthEqualsTo<T>(in this ReadOnlySpan<T> src, ushort length)
     {
       if(src.Length != length)
       {

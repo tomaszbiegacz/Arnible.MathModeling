@@ -76,15 +76,15 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Power()
     {
-      EqualExtensions.AssertEqualTo(1, 2d.ToPower(0));
-      EqualExtensions.AssertEqualTo(2, 2d.ToPower(1));
-      EqualExtensions.AssertEqualTo(4, 2d.ToPower(2));
-      EqualExtensions.AssertEqualTo(8, 2d.ToPower(3));
-      EqualExtensions.AssertEqualTo(16, 2d.ToPower(4));
-      EqualExtensions.AssertEqualTo(32, 2d.ToPower(5));
-      EqualExtensions.AssertEqualTo(64, 2d.ToPower(6));
-      EqualExtensions.AssertEqualTo(128, 2d.ToPower(7));
-      EqualExtensions.AssertEqualTo(256, 2d.ToPower(8));
+      IsEqualToExtensions.AssertIsEqualTo(1, 2d.ToPower(0));
+      IsEqualToExtensions.AssertIsEqualTo(2, 2d.ToPower(1));
+      IsEqualToExtensions.AssertIsEqualTo(4, 2d.ToPower(2));
+      IsEqualToExtensions.AssertIsEqualTo(8, 2d.ToPower(3));
+      IsEqualToExtensions.AssertIsEqualTo(16, 2d.ToPower(4));
+      IsEqualToExtensions.AssertIsEqualTo(32, 2d.ToPower(5));
+      IsEqualToExtensions.AssertIsEqualTo(64, 2d.ToPower(6));
+      IsEqualToExtensions.AssertIsEqualTo(128, 2d.ToPower(7));
+      IsEqualToExtensions.AssertIsEqualTo(256, 2d.ToPower(8));
     }
   }
 }

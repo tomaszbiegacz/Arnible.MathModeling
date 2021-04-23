@@ -17,11 +17,11 @@ namespace Arnible.MathModeling.Geometry.Test
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 
       var derivatives = view.DerivativeByR().ToArray();
-      EqualExtensions.AssertEqualTo(cartesianPoint.DimensionsCount, derivatives.Length);
+      IsEqualToExtensions.AssertIsEqualTo(cartesianPoint.DimensionsCount, derivatives.Length);
       for (ushort dimensionPos = 0; dimensionPos < cartesianPoint.DimensionsCount; ++dimensionPos)
       {
         var symbol = (PolynomialDivision)cartesianPoint.Coordinates[dimensionPos];
-        EqualExtensions.AssertEqualTo(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[dimensionPos].First);
+        IsEqualToExtensions.AssertIsEqualTo(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[dimensionPos].First);
       }
     }
 
@@ -35,12 +35,12 @@ namespace Arnible.MathModeling.Geometry.Test
       {
         PolynomialTerm angleTerm = (PolynomialTerm)sphericalPoint.Angles[anglePos];
         var derivatives = view.GetCartesianAxisViewsRatiosDerivativesByAngle(anglesCount: 4, anglePos: anglePos).ToArray();
-        EqualExtensions.AssertEqualTo(derivatives.Length, view.DimensionsCount);
+        IsEqualToExtensions.AssertIsEqualTo(derivatives.Length, view.DimensionsCount);
         for (ushort coordinatePos = 0; coordinatePos < view.Coordinates.Length; ++coordinatePos)
         {
           PolynomialDivision coordinate = (PolynomialDivision)view.Coordinates[coordinatePos];
           PolynomialDivision expected = coordinate.DerivativeBy(angleTerm);
-          derivatives[coordinatePos].First.AssertEqualTo(expected);
+          derivatives[coordinatePos].First.AssertIsEqualTo(expected);
         }
       }
     }
@@ -54,15 +54,15 @@ namespace Arnible.MathModeling.Geometry.Test
       HypersphericalCoordinateOnRectangularViewWithDerivative recView = view
         .GetAngleDerivativesView(anglesCount: 3, anglePos: 2)
         .GetRectangularViewDerivativeByAngle(axisA: 0, axisB: 2);
-      EqualExtensions.AssertEqualTo(r, recView.R);
+      IsEqualToExtensions.AssertIsEqualTo(r, recView.R);
 
-      EqualExtensions.AssertEqualTo(Cos(γ) * Cos(β) * Cos(α), recView.RatioX);
-      EqualExtensions.AssertEqualTo(r * Cos(γ) * Cos(β) * Cos(α), recView.X);
-      EqualExtensions.AssertEqualTo(-1 * r * Sin(γ) * Cos(β) * Cos(α), recView.DerivativeForX.First);
+      IsEqualToExtensions.AssertIsEqualTo(Cos(γ) * Cos(β) * Cos(α), recView.RatioX);
+      IsEqualToExtensions.AssertIsEqualTo(r * Cos(γ) * Cos(β) * Cos(α), recView.X);
+      IsEqualToExtensions.AssertIsEqualTo(-1 * r * Sin(γ) * Cos(β) * Cos(α), recView.DerivativeForX.First);
 
-      EqualExtensions.AssertEqualTo(Sin(β) * Cos(γ), recView.RatioY);
-      EqualExtensions.AssertEqualTo(r * Sin(β) * Cos(γ), recView.Y);
-      EqualExtensions.AssertEqualTo(-1 * r * Sin(γ) * Sin(β), recView.DerivativeForY.First);
+      IsEqualToExtensions.AssertIsEqualTo(Sin(β) * Cos(γ), recView.RatioY);
+      IsEqualToExtensions.AssertIsEqualTo(r * Sin(β) * Cos(γ), recView.Y);
+      IsEqualToExtensions.AssertIsEqualTo(-1 * r * Sin(γ) * Sin(β), recView.DerivativeForY.First);
     }
 
     [Fact]
@@ -74,15 +74,15 @@ namespace Arnible.MathModeling.Geometry.Test
       HypersphericalCoordinateOnRectangularViewWithDerivative recView = view
         .GetAngleDerivativesView(anglesCount: 8, anglePos: 2)
         .GetRectangularViewDerivativeByAngle(axisA: 0, axisB: 8);
-      EqualExtensions.AssertEqualTo(r, recView.R);
+      IsEqualToExtensions.AssertIsEqualTo(r, recView.R);
 
-      EqualExtensions.AssertEqualTo(Cos(γ) * Cos(β) * Cos(α), recView.RatioX);
-      EqualExtensions.AssertEqualTo(r * Cos(γ) * Cos(β) * Cos(α), recView.X);
-      EqualExtensions.AssertEqualTo(-1 * r * Sin(γ) * Cos(β) * Cos(α), recView.DerivativeForX.First);
+      IsEqualToExtensions.AssertIsEqualTo(Cos(γ) * Cos(β) * Cos(α), recView.RatioX);
+      IsEqualToExtensions.AssertIsEqualTo(r * Cos(γ) * Cos(β) * Cos(α), recView.X);
+      IsEqualToExtensions.AssertIsEqualTo(-1 * r * Sin(γ) * Cos(β) * Cos(α), recView.DerivativeForX.First);
 
-      EqualExtensions.AssertEqualTo(0, recView.RatioY);
-      EqualExtensions.AssertEqualTo(0, recView.Y);
-      EqualExtensions.AssertEqualTo(0, recView.DerivativeForY.First);
+      IsEqualToExtensions.AssertIsEqualTo(0, recView.RatioY);
+      IsEqualToExtensions.AssertIsEqualTo(0, recView.Y);
+      IsEqualToExtensions.AssertIsEqualTo(0, recView.DerivativeForY.First);
     }
   }
 }

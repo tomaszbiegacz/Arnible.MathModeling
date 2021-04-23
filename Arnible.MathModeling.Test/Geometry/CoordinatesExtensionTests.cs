@@ -43,9 +43,9 @@ namespace Arnible.MathModeling.Geometry.Test
       var pc = rc.ToPolar();
       HypersphericalCoordinate sc = cc.ToSphericalView();
 
-      EqualExtensions.AssertEqualTo(2u, sc.DimensionsCount);
-      EqualExtensions.AssertEqualTo<double>((double)pc.R, (double)sc.R);
-      EqualExtensions.AssertEqualTo<double>((double)pc.Φ, (double)sc.Angles.Single());
+      IsEqualToExtensions.AssertIsEqualTo(2u, sc.DimensionsCount);
+      IsEqualToExtensions.AssertIsEqualTo<double>((double)pc.R, (double)sc.R);
+      IsEqualToExtensions.AssertIsEqualTo<double>((double)pc.Φ, (double)sc.Angles.Single());
     }
 
     [Theory]
@@ -57,8 +57,8 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = cartesian.ToVector();
 
       HypersphericalCoordinate sc = cc.ToSphericalView();
-      EqualExtensions.AssertEqualTo(r, sc.R);
-      sc.Angles.GetInternalEnumerable().AssertSequenceEqual(angles);
+      IsEqualToExtensions.AssertIsEqualTo(r, sc.R);
+      sc.Angles.GetInternalEnumerable().AssertSequenceEqualsTo(angles);
     }
 
     [Theory]
@@ -73,8 +73,8 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = cartesian.ToVector();
 
       HypersphericalCoordinate sc = cc.ToSpherical();
-      EqualExtensions.AssertEqualTo(r, sc.R);
-      sc.Angles.GetInternalEnumerable().AssertSequenceEqual(angles);
+      IsEqualToExtensions.AssertIsEqualTo(r, sc.R);
+      sc.Angles.GetInternalEnumerable().AssertSequenceEqualsTo(angles);
     }
 
     [Theory]
@@ -86,7 +86,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
 
       var cc = sc.ToCartesianView();
-      cc.Coordinates.GetInternalEnumerable().AssertSequenceEqual(cartesian);
+      cc.Coordinates.GetInternalEnumerable().AssertSequenceEqualsTo(cartesian);
     }
 
     [Theory]
@@ -98,8 +98,8 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = cartesian.ToVector();
       var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
 
-      EqualExtensions.AssertEqualTo(cc.AddDimension(), sc.AddDimension().ToCartesianView());
-      EqualExtensions.AssertEqualTo(sc.AddDimension(), cc.AddDimension().ToSphericalView());
+      IsEqualToExtensions.AssertIsEqualTo(cc.AddDimension(), sc.AddDimension().ToCartesianView());
+      IsEqualToExtensions.AssertIsEqualTo(sc.AddDimension(), cc.AddDimension().ToSphericalView());
     }
   }
 }

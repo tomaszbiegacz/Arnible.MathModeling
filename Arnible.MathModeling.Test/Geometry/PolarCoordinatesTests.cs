@@ -15,8 +15,8 @@ namespace Arnible.MathModeling.Geometry.Test
       RectangularCoordinate rc = default;
       PolarCoordinate pc = rc.ToPolar();
 
-      EqualExtensions.AssertEqualTo<double>(0, (double)pc.R);
-      EqualExtensions.AssertEqualTo<double>(0, (double)pc.Φ);
+      IsEqualToExtensions.AssertIsEqualTo<double>(0, (double)pc.R);
+      IsEqualToExtensions.AssertIsEqualTo<double>(0, (double)pc.Φ);
     }
 
     [Theory]
@@ -27,8 +27,8 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       PolarCoordinate pc = (new RectangularCoordinate(x, y)).ToPolar();
 
-      EqualExtensions.AssertEqualTo(r, pc.R);
-      EqualExtensions.AssertEqualTo(φ, pc.Φ);
+      IsEqualToExtensions.AssertIsEqualTo(r, pc.R);
+      IsEqualToExtensions.AssertIsEqualTo(φ, pc.Φ);
     }
   }
 }

@@ -2,9 +2,9 @@ using System;
 
 namespace Arnible.Assertions
 {
-  public static class EqualExtensions
+  public static class IsEqualToExtensions
   {
-    public static void AssertEqualTo<T>(this T actual, T expected) where T: IEquatable<T>
+    public static void AssertIsEqualTo<T>(this T actual, T expected) where T: IEquatable<T>
     {
       if(!expected.Equals(actual))
       {
@@ -12,7 +12,7 @@ namespace Arnible.Assertions
       }
     }
     
-    public static void AssertEqualTo<T>(this T? actual, T expected) where T: struct, IEquatable<T>
+    public static void AssertIsEqualTo<T>(this T? actual, T expected) where T: struct, IEquatable<T>
     {
        if(!actual.HasValue)
        {
@@ -24,7 +24,7 @@ namespace Arnible.Assertions
        }
     }
     
-    public static void AssertEqualTo(this ushort actual, int expected)
+    public static void AssertIsEqualTo(this ushort actual, int expected)
     {
       if(actual != expected)
       {

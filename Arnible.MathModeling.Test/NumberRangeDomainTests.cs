@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Algebra.Test
     [InlineData(-1, -0.6, -1)]
     public void Translate(double currentValue, double evaluatedDelta, double expectedValue)
     {
-      EqualExtensions.AssertEqualTo(expectedValue, _range.Translate(currentValue, evaluatedDelta));
+      IsEqualToExtensions.AssertIsEqualTo(expectedValue, _range.Translate(currentValue, evaluatedDelta));
     }
 
     [Theory]
@@ -37,13 +37,13 @@ namespace Arnible.MathModeling.Algebra.Test
     [InlineData(0.4, -2.8, 0.5)]
     public void GetValidTranslationRatio(double currentValue, double evaluatedDelta, double expectedRatio)
     {
-      EqualExtensions.AssertEqualTo(expectedRatio, _range.GetValidTranslationRatio(currentValue, evaluatedDelta));
+      IsEqualToExtensions.AssertIsEqualTo(expectedRatio, _range.GetValidTranslationRatio(currentValue, evaluatedDelta));
     }
 
     [Fact]
     public void Width()
     {
-      EqualExtensions.AssertEqualTo(2, _range.Width);
+      IsEqualToExtensions.AssertIsEqualTo(2, _range.Width);
     }
 
     [Fact]
@@ -90,28 +90,28 @@ namespace Arnible.MathModeling.Algebra.Test
     public void GetValidTranslation_Passthrough()
     {
       var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.2), new NumberVector(0.2, 0.3));
-      EqualExtensions.AssertEqualTo(new NumberVector(0.2, 0.3), translation);
+      IsEqualToExtensions.AssertIsEqualTo(new NumberVector(0.2, 0.3), translation);
     }
 
     [Fact]
     public void GetValidTranslation_PassthroughDefault()
     {
       var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.2), default);
-      EqualExtensions.AssertEqualTo(default, translation);
+      IsEqualToExtensions.AssertIsEqualTo(default, translation);
     }
 
     [Fact]
     public void GetValidTranslation_Default()
     {
       var translation = _range.GetValidTranslation(new NumberVector(1, 0.2), new NumberVector(0.2, 0.3));
-      EqualExtensions.AssertEqualTo(0, translation);
+      IsEqualToExtensions.AssertIsEqualTo(0, translation);
     }
 
     [Fact]
     public void GetValidTranslation_Half()
     {
       var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.8), new NumberVector(0.2, 0.4));
-      EqualExtensions.AssertEqualTo(new NumberVector(0.1, 0.2), translation);
+      IsEqualToExtensions.AssertIsEqualTo(new NumberVector(0.1, 0.2), translation);
     }
 
     [Fact]
@@ -119,7 +119,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       INumberRangeDomain range = new NumberRangeDomain(0, 1);
       Number ratio = range.GetValidTranslationRatioForLastAngle(radius: 1, currentAngle: Angle.HalfRightAngle, angleDelta: Angle.HalfRightAngle);
-      EqualExtensions.AssertEqualTo<double>(1, (double)ratio);
+      IsEqualToExtensions.AssertIsEqualTo<double>(1, (double)ratio);
     }
 
     [Fact]
@@ -127,7 +127,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       INumberRangeDomain range = new NumberRangeDomain(0, 1);
       Number ratio = range.GetValidTranslationRatioForLastAngle(radius: 1, currentAngle: Angle.HalfRightAngle, angleDelta: Angle.RightAngle);
-      EqualExtensions.AssertEqualTo(0.5, ratio);
+      IsEqualToExtensions.AssertIsEqualTo(0.5, ratio);
     }
 
     [Fact]
@@ -136,7 +136,7 @@ namespace Arnible.MathModeling.Algebra.Test
       double r = 2 * Math.Sqrt(3) / 3;
       INumberRangeDomain range = new NumberRangeDomain(0, 1);
       Number ratio = range.GetValidTranslationRatioForLastAngle(radius: r, currentAngle: Angle.HalfRightAngle, angleDelta: Angle.RightAngle);
-      EqualExtensions.AssertEqualTo(1d / 6, ratio);
+      IsEqualToExtensions.AssertIsEqualTo(1d / 6, ratio);
     }
     
     [Fact]
@@ -145,7 +145,7 @@ namespace Arnible.MathModeling.Algebra.Test
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {1, 0.2}, 
         gradient: new Number[] {0.2, 0.3});
-      EqualExtensions.AssertEqualTo(translation, 0);
+      IsEqualToExtensions.AssertIsEqualTo(translation, 0);
     }
     
     [Fact]
@@ -163,7 +163,7 @@ namespace Arnible.MathModeling.Algebra.Test
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {0, 0}, 
         gradient: new Number[] {0.2, 0.1});
-      EqualExtensions.AssertEqualTo(translation, 5);
+      IsEqualToExtensions.AssertIsEqualTo(translation, 5);
     }
     
     [Fact]
@@ -172,7 +172,7 @@ namespace Arnible.MathModeling.Algebra.Test
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] { 0.2, 0 }, 
         gradient: new Number[] { -2.4, 0.1 });
-      EqualExtensions.AssertEqualTo(translation, 0.5);
+      IsEqualToExtensions.AssertIsEqualTo(translation, 0.5);
     }
     
     [Fact]
@@ -181,7 +181,7 @@ namespace Arnible.MathModeling.Algebra.Test
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {1, 0.2, 0.1}, 
         transaction: new NumberVector(0.2, 0.3));
-      EqualExtensions.AssertEqualTo(translation, 0);
+      IsEqualToExtensions.AssertIsEqualTo(translation, 0);
     }
     
     [Fact]
@@ -199,7 +199,7 @@ namespace Arnible.MathModeling.Algebra.Test
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {0, 0, 0.1}, 
         transaction: new NumberVector(0.2, 0.1));
-      EqualExtensions.AssertEqualTo(translation, 5);
+      IsEqualToExtensions.AssertIsEqualTo(translation, 5);
     }
     
     [Fact]
@@ -208,7 +208,7 @@ namespace Arnible.MathModeling.Algebra.Test
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] { 0.2, 0, 0.1 }, 
         transaction: new NumberVector( -2.4, 0.1 ));
-      EqualExtensions.AssertEqualTo(translation, 0.5);
+      IsEqualToExtensions.AssertIsEqualTo(translation, 0.5);
     }
 
     [Fact]
