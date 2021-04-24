@@ -28,5 +28,11 @@ namespace Arnible.Assertions
         }
       }
     }
+    
+    public static void AssertSequenceEqualsTo<T>(this ReadOnlyArray<T> actual, IReadOnlyList<T> expected)
+      where T: IEquatable<T>
+    {
+      actual.AsList().AssertSequenceEqualsTo(expected);
+    }
   }
 }

@@ -14,4 +14,8 @@
       <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Arnible\Arnible.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System;
 using Arnible.Assertions;
-using Arnible.MathModeling.Test;
+using Arnible.MathModeling.Analysis;
 using Xunit;
 using static Arnible.MathModeling.Algebra.Polynomials.MetaMath;
 

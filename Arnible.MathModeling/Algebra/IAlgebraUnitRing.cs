@@ -1,11 +1,7 @@
-using System;
-
 namespace Arnible.MathModeling.Algebra
 {
-  public interface IAlgebraUnitRing<T> : IAlgebraGroup<T>
+  public interface IAlgebraUnitRing<T> : IAlgebraRing<T>
   {
     ref readonly T One { get; }
-    
-    T Multiply(in T factor);
   }
 }

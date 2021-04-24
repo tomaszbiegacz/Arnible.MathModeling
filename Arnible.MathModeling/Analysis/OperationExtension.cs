@@ -1,4 +1,4 @@
-﻿namespace Arnible.MathModeling
+﻿namespace Arnible.MathModeling.Analysis
 {
   public static class OperationExtension
   {

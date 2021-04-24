@@ -186,14 +186,14 @@ namespace Arnible.MathModeling.Algebra.Test
     public void ToArray_SameSize()
     {
       var v = new NumberVector(1, 2, 3);
-      v.GetInternalEnumerable().ToValueArray(3).GetInternalEnumerable().AssertSequenceEqualsTo(new Number[] { 1d, 2, 3 });
+      v.ToArray(3).AssertSequenceEqualsTo(new Number[] { 1d, 2, 3 });
     }
 
     [Fact]
     public void ToArray_GreaterSize()
     {
       var v = new NumberVector(1, 2, 3);
-      v.GetInternalEnumerable().ToValueArray(4).GetInternalEnumerable().AssertSequenceEqualsTo(new Number[] { 1d, 2, 3, 0 });
+      v.ToArray(4).AssertSequenceEqualsTo(new Number[] { 1d, 2, 3, 0 });
     }
   }
 }

@@ -1,4 +1,4 @@
-﻿namespace Arnible.MathModeling
+﻿namespace Arnible.MathModeling.Analysis
 {
   public interface IUnaryOperation<TNumber> where TNumber : struct
   {

@@ -8,7 +8,7 @@ namespace Arnible.Linq
     /// <summary>
     /// Finds record with minimum value
     /// </summary>
-    public static T WithMinimum<T, TResult>(this IEnumerable<T> x, in Func<T, TResult> func)
+    public static T WithMinimum<T, TResult>(this IEnumerable<T> x, Func<T, TResult> func)
       where T: notnull
       where TResult: notnull, IComparable<TResult>
     {

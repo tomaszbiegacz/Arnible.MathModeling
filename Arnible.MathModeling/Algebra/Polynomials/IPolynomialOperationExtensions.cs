@@ -1,4 +1,6 @@
-﻿namespace Arnible.MathModeling.Algebra.Polynomials
+﻿using Arnible.MathModeling.Analysis;
+
+namespace Arnible.MathModeling.Algebra.Polynomials
 {
   public static class IPolynomialOperationExtensions
   {

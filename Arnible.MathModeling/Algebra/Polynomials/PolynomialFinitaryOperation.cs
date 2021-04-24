@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Arnible.Assertions;
+using Arnible.MathModeling.Analysis;
 
 namespace Arnible.MathModeling.Algebra.Polynomials
 {

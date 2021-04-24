@@ -12,8 +12,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Arnible.MathModeling\Algebra\AddExtensions.cs">
+      <Link>Algebra\AddExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\Algebra\IAlgebraGroup.cs">
       <Link>Algebra\IAlgebraGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\IAlgebraRing.cs">
+      <Link>Algebra\IAlgebraRing.cs</Link>
     </Compile>
     <Compile Include="..\Arnible.MathModeling\Algebra\IAlgebraUnitRing.cs">
       <Link>Algebra\IAlgebraUnitRing.cs</Link>
@@ -66,6 +72,15 @@
     <Compile Include="..\Arnible.MathModeling\Algebra\SumWithDefaultExtensions.cs">
       <Link>Algebra\SumWithDefaultExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Arnible.MathModeling\Analysis\IBinaryOperation.cs">
+      <Link>Analysis\IBinaryOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Analysis\IFinitaryOperation.cs">
+      <Link>Analysis\IFinitaryOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Analysis\OperationExtension.cs">
+      <Link>Analysis\OperationExtension.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\INumberRangeDomain.cs" Link="INumberRangeDomain.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\NumberVector.cs" Link="Geometry\NumberVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Sign.cs" Link="Sign.cs" />
@@ -96,15 +111,9 @@
     <Compile Include="..\Arnible.MathModeling\Geometry\PolarCoordinate.cs" Link="Geometry\PolarCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\QuantifiedDirectionsFactory.cs" Link="Geometry\QuantifiedDirectionsFactory.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\RectangularCoordinate.cs" Link="Geometry\RectangularCoordinate.cs" />
-    <Compile Include="..\Arnible.MathModeling\IBinaryOperation.cs" Link="IBinaryOperation.cs" />
-    <Compile Include="..\Arnible.MathModeling\IFinitaryOperation.cs" Link="IFinitaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\MetaMath.cs" Link="MetaMath.cs" />
     <Compile Include="..\Arnible.MathModeling\NumericFormatting.cs" Link="NumericFormatting.cs" />
-    <Compile Include="..\Arnible.MathModeling\OperationExtension.cs" Link="OperationExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\ValueArray.cs" Link="ValueArray.cs" />
-    <Compile Include="..\Arnible.MathModeling\ValueArrayExtensions.cs">
-      <Link>ValueArrayExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\Arnible.MathModeling\Analysis\ValueWithDerivative1.cs">
       <Link>Analysis\ValueWithDerivative1.cs</Link>
     </Compile>

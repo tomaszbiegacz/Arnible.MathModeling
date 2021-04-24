@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Arnible.Assertions;
-using Arnible.MathModeling.Test;
+using Arnible.MathModeling.Analysis;
 using Xunit;
 
 namespace Arnible.MathModeling.Algebra.Polynomials.Tests

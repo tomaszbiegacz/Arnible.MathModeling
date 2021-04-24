@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Arnible.MathModeling
+namespace Arnible.MathModeling.Analysis
 {
   public interface IFinitaryOperation<TNumber> where TNumber: struct
   {

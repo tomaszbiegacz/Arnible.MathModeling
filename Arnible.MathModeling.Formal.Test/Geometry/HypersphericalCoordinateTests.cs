@@ -1,4 +1,5 @@
 ﻿using Arnible.MathModeling.Algebra.Polynomials;
+using Arnible.MathModeling.Analysis;
 using System;
 using Arnible.Assertions;
 using Xunit;

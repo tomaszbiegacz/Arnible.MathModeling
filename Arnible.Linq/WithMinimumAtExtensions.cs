@@ -8,7 +8,7 @@ namespace Arnible.Linq
     /// <summary>
     /// Finds position of record with minimum value
     /// </summary>
-    public static ushort WithMinimumAt<T, TResult>(this IReadOnlyList<T> x, in Func<T, TResult> func)
+    public static ushort WithMinimumAt<T, TResult>(this IReadOnlyList<T> x, Func<T, TResult> func)
       where TResult: IComparable<TResult>
     {
       if(x.Count == 0)
