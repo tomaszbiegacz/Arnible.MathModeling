@@ -8,9 +8,7 @@ namespace Arnible.MathModeling.Geometry
   [Serializable]
   public readonly struct HypersphericalAngleTranslationVector :
     IEquatable<HypersphericalAngleTranslationVector>,
-    IEquatable<Number>,
-    IValueArray<Number>,
-    IValueObject
+    IEquatable<Number>
   {
     private readonly HypersphericalAngleVector _change;
 
@@ -35,9 +33,9 @@ namespace Arnible.MathModeling.Geometry
     // Properties
     //
 
-    public uint Length => _change.Length;
+    public ushort Length => _change.Length;
 
-    public ref readonly Number this[uint pos] => ref _change[pos];
+    public ref readonly Number this[ushort pos] => ref _change[pos];
 
     //
     // Equatable
@@ -53,7 +51,7 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(Number other) => Equals(in other);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is HypersphericalAngleTranslationVector v)
       {
@@ -91,8 +89,6 @@ namespace Arnible.MathModeling.Geometry
     internal IEnumerable<Number> GetInternalEnumerable() => _change.GetInternalEnumerable();
 
     public IEnumerator<Number> GetEnumerator() => _change.GetEnumerator();
-
-    IEnumerator IEnumerable.GetEnumerator() => _change.GetEnumerator();
 
     /*
      * Operations

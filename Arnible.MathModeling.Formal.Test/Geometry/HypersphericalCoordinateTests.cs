@@ -1,8 +1,8 @@
-﻿using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Polynomials;
+﻿using Arnible.MathModeling.Algebra.Polynomials;
+using Arnible.MathModeling.Analysis;
 using System;
+using Arnible.Assertions;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -27,7 +27,7 @@ namespace Arnible.MathModeling.Geometry.Test
         PolynomialDivision current = GetSum(i);
         if (last != default)
         {
-          AreEqual(last, current.Composition(Number.GreekTerm(i - 2), 0));
+          IsEqualToExtensions.AssertIsEqualTo(last, current.Composition(Number.GreekTerm(i - 2), 0));
         }
         last = current;
       }
@@ -44,7 +44,7 @@ namespace Arnible.MathModeling.Geometry.Test
       double sqrt3 = Math.Sqrt(3);
       double polynomialResult = polynomial.GetOperation(Term.x, Term.y, Term.z).Value(sqrt2, sqrt2, 2 * sqrt3);
       double sphericalResult = sphericalPolynomial.GetOperation(Term.r, Term.θ, Term.φ).Value(4, Math.PI / 4, Math.PI / 3);
-      AreEqual(polynomialResult, sphericalResult);
+      IsEqualToExtensions.AssertIsEqualTo(polynomialResult, sphericalResult);
     }
 
     [Fact]

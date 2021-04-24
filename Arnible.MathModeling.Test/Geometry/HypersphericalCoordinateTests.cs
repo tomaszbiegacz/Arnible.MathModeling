@@ -1,8 +1,9 @@
 ﻿using System;
+using Arnible.Assertions;
 using Arnible.Linq;
+using Arnible.MathModeling.Analysis;
+using Arnible.MathModeling.Test;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
-using static Arnible.MathModeling.xunit.AssertHelpers;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -14,9 +15,9 @@ namespace Arnible.MathModeling.Geometry.Test
       var pc = new PolarCoordinate(3, 1);
       HypersphericalCoordinate hc = pc;
 
-      AreEqual(2u, hc.DimensionsCount);
-      AreExactlyEqual(3, hc.R);
-      AreExactlyEqual(1, hc.Angles.Single());
+      hc.DimensionsCount.AssertIsEqualTo(2);
+      hc.R.AssertIsEqualTo(3);
+      hc.Angles.Single().AssertIsEqualTo(1);
     }
 
     [Fact]
@@ -24,17 +25,17 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var hc = new HypersphericalCoordinate(3, new HypersphericalAngleVector(1, 0.5));
 
-      AreEqual(3u, hc.DimensionsCount);
-      AreExactlyEqual(3d, hc.R);
-      AreEquals(new Number[] { 1, 0.5 }, hc.Angles);
+      hc.DimensionsCount.AssertIsEqualTo(3);
+      hc.R.AssertIsEqualTo(3d);
+      hc.Angles.GetInternalEnumerable().AssertSequenceEqualsTo(new Number[] { 1, 0.5 });
     }
 
     [Fact]
     public void Equal_Rounding_Angle()
     {
-      AreEqual(
-        new HypersphericalCoordinate(2, new HypersphericalAngleVector(1, 0)),
-        new HypersphericalCoordinate(2, new HypersphericalAngleVector(1, 8.65956056235496E-17)));
+      new HypersphericalCoordinate(2, new HypersphericalAngleVector(1, 8.65956056235496E-17)).AssertIsEqualTo(
+        new HypersphericalCoordinate(2, new HypersphericalAngleVector(1, 0))
+        );
     }
 
     [Fact]
@@ -43,32 +44,31 @@ namespace Arnible.MathModeling.Geometry.Test
       var cc = new CartesianCoordinate(1, Math.Sqrt(3));
 
       HypersphericalCoordinate hc = cc.ToSphericalView();
-      AreEqual(2u, hc.DimensionsCount);
-      AreEqual(2d, hc.R);
+      hc.DimensionsCount.AssertIsEqualTo(2);
+      hc.R.AssertIsEqualTo(2d);
 
       const double φ = Math.PI / 3;                           // x to r
-      AreEqual(φ, hc.Angles.Single());
+      hc.Angles.Single().AssertIsEqualTo(φ);
 
-      var derrivatives = hc.ToCartesianView().DerivativeByR().ToValueArray();
-      AreEqual(2, derrivatives.Length);
-      AreEqual(0.5, derrivatives[0].First);                 // x
-      AreEqual(Math.Sqrt(3) / 2, derrivatives[1].First);    // y
+      var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
+      derrivatives.Length.AssertIsEqualTo(2);
+      derrivatives[0].First.AssertIsEqualTo(0.5);                 // x
+      derrivatives[1].First.AssertIsEqualTo(Math.Sqrt(3) / 2);    // y
 
-      AreEqual(cc, hc.ToCartesianView());
+      ((CartesianCoordinate)hc.ToCartesianView()).AssertIsEqualTo(cc);
       VerifyCartesianCoordinateAngle(hc, cc);
     }
 
     private static void VerifyCartesianCoordinateAngle(HypersphericalCoordinate hc, CartesianCoordinate cc)
     {
-      var cartesianCoordinatesAngles = hc.ToCartesianView().CartesianCoordinatesAngles().ToValueArray();
-      AreEqual(cartesianCoordinatesAngles.Length, cc.DimensionsCount);
+      var cartesianCoordinatesAngles = hc.ToCartesianView().CartesianCoordinatesAngles().ToArray();
+      cc.DimensionsCount.AssertIsEqualTo(cartesianCoordinatesAngles.Length);
 
-      for (uint pos = 0; pos < cc.DimensionsCount; ++pos)
+      for (ushort pos = 0; pos < cc.DimensionsCount; ++pos)
       {
         var axisCc = new HypersphericalCoordinate(hc.R, cartesianCoordinatesAngles[pos]).ToCartesianView();
-        AreEqual(hc.R, axisCc.Coordinates[pos]);
-        // ReSharper disable once HeapView.BoxingAllocation
-        AreEqual(1u, axisCc.Coordinates.Count(v => v != 0));
+        axisCc.Coordinates[pos].AssertIsEqualTo(hc.R);
+        axisCc.Coordinates.GetInternalEnumerable().Count(v => v != 0).AssertIsEqualTo(1u);
       }
     }
 
@@ -78,19 +78,19 @@ namespace Arnible.MathModeling.Geometry.Test
       var cc = new CartesianCoordinate(1, Math.Sqrt(2), 2 * Math.Sqrt(3));
 
       HypersphericalCoordinate hc = cc.ToSphericalView();
-      AreEqual(3u, hc.DimensionsCount);
-      AreEqual(cc.VectorLength(), hc.R);
+      hc.DimensionsCount.AssertIsEqualTo(3);
+      hc.R.AssertIsEqualTo(cc.VectorLength());
 
       double φ = (double)hc.Angles[0];    // r to y
       double θ = (double)hc.Angles[1];    // r to xy
 
-      var derrivatives = hc.ToCartesianView().DerivativeByR().ToValueArray();
-      AreEqual(3, derrivatives.Length);
-      AreEqual(Math.Cos(θ) * Math.Cos(φ), derrivatives[0].First);   // x
-      AreEqual(Math.Cos(θ) * Math.Sin(φ), derrivatives[1].First);   // y
-      AreEqual(Math.Sin(θ), derrivatives[2].First);                 // z
+      var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
+      derrivatives.Length.AssertIsEqualTo(3);
+      derrivatives[0].First.AssertIsEqualTo(Math.Cos(θ) * Math.Cos(φ));   // x
+      derrivatives[1].First.AssertIsEqualTo(Math.Cos(θ) * Math.Sin(φ));   // y
+      derrivatives[2].First.AssertIsEqualTo(Math.Sin(θ));                 // z
 
-      AreEqual(cc, hc.ToCartesianView());
+      ((CartesianCoordinate)hc.ToCartesianView()).AssertIsEqualTo(cc);
       VerifyCartesianCoordinateAngle(hc, cc);
     }
 
@@ -103,25 +103,25 @@ namespace Arnible.MathModeling.Geometry.Test
       const double θ = Math.PI / 3;   // xy to r
 
       HypersphericalCoordinate hc = cc.ToSphericalView();
-      AreEqual(3u, hc.DimensionsCount);
-      AreEqual(4d, hc.R);
-      AreEqual(φ, hc.Angles[0]);
-      AreEqual(θ, hc.Angles[1]);
+      hc.DimensionsCount.AssertIsEqualTo(3);
+      hc.R.AssertIsEqualTo(4d);
+      hc.Angles[0].AssertIsEqualTo(φ);
+      hc.Angles[1].AssertIsEqualTo(θ);
 
-      ValueArray<Derivative1Value> derrivatives = hc.ToCartesianView().DerivativeByR().ToValueArray();
-      AreEqual(3, derrivatives.Length);
-      AreEqual(Math.Sqrt(2) / 4, derrivatives[0].First);      // x
-      AreEqual(Math.Sqrt(2) / 4, derrivatives[1].First);      // y
-      AreEqual(Math.Sqrt(3) / 2, derrivatives[2].First);      // z
+      Derivative1Value[] derivatives = hc.ToCartesianView().DerivativeByR().ToArray();
+      derivatives.Length.AssertIsEqualTo(3);
+      derivatives[0].First.AssertIsEqualTo(Math.Sqrt(2) / 4);      // x
+      derivatives[1].First.AssertIsEqualTo(Math.Sqrt(2) / 4);      // y
+      derivatives[2].First.AssertIsEqualTo(Math.Sqrt(3) / 2);      // z
 
-      AreEqual(cc, hc.ToCartesianView());
+      ((CartesianCoordinate)hc.ToCartesianView()).AssertIsEqualTo(cc);
     }
 
     [Fact]
     public void TranslateByAngle()
     {
       HypersphericalCoordinate coordinate = new HypersphericalCoordinate(2, new HypersphericalAngleVector(2, 1, -1));
-      AreEqual(new HypersphericalCoordinate(2, new HypersphericalAngleVector(2, 1.5, -1)), coordinate.TranslateByAngle(1, 0.5));
+      coordinate.TranslateByAngle(1, 0.5).AssertIsEqualTo(new HypersphericalCoordinate(2, new HypersphericalAngleVector(2, 1.5, -1)));
     }
   }
 }

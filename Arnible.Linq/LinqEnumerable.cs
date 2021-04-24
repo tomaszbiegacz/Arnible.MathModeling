@@ -8,7 +8,7 @@ namespace Arnible.Linq
     {
       yield return src;
     }
-
+    
     public static IEnumerable<int> RangeInt(ushort length) => RangeInt(0, length);
 
     public static IEnumerable<int> RangeInt(int start, uint length)

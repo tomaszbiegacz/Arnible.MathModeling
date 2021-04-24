@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Arnible.Assertions;
 using Arnible.Linq;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -23,12 +23,12 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void ToVector_Single()
     {
-      var directions = HypersphericalAngleQuantified.GetQuantifiedDirections(anglesCount: 1, resolution: 2).ToReadOnlyList();
+      var directions = HypersphericalAngleQuantified.GetQuantifiedDirections(anglesCount: 1, resolution: 2).ToArray();
 
-      AreEqual(new HypersphericalAngleVector(-1 * Math.PI / 4), directions.Where(d => d.Angles.Single() == -1).Single().ToAngleVector());
-      AreEqual(new HypersphericalAngleVector(0), directions.Where(d => d.Angles.Single() == 0).Single().ToAngleVector());
-      AreEqual(new HypersphericalAngleVector(Math.PI / 4), directions.Where(d => d.Angles.Single() == 1).Single().ToAngleVector());
-      AreEqual(new HypersphericalAngleVector(Math.PI / 2), directions.Where(d => d.Angles.Single() == 2).Single().ToAngleVector());
+      directions.Where(d => d.Angles.Single() == -1).Single().ToAngleVector().AssertIsEqualTo(new HypersphericalAngleVector(-1 * Math.PI / 4));
+      directions.Where(d => d.Angles.Single() == 0).Single().ToAngleVector().AssertIsEqualTo(new HypersphericalAngleVector(0));
+      directions.Where(d => d.Angles.Single() == 1).Single().ToAngleVector().AssertIsEqualTo(new HypersphericalAngleVector(Math.PI / 4));
+      directions.Where(d => d.Angles.Single() == 2).Single().ToAngleVector().AssertIsEqualTo(new HypersphericalAngleVector(Math.PI / 2));
     }
 
     [Fact]
@@ -44,7 +44,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, -1);       //  -45    + -    xy
       AssertDirection(directions, 1);        //   45    + +    xy
 
-      IsEmpty(directions);
+      directions.AssertIsEmpty();
       
     }
 
@@ -53,7 +53,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetQuantifiedDirections(anglesCount: 1, resolution: 2));
       var allChanged = GetDirection(directions, 1);
-      AreEqual(allChanged, HypersphericalAngleQuantified.GetAllDirectionChangePositive(anglesCount: 1));
+      HypersphericalAngleQuantified.GetAllDirectionChangePositive(anglesCount: 1).AssertIsEqualTo(allChanged);
     }
 
     [Fact]
@@ -80,7 +80,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, -1, 1);    // -45  45       + - +      xyz     - + -
       AssertDirection(directions, 1, 1);     //  45  45       + + +      xyz     - - -
 
-      IsEmpty(directions);
+      directions.AssertIsEmpty();
     }
 
     [Fact]
@@ -88,7 +88,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetQuantifiedDirections(anglesCount: 2, resolution: 2));
       var allChanged = GetDirection(directions, 1, 1);
-      AreEqual(allChanged, HypersphericalAngleQuantified.GetAllDirectionChangePositive(anglesCount: 2));
+      HypersphericalAngleQuantified.GetAllDirectionChangePositive(anglesCount: 2).AssertIsEqualTo(allChanged);
     }
 
     [Fact]
@@ -147,7 +147,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, -1, 1, 1);     // -45  45  45      + - + +     xyza    - + - -
       AssertDirection(directions, 1, 1, 1);      //  45  45  45      + + + +     xyza    - - - -    
 
-      IsEmpty(directions);
+      directions.AssertIsEmpty();
     }
 
     [Fact]
@@ -155,16 +155,16 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetQuantifiedDirections(anglesCount: 2, resolution: 2));
 
-      AreEqual(1, GetDirection(directions, 0, 0).UsedCartesianDirectionsCount);
-      AreEqual(1, GetDirection(directions, 2, 0).UsedCartesianDirectionsCount);
-      AreEqual(1, GetDirection(directions, 0, 2).UsedCartesianDirectionsCount);
-      AreEqual(1, GetDirection(directions, 0, 0).UsedCartesianDirectionsCount);
+      GetDirection(directions, 0, 0).UsedCartesianDirectionsCount.AssertIsEqualTo(1);
+      GetDirection(directions, 2, 0).UsedCartesianDirectionsCount.AssertIsEqualTo(1);
+      GetDirection(directions, 0, 2).UsedCartesianDirectionsCount.AssertIsEqualTo(1);
+      GetDirection(directions, 0, 0).UsedCartesianDirectionsCount.AssertIsEqualTo(1);
 
-      AreEqual(2, GetDirection(directions, 1, 0).UsedCartesianDirectionsCount);
-      AreEqual(2, GetDirection(directions, -1, 0).UsedCartesianDirectionsCount);
-      AreEqual(2, GetDirection(directions, 0, 1).UsedCartesianDirectionsCount);
+      GetDirection(directions, 1, 0).UsedCartesianDirectionsCount.AssertIsEqualTo(2);
+      GetDirection(directions, -1, 0).UsedCartesianDirectionsCount.AssertIsEqualTo(2);
+      GetDirection(directions, 0, 1).UsedCartesianDirectionsCount.AssertIsEqualTo(2);
 
-      AreEqual(3, GetDirection(directions, 1, 1).UsedCartesianDirectionsCount);
+      GetDirection(directions, 1, 1).UsedCartesianDirectionsCount.AssertIsEqualTo(3);
     }
 
     [Fact]
@@ -172,21 +172,21 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var directions = new List<HypersphericalAngleQuantified>(HypersphericalAngleQuantified.GetQuantifiedDirections(anglesCount: 3, resolution: 2));
 
-      AreEqual(1, GetDirection(directions, 0, 0, 0).UsedCartesianDirectionsCount);
-      AreEqual(1, GetDirection(directions, 2, 0, 0).UsedCartesianDirectionsCount);
-      AreEqual(1, GetDirection(directions, 0, 2, 0).UsedCartesianDirectionsCount);
-      AreEqual(1, GetDirection(directions, 0, 0, 2).UsedCartesianDirectionsCount);
+      GetDirection(directions, 0, 0, 0).UsedCartesianDirectionsCount.AssertIsEqualTo(1);
+      GetDirection(directions, 2, 0, 0).UsedCartesianDirectionsCount.AssertIsEqualTo(1);
+      GetDirection(directions, 0, 2, 0).UsedCartesianDirectionsCount.AssertIsEqualTo(1);
+      GetDirection(directions, 0, 0, 2).UsedCartesianDirectionsCount.AssertIsEqualTo(1);
 
-      AreEqual(2, GetDirection(directions, 1, 0, 0).UsedCartesianDirectionsCount);
-      AreEqual(2, GetDirection(directions, 0, 1, 0).UsedCartesianDirectionsCount);
-      AreEqual(2, GetDirection(directions, 0, 2, 1).UsedCartesianDirectionsCount);
+      GetDirection(directions, 1, 0, 0).UsedCartesianDirectionsCount.AssertIsEqualTo(2);
+      GetDirection(directions, 0, 1, 0).UsedCartesianDirectionsCount.AssertIsEqualTo(2);
+      GetDirection(directions, 0, 2, 1).UsedCartesianDirectionsCount.AssertIsEqualTo(2);
 
-      AreEqual(3, GetDirection(directions, 0, 1, 1).UsedCartesianDirectionsCount);
-      AreEqual(3, GetDirection(directions, 2, 1, 1).UsedCartesianDirectionsCount);
-      AreEqual(3, GetDirection(directions, 1, 1, 0).UsedCartesianDirectionsCount);
-      AreEqual(3, GetDirection(directions, 1, 0, 1).UsedCartesianDirectionsCount);
+      GetDirection(directions, 0, 1, 1).UsedCartesianDirectionsCount.AssertIsEqualTo(3);
+      GetDirection(directions, 2, 1, 1).UsedCartesianDirectionsCount.AssertIsEqualTo(3);
+      GetDirection(directions, 1, 1, 0).UsedCartesianDirectionsCount.AssertIsEqualTo(3);
+      GetDirection(directions, 1, 0, 1).UsedCartesianDirectionsCount.AssertIsEqualTo(3);
 
-      AreEqual(4, GetDirection(directions, 1, 1, 1).UsedCartesianDirectionsCount);
+      GetDirection(directions, 1, 1, 1).UsedCartesianDirectionsCount.AssertIsEqualTo(4);
     }
 
     [Fact]
@@ -198,7 +198,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, -1);       //  -45    + -    xy
       AssertDirection(directions, 1);        //   45    + +    xy
 
-      IsEmpty(directions);
+      directions.AssertIsEmpty();
     }
   }
 }

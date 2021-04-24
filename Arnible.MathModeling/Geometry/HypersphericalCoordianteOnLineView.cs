@@ -35,7 +35,7 @@ namespace Arnible.MathModeling.Geometry
       X = r * ratioX;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is HypersphericalCoordianteOnLineView casted)
       {

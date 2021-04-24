@@ -1,6 +1,8 @@
-﻿using Arnible.MathModeling.Algebra;
+﻿using Arnible.Assertions;
+using Arnible.Linq;
+using Arnible.MathModeling.Algebra;
+using Arnible.MathModeling.Test;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -12,10 +14,10 @@ namespace Arnible.MathModeling.Geometry.Test
       var rc = new RectangularCoordinate(3, 4);
       CartesianCoordinate cc = rc;
 
-      AreEqual(2u, cc.DimensionsCount);
-      AreEqual(2u, cc.Coordinates.Length);
-      AreExactlyEqual(3, cc.Coordinates[0]);
-      AreExactlyEqual(4, cc.Coordinates[1]);
+      cc.DimensionsCount.AssertIsEqualTo(2);
+      cc.Coordinates.Length.AssertIsEqualTo(2);
+      cc.Coordinates[0].AssertIsEqualTo(3);
+      cc.Coordinates[1].AssertIsEqualTo(4);
     }
 
     [Fact]
@@ -23,10 +25,10 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       CartesianCoordinate cc = new NumberVector(2, 3, 4);
 
-      AreEqual(3u, cc.DimensionsCount);
-      AreExactlyEqual(2, cc.Coordinates[0]);
-      AreExactlyEqual(3, cc.Coordinates[1]);
-      AreExactlyEqual(4, cc.Coordinates[2]);
+      cc.DimensionsCount.AssertIsEqualTo(3);
+      cc.Coordinates[0].AssertIsEqualTo(2);
+      cc.Coordinates[1].AssertIsEqualTo(3);
+      cc.Coordinates[2].AssertIsEqualTo(4);
     }
 
     [Fact]
@@ -34,7 +36,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       CartesianCoordinate v1 = new NumberVector(1, 1, 0);
       CartesianCoordinate v2 = new NumberVector(1, 1, 8.65956056235496E-17);
-      AreEqual(v1, v2);
+      v1.AssertIsEqualTo(v2);
     }
 
     [Fact]
@@ -44,7 +46,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var actual = c.GetDirectionDerivativeRatios();
 
       var expected = HypersphericalAngleVector.GetIdentityVector(2).GetCartesianAxisViewsRatios();
-      AreEqual(expected, actual);
+      expected.AssertIsEqualTo(actual);
     }
     
     [Fact]
@@ -54,25 +56,25 @@ namespace Arnible.MathModeling.Geometry.Test
       var actual = c.GetDirectionDerivativeRatios();
 
       var expected = HypersphericalAngleVector.GetIdentityVector(3).GetCartesianAxisViewsRatios();
-      AreEqual(expected, actual);
+      expected.AssertIsEqualTo(actual);
     }
     
     [Fact]
     public void GetDirectionDerivativeRatios_Random()
     {
-      ValueArray<Number> c = new Number[] { 1, 2, -3 };
+      ReadOnlyArray<Number> c = new Number[] { 1, 2, -3 };
       var radios = c.GetDirectionDerivativeRatios();
-      AreEqual(3, radios.Length);
+      3u.AssertIsEqualTo(radios.Length);
       
-      for (uint i = 0; i < 2; ++i)
+      for (ushort i = 0; i < 2; ++i)
       {
-        IsGreaterEqualThan(0, radios[i]);
-        IsLowerEqualThan(1, radios[i]);
+        radios[i].AssertIsGreaterThan(0);
+        radios[i].AssertIsLessThan(1);
       }
-      IsGreaterEqualThan(-1, radios[2]);
-      IsLowerEqualThan(0, radios[2]);
+      radios[2].AssertIsGreaterThan(-1);
+      radios[2].AssertIsLessThan(0);
       
-      AreEqual(1, radios.Select(r => r*r).SumDefensive());
+      radios.AsList().Select(r => r*r).SumDefensive().AssertIsEqualTo(1);
     }
   }
 }

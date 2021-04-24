@@ -1,7 +1,7 @@
-﻿using Arnible.MathModeling.Algebra;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Arnible.Linq;
+using Arnible.MathModeling.Analysis;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -49,7 +49,7 @@ namespace Arnible.MathModeling.Geometry
       }
 
       var angles = HypersphericalAngleVector.GetIdentityVector(dimensionsCount);
-      double lastAngle = (double)angles[angles.Length - 1];
+      double lastAngle = (double)angles[(ushort)(angles.Length - 1)];
       return Math.Sin(lastAngle);
     }
 
@@ -75,7 +75,7 @@ namespace Arnible.MathModeling.Geometry
       return rc._p;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is HypersphericalCoordinateOnAxisView casted)
       {
@@ -122,7 +122,7 @@ namespace Arnible.MathModeling.Geometry
 
     public NumberVector Coordinates { get; }
 
-    public uint DimensionsCount => Coordinates.Length;
+    public ushort DimensionsCount => Coordinates.Length;
 
     //
     // Operators
@@ -131,7 +131,7 @@ namespace Arnible.MathModeling.Geometry
     public IEnumerable<HypersphericalAngleVector> CartesianCoordinatesAngles()
     {
       uint anglesCount = _p.Angles.Length;
-      List<Number> x = LinqEnumerable.Repeat<Number>(0, anglesCount).ToList();
+      List<Number> x = new(LinqEnumerable.Repeat<Number>(0, anglesCount));
 
       yield return x.ToAngleVector();
       for (int i = 0; i < anglesCount; ++i)
@@ -144,7 +144,7 @@ namespace Arnible.MathModeling.Geometry
 
     public IEnumerable<Derivative1Value> DerivativeByR() => DerivativeByR(_p.Angles);
 
-    public HypersphericalCoordinateOnRectangularView GetRectangularView(uint axisA, uint axisB)
+    public HypersphericalCoordinateOnRectangularView GetRectangularView(ushort axisA, ushort axisB)
     {
       if (axisA == axisB)
       {
@@ -164,7 +164,7 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public HypersphericalCoordianteOnLineView GetLineView(uint axis)
+    public HypersphericalCoordianteOnLineView GetLineView(ushort axis)
     {
       if (R == 0)
       {

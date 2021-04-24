@@ -29,19 +29,7 @@ namespace Arnible.Linq
         throw new ArgumentException(nameof(source));
       }
     }
-    
-    public static T Single<T>(this IList<T> source)
-    {
-      if(source.Count == 1)
-      {
-        return source[0];
-      }
-      else
-      {
-        throw new ArgumentException(nameof(source));
-      }
-    }
-    
+
     public static T Single<T>(this IReadOnlyList<T> source)
     {
       if(source.Count == 1)

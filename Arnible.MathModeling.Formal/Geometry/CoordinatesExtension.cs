@@ -1,7 +1,7 @@
-﻿using Arnible.MathModeling.Polynomials;
-using System;
-using static Arnible.MathModeling.Polynomials.MetaMath;
+﻿using System;
+using static Arnible.MathModeling.Algebra.Polynomials.MetaMath;
 using Arnible.Linq;
+using Arnible.MathModeling.Algebra.Polynomials;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -41,9 +41,9 @@ namespace Arnible.MathModeling.Geometry
       PolynomialDivision replacement = (PolynomialDivision)hypersphericalPoint.R;
       PolynomialDivision result = source;
 
-      ValueArray<Number> cd = cartesianPoint.Coordinates.GetInternalEnumerable().Reverse().ToValueArray();
-      ValueArray<Number> ad = hypersphericalPoint.Angles.GetInternalEnumerable().Reverse().ToValueArray();
-      for (uint i = 0; i < ad.Length; ++i)
+      ReadOnlyArray<Number> cd = cartesianPoint.Coordinates.GetInternalEnumerable().Reverse().ToArray();
+      ReadOnlyArray<Number> ad = hypersphericalPoint.Angles.GetInternalEnumerable().Reverse().ToArray();
+      for (ushort i = 0; i < ad.Length; ++i)
       {
         var cartesianDimension = (PolynomialTerm)cd[i];
         var angle = (PolynomialTerm)ad[i];
@@ -76,7 +76,7 @@ namespace Arnible.MathModeling.Geometry
       }
 
       PolynomialDivision result = (PolynomialDivision)source;
-      for(uint i=0; i<c1.Coordinates.Length; ++i)
+      for(ushort i=0; i<c1.Coordinates.Length; ++i)
       {
         var cartesianDimension = (PolynomialTerm)c1.Coordinates[i];
         result = result.Composition(cartesianDimension, (PolynomialDivision)c2.Coordinates[i]);

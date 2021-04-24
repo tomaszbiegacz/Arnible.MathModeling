@@ -1,5 +1,5 @@
+using Arnible.Assertions;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -8,15 +8,15 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void ManhattanDistance()
     {
-      ValueArray<Number> src = new Number[] {1, 2, 3};
-      AreEqual(5, src.ManhattanDistance(new Number[] { 2, -2, 3 }));
+      ReadOnlyArray<Number> src = new Number[] {1, 2, 3};
+      src.ManhattanDistance(new Number[] { 2, -2, 3 }).AssertIsEqualTo(5);
     }
     
     [Fact]
     public void ChebyshevDistance()
     {
-      ValueArray<Number> src = new Number[] {1, 2, 3};
-      AreEqual(4, src.ChebyshevDistance(new Number[] { 2, -2, 3 }));
+      ReadOnlyArray<Number> src = new Number[] {1, 2, 3};
+      src.ChebyshevDistance(new Number[] { 2, -2, 3 }).AssertIsEqualTo(4);
     }
   }
 }

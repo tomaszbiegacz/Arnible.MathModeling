@@ -1,5 +1,5 @@
-﻿using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
+﻿using Arnible.Assertions;
+using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
@@ -8,83 +8,83 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void IsValidNumeric_Special()
     {
-      IsFalse(double.NaN.IsValidNumeric());
-      IsFalse(double.PositiveInfinity.IsValidNumeric());
-      IsFalse(double.NegativeInfinity.IsValidNumeric());
+      double.NaN.IsValidNumeric().AssertIsFalse();
+      double.PositiveInfinity.IsValidNumeric().AssertIsFalse();
+      double.NegativeInfinity.IsValidNumeric().AssertIsFalse();
     }
 
     [Fact]
     public void IsValidNumeric_Valid()
     {
-      IsTrue(0d.IsValidNumeric());
+      0d.IsValidNumeric().AssertIsTrue();
     }
 
     [Fact]
     public void Equals_Infinity_Infinity_Not()
     {
-      IsFalse(double.PositiveInfinity.NumericEquals(double.PositiveInfinity));
+      double.PositiveInfinity.NumericEquals(double.PositiveInfinity).AssertIsFalse();
     }    
 
     [Fact]
     public void Equals_NaN_NaN_Not()
     {
-      IsFalse(double.PositiveInfinity.NumericEquals(double.PositiveInfinity));
+      double.PositiveInfinity.NumericEquals(double.PositiveInfinity).AssertIsFalse();
     }
 
     [Fact]
     public void Equals_Zero_Zero()
     {
-      IsTrue(0d.NumericEquals(0d));
+      0d.NumericEquals(0d).AssertIsTrue();
     }
 
     [Fact]
     public void Equals_Zero_Epsilon()
     {
-      IsTrue(0d.NumericEquals(double.Epsilon));
+      0d.NumericEquals(double.Epsilon).AssertIsTrue();
     }
 
     [Fact]
     public void Epsilon_Zero_Equals()
     {
-      IsTrue(double.Epsilon.NumericEquals(0d));
+      double.Epsilon.NumericEquals(0d).AssertIsTrue();
     }
 
     [Fact]
     public void Equals_Zero_1E16()
     {
-      IsTrue(0d.NumericEquals(1E-16));
+      0d.NumericEquals(1E-16).AssertIsTrue();
     }
 
     [Fact]
     public void Equals_Zero_1E9_Not()
     {
-      IsFalse(0d.NumericEquals(1E-9));
+      0d.NumericEquals(1E-9).AssertIsFalse();
     }
 
     [Fact]
     public void Equals_One_1E16()
     {
-      IsTrue(1d.NumericEquals(1.0000000000000001));
+      1d.NumericEquals(1.0000000000000001).AssertIsTrue();
     }
 
     [Fact]
     public void Equals_One_1E9_Not()
     {
-      IsFalse(1d.NumericEquals(1.000000001));
+      1d.NumericEquals(1.000000001).AssertIsFalse();
     }
 
     [Fact]
     public void Power()
     {
-      AreEqual(1, 2d.ToPower(0));
-      AreEqual(2, 2d.ToPower(1));
-      AreEqual(4, 2d.ToPower(2));
-      AreEqual(8, 2d.ToPower(3));
-      AreEqual(16, 2d.ToPower(4));
-      AreEqual(32, 2d.ToPower(5));
-      AreEqual(64, 2d.ToPower(6));
-      AreEqual(128, 2d.ToPower(7));
-      AreEqual(256, 2d.ToPower(8));
+      2d.ToPower(0).AssertIsEqualTo(1);
+      2d.ToPower(1).AssertIsEqualTo(2);
+      2d.ToPower(2).AssertIsEqualTo(4);
+      2d.ToPower(3).AssertIsEqualTo(8);
+      2d.ToPower(4).AssertIsEqualTo(16);
+      2d.ToPower(5).AssertIsEqualTo(32);
+      2d.ToPower(6).AssertIsEqualTo(64);
+      2d.ToPower(7).AssertIsEqualTo(128);
+      2d.ToPower(8).AssertIsEqualTo(256);
     }
   }
 }

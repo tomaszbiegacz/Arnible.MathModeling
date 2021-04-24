@@ -1,0 +1,98 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29201.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arnible.MathModeling", "Arnible.MathModeling\Arnible.MathModeling.csproj", "{F492740C-6BBD-453B-A90D-258E5F1F92C9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arnible.MathModeling.Test", "Arnible.MathModeling.Test\Arnible.MathModeling.Test.csproj", "{200FC106-870E-44A2-ADA6-2699AC79E497}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2CBA47FE-8AD6-435B-BA18-8A8C7B3D0B6D}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arnible.MathModeling.Formal", "Arnible.MathModeling.Formal\Arnible.MathModeling.Formal.csproj", "{E5F2C6B5-A65A-445B-AA56-5AE375D4D94F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arnible.MathModeling.Formal.Test", "Arnible.MathModeling.Formal.Test\Arnible.MathModeling.Formal.Test.csproj", "{FB715C29-D260-488B-AE5D-DA4F612A7200}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arnible.Linq", "Arnible.Linq\Arnible.Linq.csproj", "{990019CC-5034-4C22-BFF2-93E1897B4692}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arnible.Linq.Test", "Arnible.Linq.Test\Arnible.Linq.Test.csproj", "{6571B481-1222-4284-BCE8-9AC13677F94F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arnible", "Arnible\Arnible.csproj", "{5356A65A-B90B-4C15-9E02-301DB0770222}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arnible.Assertions", "Arnible.Assertions\Arnible.Assertions.csproj", "{FAFC1D9D-5EBB-4EF6-AA9B-B54F6AC3BF5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arnible.Export", "Arnible.Export\Arnible.Export.csproj", "{FDB760D1-8D7F-4548-B037-9D1269368D32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arnible.Export.Test", "Arnible.Export.Test\Arnible.Export.Test.csproj", "{19F7F48A-4898-492B-9755-4A28C9E39436}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arnible.Test", "Arnible.Test\Arnible.Test.csproj", "{CF2580C1-D67C-44B8-A339-1C7A14FFD4C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arnible.Xunit", "Arnible.Xunit\Arnible.Xunit.csproj", "{6F3ABC96-A65F-4B36-AED2-88D8327BFC7A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F492740C-6BBD-453B-A90D-258E5F1F92C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F492740C-6BBD-453B-A90D-258E5F1F92C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F492740C-6BBD-453B-A90D-258E5F1F92C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F492740C-6BBD-453B-A90D-258E5F1F92C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{200FC106-870E-44A2-ADA6-2699AC79E497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{200FC106-870E-44A2-ADA6-2699AC79E497}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{200FC106-870E-44A2-ADA6-2699AC79E497}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{200FC106-870E-44A2-ADA6-2699AC79E497}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5F2C6B5-A65A-445B-AA56-5AE375D4D94F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5F2C6B5-A65A-445B-AA56-5AE375D4D94F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5F2C6B5-A65A-445B-AA56-5AE375D4D94F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5F2C6B5-A65A-445B-AA56-5AE375D4D94F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB715C29-D260-488B-AE5D-DA4F612A7200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB715C29-D260-488B-AE5D-DA4F612A7200}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB715C29-D260-488B-AE5D-DA4F612A7200}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB715C29-D260-488B-AE5D-DA4F612A7200}.Release|Any CPU.Build.0 = Release|Any CPU
+		{990019CC-5034-4C22-BFF2-93E1897B4692}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{990019CC-5034-4C22-BFF2-93E1897B4692}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{990019CC-5034-4C22-BFF2-93E1897B4692}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{990019CC-5034-4C22-BFF2-93E1897B4692}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6571B481-1222-4284-BCE8-9AC13677F94F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6571B481-1222-4284-BCE8-9AC13677F94F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6571B481-1222-4284-BCE8-9AC13677F94F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6571B481-1222-4284-BCE8-9AC13677F94F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5356A65A-B90B-4C15-9E02-301DB0770222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5356A65A-B90B-4C15-9E02-301DB0770222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5356A65A-B90B-4C15-9E02-301DB0770222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5356A65A-B90B-4C15-9E02-301DB0770222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAFC1D9D-5EBB-4EF6-AA9B-B54F6AC3BF5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAFC1D9D-5EBB-4EF6-AA9B-B54F6AC3BF5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAFC1D9D-5EBB-4EF6-AA9B-B54F6AC3BF5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAFC1D9D-5EBB-4EF6-AA9B-B54F6AC3BF5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDB760D1-8D7F-4548-B037-9D1269368D32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDB760D1-8D7F-4548-B037-9D1269368D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDB760D1-8D7F-4548-B037-9D1269368D32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDB760D1-8D7F-4548-B037-9D1269368D32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19F7F48A-4898-492B-9755-4A28C9E39436}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19F7F48A-4898-492B-9755-4A28C9E39436}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19F7F48A-4898-492B-9755-4A28C9E39436}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19F7F48A-4898-492B-9755-4A28C9E39436}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF2580C1-D67C-44B8-A339-1C7A14FFD4C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF2580C1-D67C-44B8-A339-1C7A14FFD4C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF2580C1-D67C-44B8-A339-1C7A14FFD4C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF2580C1-D67C-44B8-A339-1C7A14FFD4C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F3ABC96-A65F-4B36-AED2-88D8327BFC7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F3ABC96-A65F-4B36-AED2-88D8327BFC7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F3ABC96-A65F-4B36-AED2-88D8327BFC7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F3ABC96-A65F-4B36-AED2-88D8327BFC7A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {94E2A7EF-75B3-48ED-B97D-C52E75FFFF2B}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal

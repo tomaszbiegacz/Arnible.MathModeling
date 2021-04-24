@@ -2,7 +2,7 @@
 {
   interface ICoordinate<T> where T: struct
   {
-    uint DimensionsCount { get; }
+    ushort DimensionsCount { get; }
 
     T AddDimension();
   }

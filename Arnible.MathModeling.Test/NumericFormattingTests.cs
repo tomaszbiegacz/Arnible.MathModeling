@@ -1,5 +1,5 @@
-﻿using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
+﻿using Arnible.Assertions;
+using Xunit;
 
 namespace Arnible.MathModeling.Test
 {
@@ -11,7 +11,7 @@ namespace Arnible.MathModeling.Test
     [InlineData(123, "¹²³")]
     public void ToSuperscriptString_Uint(uint number, string expected)
     {
-      AreEqual(expected, number.ToSuperscriptString());
+      expected.AssertIsEqualTo(number.ToSuperscriptString());
     }
   }
 }

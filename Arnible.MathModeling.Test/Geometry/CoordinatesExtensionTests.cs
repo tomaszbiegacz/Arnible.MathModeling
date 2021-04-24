@@ -1,8 +1,9 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
+using Arnible.Assertions;
+using Arnible.MathModeling.Test;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
-using static Arnible.MathModeling.xunit.AssertHelpers;
+using Arnible.Linq;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -42,9 +43,9 @@ namespace Arnible.MathModeling.Geometry.Test
       var pc = rc.ToPolar();
       HypersphericalCoordinate sc = cc.ToSphericalView();
 
-      AreEqual(2u, sc.DimensionsCount);
-      AreExactlyEqual(pc.R, sc.R);
-      AreExactlyEqual(pc.Φ, sc.Angles.Single());
+      sc.DimensionsCount.AssertIsEqualTo(2);
+      sc.R.AssertIsEqualTo(pc.R);
+      sc.Angles.Single().AssertIsEqualTo(pc.Φ);
     }
 
     [Theory]
@@ -56,8 +57,8 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = cartesian.ToVector();
 
       HypersphericalCoordinate sc = cc.ToSphericalView();
-      AreEqual(r, sc.R);
-      AreEquals(angles, sc.Angles);
+      sc.R.AssertIsEqualTo(r);
+      sc.Angles.GetInternalEnumerable().AssertSequenceEqualsTo(angles);
     }
 
     [Theory]
@@ -72,8 +73,8 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = cartesian.ToVector();
 
       HypersphericalCoordinate sc = cc.ToSpherical();
-      AreEqual(r, sc.R);
-      AreEquals(angles, sc.Angles);
+      sc.R.AssertIsEqualTo(r);
+      sc.Angles.GetInternalEnumerable().AssertSequenceEqualsTo(angles);
     }
 
     [Theory]
@@ -85,7 +86,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
 
       var cc = sc.ToCartesianView();
-      AreEquals(cartesian, cc.Coordinates);
+      cc.Coordinates.GetInternalEnumerable().AssertSequenceEqualsTo(cartesian);
     }
 
     [Theory]
@@ -97,8 +98,8 @@ namespace Arnible.MathModeling.Geometry.Test
       CartesianCoordinate cc = cartesian.ToVector();
       var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
 
-      AreEqual(cc.AddDimension(), sc.AddDimension().ToCartesianView());
-      AreEqual(sc.AddDimension(), cc.AddDimension().ToSphericalView());
+      ((CartesianCoordinate)sc.AddDimension().ToCartesianView()).AssertIsEqualTo(cc.AddDimension());
+      ((HypersphericalCoordinate)cc.AddDimension().ToSphericalView()).AssertIsEqualTo(sc.AddDimension());
     }
   }
 }

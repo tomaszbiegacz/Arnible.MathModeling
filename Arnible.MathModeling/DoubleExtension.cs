@@ -8,7 +8,6 @@ namespace Arnible.MathModeling
     {
       if (IsValidNumeric(in a) && IsValidNumeric(in b))
       {
-        // ReSharper disable once CompareOfFloatsByEqualityOperator
         if (a == b)
         {
           return true;
@@ -18,7 +17,6 @@ namespace Arnible.MathModeling
           double diff = Math.Abs(a - b);
           double denominator = Math.Min(Math.Abs(a), Math.Abs(b));
           const double resolution = 1E-9;
-          // ReSharper disable once CompareOfFloatsByEqualityOperator
           if (denominator == 0)
           {
             return diff < resolution;
@@ -65,20 +63,6 @@ namespace Arnible.MathModeling
         default:
           return Math.Pow(a, b);
       }
-    }
-
-    public static double RoundedSin(in double value)
-    {
-      if (NumericEquals(in value, 0)) return 0;
-      else if (NumericEquals(in value, Angle.RightAngle)) return 1;
-      else return Math.Sin(value);
-    }
-
-    public static double RoundedCos(in double value)
-    {
-      if (NumericEquals(in value, 0)) return 1;
-      else if (NumericEquals(in value, Angle.RightAngle)) return 0;
-      else return Math.Cos(value);
     }
   }
 }

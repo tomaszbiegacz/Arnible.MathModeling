@@ -1,6 +1,8 @@
-﻿using Arnible.MathModeling.Export;
-using System;
+﻿using System;
 using System.Globalization;
+using Arnible.Export;
+using Arnible.Linq.Algebra;
+using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling
 {
@@ -15,10 +17,12 @@ namespace Arnible.MathModeling
   /// </remarks>  
   [Serializable]
   public readonly struct Number : 
-    IEquatable<Number>, 
-    IComparable<Number>, 
-    IValueObject
+    IAlgebraUnitRing<Number>,
+    IComparable<Number>
   {    
+    static readonly Number _one = 1;
+    static readonly Number _zero = 0;
+    
     private readonly double _value;
 
     private Number(in double value)
@@ -32,39 +36,12 @@ namespace Arnible.MathModeling
 
     public static implicit operator Number(in double v) => new Number(in v);
     public static explicit operator double(in Number v) => v._value;
-    
-    //
-    // Serializer
-    //
-
-    class Serializer : IRecordWriter<Number>
-    {
-      private readonly IRecordFieldSerializer _serializer;
-      public Serializer(in IRecordFieldSerializer serializer)
-      {
-        _serializer = serializer;
-      }
-      public void Write(in Number record)
-      {
-        _serializer.Write(string.Empty, record._value);
-      }
-
-      public void WriteNull()
-      {
-        _serializer.WriteNull(string.Empty);
-      }
-    }
-    
-    public static IRecordWriter<Number> CreateSerializer(IRecordFieldSerializer serializer)
-    {
-      return new Serializer(in serializer);
-    }
 
     //
     // Object
     //
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is Number v)
       {
@@ -88,6 +65,18 @@ namespace Arnible.MathModeling
     }
     public override string ToString() => ToString(CultureInfo.InvariantCulture);
     public string ToStringValue() => ToString();
+    
+    //
+    // Serializable
+    //
+    
+    public class Serializer : ValueRecordSerializerSimple<Number>
+    {
+      public override void Serialize(IRecordFieldSerializer serializer, in Number? record)
+      {
+        serializer.Write(string.Empty, record?._value);
+      }
+    }
 
     //
     // Operators
@@ -183,6 +172,14 @@ namespace Arnible.MathModeling
     public static Number operator *(in uint a, in Number b) => a * b._value;    
 
     public Number ToPower(in uint b) => DoubleExtension.ToPower(in _value, in b);
+    
+    public ref readonly Number One => ref _one;
+    public ref readonly Number Zero => ref _zero;
+    
+    public Number Add(in Number component) => this._value + component._value;
+    
+    public Number Inverse() => -1 * this._value;
+    public Number Multiply(in Number factor) => this._value * factor._value;
 
     //
     // IComparable

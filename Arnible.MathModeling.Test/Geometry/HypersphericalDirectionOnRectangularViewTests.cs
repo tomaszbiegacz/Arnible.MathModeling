@@ -1,5 +1,5 @@
-﻿using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
+﻿using Arnible.Assertions;
+using Xunit;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -10,8 +10,8 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var p = new HypersphericalDirectionOnRectangularView(ratioX: 0.3, ratioY: -0.4);
 
-      AreExactlyEqual(0.3, p.RatioX);
-      AreExactlyEqual(-0.4, p.RatioY);
+      p.RatioX.AssertIsEqualTo(0.3);
+      p.RatioY.AssertIsEqualTo(-0.4);
     }
   }
 }

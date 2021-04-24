@@ -1,6 +1,6 @@
-﻿using Arnible.MathModeling.Polynomials;
+﻿using Arnible.Assertions;
+using Arnible.MathModeling.Algebra.Polynomials;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Test
 {
@@ -11,34 +11,34 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Equality()
     {
-      IsTrue(0 == A - A);
-      IsFalse(0 != A - A);
+      (0 == A - A).AssertIsTrue();
+      (0 != A - A).AssertIsFalse();
 
-      IsTrue(1 == A + 1 - A);
-      IsFalse(1 != A + 1 - A);
+      (1 == A + 1 - A).AssertIsTrue();
+      (1 != A + 1 - A).AssertIsFalse();
 
-      IsFalse(1 == A - A);
-      IsTrue(1 != A - A);      
+      (1 == A - A).AssertIsFalse();
+      (1 != A - A).AssertIsTrue();      
     }
 
     [Fact]
     public void Greater()
     {
-      IsFalse(0 > A + 1 - A);
-      IsTrue(0 < A + 1 - A);
+      (0 > A + 1 - A).AssertIsFalse();
+      (0 < A + 1 - A).AssertIsTrue();
 
-      IsTrue(2 > A + 1 - A);
-      IsFalse(2 < A + 1 - A);
+      (2 > A + 1 - A).AssertIsTrue();
+      (2 < A + 1 - A).AssertIsFalse();
 
-      IsFalse(2 * A > A);
-      IsFalse(2 * A < A);
-      IsFalse(2 * A >= A);
-      IsFalse(2 * A <= A);
+      (2 * A > A).AssertIsFalse();
+      (2 * A < A).AssertIsFalse();
+      (2 * A >= A).AssertIsFalse();
+      (2 * A <= A).AssertIsFalse();
 
-      IsFalse(A > Term.a);
-      IsFalse(A < Term.a);
-      IsTrue(A <= Term.a);
-      IsTrue(A >= Term.a);
+      (A > Term.a).AssertIsFalse();
+      (A < Term.a).AssertIsFalse();
+      (A <= Term.a).AssertIsTrue();
+      (A >= Term.a).AssertIsTrue();
     }
   }
 }

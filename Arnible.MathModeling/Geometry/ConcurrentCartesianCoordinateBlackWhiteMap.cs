@@ -6,18 +6,18 @@ namespace Arnible.MathModeling.Geometry
 {
   public interface ICartesianCoordinateBlackWhiteMap
   {
-    uint DimensionsCount { get; }
+    ushort DimensionsCount { get; }
     
-    uint MarkedPointsCount { get; }
+    ushort MarkedPointsCount { get; }
 
-    bool IsMarked(in ValueArray<Number> point);
+    bool IsMarked(ReadOnlyArray<Number> point);
   }
   
   public class ConcurrentCartesianCoordinateBlackWhiteMap : ICartesianCoordinateBlackWhiteMap
   {
-    private readonly ValueArray<Number> _leftBottomMapCorner;
-    private readonly ValueArray<Number> _rightTopMapCorner;
-    private readonly ValueArray<Number> _normalizedStep;
+    private readonly ReadOnlyArray<Number> _leftBottomMapCorner;
+    private readonly ReadOnlyArray<Number> _rightTopMapCorner;
+    private readonly ReadOnlyArray<Number> _normalizedStep;
     private readonly byte _precision;
     private readonly List<byte[]> _points;
 
@@ -25,8 +25,20 @@ namespace Arnible.MathModeling.Geometry
     {
       public static PointsComparer Current { get; } = new PointsComparer();
       
-      public int Compare(byte[] x, byte[] y)
+      public int Compare(byte[]? x, byte[]? y)
       {
+        if(x is null || y is null)
+        {
+          if(x is null && y is null)
+          {
+            return 0;
+          }
+          else
+          {
+            throw new ArgumentException(nameof(y));
+          }
+        }
+        
         if (x.Length != y.Length)
         {
           throw new ArgumentException(nameof(y));
@@ -46,8 +58,8 @@ namespace Arnible.MathModeling.Geometry
     }
 
     public ConcurrentCartesianCoordinateBlackWhiteMap(
-      in ValueArray<Number> leftBottomMapCorner,
-      in ValueArray<Number> rightTopMapCorner,
+      ReadOnlyArray<Number> leftBottomMapCorner,
+      ReadOnlyArray<Number> rightTopMapCorner,
       byte precision)
     {
       if (leftBottomMapCorner.Length == 0)
@@ -66,7 +78,7 @@ namespace Arnible.MathModeling.Geometry
       _leftBottomMapCorner = leftBottomMapCorner;
       _rightTopMapCorner = rightTopMapCorner;
       _precision = precision;
-      _normalizedStep = rightTopMapCorner.Substract(leftBottomMapCorner).Select(v => v / precision).ToValueArray();
+      _normalizedStep = rightTopMapCorner.AsList().ZipDefensive(leftBottomMapCorner.AsList(), (p1, p2) => p1 - p2).Select(v => v / precision).ToArray();
       _points = new List<byte[]>();
     }
     
@@ -74,15 +86,15 @@ namespace Arnible.MathModeling.Geometry
     // Properties
     //
 
-    public uint DimensionsCount => _leftBottomMapCorner.Length;
+    public ushort DimensionsCount => _leftBottomMapCorner.Length;
 
-    public uint MarkedPointsCount
+    public ushort MarkedPointsCount
     {
       get
       {
         lock (_points)
         {
-          return (uint) _points.Count;
+          return (ushort) _points.Count;
         }
       }
     }
@@ -91,14 +103,14 @@ namespace Arnible.MathModeling.Geometry
     // Query operations
     //
 
-    private IEnumerable<byte> NormalizeCoordinate(ValueArray<Number> point)
+    private IEnumerable<byte> NormalizeCoordinate(ReadOnlyArray<Number> point)
     {
       if (point.Length != DimensionsCount)
       {
         throw new ArgumentException(nameof(point));
       }
 
-      for (uint i = 0; i < point.Length; ++i)
+      for (ushort i = 0; i < point.Length; ++i)
       {
         Number v = point[i];
         Number left = _leftBottomMapCorner[i];
@@ -128,7 +140,7 @@ namespace Arnible.MathModeling.Geometry
       }
     }
     
-    public bool IsMarked(in ValueArray<Number> point)
+    public bool IsMarked(ReadOnlyArray<Number> point)
     {
       byte[] normalizedPoint = System.Linq.Enumerable.ToArray(NormalizeCoordinate(point));
       lock (_points)
@@ -156,7 +168,7 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public bool MarkPoint(in ValueArray<Number> point)
+    public bool MarkPoint(ReadOnlyArray<Number> point)
     {
       byte[] normalizedPoint = System.Linq.Enumerable.ToArray(NormalizeCoordinate(point));
       lock (_points)
@@ -165,11 +177,11 @@ namespace Arnible.MathModeling.Geometry
       }
     }
     
-    public void MarkPoints(IEnumerable<ValueArray<Number>> points)
+    public void MarkPoints(IEnumerable<ReadOnlyArray<Number>> points)
     {
       IReadOnlyList<byte[]> normalizedPoints = points
         .Select(p => System.Linq.Enumerable.ToArray(NormalizeCoordinate(p)))
-        .ToReadOnlyList();
+        .ToArray();
       
       lock (_points)
       {

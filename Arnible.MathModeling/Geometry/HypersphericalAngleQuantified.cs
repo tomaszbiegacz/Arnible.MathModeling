@@ -5,8 +5,7 @@ using Arnible.Linq;
 namespace Arnible.MathModeling.Geometry
 {
   public readonly struct HypersphericalAngleQuantified : 
-    IEquatable<HypersphericalAngleQuantified>,
-    IValueObject
+    IEquatable<HypersphericalAngleQuantified>
   {
     internal class Factory
     {
@@ -85,7 +84,7 @@ namespace Arnible.MathModeling.Geometry
     {
       Id = id;
       _rightAngleResolution = rightAngleResolution;
-      _angles = angles.ToReadOnlyList();
+      _angles = angles.ToArray();
       if (_angles.Where(a => a == rightAngleResolution).Count() > 1)
       {
         throw new ArgumentException(nameof(angles));
@@ -131,7 +130,7 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(HypersphericalAngleQuantified other) => Id == other.Id;
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is HypersphericalAngleQuantified objCast)
         return Equals(objCast);

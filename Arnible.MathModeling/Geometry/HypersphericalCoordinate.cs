@@ -11,8 +11,7 @@ namespace Arnible.MathModeling.Geometry
   public readonly struct HypersphericalCoordinate : 
     IEquatable<HypersphericalCoordinate>, 
     IHypersphericalCoordinate, 
-    ICoordinate<HypersphericalCoordinate>,
-    IValueObject
+    ICoordinate<HypersphericalCoordinate>
   {
     /// <summary>
     /// Angles:
@@ -54,7 +53,7 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(HypersphericalCoordinate other) => Equals(in other);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is HypersphericalCoordinate typed)
       {
@@ -76,13 +75,12 @@ namespace Arnible.MathModeling.Geometry
     {
       return $"{{{R.ToString()}, {Angles.ToString()}}}";
     }
-    public string ToStringValue() => ToString();
 
     //
     // Properties
     //
 
-    public uint DimensionsCount => Angles.Length + 1;
+    public ushort DimensionsCount => (ushort)(Angles.Length + 1);
 
     //
     // Operations

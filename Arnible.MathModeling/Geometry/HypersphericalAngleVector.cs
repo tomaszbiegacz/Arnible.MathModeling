@@ -1,10 +1,8 @@
-﻿using Arnible.MathModeling.Algebra;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using static Arnible.MathModeling.MetaMath;
 using Arnible.Linq;
+using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -14,10 +12,11 @@ namespace Arnible.MathModeling.Geometry
   [Serializable]
   public readonly struct HypersphericalAngleVector : 
     IEquatable<HypersphericalAngleVector>, 
-    IEquatable<Number>, 
-    IValueArray<Number>,
-    IValueObject
+    IEquatable<Number>,
+    IAlgebraGroup<HypersphericalAngleVector>
   {
+    static readonly HypersphericalAngleVector _zero = 0;
+    
     private readonly NumberVector _angles;
     
     public static HypersphericalAngleVector CreateOrthogonalDirection(uint anglePos, in Number value)
@@ -95,11 +94,11 @@ namespace Arnible.MathModeling.Geometry
     // Properties
     //    
 
-    public ref readonly Number this[uint pos] => ref _angles[pos];
+    public ref readonly Number this[ushort pos] => ref _angles[pos];
 
-    public uint Length => _angles.Length;
+    public ushort Length => _angles.Length;
 
-    public Number GetOrDefault(uint pos) => _angles.GetOrDefault(pos);
+    public Number GetOrDefault(ushort pos) => _angles.GetOrDefault(pos);
 
     //
     // IArray
@@ -108,8 +107,7 @@ namespace Arnible.MathModeling.Geometry
     internal IEnumerable<Number> GetInternalEnumerable() => _angles.GetInternalEnumerable();
 
     public IEnumerator<Number> GetEnumerator() => _angles.GetEnumerator();
-
-    IEnumerator IEnumerable.GetEnumerator() => _angles.GetEnumerator();    
+    
 
     //
     // IEquatable
@@ -121,7 +119,7 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(Number other) => Equals(in other);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (obj is HypersphericalAngleVector v)
       {
@@ -157,7 +155,7 @@ namespace Arnible.MathModeling.Geometry
     // query operators
     //
 
-    public HypersphericalAngleVector GetOrthogonalDirection(uint anglePos)
+    public HypersphericalAngleVector GetOrthogonalDirection(ushort anglePos)
     {
       ref readonly Number angle = ref _angles[anglePos];
       return new HypersphericalAngleVector(NumberVector.NonZeroValueAt(pos: anglePos, value: in angle));
@@ -197,8 +195,8 @@ namespace Arnible.MathModeling.Geometry
       Number replacement = 1;
       foreach (var angle in GetInternalEnumerable().Reverse())
       {
-        cartesianDimensions.Add(replacement * Sin(angle));
-        replacement *= Cos(angle);
+        cartesianDimensions.Add(replacement * NumberMath.Sin(angle));
+        replacement *= NumberMath.Cos(angle);
       }
       cartesianDimensions.Add(replacement);
       cartesianDimensions.Reverse();
@@ -234,7 +232,7 @@ namespace Arnible.MathModeling.Geometry
 
     private static IEnumerable<Number> AddAngles(NumberVector a, NumberVector b)
     {
-      return Normalize(a.GetInternalEnumerable().Zip(
+      return Normalize(a.GetInternalEnumerable().ZipValue(
         col2: b.GetInternalEnumerable(), 
         merge: (v1, v2) => (v1 ?? 0) + (v2 ?? 0)));      
     }
@@ -258,5 +256,11 @@ namespace Arnible.MathModeling.Geometry
     {
       return new HypersphericalAngleVector(ScaleAngles(b, a).ToVector());
     }
+    
+    public ref readonly HypersphericalAngleVector Zero => ref _zero;
+
+    public HypersphericalAngleVector Add(in HypersphericalAngleVector component) => this + component;
+    
+    public HypersphericalAngleVector Inverse() => throw new NotImplementedException();
   }
 }

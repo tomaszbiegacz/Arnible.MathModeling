@@ -1,5 +1,5 @@
+using Arnible.Assertions;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -13,20 +13,20 @@ namespace Arnible.MathModeling.Geometry.Test
         rightTopMapCorner: new Number[] {2, 3, 4},
         precision: 1);
       
-      AreEqual(3, map.DimensionsCount);
-      AreEqual(0, map.MarkedPointsCount);
-      IsFalse(map.IsMarked(new Number[] {0, -1, -2}));
-      IsFalse(map.IsMarked(new Number[] { 0, 0, 0 }));
-      IsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
-      IsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
+      map.DimensionsCount.AssertIsEqualTo(3);
+      map.MarkedPointsCount.AssertIsEqualTo(0);
+      map.IsMarked(new Number[] {0, -1, -2}).AssertIsFalse();
+      map.IsMarked(new Number[] { 0, 0, 0 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 1, 1, 1 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 2, 3, 4 }).AssertIsFalse();
       
-      IsTrue(map.MarkPoint(new Number[] { 0, 0, 0 }));
+      map.MarkPoint(new Number[] { 0, 0, 0 }).AssertIsTrue();
       
-      AreEqual(1, map.MarkedPointsCount);
-      IsTrue(map.IsMarked(new Number[] {0, -1, -2}));
-      IsTrue(map.IsMarked(new Number[] { 0, 0, 0 }));
-      IsTrue(map.IsMarked(new Number[] { 1, 1, 1 }));
-      IsTrue(map.IsMarked(new Number[] { 2, 3, 4 }));
+      map.MarkedPointsCount.AssertIsEqualTo(1);
+      map.IsMarked(new Number[] {0, -1, -2}).AssertIsTrue();
+      map.IsMarked(new Number[] { 0, 0, 0 }).AssertIsTrue();
+      map.IsMarked(new Number[] { 1, 1, 1 }).AssertIsTrue();
+      map.IsMarked(new Number[] { 2, 3, 4 }).AssertIsTrue();
     }
     
     [Fact]
@@ -38,20 +38,20 @@ namespace Arnible.MathModeling.Geometry.Test
         precision: 2);
       // middle: new Number[] {1, 1, 1}
       
-      AreEqual(3, map.DimensionsCount);
-      AreEqual(0, map.MarkedPointsCount);
-      IsFalse(map.IsMarked(new Number[] {0, -1, -2}));
-      IsFalse(map.IsMarked(new Number[] { 0, 0, 0 }));
-      IsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
-      IsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
+      map.DimensionsCount.AssertIsEqualTo(3);
+      map.MarkedPointsCount.AssertIsEqualTo(0);
+      map.IsMarked(new Number[] {0, -1, -2}).AssertIsFalse();
+      map.IsMarked(new Number[] { 0, 0, 0 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 1, 1, 1 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 2, 3, 4 }).AssertIsFalse();
       
-      IsTrue(map.MarkPoint(new Number[] { 0, 0, 0 }));
+      map.MarkPoint(new Number[] { 0, 0, 0 }).AssertIsTrue();
       
-      AreEqual(1, map.MarkedPointsCount);
-      IsTrue(map.IsMarked(new Number[] {0, -1, -2}));
-      IsTrue(map.IsMarked(new Number[] { 0, 0, 0 }));
-      IsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
-      IsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
+      map.MarkedPointsCount.AssertIsEqualTo(1);
+      map.IsMarked(new Number[] {0, -1, -2}).AssertIsTrue();
+      map.IsMarked(new Number[] { 0, 0, 0 }).AssertIsTrue();
+      map.IsMarked(new Number[] { 1, 1, 1 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 2, 3, 4 }).AssertIsFalse();
     }
     
     [Fact]
@@ -62,23 +62,23 @@ namespace Arnible.MathModeling.Geometry.Test
         rightTopMapCorner: new Number[] {2, 3, 4},
         precision: 3);
 
-      AreEqual(3, map.DimensionsCount);
-      AreEqual(0, map.MarkedPointsCount);
-      IsFalse(map.IsMarked(new Number[] {0, -1, -2}));
-      IsFalse(map.IsMarked(new Number[] { 0, 0, 0 }));
-      IsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
-      IsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
+      map.DimensionsCount.AssertIsEqualTo(3);
+      map.MarkedPointsCount.AssertIsEqualTo(0);
+      map.IsMarked(new Number[] {0, -1, -2}).AssertIsFalse();
+      map.IsMarked(new Number[] { 0, 0, 0 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 1, 1, 1 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 2, 3, 4 }).AssertIsFalse();
       
-      IsTrue(map.MarkPoint(new Number[] { 0, 0, 0 }));
+      map.MarkPoint(new Number[] { 0, 0, 0 }).AssertIsTrue();
       
-      AreEqual(1, map.MarkedPointsCount);
-      IsFalse(map.IsMarked(new Number[] {0, -1, -2}));
-      IsTrue(map.IsMarked(new Number[] { 0, 0, 0 }));
-      IsTrue(map.IsMarked(new Number[] { 0.1, 0.1, 0.1 }));
-      IsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
-      IsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
+      map.MarkedPointsCount.AssertIsEqualTo(1);
+      map.IsMarked(new Number[] {0, -1, -2}).AssertIsFalse();
+      map.IsMarked(new Number[] { 0, 0, 0 }).AssertIsTrue();
+      map.IsMarked(new Number[] { 0.1, 0.1, 0.1 }).AssertIsTrue();
+      map.IsMarked(new Number[] { 1, 1, 1 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 2, 3, 4 }).AssertIsFalse();
       
-      IsFalse(map.MarkPoint(new Number[] { 0.1, 0.1, 0.1 }));
+      map.MarkPoint(new Number[] { 0.1, 0.1, 0.1 }).AssertIsFalse();
     }
   }
 }

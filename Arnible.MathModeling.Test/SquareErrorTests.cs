@@ -1,6 +1,6 @@
-﻿using Arnible.MathModeling.Geometry;
+﻿using Arnible.Assertions;
+using Arnible.MathModeling.Geometry;
 using Xunit;
-using static Arnible.MathModeling.xunit.AssertNumber;
 
 namespace Arnible.MathModeling.Test
 {
@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Test
     [InlineData(-1, 1, 4)]
     public void Value(double x, double y, double expected)
     {
-      AreEqual(expected, _error.Value(x, y));
+      _error.Value(x, y).AssertIsEqualTo(expected);
     }
 
     [Theory]
@@ -26,8 +26,8 @@ namespace Arnible.MathModeling.Test
     public void DerivativeByX(double x, double y, double first, double second)
     {
       var derivative = _error.DerivativeByX(new RectangularCoordinate(x, y));
-      AreEqual(first, derivative.First);
-      AreEqual(second, derivative.Second);
+      derivative.First.AssertIsEqualTo(first);
+      derivative.Second.AssertIsEqualTo(second);
     }
 
     [Theory]
@@ -37,8 +37,8 @@ namespace Arnible.MathModeling.Test
     public void DerivativeByY(double x, double y, double first, double second)
     {
       var derivative = _error.DerivativeByY(new RectangularCoordinate(x, y));
-      AreEqual(first, derivative.First);
-      AreEqual(second, derivative.Second);
+      derivative.First.AssertIsEqualTo(first);
+      derivative.Second.AssertIsEqualTo(second);
     }    
 
     [Theory]
@@ -49,8 +49,8 @@ namespace Arnible.MathModeling.Test
     {
       PolarCoordinate p = new RectangularCoordinate(x, y).ToPolar();
       var derivative = _error.DerivativeByR(p);
-      AreEqual(first, derivative.First);
-      AreEqual(second, derivative.Second);
+      derivative.First.AssertIsEqualTo(first);
+      derivative.Second.AssertIsEqualTo(second);
     }
 
     [Theory]
@@ -61,8 +61,8 @@ namespace Arnible.MathModeling.Test
     {
       PolarCoordinate p = new RectangularCoordinate(x, y).ToPolar();
       var derivative = _error.DerivativeByΦ(p);
-      AreEqual(first, derivative.First);
-      AreEqual(second, derivative.Second);
+      derivative.First.AssertIsEqualTo(first);
+      derivative.Second.AssertIsEqualTo(second);
     }
   }
 }

@@ -1,7 +1,6 @@
-﻿using Arnible.MathModeling.Algebra;
+﻿using Arnible.Assertions;
 using Xunit;
-using static Arnible.MathModeling.Polynomials.Term;
-using static Arnible.MathModeling.xunit.AssertNumber;
+using static Arnible.MathModeling.Algebra.Polynomials.Term;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -20,7 +19,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var hc = new HypersphericalCoordinate(r, new HypersphericalAngleVector(φ));
       var actual = expression.ToSpherical(cc, hc);
 
-      AreEqual(expected, actual);
+      IsEqualToExtensions.AssertIsEqualTo(expected, actual);
     }
   }
 }

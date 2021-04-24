@@ -1,5 +1,5 @@
-﻿using Arnible.MathModeling.Algebra;
-using System;
+﻿using System;
+using Arnible.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -11,8 +11,7 @@ namespace Arnible.MathModeling.Geometry
   public readonly struct CartesianCoordinate : 
     IEquatable<CartesianCoordinate>, 
     ICartesianCoordinate, 
-    ICoordinate<CartesianCoordinate>,
-    IValueObject
+    ICoordinate<CartesianCoordinate>
   {
     public static CartesianCoordinate ForAxis(uint dimensionsCount, uint axisNumber, Number value)
     {
@@ -44,9 +43,9 @@ namespace Arnible.MathModeling.Geometry
       return new CartesianCoordinate(new[] { rc.X, rc.Y }.ToVector());
     }
 
-    public static implicit operator CartesianCoordinate(in ValueArray<Number> rc)
+    public static implicit operator CartesianCoordinate(in ReadOnlyArray<Number> rc)
     {
-      return new CartesianCoordinate(rc.GetInternalEnumerable().ToVector());
+      return new CartesianCoordinate(rc.AsList().ToVector());
     }
 
     public static implicit operator CartesianCoordinate(in NumberVector rc)
@@ -61,7 +60,7 @@ namespace Arnible.MathModeling.Geometry
 
     public bool Equals(CartesianCoordinate other) => Equals(in other);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if(obj is CartesianCoordinate typed)
       {
@@ -89,7 +88,7 @@ namespace Arnible.MathModeling.Geometry
     // Properties
     //
 
-    public uint DimensionsCount => Coordinates.Length;
+    public ushort DimensionsCount => Coordinates.Length;
 
     //
     // Operations
