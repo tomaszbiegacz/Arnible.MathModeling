@@ -30,40 +30,29 @@ namespace Arnible
     {
       _src = items;
     }
+    
     public static implicit operator ReadOnlyArray<T>(T[] v) => new(v);
-
-    //
-    // Basic casts
-    //
-    
     public static implicit operator ReadOnlySpan<T>(ReadOnlyArray<T> v) => v._src ?? _emptyArray;
-    
-    private IReadOnlyList<T> Src => _src ?? _emptyArray;
-    
-    /// <summary>
-    /// Shorthand for quick and dirty code relying on linq.
-    /// </summary>
-    public IReadOnlyList<T>AsList() => Src;
-    public IEnumerator<T> GetEnumerator() => Src.GetEnumerator();
 
     //
     // Properties
     //
     
+    private IReadOnlyList<T> Src => _src ?? _emptyArray;
+    
     public ushort Length => (ushort)Src.Count;
     public bool IsEmpty => Src.Count == 0;
-    
-    
+
     public ref T this[ushort pos] => ref (_src ?? throw new InvalidOperationException())[pos];
-
-    public ref T First => ref (_src ?? throw new InvalidOperationException())[0]; 
     
+    public ref T First => ref (_src ?? throw new InvalidOperationException())[0];
     public ref T Last => ref (_src ?? throw new InvalidOperationException())[^1];
-
+    
     //
-    // Equals
+    // IEquatable
+    // 
     //
-
+    
     public bool Equals(ReadOnlyArray<T> other)
     {
       bool isThisEmpty = IsEmpty;
@@ -104,19 +93,24 @@ namespace Arnible
       }
       return hashCode.ToHashCode();
     }
+
+    public override string ToString()
+    {
+      return "[" + string.Join(',', Src) + "]";
+    }
     
     public static bool operator ==(ReadOnlyArray<T> a, ReadOnlyArray<T> b) => a.Equals(b);
     public static bool operator !=(ReadOnlyArray<T> a, ReadOnlyArray<T> b) => !a.Equals(b);
-    
+
     //
-    // Serialization
+    // 
+    // IEquatable
     //
     
-    public ReadOnlyMemory<char> ToCharMemory(char separator = ',')
-    {
-      return ("[" + string.Join(separator, Src) + "]").AsMemory();
-    }
-    
-    public override string ToString() => ToCharMemory().ToString();
+    /// <summary>
+    /// Shorthand for quick and dirty code relying on linq.
+    /// </summary>
+    public IReadOnlyList<T>AsList() => Src;
+    public IEnumerator<T> GetEnumerator() => Src.GetEnumerator();
   }
 }
