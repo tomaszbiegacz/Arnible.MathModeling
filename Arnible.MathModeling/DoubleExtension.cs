@@ -8,7 +8,6 @@ namespace Arnible.MathModeling
     {
       if (IsValidNumeric(in a) && IsValidNumeric(in b))
       {
-        // ReSharper disable once CompareOfFloatsByEqualityOperator
         if (a == b)
         {
           return true;
@@ -18,7 +17,6 @@ namespace Arnible.MathModeling
           double diff = Math.Abs(a - b);
           double denominator = Math.Min(Math.Abs(a), Math.Abs(b));
           const double resolution = 1E-9;
-          // ReSharper disable once CompareOfFloatsByEqualityOperator
           if (denominator == 0)
           {
             return diff < resolution;
