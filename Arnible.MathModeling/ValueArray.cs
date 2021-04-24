@@ -18,10 +18,9 @@ namespace Arnible.MathModeling
   /// </remarks>  
   [Serializable]
   public readonly struct ValueArray<T> : 
-    IEquatable<ValueArray<T>>, 
-    IValueArray<T>, 
-    IValueObject 
-    where T : struct, IValueObject
+    IEquatable<ValueArray<T>>,
+    IEnumerable<T>
+    where T : struct
   {
     private static IEnumerable<T> _empty = LinqArray<T>.Empty;
     private readonly T[] _values;
@@ -37,18 +36,18 @@ namespace Arnible.MathModeling
 
     public override string ToString()
     {
-      return "[" + string.Join(" ", GetInternalEnumerable().Select(v => v.ToStringValue())) + "]";
+      return "[" + string.Join(" ", GetInternalEnumerable()) + "]";
     }
     public string ToStringValue() => ToString();
 
     public override int GetHashCode()
     {
-      int hc = Length.GetHashCode();
-      foreach (T v in GetInternalEnumerable())
+      HashCode hashCode = new HashCode();
+      foreach(T item in GetInternalEnumerable())
       {
-        hc = unchecked(hc * 314159 + v.GetHashCodeValue());
+        hashCode.Add(item);
       }
-      return hc;
+      return hashCode.ToHashCode();
     }
     public int GetHashCodeValue() => GetHashCode();
 

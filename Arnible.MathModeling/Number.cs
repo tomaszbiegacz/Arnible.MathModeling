@@ -18,8 +18,7 @@ namespace Arnible.MathModeling
   [Serializable]
   public readonly struct Number : 
     IAlgebraUnitRing<Number>,
-    IComparable<Number>,
-    IValueObject
+    IComparable<Number>
   {    
     static readonly Number _one = 1;
     static readonly Number _zero = 0;

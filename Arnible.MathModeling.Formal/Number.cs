@@ -8,8 +8,7 @@ using Arnible.MathModeling.Algebra.Polynomials;
 namespace Arnible.MathModeling
 {
   public readonly struct Number : 
-    IAlgebraUnitRing<Number>, 
-    IValueObject
+    IAlgebraUnitRing<Number>
   {
     static readonly Number _one = 1;
     static readonly Number _zero = 0;

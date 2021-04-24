@@ -98,10 +98,6 @@
     <Compile Include="..\Arnible.MathModeling\Geometry\RectangularCoordinate.cs" Link="Geometry\RectangularCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\IBinaryOperation.cs" Link="IBinaryOperation.cs" />
     <Compile Include="..\Arnible.MathModeling\IFinitaryOperation.cs" Link="IFinitaryOperation.cs" />
-    <Compile Include="..\Arnible.MathModeling\IValueArray.cs" Link="IValueArray.cs" />
-    <Compile Include="..\Arnible.MathModeling\IValueObject.cs">
-      <Link>IValueObject.cs</Link>
-    </Compile>
     <Compile Include="..\Arnible.MathModeling\MetaMath.cs" Link="MetaMath.cs" />
     <Compile Include="..\Arnible.MathModeling\NumericFormatting.cs" Link="NumericFormatting.cs" />
     <Compile Include="..\Arnible.MathModeling\OperationExtension.cs" Link="OperationExtension.cs" />

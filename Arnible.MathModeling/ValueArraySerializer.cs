@@ -4,7 +4,7 @@ using Arnible.Export;
 namespace Arnible.MathModeling
 {
   public class ValueArraySerializer<T> : ValueRecordSerializerSimple<ValueArray<T>>
-    where T : struct, IValueObject
+    where T : struct
   {
     public override void Serialize(IRecordFieldSerializer serializer, in ValueArray<T>? record)
     {
