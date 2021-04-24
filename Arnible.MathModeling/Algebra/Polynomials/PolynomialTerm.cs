@@ -353,7 +353,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
     {
       if (name.IsConstant)
       {
-        return DoubleExtension.RoundedSin((double)name);
+        return NumberMath.RoundedSin((double)name);
       }
       else
       {
@@ -365,7 +365,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
     {
       if (name.IsConstant)
       {
-        return DoubleExtension.RoundedCos((double)name);
+        return NumberMath.RoundedCos((double)name);
       }
       else
       {

@@ -1,6 +1,6 @@
 ﻿using Arnible.MathModeling.Analysis;
 using Arnible.MathModeling.Geometry;
-using static Arnible.MathModeling.MetaMath;
+using static Arnible.MathModeling.NumberMath;
 
 namespace Arnible.MathModeling.Test
 {

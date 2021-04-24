@@ -8,7 +8,7 @@ namespace Arnible.Linq
     /// <summary>
     /// Finds maximum value or throw ArgumentException if passed enumerable is empty
     /// </summary>
-    public static T MaxDefensive<T>(this IEnumerable<T> x) where T: notnull, IComparable<T>
+    public static T MaxDefensive<T>(this IEnumerable<T> x) where T: IComparable<T>
     {      
       bool isResultKnown = false;
       T result = default;
@@ -36,6 +36,14 @@ namespace Arnible.Linq
       {
         throw new ArgumentException("Empty enumerator");
       }
-    } 
+    }
+    
+    /// <summary>
+    /// Finds maximum value or throw ArgumentException if passed enumerable is empty
+    /// </summary>
+    public static T MaxDefensive<T>(this ReadOnlyArray<T> x) where T: IComparable<T>, IEquatable<T>
+    {      
+      return x.AsList().MaxDefensive();
+    }
   }
 }

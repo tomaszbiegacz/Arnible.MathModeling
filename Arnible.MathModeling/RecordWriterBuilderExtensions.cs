@@ -7,8 +7,7 @@ namespace Arnible.MathModeling
     public static RecordWriterBuilder RegisterMathModellingSerializers(this RecordWriterBuilder src)
     {
       return src
-        .RegisterValueSerializer<Number,Number.Serializer>()
-        .RegisterGenericValueSerializer(typeof(ValueArray<>), typeof(ValueArraySerializer<>));
+        .RegisterValueSerializer<Number,Number.Serializer>();
     }
   }
 }

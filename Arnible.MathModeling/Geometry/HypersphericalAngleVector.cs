@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using static Arnible.MathModeling.MetaMath;
 using Arnible.Linq;
 using Arnible.MathModeling.Algebra;
 
@@ -197,8 +195,8 @@ namespace Arnible.MathModeling.Geometry
       Number replacement = 1;
       foreach (var angle in GetInternalEnumerable().Reverse())
       {
-        cartesianDimensions.Add(replacement * Sin(angle));
-        replacement *= Cos(angle);
+        cartesianDimensions.Add(replacement * NumberMath.Sin(angle));
+        replacement *= NumberMath.Cos(angle);
       }
       cartesianDimensions.Add(replacement);
       cartesianDimensions.Reverse();

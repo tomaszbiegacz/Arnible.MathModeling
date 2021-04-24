@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using static Arnible.MathModeling.MetaMath;
 using Arnible.Linq;
 using Arnible.MathModeling.Analysis;
 
@@ -39,25 +38,25 @@ namespace Arnible.MathModeling.Geometry
           // derivative by angle
           if (currentAnglePos <= pos)
           {
-            cartesianDimensions.Add(replacement * Cos(angle));
+            cartesianDimensions.Add(replacement * NumberMath.Cos(angle));
           }
           else
           {
             cartesianDimensions.Add(0);
           }
-          replacement *= -1 * Sin(angle);
+          replacement *= -1 * NumberMath.Sin(angle);
         }
         else
         {
           if (currentAnglePos <= pos)
           {
-            cartesianDimensions.Add(replacement * Sin(angle));
+            cartesianDimensions.Add(replacement * NumberMath.Sin(angle));
           }
           else
           {
             cartesianDimensions.Add(0);
           }
-          replacement *= Cos(angle);
+          replacement *= NumberMath.Cos(angle);
         }
       }
       cartesianDimensions.Add(replacement);

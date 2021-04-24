@@ -30,7 +30,7 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Rounding_Array()
     {
-      IsEqualToExtensions.AssertIsEqualTo<ValueArray<Number>>(new Number[] { 0 }, new Number[] { 8.65956056235496E-17 });
+      (new Number[] { 8.65956056235496E-17 }).AssertSequenceEqualsTo(new Number[] { 0 });
     }
 
     [Theory]

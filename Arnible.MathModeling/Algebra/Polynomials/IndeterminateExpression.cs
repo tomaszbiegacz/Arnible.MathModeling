@@ -114,9 +114,9 @@ namespace Arnible.MathModeling.Algebra.Polynomials
         case ElementaryUnaryOperation.Identity:
           return value;
         case ElementaryUnaryOperation.Sine:
-          return DoubleExtension.RoundedSin(value);
+          return NumberMath.RoundedSin(value);
         case ElementaryUnaryOperation.Cosine:
-          return DoubleExtension.RoundedCos(value);
+          return NumberMath.RoundedCos(value);
         default:
           throw new InvalidOperationException("Unknown modifier: " + _modifier);
       }
@@ -273,9 +273,9 @@ namespace Arnible.MathModeling.Algebra.Polynomials
           case ElementaryUnaryOperation.Identity:
             return value.ToPower(Power);
           case ElementaryUnaryOperation.Sine:
-            return DoubleExtension.RoundedSin(value).ToPower(Power);
+            return NumberMath.RoundedSin(value).ToPower(Power);
           case ElementaryUnaryOperation.Cosine:
-            return DoubleExtension.RoundedCos(value).ToPower(Power);
+            return NumberMath.RoundedCos(value).ToPower(Power);
           default:
             throw new InvalidOperationException("Unknown modifier: " + _modifier);
         }

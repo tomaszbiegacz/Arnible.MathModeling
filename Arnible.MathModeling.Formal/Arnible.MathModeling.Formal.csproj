@@ -111,9 +111,7 @@
     <Compile Include="..\Arnible.MathModeling\Geometry\PolarCoordinate.cs" Link="Geometry\PolarCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\QuantifiedDirectionsFactory.cs" Link="Geometry\QuantifiedDirectionsFactory.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\RectangularCoordinate.cs" Link="Geometry\RectangularCoordinate.cs" />
-    <Compile Include="..\Arnible.MathModeling\MetaMath.cs" Link="MetaMath.cs" />
     <Compile Include="..\Arnible.MathModeling\NumericFormatting.cs" Link="NumericFormatting.cs" />
-    <Compile Include="..\Arnible.MathModeling\ValueArray.cs" Link="ValueArray.cs" />
     <Compile Include="..\Arnible.MathModeling\Analysis\ValueWithDerivative1.cs">
       <Link>Analysis\ValueWithDerivative1.cs</Link>
     </Compile>

@@ -66,19 +66,5 @@ namespace Arnible.MathModeling
           return Math.Pow(a, b);
       }
     }
-
-    public static double RoundedSin(in double value)
-    {
-      if (NumericEquals(in value, 0)) return 0;
-      else if (NumericEquals(in value, Angle.RightAngle)) return 1;
-      else return Math.Sin(value);
-    }
-
-    public static double RoundedCos(in double value)
-    {
-      if (NumericEquals(in value, 0)) return 1;
-      else if (NumericEquals(in value, Angle.RightAngle)) return 0;
-      else return Math.Cos(value);
-    }
   }
 }
