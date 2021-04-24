@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Constructor_Default()
     {
       HypersphericalAngleVector v = default;
-      ConditionExtensions.AssertIsTrue(v == 0);
+      (v == 0).AssertIsTrue();
       v.Length.AssertIsEqualTo(1);
       v[0].AssertIsEqualTo(0);
       v.ToString().AssertIsEqualTo("0");
@@ -32,9 +32,9 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Constructor_Single()
     {
       HypersphericalAngleVector v = 2;
-      ConditionExtensions.AssertIsFalse(v == 0);
-      ConditionExtensions.AssertIsTrue(v == 2);
-      ConditionExtensions.AssertIsFalse(v != 2);
+      (v == 0).AssertIsFalse();
+      (v == 2).AssertIsTrue();
+      (v != 2).AssertIsFalse();
       v[0].AssertIsEqualTo(2);
       v.Length.AssertIsEqualTo(1);
       v.ToString().AssertIsEqualTo("2");
@@ -47,7 +47,7 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Constructor_Explicit()
     {
       HypersphericalAngleVector v = new HypersphericalAngleVector(2, -1, 1);
-      ConditionExtensions.AssertIsFalse(v == 0);
+      (v == 0).AssertIsFalse();
       v.Length.AssertIsEqualTo(3);
       v.ToString().AssertIsEqualTo("[2 -1 1]");
     }
@@ -55,13 +55,13 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void NotEqual_Values()
     {
-      ConditionExtensions.AssertIsFalse(new HypersphericalAngleVector(1, 1) == new HypersphericalAngleVector(1, -1));
+      (new HypersphericalAngleVector(1, 1) == new HypersphericalAngleVector(1, -1)).AssertIsFalse();
     }
 
     [Fact]
     public void NotEqual_Dimensions()
     {
-      ConditionExtensions.AssertIsFalse(default == new HypersphericalAngleVector(1));
+      (default == new HypersphericalAngleVector(1)).AssertIsFalse();
     }
 
     [Fact]
@@ -194,8 +194,8 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       for (ushort i = 0; i < radios.Length; ++i)
       {
-        IsLessThanExtensions.AssertIsLessEqualThan(0, radios[i]);
-        IsGreaterThanExtensions.AssertIsGreaterEqualThan(1, radios[i]);
+        radios[i].AssertIsGreaterEqualThan(0);
+        radios[i].AssertIsLessEqualThan(1);
       }
       radios.Select(r => r*r).SumDefensive().AssertIsEqualTo(1);
     }

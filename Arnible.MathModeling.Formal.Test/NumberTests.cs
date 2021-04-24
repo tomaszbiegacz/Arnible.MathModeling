@@ -11,34 +11,34 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void Equality()
     {
-      ConditionExtensions.AssertIsTrue(0 == A - A);
-      ConditionExtensions.AssertIsFalse(0 != A - A);
+      (0 == A - A).AssertIsTrue();
+      (0 != A - A).AssertIsFalse();
 
-      ConditionExtensions.AssertIsTrue(1 == A + 1 - A);
-      ConditionExtensions.AssertIsFalse(1 != A + 1 - A);
+      (1 == A + 1 - A).AssertIsTrue();
+      (1 != A + 1 - A).AssertIsFalse();
 
-      ConditionExtensions.AssertIsFalse(1 == A - A);
-      ConditionExtensions.AssertIsTrue(1 != A - A);      
+      (1 == A - A).AssertIsFalse();
+      (1 != A - A).AssertIsTrue();      
     }
 
     [Fact]
     public void Greater()
     {
-      ConditionExtensions.AssertIsFalse(0 > A + 1 - A);
-      ConditionExtensions.AssertIsTrue(0 < A + 1 - A);
+      (0 > A + 1 - A).AssertIsFalse();
+      (0 < A + 1 - A).AssertIsTrue();
 
-      ConditionExtensions.AssertIsTrue(2 > A + 1 - A);
-      ConditionExtensions.AssertIsFalse(2 < A + 1 - A);
+      (2 > A + 1 - A).AssertIsTrue();
+      (2 < A + 1 - A).AssertIsFalse();
 
-      ConditionExtensions.AssertIsFalse(2 * A > A);
-      ConditionExtensions.AssertIsFalse(2 * A < A);
-      ConditionExtensions.AssertIsFalse(2 * A >= A);
-      ConditionExtensions.AssertIsFalse(2 * A <= A);
+      (2 * A > A).AssertIsFalse();
+      (2 * A < A).AssertIsFalse();
+      (2 * A >= A).AssertIsFalse();
+      (2 * A <= A).AssertIsFalse();
 
-      ConditionExtensions.AssertIsFalse(A > Term.a);
-      ConditionExtensions.AssertIsFalse(A < Term.a);
-      ConditionExtensions.AssertIsTrue(A <= Term.a);
-      ConditionExtensions.AssertIsTrue(A >= Term.a);
+      (A > Term.a).AssertIsFalse();
+      (A < Term.a).AssertIsFalse();
+      (A <= Term.a).AssertIsTrue();
+      (A >= Term.a).AssertIsTrue();
     }
   }
 }

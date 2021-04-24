@@ -15,18 +15,18 @@ namespace Arnible.MathModeling.Geometry.Test
       
       map.DimensionsCount.AssertIsEqualTo(3);
       map.MarkedPointsCount.AssertIsEqualTo(0);
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] {0, -1, -2}));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 0, 0, 0 }));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
+      map.IsMarked(new Number[] {0, -1, -2}).AssertIsFalse();
+      map.IsMarked(new Number[] { 0, 0, 0 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 1, 1, 1 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 2, 3, 4 }).AssertIsFalse();
       
-      ConditionExtensions.AssertIsTrue(map.MarkPoint(new Number[] { 0, 0, 0 }));
+      map.MarkPoint(new Number[] { 0, 0, 0 }).AssertIsTrue();
       
       map.MarkedPointsCount.AssertIsEqualTo(1);
-      ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] {0, -1, -2}));
-      ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] { 0, 0, 0 }));
-      ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] { 1, 1, 1 }));
-      ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] { 2, 3, 4 }));
+      map.IsMarked(new Number[] {0, -1, -2}).AssertIsTrue();
+      map.IsMarked(new Number[] { 0, 0, 0 }).AssertIsTrue();
+      map.IsMarked(new Number[] { 1, 1, 1 }).AssertIsTrue();
+      map.IsMarked(new Number[] { 2, 3, 4 }).AssertIsTrue();
     }
     
     [Fact]
@@ -40,18 +40,18 @@ namespace Arnible.MathModeling.Geometry.Test
       
       map.DimensionsCount.AssertIsEqualTo(3);
       map.MarkedPointsCount.AssertIsEqualTo(0);
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] {0, -1, -2}));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 0, 0, 0 }));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
+      map.IsMarked(new Number[] {0, -1, -2}).AssertIsFalse();
+      map.IsMarked(new Number[] { 0, 0, 0 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 1, 1, 1 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 2, 3, 4 }).AssertIsFalse();
       
-      ConditionExtensions.AssertIsTrue(map.MarkPoint(new Number[] { 0, 0, 0 }));
+      map.MarkPoint(new Number[] { 0, 0, 0 }).AssertIsTrue();
       
       map.MarkedPointsCount.AssertIsEqualTo(1);
-      ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] {0, -1, -2}));
-      ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] { 0, 0, 0 }));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
+      map.IsMarked(new Number[] {0, -1, -2}).AssertIsTrue();
+      map.IsMarked(new Number[] { 0, 0, 0 }).AssertIsTrue();
+      map.IsMarked(new Number[] { 1, 1, 1 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 2, 3, 4 }).AssertIsFalse();
     }
     
     [Fact]
@@ -64,21 +64,21 @@ namespace Arnible.MathModeling.Geometry.Test
 
       map.DimensionsCount.AssertIsEqualTo(3);
       map.MarkedPointsCount.AssertIsEqualTo(0);
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] {0, -1, -2}));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 0, 0, 0 }));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
+      map.IsMarked(new Number[] {0, -1, -2}).AssertIsFalse();
+      map.IsMarked(new Number[] { 0, 0, 0 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 1, 1, 1 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 2, 3, 4 }).AssertIsFalse();
       
-      ConditionExtensions.AssertIsTrue(map.MarkPoint(new Number[] { 0, 0, 0 }));
+      map.MarkPoint(new Number[] { 0, 0, 0 }).AssertIsTrue();
       
       map.MarkedPointsCount.AssertIsEqualTo(1);
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] {0, -1, -2}));
-      ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] { 0, 0, 0 }));
-      ConditionExtensions.AssertIsTrue(map.IsMarked(new Number[] { 0.1, 0.1, 0.1 }));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 1, 1, 1 }));
-      ConditionExtensions.AssertIsFalse(map.IsMarked(new Number[] { 2, 3, 4 }));
+      map.IsMarked(new Number[] {0, -1, -2}).AssertIsFalse();
+      map.IsMarked(new Number[] { 0, 0, 0 }).AssertIsTrue();
+      map.IsMarked(new Number[] { 0.1, 0.1, 0.1 }).AssertIsTrue();
+      map.IsMarked(new Number[] { 1, 1, 1 }).AssertIsFalse();
+      map.IsMarked(new Number[] { 2, 3, 4 }).AssertIsFalse();
       
-      ConditionExtensions.AssertIsFalse(map.MarkPoint(new Number[] { 0.1, 0.1, 0.1 }));
+      map.MarkPoint(new Number[] { 0.1, 0.1, 0.1 }).AssertIsFalse();
     }
   }
 }

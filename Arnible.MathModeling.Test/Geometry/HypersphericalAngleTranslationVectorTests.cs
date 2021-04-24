@@ -10,7 +10,7 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Constructor_Default()
     {
       HypersphericalAngleTranslationVector v = default;
-      ConditionExtensions.AssertIsTrue(v == 0);
+      (v == 0).AssertIsTrue();
       v.Length.AssertIsEqualTo(1);
       v[0].AssertIsEqualTo(0);
       v.ToString().AssertIsEqualTo("0");
@@ -24,9 +24,9 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Constructor_Single()
     {
       HypersphericalAngleTranslationVector v = 2;
-      ConditionExtensions.AssertIsFalse(v == 0);
-      ConditionExtensions.AssertIsTrue(v == 2);
-      ConditionExtensions.AssertIsFalse(v != 2);
+      (v == 0).AssertIsFalse();
+      (v == 2).AssertIsTrue();
+      (v != 2).AssertIsFalse();
       v[0].AssertIsEqualTo(2);
       v.Length.AssertIsEqualTo(1);
       v.ToString().AssertIsEqualTo("2");
@@ -36,7 +36,7 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Constructor_Explicit()
     {
       HypersphericalAngleTranslationVector v = new HypersphericalAngleTranslationVector(2, 1, -1);
-      ConditionExtensions.AssertIsFalse(v == 0);
+      (v == 0).AssertIsFalse();
       v.Length.AssertIsEqualTo(3);
       v.ToString().AssertIsEqualTo("[2 1 -1]");
     }

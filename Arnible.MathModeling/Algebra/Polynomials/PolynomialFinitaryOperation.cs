@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
 
     public double Value(in ReadOnlySpan<double> x)
     {
-      x.AssertLengthEqualsTo(_variables.Length);
+      x.Length.AssertIsEqualTo(_variables.Length);
       
       var args = new Dictionary<char, double>();
       for(ushort i=0; i<_variables.Length; ++i)

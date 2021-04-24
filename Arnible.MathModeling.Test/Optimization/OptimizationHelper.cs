@@ -14,9 +14,9 @@ namespace Arnible.MathModeling.Optimization.Test
       while(!method.IsOptimal)
       {
         i++;
-        ConditionExtensions.AssertIsTrue(method.MoveNext());
-        IsGreaterThanExtensions.AssertIsGreaterThan(width, method.Width);
-        IsGreaterThanExtensions.AssertIsGreaterEqualThan(value, method.Y);
+        method.MoveNext().AssertIsTrue();
+        method.Width.AssertIsLessThan(width);
+        method.Y.AssertIsLessEqualThan(value);
 
         width = method.Width;
         value = method.Y;

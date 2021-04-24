@@ -13,14 +13,14 @@ namespace Arnible.MathModeling.Geometry.Test
     public void HypersphericalCoordinate_IsValidTranslation_ok()
     {
       HypersphericalCoordinate hc = new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.HalfRightAngle));
-      ConditionExtensions.AssertIsTrue(_range.IsValidTranslation(hc, new HypersphericalAngleTranslationVector(Angle.HalfRightAngle)));
+      _range.IsValidTranslation(hc, new HypersphericalAngleTranslationVector(Angle.HalfRightAngle)).AssertIsTrue();
     }
 
     [Fact]
     public void HypersphericalCoordinate_IsValidTranslation_false()
     {
       HypersphericalCoordinate hc = new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.HalfRightAngle));
-      ConditionExtensions.AssertIsFalse(_range.IsValidTranslation(hc, new HypersphericalAngleTranslationVector(Angle.RightAngle)));
+      _range.IsValidTranslation(hc, new HypersphericalAngleTranslationVector(Angle.RightAngle)).AssertIsFalse();
     }
 
     [Fact]

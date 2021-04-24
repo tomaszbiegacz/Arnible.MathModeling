@@ -13,8 +13,8 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       IndeterminateExpression v = default;
 
-      ConditionExtensions.AssertIsTrue(v.IsOne);
-      ConditionExtensions.AssertIsFalse(v.HasUnaryModifier);
+      v.IsOne.AssertIsTrue();
+      v.HasUnaryModifier.AssertIsFalse();
       Assert.Throws<InvalidOperationException>(() =>
       {
         var _ = (char) v;
@@ -37,8 +37,8 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     public void Constructor_Identity()
     {
       IndeterminateExpression v = 'v';
-      ConditionExtensions.AssertIsFalse(v.IsOne);
-      ConditionExtensions.AssertIsFalse(v.HasUnaryModifier);
+      v.IsOne.AssertIsFalse();
+      v.HasUnaryModifier.AssertIsFalse();
       ((char)v).AssertIsEqualTo('v');
 
       v.ToString().AssertIsEqualTo("v");
@@ -55,8 +55,8 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     public void Constructor_Sin()
     {
       IndeterminateExpression v = IndeterminateExpression.Sin('v');
-      ConditionExtensions.AssertIsFalse(v.IsOne);
-      ConditionExtensions.AssertIsTrue(v.HasUnaryModifier);
+      v.IsOne.AssertIsFalse();
+      v.HasUnaryModifier.AssertIsTrue();
       Assert.Throws<InvalidOperationException>(() =>
       {
         var _ = (char) v;
@@ -78,8 +78,8 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     public void Constructor_Cos()
     {
       IndeterminateExpression v = IndeterminateExpression.Cos('v');
-      ConditionExtensions.AssertIsFalse(v.IsOne);
-      ConditionExtensions.AssertIsTrue(v.HasUnaryModifier);
+      v.IsOne.AssertIsFalse();
+      v.HasUnaryModifier.AssertIsTrue();
       Assert.Throws<InvalidOperationException>(() =>
       {
         var _ = (char) v;

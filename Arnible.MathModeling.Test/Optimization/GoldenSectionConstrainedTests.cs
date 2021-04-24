@@ -147,7 +147,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       method.X.AssertIsEqualTo(b.X);
       method.Y.AssertIsEqualTo(b.Y);
-      IsLessThanExtensions.AssertIsLessThan(b.Y, a.Y);
+      a.Y.AssertIsGreaterThan(b.Y);
 
       ushort i = OptimizationHelper.FindOptimal(method);
       
@@ -165,7 +165,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       method.X.AssertIsEqualTo(a.X);
       method.Y.AssertIsEqualTo(a.Y);
-      IsLessThanExtensions.AssertIsLessThan(a.Y, b.Y);
+      b.Y.AssertIsGreaterThan(a.Y);
 
       ushort i = OptimizationHelper.FindOptimal(method);
       
@@ -184,9 +184,9 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(1.4 * Math.PI);
       var b = f.ValueWithDerivative(4.4 * Math.PI);
       
-      IsGreaterThanExtensions.AssertIsGreaterThan(b.Y, a.Y);
-      IsGreaterThanExtensions.AssertIsGreaterThan(0, a.First);
-      IsLessThanExtensions.AssertIsLessThan(0, b.First);
+      a.Y.AssertIsLessThan(b.Y);
+      a.First.AssertIsLessThan(0);
+      b.First.AssertIsGreaterThan(0);
       
       var method = new GoldenSectionConstrained(f: f, a: a, b: b, Logger);
       method.X.AssertIsEqualTo(a.X);

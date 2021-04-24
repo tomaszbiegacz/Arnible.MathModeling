@@ -14,14 +14,14 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       Polynomial v = default;
 
-      ConditionExtensions.AssertIsTrue(v == 0);
-      ConditionExtensions.AssertIsTrue(v.IsSingleTerm);
-      ConditionExtensions.AssertIsTrue(v.IsConstant);
+      (v == 0).AssertIsTrue();
+      v.IsSingleTerm.AssertIsTrue();
+      v.IsConstant.AssertIsTrue();
       v.ToString().AssertIsEqualTo("0");
 
       v.AssertIsEqualTo(0);
       v.AssertIsEqualTo(0);
-      ConditionExtensions.AssertIsFalse(1 == v);
+      (1 == v).AssertIsFalse();
 
       v.DerivativeBy('a').AssertIsEqualTo(0);
 
@@ -35,15 +35,15 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     public void Constructor_Constant()
     {
       Polynomial v = 2;
-      ConditionExtensions.AssertIsFalse(v == 0);
-      ConditionExtensions.AssertIsTrue(v.IsSingleTerm);
-      ConditionExtensions.AssertIsTrue(v.IsConstant);
+      (v == 0).AssertIsFalse();
+      v.IsSingleTerm.AssertIsTrue();
+      v.IsConstant.AssertIsTrue();
       v.ToString().AssertIsEqualTo("2");
 
       v.AssertIsEqualTo(2);
       v.AssertIsEqualTo(2);
-      ConditionExtensions.AssertIsFalse(1 == v);
-      ConditionExtensions.AssertIsFalse(0 == v);
+      (1 == v).AssertIsFalse();
+      (0 == v).AssertIsFalse();
 
       v.DerivativeBy('a').AssertIsEqualTo(0);
 
@@ -57,9 +57,9 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     public void Constructor_Variable()
     {
       Polynomial v = 'a';
-      ConditionExtensions.AssertIsFalse(v == 0);
-      ConditionExtensions.AssertIsTrue(v.IsSingleTerm);
-      ConditionExtensions.AssertIsFalse(v.IsConstant);
+      (v == 0).AssertIsFalse();
+      v.IsSingleTerm.AssertIsTrue();
+      v.IsConstant.AssertIsFalse();
       v.ToString().AssertIsEqualTo("a");
 
       ((PolynomialTerm)v).AssertIsEqualTo('a');

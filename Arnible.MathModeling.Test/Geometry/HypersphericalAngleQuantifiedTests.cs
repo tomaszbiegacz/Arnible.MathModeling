@@ -44,7 +44,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, -1);       //  -45    + -    xy
       AssertDirection(directions, 1);        //   45    + +    xy
 
-      IsEmptyExtensions.AssertIsEmpty(directions);
+      directions.AssertIsEmpty();
       
     }
 
@@ -80,7 +80,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, -1, 1);    // -45  45       + - +      xyz     - + -
       AssertDirection(directions, 1, 1);     //  45  45       + + +      xyz     - - -
 
-      IsEmptyExtensions.AssertIsEmpty(directions);
+      directions.AssertIsEmpty();
     }
 
     [Fact]
@@ -147,7 +147,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, -1, 1, 1);     // -45  45  45      + - + +     xyza    - + - -
       AssertDirection(directions, 1, 1, 1);      //  45  45  45      + + + +     xyza    - - - -    
 
-      IsEmptyExtensions.AssertIsEmpty(directions);
+      directions.AssertIsEmpty();
     }
 
     [Fact]
@@ -198,7 +198,7 @@ namespace Arnible.MathModeling.Geometry.Test
       AssertDirection(directions, -1);       //  -45    + -    xy
       AssertDirection(directions, 1);        //   45    + +    xy
 
-      IsEmptyExtensions.AssertIsEmpty(directions);
+      directions.AssertIsEmpty();
     }
   }
 }

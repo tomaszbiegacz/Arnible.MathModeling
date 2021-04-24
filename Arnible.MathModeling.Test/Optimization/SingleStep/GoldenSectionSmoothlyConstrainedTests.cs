@@ -99,8 +99,8 @@ namespace Arnible.MathModeling.Optimization.SingleStep.Test
       var a = f.ValueWithDerivative(-1.1 * Math.PI);
       var b = f.ValueWithDerivative(2 * Math.PI);
       
-      IsGreaterThanExtensions.AssertIsGreaterThan(0, a.First);
-      IsLessThanExtensions.AssertIsLessThan(0, b.First);
+      a.First.AssertIsLessThan(0);
+      b.First.AssertIsGreaterThan(0);
       
       double actual = (double)optimizer.Optimize(f, in a, b.X);
       Assert.Equal(-0.5 * Math.PI, actual, precision: 1);

@@ -68,11 +68,11 @@ namespace Arnible.MathModeling.Geometry.Test
       
       for (ushort i = 0; i < 2; ++i)
       {
-        IsLessThanExtensions.AssertIsLessThan(0, radios[i]);
-        IsGreaterThanExtensions.AssertIsGreaterThan(1, radios[i]);
+        radios[i].AssertIsGreaterThan(0);
+        radios[i].AssertIsLessThan(1);
       }
-      IsLessThanExtensions.AssertIsLessThan(-1, radios[2]);
-      IsGreaterThanExtensions.AssertIsGreaterThan(0, radios[2]);
+      radios[2].AssertIsGreaterThan(-1);
+      radios[2].AssertIsLessThan(0);
       
       radios.AsList().Select(r => r*r).SumDefensive().AssertIsEqualTo(1);
     }

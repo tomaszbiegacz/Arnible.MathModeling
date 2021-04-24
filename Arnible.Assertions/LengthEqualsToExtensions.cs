@@ -15,15 +15,5 @@ namespace Arnible.Assertions
           AssertException.ToString(src.ToArray()));
       }
     }
-    
-    public static void AssertLengthEqualsTo<T>(in this ReadOnlySpan<T> src, ushort length)
-    {
-      if(src.Length != length)
-      {
-        throw new AssertException(
-          $"Expected length {length} got {src.Length}",
-          AssertException.ToString(src.ToArray()));
-      }
-    }
   }
 }

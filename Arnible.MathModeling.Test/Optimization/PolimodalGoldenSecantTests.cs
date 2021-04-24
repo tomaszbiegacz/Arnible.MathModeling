@@ -24,12 +24,12 @@ namespace Arnible.MathModeling.Optimization.Test
       method.X.AssertIsEqualTo(2);
       method.Y.AssertIsEqualTo(4);
       
-      ConditionExtensions.AssertIsTrue(method.MoveNext());
+      method.MoveNext().AssertIsTrue();
       method.X.AssertIsEqualTo(1);
       method.Y.AssertIsEqualTo(3);
       
-      ConditionExtensions.AssertIsTrue(method.IsOptimal);
-      ConditionExtensions.AssertIsFalse(method.MoveNext());
+      method.IsOptimal.AssertIsTrue();
+      method.MoveNext().AssertIsFalse();
     }
     
     [Fact]
@@ -148,7 +148,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
       method.X.AssertIsEqualTo(b.X);
       method.Y.AssertIsEqualTo(b.Y);
-      IsLessThanExtensions.AssertIsLessThan(b.Y, a.Y);
+      a.Y.AssertIsGreaterThan(b.Y);
 
       ushort i = OptimizationHelper.FindOptimal(method);
       
@@ -166,7 +166,7 @@ namespace Arnible.MathModeling.Optimization.Test
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
       method.X.AssertIsEqualTo(a.X);
       method.Y.AssertIsEqualTo(a.Y);
-      IsLessThanExtensions.AssertIsLessThan(a.Y, b.Y);
+      b.Y.AssertIsGreaterThan(a.Y);
 
       ushort i = OptimizationHelper.FindOptimal(method);
       
@@ -185,9 +185,9 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(1.4 * Math.PI);
       var b = f.ValueWithDerivative(4.4 * Math.PI);
       
-      IsGreaterThanExtensions.AssertIsGreaterThan(b.Y, a.Y);
-      IsGreaterThanExtensions.AssertIsGreaterThan(0, a.First);
-      IsLessThanExtensions.AssertIsLessThan(0, b.First);
+      a.Y.AssertIsLessThan(b.Y);
+      a.First.AssertIsLessThan(0);
+      b.First.AssertIsGreaterThan(0);
       
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
       method.X.AssertIsEqualTo(a.X);

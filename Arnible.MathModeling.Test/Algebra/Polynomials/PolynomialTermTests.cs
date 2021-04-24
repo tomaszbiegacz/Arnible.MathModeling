@@ -13,8 +13,8 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       PolynomialTerm v = default;
 
-      ConditionExtensions.AssertIsTrue(v == 0);
-      ConditionExtensions.AssertIsTrue(v.IsConstant);
+      (v == 0).AssertIsTrue();
+      v.IsConstant.AssertIsTrue();
       v.ToString().AssertIsEqualTo("0");
 
       v.PowerSum.AssertIsEqualTo(0u);
@@ -22,9 +22,9 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       v.GreatestPowerIndeterminate.Power.AssertIsEqualTo(0u);
 
       v.AssertIsEqualTo(0);
-      ConditionExtensions.AssertIsFalse(1 == v);
+      (1 == v).AssertIsFalse();
 
-      IsEmptyExtensions.AssertIsEmpty(v.DerivativeBy('a'));
+      v.DerivativeBy('a').AssertIsEmpty();
 
       (2 * v).AssertIsEqualTo(0);
       (v / 2).AssertIsEqualTo(0);
@@ -37,8 +37,8 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       PolynomialTerm v = 2;
 
-      ConditionExtensions.AssertIsFalse(v == 0);
-      ConditionExtensions.AssertIsTrue(v.IsConstant);
+      (v == 0).AssertIsFalse();
+      v.IsConstant.AssertIsTrue();
       v.ToString().AssertIsEqualTo("2");
 
       v.PowerSum.AssertIsEqualTo(0u);
@@ -46,10 +46,10 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       v.GreatestPowerIndeterminate.Power.AssertIsEqualTo(0u);
 
       v.AssertIsEqualTo(2);
-      ConditionExtensions.AssertIsFalse(1 == v);
-      ConditionExtensions.AssertIsFalse(0 == v);
+      (1 == v).AssertIsFalse();
+      (0 == v).AssertIsFalse();
 
-      IsEmptyExtensions.AssertIsEmpty(v.DerivativeBy('a'));
+      v.DerivativeBy('a').AssertIsEmpty();
 
       (2 * v).AssertIsEqualTo(4);
       (v / 2).AssertIsEqualTo(1);
@@ -61,18 +61,18 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     public void Constructor_Variable()
     {
       PolynomialTerm v = 'a';
-      ConditionExtensions.AssertIsFalse(v == 0);
-      ConditionExtensions.AssertIsFalse(v.IsConstant);
+      (v == 0).AssertIsFalse();
+      v.IsConstant.AssertIsFalse();
 
       v.PowerSum.AssertIsEqualTo(1u);
       v.GreatestPowerIndeterminate.Variable.AssertIsEqualTo('a');
       v.GreatestPowerIndeterminate.Power.AssertIsEqualTo(1u);
 
       v.ToString().AssertIsEqualTo("a");
-      ConditionExtensions.AssertIsFalse('b' == v);
+      ('b' == v).AssertIsFalse();
 
       v.DerivativeBy('a').Single().AssertIsEqualTo(1);
-      IsEmptyExtensions.AssertIsEmpty(v.DerivativeBy('b'));
+      v.DerivativeBy('b').AssertIsEmpty();
 
       (2 * v).AssertIsEqualTo(2 * Term.a);
       (v / 2).AssertIsEqualTo(0.5 * Term.a);
@@ -85,8 +85,8 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       PolynomialTerm v = 2.1 * Term.a * Term.c.ToPower(3);
 
-      ConditionExtensions.AssertIsFalse(v == 0);
-      ConditionExtensions.AssertIsFalse(v.IsConstant);
+      (v == 0).AssertIsFalse();
+      v.IsConstant.AssertIsFalse();
       v.ToString().AssertIsEqualTo("2.1ac³");
 
       v.PowerSum.AssertIsEqualTo(4u);
@@ -94,7 +94,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       v.GreatestPowerIndeterminate.Power.AssertIsEqualTo(3u);      
 
       v.DerivativeBy('a').Single().AssertIsEqualTo(2.1 * Term.c.ToPower(3));
-      IsEmptyExtensions.AssertIsEmpty(v.DerivativeBy('b'));
+      v.DerivativeBy('b').AssertIsEmpty();
       v.DerivativeBy('c').Single().AssertIsEqualTo(6.3 * Term.c.ToPower(2) * Term.a.ToPower(1));
 
       v.DerivativeBy('a').DerivativeBy('c').Single().AssertIsEqualTo(6.3 * Term.c.ToPower(2));
@@ -167,14 +167,14 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     public void TryDivide_ByZero()
     {
       PolynomialTerm x = 'x';
-      ConditionExtensions.AssertIsFalse(x.TryDivide(0, out _));
+      x.TryDivide(0, out _).AssertIsFalse();
     }
 
     [Fact]
     public void TryDivide_ByConstant()
     {
       PolynomialTerm x = 'x';
-      ConditionExtensions.AssertIsTrue((2 * x).TryDivide(2, out PolynomialTerm r));
+      (2 * x).TryDivide(2, out PolynomialTerm r).AssertIsTrue();
       r.AssertIsEqualTo(x);
     }
 
@@ -183,14 +183,14 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       PolynomialTerm x = 'x';
       PolynomialTerm y = 'y';
-      ConditionExtensions.AssertIsFalse(x.TryDivide(x * y, out _));
+      x.TryDivide(x * y, out _).AssertIsFalse();
     }
 
     [Fact]
     public void TryDivide_ByTerm_BySupersetVariables_9x_x()
     {
       PolynomialTerm x = 'x';
-      ConditionExtensions.AssertIsTrue((9 * x).TryDivide(x, out PolynomialTerm r));
+      (9 * x).TryDivide(x, out PolynomialTerm r).AssertIsTrue();
       r.AssertIsEqualTo(9);
     }
 
@@ -198,7 +198,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     public void TryDivide_ByTerm_BySupersetPowers()
     {
       PolynomialTerm x = 'x';
-      ConditionExtensions.AssertIsFalse(x.TryDivide(x * x, out _));
+      x.TryDivide(x * x, out _).AssertIsFalse();
     }
 
     [Fact]
@@ -206,7 +206,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       PolynomialTerm x = 'x';
       PolynomialTerm y = 'y';
-      ConditionExtensions.AssertIsTrue((2 * x.ToPower(3) * y.ToPower(2)).TryDivide(0.5 * x, out PolynomialTerm r));
+      (2 * x.ToPower(3) * y.ToPower(2)).TryDivide(0.5 * x, out PolynomialTerm r).AssertIsTrue();
       r.AssertIsEqualTo(4 * x.ToPower(2) * y.ToPower(2));
     }
 

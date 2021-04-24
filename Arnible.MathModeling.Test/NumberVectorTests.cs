@@ -12,7 +12,7 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Constructor_Default()
     {
       NumberVector v = default;
-      ConditionExtensions.AssertIsTrue(v == 0);
+      (v == 0).AssertIsTrue();
       1u.AssertIsEqualTo(v.Length);
       v[0].AssertIsEqualTo(0);
       v.ToString().AssertIsEqualTo("0");
@@ -29,9 +29,9 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Constructor_Single()
     {
       NumberVector v = 2;
-      ConditionExtensions.AssertIsFalse(v == 0);
-      ConditionExtensions.AssertIsTrue(v == 2);
-      ConditionExtensions.AssertIsFalse(v != 2);
+      (v == 0).AssertIsFalse();
+      (v == 2).AssertIsTrue();
+      (v != 2).AssertIsFalse();
       v[0].AssertIsEqualTo(2);
       1u.AssertIsEqualTo(v.Length);
       v.ToString().AssertIsEqualTo("2");
@@ -44,7 +44,7 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Constructor_Explicit()
     {
       NumberVector v = new NumberVector(2, 3, 4);
-      ConditionExtensions.AssertIsFalse(v == 0);
+      (v == 0).AssertIsFalse();
       v.GetInternalEnumerable().AssertSequenceEqualsTo(new Number[] { 2, 3, 4 });
       3u.AssertIsEqualTo(v.Length);
       v.ToString().AssertIsEqualTo("[2 3 4]");
@@ -63,13 +63,13 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void NotEqual_Values()
     {
-      ConditionExtensions.AssertIsFalse(new NumberVector(1, 2) == new NumberVector(1, 3));
+      (new NumberVector(1, 2) == new NumberVector(1, 3)).AssertIsFalse();
     }
 
     [Fact]
     public void NotEqual_Dimensions()
     {
-      ConditionExtensions.AssertIsFalse(default == new NumberVector(1));
+      (default == new NumberVector(1)).AssertIsFalse();
     }
 
     [Fact]
