@@ -11,7 +11,7 @@ namespace Arnible.MathModeling.Test
     [InlineData(123, "¹²³")]
     public void ToSuperscriptString_Uint(uint number, string expected)
     {
-      IsEqualToExtensions.AssertIsEqualTo(expected, number.ToSuperscriptString());
+      expected.AssertIsEqualTo(number.ToSuperscriptString());
     }
   }
 }

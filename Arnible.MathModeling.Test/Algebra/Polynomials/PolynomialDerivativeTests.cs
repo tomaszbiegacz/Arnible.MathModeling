@@ -11,7 +11,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     public void CosMinusSin()
     {
       var p = Cos(φ) - Sin(φ);
-      IsEqualToExtensions.AssertIsEqualTo(-1 * (Sin(φ) + Cos(φ)), p.DerivativeBy(φ));
+      p.DerivativeBy(φ).AssertIsEqualTo(-1 * (Sin(φ) + Cos(φ)));
     }
   }
 }

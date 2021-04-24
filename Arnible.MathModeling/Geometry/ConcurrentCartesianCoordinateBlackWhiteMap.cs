@@ -6,9 +6,9 @@ namespace Arnible.MathModeling.Geometry
 {
   public interface ICartesianCoordinateBlackWhiteMap
   {
-    uint DimensionsCount { get; }
+    ushort DimensionsCount { get; }
     
-    uint MarkedPointsCount { get; }
+    ushort MarkedPointsCount { get; }
 
     bool IsMarked(ReadOnlyArray<Number> point);
   }
@@ -86,15 +86,15 @@ namespace Arnible.MathModeling.Geometry
     // Properties
     //
 
-    public uint DimensionsCount => _leftBottomMapCorner.Length;
+    public ushort DimensionsCount => _leftBottomMapCorner.Length;
 
-    public uint MarkedPointsCount
+    public ushort MarkedPointsCount
     {
       get
       {
         lock (_points)
         {
-          return (uint) _points.Count;
+          return (ushort) _points.Count;
         }
       }
     }

@@ -13,28 +13,20 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       // error expression in cartesian coordinates (x, y)
       var error = (c - x * y).ToPower(2);
       
-      IsEqualToExtensions.AssertIsEqualTo(
-        -2 * y * (c - x * y), 
-        error.DerivativeBy(x));
+      error.DerivativeBy(x).AssertIsEqualTo(-2 * y * (c - x * y));
 
-      IsEqualToExtensions.AssertIsEqualTo(
-        -2 * x * (c - x * y), 
-        error.DerivativeBy(y));
+      error.DerivativeBy(y).AssertIsEqualTo(-2 * x * (c - x * y));
 
       // error expression in polar coordinates (r, θ)
       var errorPolar = error.Composition(x, r * Cos(θ)).Composition(y, r * Sin(θ));
 
-      IsEqualToExtensions.AssertIsEqualTo(
-        (c - r.ToPower(2) * Sin(θ) * Cos(θ)).ToPower(2),
-        errorPolar);
+      errorPolar.AssertIsEqualTo((c - r.ToPower(2) * Sin(θ) * Cos(θ)).ToPower(2));
 
-      IsEqualToExtensions.AssertIsEqualTo(
-        -4 * r * Sin(θ) * Cos(θ) * (c - r.ToPower(2) * Sin(θ) * Cos(θ)), 
-        errorPolar.DerivativeBy(r));
+      errorPolar.DerivativeBy(r).AssertIsEqualTo(-4 * r * Sin(θ) * Cos(θ) * (c - r.ToPower(2) * Sin(θ) * Cos(θ)));
 
-      IsEqualToExtensions.AssertIsEqualTo(
-        -2 * r.ToPower(2) * (c - r.ToPower(2) * Sin(θ) * Cos(θ)) * (Cos(θ).ToPower(2) - Sin(θ).ToPower(2)),
-        errorPolar.DerivativeBy(θ));
+      errorPolar.DerivativeBy(θ).AssertIsEqualTo(
+        -2 * r.ToPower(2) * (c - r.ToPower(2) * Sin(θ) * Cos(θ)) * (Cos(θ).ToPower(2) - Sin(θ).ToPower(2))
+        );
     }
   }
 }

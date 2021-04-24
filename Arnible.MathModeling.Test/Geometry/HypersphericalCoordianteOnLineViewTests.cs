@@ -11,10 +11,10 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var p = new HypersphericalCoordianteOnLineView(r: 2, ratioX: 0.3);
 
-      IsEqualToExtensions.AssertIsEqualTo<double>(2, (double)p.R);
-      IsEqualToExtensions.AssertIsEqualTo<double>(0.3, (double)p.RatioX);
+      p.R.AssertIsEqualTo(2);
+      p.RatioX.AssertIsEqualTo(0.3);
 
-      IsEqualToExtensions.AssertIsEqualTo(0.6, p.X);
+      p.X.AssertIsEqualTo(0.6);
     }
   }
 }

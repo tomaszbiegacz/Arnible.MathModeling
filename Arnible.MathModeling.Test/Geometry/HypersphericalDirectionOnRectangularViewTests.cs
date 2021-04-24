@@ -10,8 +10,8 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var p = new HypersphericalDirectionOnRectangularView(ratioX: 0.3, ratioY: -0.4);
 
-      IsEqualToExtensions.AssertIsEqualTo<double>(0.3, (double)p.RatioX);
-      IsEqualToExtensions.AssertIsEqualTo<double>(-0.4, (double)p.RatioY);
+      p.RatioX.AssertIsEqualTo(0.3);
+      p.RatioY.AssertIsEqualTo(-0.4);
     }
   }
 }

@@ -1,5 +1,3 @@
-using Arnible.MathModeling;
-
 namespace Arnible.Export.Test
 {
   public static class RecordWriterBuilderExtensions

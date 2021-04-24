@@ -10,25 +10,25 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     [Fact]
     public void Factoring_a2_minus_b2()
     {
-      IsEqualToExtensions.AssertIsEqualTo(a.ToPower(2) - b.ToPower(2), (a - b) * (a + b));
+      ((a - b) * (a + b)).AssertIsEqualTo(a.ToPower(2) - b.ToPower(2));
     }
 
     [Fact]
     public void Factoring_a3_minus_b3()
     {
-      IsEqualToExtensions.AssertIsEqualTo(a.ToPower(3) - b.ToPower(3), (a - b) * (a.ToPower(2) + b.ToPower(2) + a * b));
+      ((a - b) * (a.ToPower(2) + b.ToPower(2) + a * b)).AssertIsEqualTo(a.ToPower(3) - b.ToPower(3));
     }
 
     [Fact]
     public void Factoring_a3_plus_b3()
     {
-      IsEqualToExtensions.AssertIsEqualTo(a.ToPower(3) + b.ToPower(3), (a + b) * (a.ToPower(2) + b.ToPower(2) - a * b));
+      ((a + b) * (a.ToPower(2) + b.ToPower(2) - a * b)).AssertIsEqualTo(a.ToPower(3) + b.ToPower(3));
     }    
 
     [Fact]
     public void Trigonometric_one()
     {
-      IsEqualToExtensions.AssertIsEqualTo(0, (Sin(a).ToPower(2) + Cos(a).ToPower(2)).DerivativeBy(a));
+      (Sin(a).ToPower(2) + Cos(a).ToPower(2)).DerivativeBy(a).AssertIsEqualTo(0);
     }
   }
 }

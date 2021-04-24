@@ -32,7 +32,7 @@ namespace Arnible.MathModeling.Optimization.SingleStep.Test
       var b = f.ValueWithDerivative(3);
 
       Number actual = optimizer.Optimize(f, in a, b.X);
-      IsEqualToExtensions.AssertIsEqualTo(1, actual);
+      actual.AssertIsEqualTo(1);
     }
     
     [Fact]

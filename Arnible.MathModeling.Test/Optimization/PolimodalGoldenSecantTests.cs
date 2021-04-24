@@ -21,12 +21,12 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(2);
       
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>(2, (double)method.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>(4, (double)method.Y);
+      method.X.AssertIsEqualTo(2);
+      method.Y.AssertIsEqualTo(4);
       
       ConditionExtensions.AssertIsTrue(method.MoveNext());
-      IsEqualToExtensions.AssertIsEqualTo(1, method.X);
-      IsEqualToExtensions.AssertIsEqualTo(3, method.Y);
+      method.X.AssertIsEqualTo(1);
+      method.Y.AssertIsEqualTo(3);
       
       ConditionExtensions.AssertIsTrue(method.IsOptimal);
       ConditionExtensions.AssertIsFalse(method.MoveNext());
@@ -40,12 +40,12 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(2);
       
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>(1.5, (double)method.X);
+      method.X.AssertIsEqualTo(1.5);
 
-      uint i = OptimizationHelper.FindOptimal(method);
+      ushort i = OptimizationHelper.FindOptimal(method);
       
-      IsEqualToExtensions.AssertIsEqualTo(1.5, method.X);
-      IsEqualToExtensions.AssertIsEqualTo(21, i);
+      method.X.AssertIsEqualTo(1.5);
+      i.AssertIsEqualTo(21);
     }
     
     [Fact]
@@ -56,12 +56,12 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(2);
       
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>(1, (double)method.X);
+      method.X.AssertIsEqualTo(1);
 
-      uint i = OptimizationHelper.FindOptimal(method);
+      ushort i = OptimizationHelper.FindOptimal(method);
       
-      IsEqualToExtensions.AssertIsEqualTo(1, method.X);
-      IsEqualToExtensions.AssertIsEqualTo(22, i);
+      method.X.AssertIsEqualTo(1);
+      i.AssertIsEqualTo(22);
     }
     
     [Fact]
@@ -72,12 +72,12 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(-2);
       
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>(0.5, (double)method.X);
+      method.X.AssertIsEqualTo(0.5);
 
-      uint i = OptimizationHelper.FindOptimal(method);
+      ushort i = OptimizationHelper.FindOptimal(method);
       
-      IsEqualToExtensions.AssertIsEqualTo(0.5, method.X);
-      IsEqualToExtensions.AssertIsEqualTo(24, i);
+      method.X.AssertIsEqualTo(0.5);
+      i.AssertIsEqualTo(24);
     }
     
     [Fact]
@@ -88,12 +88,12 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(-2);
       
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>(1, (double)method.X);
+      method.X.AssertIsEqualTo(1);
 
-      uint i = OptimizationHelper.FindOptimal(method);
+      ushort i = OptimizationHelper.FindOptimal(method);
       
-      IsEqualToExtensions.AssertIsEqualTo(1, method.X);
-      IsEqualToExtensions.AssertIsEqualTo(23, i);
+      method.X.AssertIsEqualTo(1);
+      i.AssertIsEqualTo(23);
     }
     
     /*
@@ -108,13 +108,13 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(2);
       
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>(-1, (double)method.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>(-1, (double)method.Y);
+      method.X.AssertIsEqualTo(-1);
+      method.Y.AssertIsEqualTo(-1);
 
-      uint i = OptimizationHelper.FindOptimal(method);
+      ushort i = OptimizationHelper.FindOptimal(method);
       
-      IsEqualToExtensions.AssertIsEqualTo(-1, method.X);
-      IsEqualToExtensions.AssertIsEqualTo(23, i);
+      method.X.AssertIsEqualTo(-1);
+      i.AssertIsEqualTo(23);
     }
     
     /*
@@ -129,13 +129,13 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(0.4 * Math.PI);
       
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)a.X, (double)method.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)a.Y, (double)method.Y);
+      method.X.AssertIsEqualTo(a.X);
+      method.Y.AssertIsEqualTo(a.Y);
 
-      uint i = OptimizationHelper.FindOptimal(method);
+      ushort i = OptimizationHelper.FindOptimal(method);
       
-      IsEqualToExtensions.AssertIsEqualTo(2, method.Y);
-      IsEqualToExtensions.AssertIsEqualTo(6, i);
+      method.Y.AssertIsEqualTo(2);
+      i.AssertIsEqualTo(6);
     }
     
     [Fact]
@@ -146,14 +146,14 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(Math.PI);
       
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)b.X, (double)method.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)b.Y, (double)method.Y);
+      method.X.AssertIsEqualTo(b.X);
+      method.Y.AssertIsEqualTo(b.Y);
       IsLessThanExtensions.AssertIsLessThan(b.Y, a.Y);
 
-      uint i = OptimizationHelper.FindOptimal(method);
+      ushort i = OptimizationHelper.FindOptimal(method);
       
-      IsEqualToExtensions.AssertIsEqualTo(3, method.Y);
-      IsEqualToExtensions.AssertIsEqualTo(22, i);
+      method.Y.AssertIsEqualTo(3);
+      i.AssertIsEqualTo(22);
     }
     
     [Fact]
@@ -164,14 +164,14 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(0.7 * Math.PI);
       
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)a.X, (double)method.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)a.Y, (double)method.Y);
+      method.X.AssertIsEqualTo(a.X);
+      method.Y.AssertIsEqualTo(a.Y);
       IsLessThanExtensions.AssertIsLessThan(a.Y, b.Y);
 
-      uint i = OptimizationHelper.FindOptimal(method);
+      ushort i = OptimizationHelper.FindOptimal(method);
       
-      IsEqualToExtensions.AssertIsEqualTo(3, method.Y);
-      IsEqualToExtensions.AssertIsEqualTo(23, i);
+      method.Y.AssertIsEqualTo(3);
+      i.AssertIsEqualTo(23);
     }
     
     /*
@@ -190,13 +190,13 @@ namespace Arnible.MathModeling.Optimization.Test
       IsLessThanExtensions.AssertIsLessThan(0, b.First);
       
       var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)a.X, (double)method.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)a.Y, (double)method.Y);
+      method.X.AssertIsEqualTo(a.X);
+      method.Y.AssertIsEqualTo(a.Y);
 
-      uint i = OptimizationHelper.FindOptimal(method);
+      ushort i = OptimizationHelper.FindOptimal(method);
       
-      IsEqualToExtensions.AssertIsEqualTo(2, method.Y);
-      IsEqualToExtensions.AssertIsEqualTo(6, i);
+      method.Y.AssertIsEqualTo(2);
+      i.AssertIsEqualTo(6);
     }
   }
 }

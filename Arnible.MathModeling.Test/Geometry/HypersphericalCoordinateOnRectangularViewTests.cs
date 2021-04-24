@@ -11,12 +11,12 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var p = HypersphericalCoordinateOnRectangularView.FromCartesian(r: 2, x: 0.6, y: -0.8);
 
-      IsEqualToExtensions.AssertIsEqualTo<double>(2, (double)p.R);
-      IsEqualToExtensions.AssertIsEqualTo(0.3, p.RatioX);
-      IsEqualToExtensions.AssertIsEqualTo(-0.4, p.RatioY);
+      p.R.AssertIsEqualTo(2);
+      p.RatioX.AssertIsEqualTo(0.3);
+      p.RatioY.AssertIsEqualTo(-0.4);
 
-      IsEqualToExtensions.AssertIsEqualTo<double>(0.6, (double)p.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>(-0.8, (double)p.Y);
+      p.X.AssertIsEqualTo(0.6);
+      p.Y.AssertIsEqualTo(-0.8);
     }
 
     [Fact]
@@ -24,12 +24,12 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var p = HypersphericalCoordinateOnRectangularView.FromRatios(r: 2, ratioX: 0.6, ratioY: -0.8);
 
-      IsEqualToExtensions.AssertIsEqualTo<double>(2, (double)p.R);
-      IsEqualToExtensions.AssertIsEqualTo<double>(0.6, (double)p.RatioX);
-      IsEqualToExtensions.AssertIsEqualTo<double>(-0.8, (double)p.RatioY);
+      p.R.AssertIsEqualTo(2);
+      p.RatioX.AssertIsEqualTo(0.6);
+      p.RatioY.AssertIsEqualTo(-0.8);
 
-      IsEqualToExtensions.AssertIsEqualTo(1.2, p.X);
-      IsEqualToExtensions.AssertIsEqualTo(-1.6, p.Y);
+      p.X.AssertIsEqualTo(1.2);
+      p.Y.AssertIsEqualTo(-1.6);
     }
   }
 }

@@ -1,6 +1,6 @@
-using Arnible.Export;
+using Arnible.MathModeling;
 
-namespace Arnible.MathModeling
+namespace Arnible.Export
 {
   public static class RecordWriterBuilderExtensions
   {

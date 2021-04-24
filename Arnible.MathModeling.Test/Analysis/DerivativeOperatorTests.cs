@@ -17,7 +17,7 @@ namespace Arnible.MathModeling.Analysis.Test
         productValues: new[] { v1 },
         valueDerivativeByParameter: new[] { v1d });
 
-      IsEqualToExtensions.AssertIsEqualTo(3d, d.First);
+      d.First.AssertIsEqualTo(3d);
     }
 
     [Fact]
@@ -33,15 +33,15 @@ namespace Arnible.MathModeling.Analysis.Test
         productValues: new[] { v1, v2 },
         valueDerivativeByParameter: new[] { v1d, v2d });
 
-      IsEqualToExtensions.AssertIsEqualTo(3d * 7 + 2 * 11, d.First);
+      d.First.AssertIsEqualTo(3d * 7 + 2 * 11);
     }
 
     [Fact]
     public void ForComposition2_OneValue()
     {
       var d = (new[] { new Derivative2Value(2, 3) }).ForComposition();
-      IsEqualToExtensions.AssertIsEqualTo<double>(2, (double)d.First);
-      IsEqualToExtensions.AssertIsEqualTo<double>(3, (double)d.Second);
+      d.First.AssertIsEqualTo(2);
+      d.Second.AssertIsEqualTo(3);
     }
 
     [Fact]
@@ -50,8 +50,8 @@ namespace Arnible.MathModeling.Analysis.Test
       var d = (new[] {
         new Derivative2Value(2, 3),
         new Derivative2Value(5, 7) }).ForComposition();
-      IsEqualToExtensions.AssertIsEqualTo(2d * 5, d.First);
-      IsEqualToExtensions.AssertIsEqualTo(3d * 5 * 5 + 2 * 7, d.Second);
+      d.First.AssertIsEqualTo(2d * 5);
+      d.Second.AssertIsEqualTo(3d * 5 * 5 + 2 * 7);
     }
 
     [Fact]
@@ -62,15 +62,15 @@ namespace Arnible.MathModeling.Analysis.Test
         new Derivative2Value(5, 7),
         new Derivative2Value(11, 13)
       }).ForComposition();
-      IsEqualToExtensions.AssertIsEqualTo(2d * 5 * 11, d.First);
-      IsEqualToExtensions.AssertIsEqualTo(3d * 5 * 5 * 11 * 11 + 2 * 7 * 11 * 11 + 2 * 5 * 13, d.Second);
+      d.First.AssertIsEqualTo(2d * 5 * 11);
+      d.Second.AssertIsEqualTo(3d * 5 * 5 * 11 * 11 + 2 * 7 * 11 * 11 + 2 * 5 * 13);
     }
 
     [Fact]
     public void ForComposition1_OneValue()
     {
       var d = (new[] { new Derivative1Value(2) }).ForComposition();
-      IsEqualToExtensions.AssertIsEqualTo<double>(2, (double)d.First);
+      d.First.AssertIsEqualTo(2);
     }
 
     [Fact]
@@ -79,16 +79,17 @@ namespace Arnible.MathModeling.Analysis.Test
       var d = (new[] {
         new Derivative1Value(2),
         new Derivative1Value(5) }).ForComposition();
-      IsEqualToExtensions.AssertIsEqualTo(2d * 5, d.First);
+      d.First.AssertIsEqualTo(2d * 5);
     }
 
     [Fact]
     public void ForEachElementComposition_OneValue()
     {
-      IsEqualToExtensions.AssertIsEqualTo(6d,
-        new[] { new Derivative1Value(2) }
+      new[] { new Derivative1Value(2) }
         .ForEachElementComposition(new[] { new Derivative1Value(3) })
-        .Select(v => v.First).Single());
+        .Select(v => v.First)
+        .Single()
+        .AssertIsEqualTo(6);
     }
   }
 }

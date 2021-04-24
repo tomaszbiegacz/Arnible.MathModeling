@@ -31,5 +31,13 @@ namespace Arnible.Assertions
         throw new AssertException($"Expected {expected} got {actual}");
       }
     }
+    
+    public static void AssertIsEqualTo(this byte actual, int expected)
+    {
+      if(actual != expected)
+      {
+        throw new AssertException($"Expected {expected} got {actual}");
+      }
+    }
   }
 }

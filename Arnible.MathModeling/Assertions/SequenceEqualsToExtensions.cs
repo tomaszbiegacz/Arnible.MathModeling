@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Arnible.Assertions;
+using Arnible.MathModeling;
 
-namespace Arnible.MathModeling
+namespace Arnible.Assertions
 {
   public static class SequenceEqualsToExtensions
   {

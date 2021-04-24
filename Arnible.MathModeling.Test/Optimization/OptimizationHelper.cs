@@ -5,12 +5,12 @@ namespace Arnible.MathModeling.Optimization.Test
 {
   public static class OptimizationHelper
   {
-    public static uint FindOptimal(IUnimodalOptimization method)
+    public static ushort FindOptimal(IUnimodalOptimization method)
     {
       Number width = method.Width;
       Number value = method.Y;
 
-      uint i = 0;
+      ushort i = 0;
       while(!method.IsOptimal)
       {
         i++;

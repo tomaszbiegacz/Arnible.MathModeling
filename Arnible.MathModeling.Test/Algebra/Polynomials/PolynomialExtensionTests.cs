@@ -12,7 +12,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       Polynomial y = 'y';
       Polynomial z = 'z';
 
-      IsEqualToExtensions.AssertIsEqualTo(3 * x + y + z, (new[] { 4 * x, y - x, z }).SumWithDefault());
+      (new[] { 4 * x, y - x, z }).SumWithDefault().AssertIsEqualTo(3 * x + y + z);
     }
 
     [Fact]
@@ -21,7 +21,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
       Polynomial x = 'x';
       Polynomial z = 'z';
 
-      IsEqualToExtensions.AssertIsEqualTo(z * (x * x - 1), (new[] { x - 1, x + 1, z }).ProductWithDefault());
+      (new[] { x - 1, x + 1, z }).ProductWithDefault().AssertIsEqualTo(z * (x * x - 1));
     }
   }
 }

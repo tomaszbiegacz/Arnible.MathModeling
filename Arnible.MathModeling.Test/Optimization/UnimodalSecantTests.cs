@@ -22,12 +22,12 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(2);
       
       var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>(2, (double)method.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>(4, (double)method.Y);
+      method.X.AssertIsEqualTo(2);
+      method.Y.AssertIsEqualTo(4);
       
       ConditionExtensions.AssertIsTrue(method.MoveNext());
-      IsEqualToExtensions.AssertIsEqualTo(1, method.X);
-      IsEqualToExtensions.AssertIsEqualTo(3, method.Y);
+      method.X.AssertIsEqualTo(1);
+      method.Y.AssertIsEqualTo(3);
       
       ConditionExtensions.AssertIsTrue(method.IsOptimal);
       ConditionExtensions.AssertIsFalse(method.MoveNext());
@@ -45,8 +45,8 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(2);
       
       var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>(-1, (double)method.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>(-1, (double)method.Y);
+      method.X.AssertIsEqualTo(-1);
+      method.Y.AssertIsEqualTo(-1);
 
       ConditionExtensions.AssertIsFalse(method.IsOptimal);
       ConditionExtensions.AssertIsFalse(method.IsPolimodal);
@@ -69,16 +69,16 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(0.4 * Math.PI);
       
       var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)a.X, (double)method.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)a.Y, (double)method.Y);
+      method.X.AssertIsEqualTo(a.X);
+      method.Y.AssertIsEqualTo(a.Y);
       
       Number width = method.Width;
       Number value = method.Y;
 
-      uint i = OptimizationHelper.FindOptimal(method);
+      ushort i = OptimizationHelper.FindOptimal(method);
       
-      IsEqualToExtensions.AssertIsEqualTo(2, method.Y);
-      IsEqualToExtensions.AssertIsEqualTo(6, i);
+      method.Y.AssertIsEqualTo(2);
+      i.AssertIsEqualTo(6);
     }
     
     [Fact]
@@ -89,8 +89,8 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(Math.PI);
       
       var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)b.X, (double)method.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)b.Y, (double)method.Y);
+      method.X.AssertIsEqualTo(b.X);
+      method.Y.AssertIsEqualTo(b.Y);
       IsLessThanExtensions.AssertIsLessThan(b.Y, a.Y);
 
       ConditionExtensions.AssertIsFalse(method.IsOptimal);
@@ -110,8 +110,8 @@ namespace Arnible.MathModeling.Optimization.Test
       var b = f.ValueWithDerivative(0.7 * Math.PI);
       
       var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)a.X, (double)method.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)a.Y, (double)method.Y);
+      method.X.AssertIsEqualTo(a.X);
+      method.Y.AssertIsEqualTo(a.Y);
       IsLessThanExtensions.AssertIsLessThan(a.Y, b.Y);
 
       ConditionExtensions.AssertIsFalse(method.IsOptimal);
@@ -139,8 +139,8 @@ namespace Arnible.MathModeling.Optimization.Test
       IsLessThanExtensions.AssertIsLessThan(0, b.First);
       
       var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)a.X, (double)method.X);
-      IsEqualToExtensions.AssertIsEqualTo<double>((double)a.Y, (double)method.Y);
+      method.X.AssertIsEqualTo(a.X);
+      method.Y.AssertIsEqualTo(a.Y);
 
       ConditionExtensions.AssertIsFalse(method.IsOptimal);
       ConditionExtensions.AssertIsFalse(method.IsPolimodal);
