@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Algebra
 {
@@ -14,6 +16,29 @@ namespace Arnible.MathModeling.Algebra
         pos++;
       }
       return result;
+    }
+    
+    public static void Multiply<T>(
+      in this ReadOnlySpan<T> arg, 
+      in T value,
+      in Span<T> output) where T: struct, IAlgebraRing<T>
+    {
+      arg.Length.AssertIsEqualTo(output.Length);
+      
+      for (ushort i =0; i<arg.Length; ++i)
+      {
+        output[i] = arg[i].Multiply(in value);
+      }
+    }
+    
+    public static void Multiply<T>(
+      in this Span<T> arg, 
+      in T value) where T: struct, IAlgebraRing<T>
+    {
+      for (ushort i =0; i<arg.Length; ++i)
+      {
+        arg[i] = arg[i].Multiply(in value);
+      }
     }
   }
 }

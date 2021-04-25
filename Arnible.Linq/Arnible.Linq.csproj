@@ -11,6 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Arnible.Assertions\Arnible.Assertions.csproj" />
       <ProjectReference Include="..\Arnible\Arnible.csproj" />
     </ItemGroup>
 

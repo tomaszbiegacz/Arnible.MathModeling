@@ -10,13 +10,7 @@ namespace Arnible.Assertions
       where T: IEquatable<T>
     {
       var actualMaterialized = actual.ToArray();
-      if(actualMaterialized.Length != expected.Count)
-      {
-        throw new AssertException(
-          $"Expected length {expected.Count} got {actualMaterialized.Length}", 
-          AssertException.ToString(actualMaterialized)
-          );
-      }
+      actualMaterialized.Length.AssertIsEqualTo(expected.Count);
       for(ushort i=0; i<expected.Count; ++i)
       {
         if(!actualMaterialized[i].Equals(expected[i]))
@@ -33,6 +27,19 @@ namespace Arnible.Assertions
       where T: IEquatable<T>
     {
       actual.AsList().AssertSequenceEqualsTo(expected);
+    }
+    
+    public static void AssertSequenceEqualsTo<T>(in this Span<T> actual, in ReadOnlySpan<T> expected)
+      where T: IEquatable<T>
+    {
+      actual.Length.AssertIsEqualTo(expected.Length);
+      for(ushort i=0; i<actual.Length; ++i)
+      {
+        if(!actual[i].Equals(expected[i]))
+        {
+          throw new AssertException($"At position {i} expected {expected[i]} got {actual[i]}");
+        }
+      }
     }
   }
 }

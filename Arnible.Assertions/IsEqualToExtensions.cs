@@ -4,15 +4,16 @@ namespace Arnible.Assertions
 {
   public static class IsEqualToExtensions
   {
-    public static void AssertIsEqualTo<T>(this T actual, T expected) where T: IEquatable<T>
+    public static T AssertIsEqualTo<T>(this T actual, T expected) where T: IEquatable<T>
     {
       if(!expected.Equals(actual))
       {
         throw new AssertException($"Expected {expected} got {actual}");
       }
+      return actual;
     }
     
-    public static void AssertIsEqualTo<T>(this T? actual, T expected) where T: struct, IEquatable<T>
+    public static T? AssertIsEqualTo<T>(this T? actual, T expected) where T: struct, IEquatable<T>
     {
        if(!actual.HasValue)
        {
@@ -22,6 +23,7 @@ namespace Arnible.Assertions
        {
         throw new AssertException($"Expected {expected} got {actual}");
        }
+       return actual;
     }
     
     public static void AssertIsEqualTo(this ushort actual, int expected)

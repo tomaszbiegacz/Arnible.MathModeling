@@ -23,5 +23,26 @@ namespace Arnible.Linq
 
       return !e2.MoveNext();
     }
+    
+    public static bool SequenceEqual<TSource>(
+      in this ReadOnlySpan<TSource> first, 
+      in ReadOnlySpan<TSource> second
+    ) where TSource: IEquatable<TSource>
+    {
+      if (first.Length != second.Length)
+      {
+        return false;
+      }
+      
+      for (ushort i =0; i<first.Length; ++i)
+      {
+        if (!first[i].Equals(second[i]))
+        {
+          return false;
+        }
+      }
+      
+      return true;
+    }
   }
 }
