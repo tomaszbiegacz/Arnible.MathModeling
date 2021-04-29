@@ -1,4 +1,5 @@
 using System;
+using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Analysis.Optimization
 {
@@ -29,17 +30,12 @@ namespace Arnible.MathModeling.Analysis.Optimization
       in FunctionPointWithDerivative a,
       in FunctionPointWithDerivative b)
     {
-      if (a.First >= 0 || b.First <= 0)
-      {
-        throw new ArgumentException($"Something went wrong {a.ToStringValue()}, {b.ToStringValue()}");
-      }
+      a.First.AssertIsLessThan(0);
+      b.First.AssertIsGreaterThan(0);
 
       Number step = a.First * (b.X - a.X) / (b.First - a.First);
-      if (step == 0)
-      {
-        throw new InvalidOperationException($"Something went wrong {a.ToStringValue()}, {b.ToStringValue()}");
-      }
-      
+      step.AssertIsNotEqualTo(0);
+
       return f.ValueWithDerivative(a.X - step);
     }
     

@@ -167,20 +167,18 @@ namespace Arnible.MathModeling.Geometry
         return false;
       }
     }
-
-    public string ToString(CultureInfo cultureInfo)
+    
+    public override string ToString()
     {
       if (Length == 1)
       {
-        return this[0].ToString(cultureInfo);
+        return this[0].ToString();
       }
       else
       {
-        return "[" + string.Join(" ", GetInternalEnumerable().Select(v => v.ToString(cultureInfo))) + "]";
+        return "[" + string.Join(" ", GetInternalEnumerable().Select(v => v.ToString())) + "]";
       }
     }
-    public override string ToString() => ToString(CultureInfo.InvariantCulture);
-    public string ToStringValue() => ToString();
 
     public ReadOnlyArray<Number> ToArray(uint length)
     {

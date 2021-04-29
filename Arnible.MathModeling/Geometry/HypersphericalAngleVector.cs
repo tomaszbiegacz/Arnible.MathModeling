@@ -135,12 +135,8 @@ namespace Arnible.MathModeling.Geometry
       }
     }
     
-    public string ToString(CultureInfo culture) => _angles.ToString(culture);
     public override string ToString() => _angles.ToString();
-    public string ToStringValue() => ToString();
-
     public override int GetHashCode() => _angles.GetHashCode();
-    public int GetHashCodeValue() => GetHashCode();
 
     public static bool operator ==(HypersphericalAngleVector a, HypersphericalAngleVector b) => a.Equals(b);
     public static bool operator !=(HypersphericalAngleVector a, HypersphericalAngleVector b) => !a.Equals(b);

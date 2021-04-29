@@ -17,7 +17,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
 
     public string ToStringValue()
     {
-      return $"({X.ToStringValue()}, {Y.ToStringValue()}) [{First.ToStringValue()}]";
+      return $"({X.ToString()}, {Y.ToString()}) [{First.ToString()}]";
     }
   }
 }

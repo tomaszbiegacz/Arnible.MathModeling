@@ -83,6 +83,9 @@
     </Compile>
     <Compile Include="..\Arnible.MathModeling\INumberRangeDomain.cs" Link="INumberRangeDomain.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\NumberVector.cs" Link="Geometry\NumberVector.cs" />
+    <Compile Include="..\Arnible.MathModeling\Number.Common.cs">
+      <Link>Number.Common.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\Sign.cs" Link="Sign.cs" />
     <Compile Include="..\Arnible.MathModeling\SignExtensions.cs">
       <Link>SignExtensions.cs</Link>

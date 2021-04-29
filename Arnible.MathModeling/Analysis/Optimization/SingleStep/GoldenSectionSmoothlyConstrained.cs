@@ -78,7 +78,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       // well, maybe we made some progress with golden ratio
       if (pMinValue.Y < a.Y)
       {
-        _logger.Log($"  [{iteration.ToString()}] Golden section {pMinValue.X.ToStringValue()} with [{a.ToStringValue()}, {p1.ToStringValue()}, {p2.ToStringValue()}]");
+        _logger.Log($"  [{iteration.ToString()}] Golden section {pMinValue.X.ToString()} with [{a.ToStringValue()}, {p1.ToStringValue()}, {p2.ToStringValue()}]");
         return pMinValue.X;
       }
       

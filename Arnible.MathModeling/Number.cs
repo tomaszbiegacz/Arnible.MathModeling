@@ -16,13 +16,8 @@ namespace Arnible.MathModeling
   /// * Structure size is less then IntPtr.Size on 64-bit processes, hence it is suggested to not return/receive structure instance by reference
   /// </remarks>  
   [Serializable]
-  public readonly struct Number : 
-    IAlgebraUnitRing<Number>,
-    IComparable<Number>
-  {    
-    static readonly Number _one = 1;
-    static readonly Number _zero = 0;
-    
+  public readonly partial struct Number 
+  {
     private readonly double _value;
 
     private Number(in double value)
@@ -36,35 +31,6 @@ namespace Arnible.MathModeling
 
     public static implicit operator Number(in double v) => new Number(in v);
     public static explicit operator double(in Number v) => v._value;
-
-    //
-    // Object
-    //
-
-    public override bool Equals(object? obj)
-    {
-      if (obj is Number v)
-      {
-        return Equals(v);
-      }
-      else
-      {
-        return false;
-      }
-    }
-
-    public override int GetHashCode()
-    {
-      return _value.GetHashCode();
-    }
-    public int GetHashCodeValue() => GetHashCode();
-    
-    public string ToString(in CultureInfo cultureInfo)
-    {
-      return _value.ToString(cultureInfo);
-    }
-    public override string ToString() => ToString(CultureInfo.InvariantCulture);
-    public string ToStringValue() => ToString();
     
     //
     // Serializable
@@ -79,28 +45,11 @@ namespace Arnible.MathModeling
     }
 
     //
-    // Operators
+    // Comparision operators
     //
 
-    public bool Equals(Number other) => _value.NumericEquals(other._value);
-
     public bool Equals(in Number other) => _value.NumericEquals(in other._value);
-
-    public static bool operator ==(in Number a, in Number b) => a.Equals(in b);
-    public static bool operator !=(in Number a, in Number b) => !a.Equals(in b);
-
-    public static bool operator <(in Number a, in Number b)
-    {
-      if(a.Equals(in b))
-      {
-        return false;
-      }
-      else
-      {
-        return a._value < b._value;
-      }
-    }
-
+    
     public static bool operator >(in Number a, in Number b)
     {
       if (a.Equals(in b))
@@ -110,6 +59,18 @@ namespace Arnible.MathModeling
       else
       {
         return a._value > b._value;
+      }
+    }
+    
+    public static bool operator <(in Number a, in Number b)
+    {
+      if(a.Equals(in b))
+      {
+        return false;
+      }
+      else
+      {
+        return a._value < b._value;
       }
     }
 
@@ -136,64 +97,33 @@ namespace Arnible.MathModeling
         return a._value > b._value;
       }
     }
-
-    public static Number operator /(in Number a, in Number b) => a._value / b._value;
-    public static Number operator /(in Number a, in double b) => a._value / b;
-    public static Number operator /(in double a, in Number b) => a / b._value;
-    public static Number operator /(in Number a, in int b) => a._value / b;
-    public static Number operator /(in int a, in Number b) => a / b._value;
-    public static Number operator /(in Number a, in uint b) => a._value / b;
-    public static Number operator /(in uint a, in Number b) => a / b._value;
-
-
-    public static Number operator +(in Number a, in Number b) => a._value + b._value;
-    public static Number operator +(in Number a, in double b) => a._value + b;
-    public static Number operator +(in double a, in Number b) => a + b._value;
-    public static Number operator +(in Number a, in int b) => a._value + b;
-    public static Number operator +(in int a, in Number b) => a + b._value;
-    public static Number operator +(in Number a, in uint b) => a._value + b;
-    public static Number operator +(in uint a, in Number b) => a + b._value;
-
-
-    public static Number operator -(in Number a, in Number b) => a._value - b._value;
-    public static Number operator -(in Number a, in double b) => a._value - b;
-    public static Number operator -(in double a, in Number b) => a - b._value;
-    public static Number operator -(in Number a, in int b) => a._value - b;
-    public static Number operator -(in int a, in Number b) => a - b._value;
-    public static Number operator -(in Number a, in uint b) => a._value - b;
-    public static Number operator -(in uint a, in Number b) => a - b._value;
-
-    public static Number operator *(in Number a, in Number b) => a._value * b._value;
-    public static Number operator *(in Number a, in double b) => a._value * b;
-    public static Number operator *(in double a, in Number b) => a * b._value;
-    public static Number operator *(in Number a, in int b) => a._value * b;
-    public static Number operator *(in int a, in Number b) => a * b._value;    
-    public static Number operator *(in Number a, in uint b) => a._value * b;
-    public static Number operator *(in uint a, in Number b) => a * b._value;    
-
-    public Number ToPower(in uint b) => DoubleExtension.ToPower(in _value, in b);
     
-    public ref readonly Number One => ref _one;
-    public ref readonly Number Zero => ref _zero;
-    
-    public Number Add(in Number component) => this._value + component._value;
-    
-    public Number Inverse() => -1 * this._value;
-    public Number Multiply(in Number factor) => this._value * factor._value;
-
     //
-    // IComparable
+    // IComparable<Number>
     //
-
+    
     public int CompareTo(Number other)
     {
-      if (_value.NumericEquals(other._value)) return 0;
-      return _value > other._value ? 1 : -1;
+      if (Equals(in other))
+      {
+        return 0;
+      }
+      else
+      {
+        return _value > other._value ? 1 : -1;  
+      }
     }
+    
+    //
+    // Arithmetic operators
+    //
+
+    public Number ToPower(in uint b) => DoubleExtension.ToPower(in _value, in b);
     
     //
     // Extensions
     //
+    
     public Number Abs()
     {
       return Math.Abs(_value);

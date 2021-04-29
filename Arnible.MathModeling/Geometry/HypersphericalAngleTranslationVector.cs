@@ -41,9 +41,7 @@ namespace Arnible.MathModeling.Geometry
     // Equatable
     //
     
-    public string ToString(CultureInfo cultureInfo) => _change.ToString(cultureInfo);
     public override string ToString() => _change.ToString();
-    public string ToStringValue() => ToString();
 
     public bool Equals(HypersphericalAngleTranslationVector other) => other._change == _change;
 
