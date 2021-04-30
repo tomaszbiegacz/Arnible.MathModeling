@@ -37,6 +37,7 @@ jobs:
         run: 'dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
       - name: publish results
         uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
         with:
           files: ./**/*test-result.xml
           
@@ -52,7 +53,8 @@ jobs:
       - name: test
         run: dotnet test
       - name: publish results
-        uses: EnricoMi/publish-unit-test-result-action/composite@v1        
+        uses: EnricoMi/publish-unit-test-result-action/composite@v1
+        if: always()
         with:
           files: ./**/*test-result.xml
         
