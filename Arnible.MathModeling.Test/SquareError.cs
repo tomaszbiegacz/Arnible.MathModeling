@@ -11,21 +11,21 @@ namespace Arnible.MathModeling.Test
       return (x - y).ToPower(2);
     }
 
-    public Derivative2Value DerivativeByX(RectangularCoordinate p)
+    public Derivative2Value DerivativeByX(in RectangularCoordinate p)
     {
       return new Derivative2Value(
         first: 2 * (p.X - p.Y),
         second: 2);
     }
 
-    public Derivative2Value DerivativeByY(RectangularCoordinate p)
+    public Derivative2Value DerivativeByY(in RectangularCoordinate p)
     {
       return new Derivative2Value(
         first: -2 * (p.X - p.Y),
         second: 2);
     }
 
-    public Derivative2Value DerivativeByR(PolarCoordinate p)
+    public Derivative2Value DerivativeByR(in PolarCoordinate p)
     {
       return new Derivative2Value(
         first: 2 * p.R * (Cos(p.Φ) - Sin(p.Φ)).ToPower(2),
@@ -33,7 +33,7 @@ namespace Arnible.MathModeling.Test
         );
     }     
 
-    public Derivative2Value DerivativeByΦ(PolarCoordinate p)
+    public Derivative2Value DerivativeByΦ(in PolarCoordinate p)
     {
       return new Derivative2Value(
         first: 2 * p.R.ToPower(2) * (Sin(p.Φ).ToPower(2) - Cos(p.Φ).ToPower(2)),

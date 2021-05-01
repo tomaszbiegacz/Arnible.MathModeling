@@ -20,7 +20,7 @@ namespace Arnible.Linq
       in this ReadOnlySpan<T> source, 
       FuncIn<T, bool> predicate,
       in Span<T> output,
-      in T defaultValue = default)
+      in T defaultValue)
     {
       if(source.Length != output.Length)
       {

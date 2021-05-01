@@ -4,4 +4,4 @@ obj
 *.tt.cs
 .idea
 *.DotSettings.user
-/artifacts
+TestResults

@@ -11,7 +11,9 @@ namespace Arnible.Linq
     public static T MaxDefensive<T>(this IEnumerable<T> x) where T: IComparable<T>
     {      
       bool isResultKnown = false;
+#pragma warning disable CS8600
       T result = default;
+#pragma warning restore CS8600
       foreach (T v in x)
       {
         if (isResultKnown)

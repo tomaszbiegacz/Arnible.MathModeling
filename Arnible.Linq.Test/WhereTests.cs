@@ -18,7 +18,7 @@ namespace Arnible.Linq.Test
     {
       ReadOnlySpan<int> src = stackalloc int[] { 1, -2, 3, -4 };
       Span<int> output = stackalloc int[4];
-      Assert.True(src.Where((in int i) => i > 0, in output));
+      Assert.True(src.Where((in int i) => i > 0, in output, default));
       Assert.True(output.SequenceEqual(new int[] { 1, 0, 3, 0 }));
     }
   }
