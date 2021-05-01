@@ -34,10 +34,15 @@ jobs:
         with:
           name: linux-build-result
       - name: test
-        run: 'dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
+        run: 'dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=..\TestResults\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose" /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov'
       - name: publish results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
           check_name: 'Unit Tests Results for Linux'
-          files: ./**/*test-result.xml
+          files: ./TestResults/*test-result.xml
+      - name: Publish coverage report to coveralls.io   
+        uses: coverallsapp/github-action@master   
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }} 
+          path-to-lcov: ./*/TestResults/coverage.info 

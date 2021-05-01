@@ -13,8 +13,10 @@ namespace Arnible.Linq
       where TResult: notnull, IComparable<TResult>
     {
       bool isResultKnown = false;
+#pragma warning disable CS8600
       T result = default;
       TResult resultMaximum = default;
+#pragma warning restore CS8600
       foreach (T v in x)
       {
         if (isResultKnown)

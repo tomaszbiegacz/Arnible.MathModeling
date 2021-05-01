@@ -21,12 +21,12 @@ jobs:
       - name: build
         run: dotnet build  
       - name: test
-        run: 'dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
+        run: 'dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=..\TestResults\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
       - name: publish results
         uses: EnricoMi/publish-unit-test-result-action/composite@v1
         if: always()
         with:
           check_name: 'Unit Tests Results for Windows'
-          files: ./**/*test-result.xml
+          files: ./TestResults/*test-result.xml
         
   

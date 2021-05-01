@@ -42,9 +42,9 @@ namespace Arnible.MathModeling.Geometry.Test
 
       double sqrt2 = Math.Sqrt(2);
       double sqrt3 = Math.Sqrt(3);
-      double polynomialResult = polynomial.GetOperation(Term.x, Term.y, Term.z).Value(sqrt2, sqrt2, 2 * sqrt3);
+      Number polynomialResult = polynomial.GetOperation(Term.x, Term.y, Term.z).Value(sqrt2, sqrt2, 2 * sqrt3);
       double sphericalResult = sphericalPolynomial.GetOperation(Term.r, Term.θ, Term.φ).Value(4, Math.PI / 4, Math.PI / 3);
-      IsEqualToExtensions.AssertIsEqualTo(polynomialResult, sphericalResult);
+      polynomialResult.AssertIsEqualTo(sphericalResult);
     }
 
     [Fact]
