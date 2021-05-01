@@ -2,8 +2,7 @@
 
 [![CI-Linux](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/ci-linux.yml)
 [![CI-Windows](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/ci-windows.yml/badge.svg)](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/ci-windows.yml)
-[![CodeQL](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/
-codeql-analysis.yml/badge.svg)](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/codeql-analysis.yml)
+[![CodeQL](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/codeql-analysis.yml)
 
 .Net is great, but doesn't provide all the utilities that I need for writing code focused on minimal memory footprint from one side, but also on following defensive coding principles.
 Arnible toolkit is collection of reusable things that I use in my R&D projects. 
