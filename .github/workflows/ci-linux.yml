@@ -41,8 +41,28 @@ jobs:
         with:
           check_name: 'Unit Tests Results for Linux'
           files: ./TestResults/*test-result.xml
-      - name: Publish coverage report to coveralls.io   
-        uses: coverallsapp/github-action@master   
+      - name: Publish coverage report for Arnible.Test
+        uses: coverallsapp/github-action@master
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }} 
-          path-to-lcov: ./*/TestResults/coverage.info 
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./Arnible.Test/TestResults/coverage.info
+      - name: Publish coverage report for Arnible.Export.Test
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./Arnible.Export.Test/TestResults/coverage.info
+      - name: Publish coverage report for Arnible.Linq.Test
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./Arnible.Linq.Test/TestResults/coverage.info
+      - name: Publish coverage report for Arnible.MathModeling.Test
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./Arnible.MathModeling.Test/TestResults/coverage.info
+      - name: Publish coverage report for Arnible.MathModeling.Formal.Test
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./Arnible.MathModeling.Formal.Test/TestResults/coverage.info
