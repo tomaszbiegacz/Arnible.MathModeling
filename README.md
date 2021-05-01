@@ -3,6 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/tomaszbiegacz/Arnible.MathModeling/blob/master/LICENSE)
 [![CI-Linux](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/ci-linux.yml)
 [![CI-Windows](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/ci-windows.yml/badge.svg)](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/ci-windows.yml)
+[![Coverage Status](https://coveralls.io/repos/github/tomaszbiegacz/Arnible.MathModeling/badge.svg?branch=master)](https://coveralls.io/github/tomaszbiegacz/Arnible.MathModeling?branch=master)
 [![CodeQL](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/codeql-analysis.yml)
 
 Tooltik manifesto:
