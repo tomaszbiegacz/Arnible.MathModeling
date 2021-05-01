@@ -1,0 +1,32 @@
+name: CI-Windows
+
+on:  
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:  
+
+  build-and-test:
+    runs-on: windows-latest
+    steps:      
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+      - name: build
+        run: dotnet build  
+      - name: test
+        run: 'dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
+      - name: publish results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v1
+        if: always()
+        with:
+          check_name: 'Unit Tests Results for Windows'
+          files: ./**/*test-result.xml
+        
+  
