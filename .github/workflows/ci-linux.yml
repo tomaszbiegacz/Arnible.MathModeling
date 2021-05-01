@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:  
-  build:
+  build-linux:
     runs-on: ubuntu-latest
     steps:      
       - uses: actions/checkout@v2      
@@ -25,9 +25,9 @@ jobs:
           name: linux-build-result
           path: .
 
-  unit-test:
+  test-linux:
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [build-linux]
     steps:
       - name: download build
         uses: actions/download-artifact@v2
