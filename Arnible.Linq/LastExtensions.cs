@@ -8,9 +8,10 @@ namespace Arnible.Linq
     public static T Last<T>(this IEnumerable<T> source)
     {
       bool found = false;
+#pragma warning disable CS8600
       T result = default;
-      
-      foreach(T val in source)
+#pragma warning restore CS8600      
+      foreach (T val in source)
       {
         result = val;
         found = true;

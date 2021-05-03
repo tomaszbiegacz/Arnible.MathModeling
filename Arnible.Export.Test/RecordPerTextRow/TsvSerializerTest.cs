@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Arnible.Assertions;
@@ -39,7 +40,7 @@ namespace Arnible.Export.RecordPerTextRow.Test
         writer.Flush(out result);
       }
 
-      string[] lines = result.Split('\n');
+      string[] lines = result.Split(Environment.NewLine);
       lines.Length.AssertIsEqualTo(2);
       lines[0].Split('\t').AssertSequenceEqualsTo(new[]
       {
@@ -69,7 +70,7 @@ namespace Arnible.Export.RecordPerTextRow.Test
         writer.Flush(out result);
       }
 
-      string[] lines = result.Split('\n');
+      string[] lines = result.Split(Environment.NewLine);
       lines.Length.AssertIsEqualTo(2);
       lines[0].Split('\t').AssertSequenceEqualsTo(new[] { "RootValue", "Record_Value", "Nullable_NotPresentValue", "Nullable_NotPresentOther", "OtherValue" });
       lines[1].AssertIsEqualTo("1\t2\t\t\t3");
@@ -99,8 +100,8 @@ namespace Arnible.Export.RecordPerTextRow.Test
         serializer.Write(in record);
         writer.Flush(out result);
       }
-      
-      string[] lines = result.Split('\n');
+
+      string[] lines = result.Split(Environment.NewLine);
       lines.Length.AssertIsEqualTo(2);
       lines[0].Split('\t').AssertSequenceEqualsTo(new[] { "Records_0_NotPresentValue", "Records_0_NotPresentOther", "Records_1_NotPresentValue", "Records_1_NotPresentOther" });
       lines[1].AssertIsEqualTo("2\t3\t1\t5");

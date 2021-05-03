@@ -10,32 +10,37 @@ namespace Arnible.MathModeling.Test
   public class SquareErrorTests
   {
     private readonly SquareError _error = new SquareError();
-    
+
+    static void AreDerivativesEqual(in Number value, in Number term, in Derivative1Value actual)
+    {
+      AreDerivativesEqual((PolynomialDivision)value, in term, in actual);
+    }
+
     static void AreDerivativesEqual(in PolynomialDivision value, in Number term, in Derivative1Value actual)
     {
       PolynomialTerm termSingle = (PolynomialTerm)term;
-      PolynomialDivision firstDerivative = value.DerivativeBy(termSingle);
-      IsEqualToExtensions.AssertIsEqualTo<Number>(firstDerivative, actual.First);
+      Number firstDerivative = value.DerivativeBy(termSingle);
+      firstDerivative.AssertIsEqualTo(actual.First);
     }
 
     [Fact]
     public void Value()
     {
-      IsEqualToExtensions.AssertIsEqualTo((x - y).ToPower(2), _error.Value(x, y));
+      _error.Value(x, y).AssertIsEqualTo((x - y).ToPower(2));
     }
 
     [Fact]
     public void DerivativeByX()
     {
       var p = new RectangularCoordinate(x, y);
-      AreDerivativesEqual((PolynomialDivision)_error.Value(x, y), x, _error.DerivativeByX(p));
+      AreDerivativesEqual(_error.Value(x, y), x, _error.DerivativeByX(p));
     }
 
     [Fact]
     public void DerivativeByY()
     {
       var p = new RectangularCoordinate(x, y);
-      AreDerivativesEqual((PolynomialDivision)_error.Value(x, y), y, _error.DerivativeByY(p));
+      AreDerivativesEqual(_error.Value(x, y), y, _error.DerivativeByY(p));
     }
 
     [Fact]
@@ -44,7 +49,7 @@ namespace Arnible.MathModeling.Test
       var cartesianPoint = new RectangularCoordinate(x, y);
       var polarPoint = new PolarCoordinate(r, φ);
       var valueInPolar = _error.Value(x, y).ToPolar(cartesianPoint, polarPoint);
-      AreDerivativesEqual((PolynomialDivision)valueInPolar, r, _error.DerivativeByR(polarPoint));
+      AreDerivativesEqual(valueInPolar, r, _error.DerivativeByR(polarPoint));
     }
 
     [Fact]
@@ -53,7 +58,7 @@ namespace Arnible.MathModeling.Test
       var cartesianPoint = new RectangularCoordinate(x, y);
       var polarPoint = new PolarCoordinate(r, φ);
       var valueInPolar = _error.Value(x, y).ToPolar(cartesianPoint, polarPoint);
-      AreDerivativesEqual((PolynomialDivision)valueInPolar, φ, _error.DerivativeByΦ(polarPoint));
+      AreDerivativesEqual(valueInPolar, φ, _error.DerivativeByΦ(polarPoint));
     }
   }
 }

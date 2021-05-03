@@ -17,7 +17,7 @@ namespace Arnible.Linq
       var result = new Dictionary<TKey, TMergeResult>();
       foreach (TKey key in source.Keys)
       {
-        if (other.TryGetValue(key, out TResult otherValue))
+        if (other.TryGetValue(key, out TResult? otherValue))
         {
           result.Add(key, merge(source[key], otherValue));
         }
