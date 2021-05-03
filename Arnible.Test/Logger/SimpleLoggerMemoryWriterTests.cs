@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -23,6 +24,42 @@ namespace Arnible.Logger.Test
       
       string content = await File.ReadAllTextAsync(tempFilePath, default);
       Assert.Equal($"First-line{Environment.NewLine}Second-line{Environment.NewLine}", content);
+    }
+    
+    [Fact]
+    public async Task Flush_MemoryStream()
+    {
+      await using (MemoryStream stream = new MemoryStream())
+      {
+        using(SimpleLoggerMemoryWriter writer = new())
+        {
+          writer.Log("First-line");
+          writer.Log("Second-line");
+        
+          await writer.Flush(stream, default);
+        }
+        
+        string content = Encoding.UTF8.GetString(stream.ToArray());
+        Assert.Equal($"First-line{Environment.NewLine}Second-line{Environment.NewLine}", content);
+      }
+    }
+    
+    [Fact]
+    public void Flush_OtherLogger()
+    {
+      using (SimpleLoggerMemoryWriter other = new())
+      {
+        using(SimpleLoggerMemoryWriter writer = new())
+        {
+          writer.Log("First-line");
+          writer.Log("Second-line");
+        
+          writer.Flush(other);
+        }
+
+        other.Flush(out string content);
+        Assert.Equal($"First-line{Environment.NewLine}Second-line{Environment.NewLine}", content);  
+      }
     }
   }
 }

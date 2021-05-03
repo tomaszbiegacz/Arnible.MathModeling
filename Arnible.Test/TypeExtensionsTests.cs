@@ -37,5 +37,11 @@ namespace Arnible.Test
     {
       Assert.True(typeof(ReadOnlyArray<>).IsImplementingGenericInterface(typeof(IEquatable<>)));
     }
+    
+    [Fact]
+    public void IsImplementingGenericInterface_NotInterface()
+    {
+      Assert.Throws<ArgumentException>(() => typeof(ReadOnlyArray<>).IsImplementingGenericInterface(typeof(Exception)));
+    } 
   }
 }

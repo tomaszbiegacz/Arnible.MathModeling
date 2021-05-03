@@ -127,7 +127,7 @@ namespace Arnible
       in ReadOnlySpan<char> str2,
       in ReadOnlySpan<char> str3)
     {
-      logger.Write(in str0, in str1, in str3);
+      logger.Write(in str0, in str1, in str2, in str3);
       logger.Write(_newLine.Span);
     }
     
@@ -139,7 +139,7 @@ namespace Arnible
       in ReadOnlySpan<char> str3,
       in ReadOnlySpan<char> str4)
     {
-      logger.Write(in str0, in str1, in str3, in str4);
+      logger.Write(in str0, in str1, in str2, in str3, in str4);
       logger.Write(_newLine.Span);
     }
     
@@ -152,7 +152,7 @@ namespace Arnible
       in ReadOnlySpan<char> str4,
       in ReadOnlySpan<char> str5)
     {
-      logger.Write(in str0, in str1, in str3, in str4, in str5);
+      logger.Write(in str0, in str1, in str2, in str3, in str4, in str5);
       logger.Write(_newLine.Span);
     }
     
@@ -166,7 +166,7 @@ namespace Arnible
       in ReadOnlySpan<char> str5,
       in ReadOnlySpan<char> str6)
     {
-      logger.Write(in str0, in str1, in str3, in str4, in str5, in str6);
+      logger.Write(in str0, in str1, in str2, in str3, in str4, in str5, in str6);
       logger.Write(_newLine.Span);
     }
   }
