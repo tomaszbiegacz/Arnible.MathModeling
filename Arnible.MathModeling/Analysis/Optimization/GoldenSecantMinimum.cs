@@ -1,13 +1,9 @@
 namespace Arnible.MathModeling.Analysis.Optimization
 {
-  public class PolimodalGoldenSecant : GoldenSectionConstrained
+  public class GoldenSecant
   {
-    public PolimodalGoldenSecant(
-      INumberFunctionWithDerivative f,
-      in FunctionPointWithDerivative a,
-      in FunctionPointWithDerivative b,
-      ISimpleLogger logger)
-    : base (f, in a, in b, logger)
+    private readonly 
+    public GoldenSecant(ISimpleLogger logger)
     {
       // intentionally empty
     }

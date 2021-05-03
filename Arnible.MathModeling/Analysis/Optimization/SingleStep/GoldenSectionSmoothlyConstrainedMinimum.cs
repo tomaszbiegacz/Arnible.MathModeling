@@ -1,3 +1,5 @@
+using System;
+
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
 {
   public class GoldenSectionSmoothlyConstrained : ISingleStepOptimization
@@ -16,16 +18,11 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
 
     public Number Optimize(
       INumberFunctionWithDerivative f,
-      in FunctionPointWithDerivative a,
-      in Number b)
+      in NumberFunctionPointWithDerivative startPoint,
+      in Number maxX)
     {
-      if (a.X == b)
-      {
-        throw new NotAbleToOptimizeException();
-      }
-
-      var aSign = a.First.GetSign();
-      if (a.X < b)
+      var aSign = startPoint.First.GetSign();
+      if (startPoint.X < maxX)
       {
         if (aSign != Sign.Negative)
         {
@@ -40,13 +37,17 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
         }
       }
 
-      return Optimize(0, f, in a, in b);
+      return Optimize(
+        iteration: 0, 
+        f: f, 
+        a: in startPoint, 
+        b: in maxX);
     }
 
     private Number Optimize(
-      uint iteration,
+      ushort iteration,
       INumberFunctionWithDerivative f,
-      in FunctionPointWithDerivative a,
+      in NumberFunctionPointWithDerivative a,
       in Number b)
     {
       if (iteration > IterationLimit)
@@ -70,7 +71,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       {
         if (pSecant.Value.Y < pMinValue.Y)
         {
-          _logger.Log($"  [{iteration.ToString()}] Secant {pSecant.Value.ToStringValue()} with [{a.ToStringValue()}, {p1.ToStringValue()}, {p2.ToStringValue()}]");
+          Log(iteration, "Secant", pSecant.Value, in a, in p1, in p2);
           return pSecant.Value.X;
         }
       }
@@ -78,12 +79,12 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       // well, maybe we made some progress with golden ratio
       if (pMinValue.Y < a.Y)
       {
-        _logger.Log($"  [{iteration.ToString()}] Golden section {pMinValue.X.ToString()} with [{a.ToStringValue()}, {p1.ToStringValue()}, {p2.ToStringValue()}]");
+        Log(iteration, "Golden section", pMinValue, in a, in p1, in p2);
         return pMinValue.X;
       }
       
       // not much luck, let's focus on first range
-      return Optimize(iteration + 1, f, in a, p1.X);
+      return Optimize((ushort)(iteration + 1), f, in a, p1.X);
     }
 
     static FunctionPointWithDerivative? ApplyUnimodalSecantIfPossible(
@@ -106,6 +107,28 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
         }
       }
       return null;
+    }
+    
+    protected void Log(
+      ushort iteration,
+      string message,
+      in FunctionPointWithDerivative result,
+      in FunctionPointWithDerivative a,
+      in FunctionPointWithDerivative p1,
+      in FunctionPointWithDerivative p2)
+    {
+      Span<char> iterationBuffer = stackalloc char[SpanCharFormatter.BufferSize];
+      SpanCharFormatter.ToString(iteration, in iterationBuffer);
+      
+      _logger.Write("  [", iterationBuffer, "] ", message, " ");
+      result.Write(_logger);
+      _logger.Write(" with [");
+      a.Write(_logger);
+      _logger.Write(", ");
+      p1.Write(_logger);
+      _logger.Write(", ");
+      p2.Write(_logger);
+      _logger.Write("]");
     }
   }
 }

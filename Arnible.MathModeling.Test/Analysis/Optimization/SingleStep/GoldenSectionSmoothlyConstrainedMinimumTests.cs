@@ -11,15 +11,13 @@ namespace Arnible.MathModeling.Optimization.SingleStep.Test
 {
   public class GoldenSectionSmoothlyConstrainedTests : TestsWithLogger
   {
+    private readonly ISingleStepOptimization _method;
+    
     public GoldenSectionSmoothlyConstrainedTests(ITestOutputHelper output) : base(output)
     {
+      _method = new GoldenSectionSmoothlyConstrainedMinimum(Logger);
     }
-
-    private ISingleStepOptimization CreateOptimizer()
-    {
-      return new GoldenSectionSmoothlyConstrained(Logger);
-    }
-
+    
     /// <summary>
     /// Use secant to find optimum in one step
     /// </summary>

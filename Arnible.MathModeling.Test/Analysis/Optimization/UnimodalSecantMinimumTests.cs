@@ -10,6 +10,8 @@ namespace Arnible.MathModeling.Optimization.Test
 {
   public class UnimodalSecantTests : TestsWithLogger
   {
+    private readonly UnimodalSecantMinimum _method;
+    
     public UnimodalSecantTests(ITestOutputHelper output) : base(output)
     {
     }
