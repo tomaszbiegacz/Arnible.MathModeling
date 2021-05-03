@@ -8,7 +8,15 @@ namespace Arnible.Assertions.Test
         [Fact]
         public void Value_Error()
         {
-            Assert.Throws<AssertException>(() => 2.AssertIsNotEqualTo(2));
+            try
+            {
+                2.AssertIsNotEqualTo(2);
+                throw new Exception("I should not get here");
+            }
+            catch(AssertException)
+            {
+                // all is ok
+            }
         }
         
         [Fact]
@@ -26,7 +34,15 @@ namespace Arnible.Assertions.Test
         [Fact]
         public void Enum_Error()
         {
-            Assert.Throws<AssertException>(() => SomeEnum.a.AssertIsNotEqualToEnum(SomeEnum.a));
+            try
+            {
+                SomeEnum.a.AssertIsNotEqualToEnum(SomeEnum.a);
+                throw new Exception("I should not get here");
+            }
+            catch(AssertException)
+            {
+                // all is ok
+            }
         }
         
         [Fact]
