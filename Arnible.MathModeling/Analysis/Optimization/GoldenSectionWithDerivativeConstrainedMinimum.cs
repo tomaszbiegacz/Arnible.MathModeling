@@ -2,45 +2,45 @@ using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Analysis.Optimization
 {
-  public class GoldenSectionConstrained : INumberFunctionOptimization
+  /// <summary>
+  /// Golden section search for minimum.
+  /// Search is capable of dealing with multimodal functions and it uses sign of derivative 
+  /// to find section where secant method can be used to speed up optimization task.    
+  /// </summary>
+  public class GoldenSectionWithDerivativeConstrainedMinimum : INumberFunctionOptimization
   {
     public const double Ratio = 0.618;
     private readonly ISimpleLogger _logger;
     
-    public GoldenSectionConstrained(ISimpleLogger logger)
+    public GoldenSectionWithDerivativeConstrainedMinimum(ISimpleLogger logger)
     {
       _logger = logger;
     }
     
-    public bool MoveNext(ref NumberFunctionOptimizationKernel point)
+    public void MoveNext(ref NumberFunctionOptimizationSearchRange point)
     {
-      if (point.IsOptimal)
-      {
-        // we're done here
-        return false;
-      }
-
-      NumberFunctionPointWithDerivative a = point.BorderSmaller;
-      NumberFunctionPointWithDerivative b = point.BorderGreater;
-      Number width = point.Width;
+      point.IsOptimal.AssertIsFalse();
       
-      Number x1 = point.BorderSmaller.X + Ratio * width;
-      Number x2 = point.BorderGreater.X - Ratio * width;
+      Number width = point.Width;
+      Number x1 = point.End.X - Ratio * width;
+      Number x2 = point.Start.X + Ratio * width;
       
       _logger.Log("> x1");
-      MoveNext(ref point, in a, in b, point.F.ValueWithDerivative(in x1));
-      _logger.Log("> x2");
-      MoveNext(ref point, in a, in b, point.F.ValueWithDerivative(in x2));
-
-      return true;
+      MoveNext(ref point, point.ValueWithDerivative(in x1));
+      if (point.End.X > x2)
+      {
+        _logger.Log("> x2");
+        MoveNext(ref point, point.ValueWithDerivative(in x2));  
+      }
     }
 
     protected void MoveNext(
-      ref NumberFunctionOptimizationKernel point,
-      in NumberFunctionPointWithDerivative a,
-      in NumberFunctionPointWithDerivative b,
+      ref NumberFunctionOptimizationSearchRange point,
       in NumberFunctionPointWithDerivative c)
     {
+      NumberFunctionPointWithDerivative a = point.BorderSmaller;
+      NumberFunctionPointWithDerivative b = point.BorderGreater;
+      
       Sign daSign = a.First.GetSign();
       Sign dbSign = b.First.GetSign();
       Sign dcSign = c.First.GetSign();
@@ -126,8 +126,6 @@ namespace Arnible.MathModeling.Analysis.Optimization
           }
         }
       }
-
-      point.BorderGreater.Y.AssertIsGreaterEqualThan(point.BorderSmaller.Y);
     }
   }
 }

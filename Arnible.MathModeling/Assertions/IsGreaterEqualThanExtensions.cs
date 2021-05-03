@@ -1,12 +1,12 @@
-using System;
+using Arnible.MathModeling;
 
 namespace Arnible.Assertions
 {
   public static class IsGreaterEqualThanExtensions
   {
-    public static void AssertIsGreaterEqualThan<T>(this T currentValue, in T baseValue) where T: IComparable<T>
+    public static void AssertIsGreaterEqualThan(in this Number currentValue, in Number baseValue)
     {
-      if(baseValue.CompareTo(currentValue) > 0)
+      if(baseValue > currentValue)
       {
         throw new AssertException($"Expected greater or equal than {baseValue} got {currentValue}");
       }

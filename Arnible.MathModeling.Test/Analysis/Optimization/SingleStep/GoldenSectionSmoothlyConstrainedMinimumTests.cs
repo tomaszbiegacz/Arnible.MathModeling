@@ -1,21 +1,19 @@
 using System;
 using Arnible.Assertions;
-using Arnible.MathModeling.Analysis.Optimization;
-using Arnible.MathModeling.Analysis.Optimization.SingleStep;
-using Arnible.MathModeling.Optimization.Test;
+using Arnible.MathModeling.Analysis.Optimization.Test;
 using Arnible.Xunit;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Arnible.MathModeling.Optimization.SingleStep.Test
+namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
 {
-  public class GoldenSectionSmoothlyConstrainedTests : TestsWithLogger
+  public class GoldenSectionSmoothlyConstrainedMinimumTests : TestsWithLogger
   {
-    private readonly ISingleStepOptimization _method;
+    private readonly ISingleStepOptimization _optimizer;
     
-    public GoldenSectionSmoothlyConstrainedTests(ITestOutputHelper output) : base(output)
+    public GoldenSectionSmoothlyConstrainedMinimumTests(ITestOutputHelper output) : base(output)
     {
-      _method = new GoldenSectionSmoothlyConstrainedMinimum(Logger);
+      _optimizer = new GoldenSectionSmoothlyConstrainedMinimum(Logger);
     }
     
     /// <summary>
@@ -24,75 +22,100 @@ namespace Arnible.MathModeling.Optimization.SingleStep.Test
     [Fact]
     public void Unimodal_Square_Optimum()
     {
-      var optimizer = CreateOptimizer();
       var f = new SquareTestFunction();
       var a = f.ValueWithDerivative(-1);
       var b = f.ValueWithDerivative(3);
 
-      Number actual = optimizer.Optimize(f, in a, b.X);
+      Number actual = _optimizer.Optimize(f, in a, b.X);
       actual.AssertIsEqualTo(1);
     }
     
     [Fact]
     public void Unimodal_SquareReversed_Maximum()
     {
-      var optimizer = CreateOptimizer();
       var f = new SquareReversedTestFunction();
       var a = f.ValueWithDerivative(-1);
       var b = f.ValueWithDerivative(3);
       
-      Assert.Throws<NotAbleToOptimizeException>(() => optimizer.Optimize(f, a, b.X).ToString());
+      try
+      {
+        _optimizer.Optimize(f, in a, b.X);
+        throw new Exception("I should never get here");
+      }
+      catch(NotAbleToOptimizeException)
+      {
+        // all is fine
+      }
     }
     
     [Fact]
     public void Unimodal_Square_WrongDirection_PositiveDerivative()
     {
-      var optimizer = CreateOptimizer();
       var f = new SquareTestFunction();
       var a = f.ValueWithDerivative(1.5);
       var b = f.ValueWithDerivative(2);
 
-      Assert.Throws<NotAbleToOptimizeException>(() => optimizer.Optimize(f, a, b.X).ToString());
+      try
+      {
+        _optimizer.Optimize(f, in a, b.X);
+        throw new Exception("I should never get here");
+      }
+      catch(NotAbleToOptimizeException)
+      {
+        // all is fine
+      }
     }
     
     [Fact]
     public void Unimodal_Square_WrongDirection_NegativeDerivative()
     {
-      var optimizer = CreateOptimizer();
       var f = new SquareTestFunction();
       var a = f.ValueWithDerivative(0.5);
       var b = f.ValueWithDerivative(-2);
 
-      Assert.Throws<NotAbleToOptimizeException>(() => optimizer.Optimize(f, a, b.X).ToString());
+      try
+      {
+        _optimizer.Optimize(f, in a, b.X);
+        throw new Exception("I should never get here");
+      }
+      catch(NotAbleToOptimizeException)
+      {
+        // all is fine
+      }
     }
     
     [Fact]
     public void Unimodal_Square_AtOptimum()
     {
-      var optimizer = CreateOptimizer();
       var f = new SquareTestFunction();
       var a = f.ValueWithDerivative(1);
       var b = f.ValueWithDerivative(2);
       
-      Assert.Throws<NotAbleToOptimizeException>(() => optimizer.Optimize(f, a, b.X).ToString());
+      try
+      {
+        _optimizer.Optimize(f, in a, b.X);
+        throw new Exception("I should never get here");
+      }
+      catch(NotAbleToOptimizeException)
+      {
+        // all is fine
+      }
     }
     
     [Fact]
     public void Unimodal_Sin_Optimum()
     {
-      var optimizer = CreateOptimizer();
       var f = new SinTestFunction();
       var a = f.ValueWithDerivative(-1.3 * Math.PI);
       var b = f.ValueWithDerivative(0.4 * Math.PI);
       
-      double actual = (double)optimizer.Optimize(f, in a, b.X);
+      double actual = (double)_optimizer.Optimize(f, in a, b.X);
       Assert.Equal(-0.5 * Math.PI, actual, precision: 1);
     }
     
     [Fact]
-    public void Polimodal_Sin()
+    public void Multimodal_Sin()
     {
-      var optimizer = CreateOptimizer();
       var f = new SinTestFunction();
       var a = f.ValueWithDerivative(-1.1 * Math.PI);
       var b = f.ValueWithDerivative(2 * Math.PI);
@@ -100,7 +123,7 @@ namespace Arnible.MathModeling.Optimization.SingleStep.Test
       a.First.AssertIsLessThan(0);
       b.First.AssertIsGreaterThan(0);
       
-      double actual = (double)optimizer.Optimize(f, in a, b.X);
+      double actual = (double)_optimizer.Optimize(f, in a, b.X);
       Assert.Equal(-0.5 * Math.PI, actual, precision: 1);
     }
   }

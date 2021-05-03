@@ -34,6 +34,15 @@ namespace Arnible.MathModeling
     public static explicit operator PolynomialDivision(in Number v) => v._value;
     
     //
+    // Serializable
+    //
+    
+    public void Write(ISimpleLogger logger)
+    {
+      logger.Write(_value.ToString());
+    }
+    
+    //
     // Comparision operators
     //
 

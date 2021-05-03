@@ -2,53 +2,32 @@ using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Analysis.Optimization
 {
-  public class UnimodalSecant
+  public class UnimodalSecantMinimum : INumberFunctionOptimization
   {
-    public static UnimodalSecantAnalysis AnalyseApplicability(
-      in NumberFunctionPointWithDerivative a,
-      in NumberFunctionPointWithDerivative b)
-    {
-      a.X.AssertIsLessThan(b.X);
-      Sign aSign = a.First.GetSign();
-      Sign bSign = b.First.GetSign();
-      if (aSign == Sign.Negative && bSign == Sign.Positive)
-      {
-        return UnimodalSecantAnalysis.HasMinimum;
-      }
-      else if (aSign == Sign.Positive && bSign == Sign.Negative)
-      {
-        return UnimodalSecantAnalysis.HasMaximum;
-      }
-      else
-      {
-        return UnimodalSecantAnalysis.Unknown;
-      }
-    }
-
     private readonly ISimpleLogger _logger;
 
-    public UnimodalSecant(ISimpleLogger logger)
+    public UnimodalSecantMinimum(ISimpleLogger logger)
     {
       _logger = logger;
     }
 
-    public void MoveNext(ref NumberFunctionOptimizationKernelForSecant point)
+    public void MoveNext(ref NumberFunctionOptimizationSearchRange point)
     {
       point.IsOptimal.AssertIsFalse();
 
       NumberFunctionPointWithDerivative c = point.CalculateOptimum();
       if (c.First == 0)
       {
-        if (c.Y > point.Y)
+        if (c.Y > point.BorderSmaller.Y)
         {
           point.Log(_logger, "Stop, found maximum", in c);
-          throw new PolimodalFunctionException();
+          throw new MultimodalFunctionException();
         }
         else
         {
           point.Log(_logger, "Found minimum", in c);
-          point.BorderDecreasing = c;
-          point.BorderIncreasing = c;
+          point.BorderLowestDerivative = c;
+          point.BorderGreatestDerivative = c;
         }
       }
       else
@@ -57,28 +36,28 @@ namespace Arnible.MathModeling.Analysis.Optimization
         // stop if found not to be unimodal
         if (c.First > 0)
         {
-          if (c.Y > point.BorderIncreasing.Y)
+          if (c.Y > point.BorderGreatestDerivative.Y)
           {
             point.Log(_logger, "Stop, not unimodal at b", in c);
-            throw new PolimodalFunctionException();
+            throw new MultimodalFunctionException();
           }
           else
           {
             point.Log(_logger, "Moving point with positive derivative", in c);
-            point.BorderIncreasing = c;
+            point.BorderGreatestDerivative = c;
           }
         }
         else
         {
-          if (c.Y > point.BorderDecreasing.Y)
+          if (c.Y > point.BorderLowestDerivative.Y)
           {
             point.Log(_logger, "Stop, not unimodal at a", in c);
-            throw new PolimodalFunctionException();
+            throw new MultimodalFunctionException();
           }
           else
           {
             point.Log(_logger, "Moving point with negative derivative", in c);
-            point.BorderDecreasing = c;
+            point.BorderLowestDerivative = c;
           }
         }
       }

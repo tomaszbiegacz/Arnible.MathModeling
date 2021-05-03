@@ -1,16 +1,18 @@
 using System;
 using Arnible.Assertions;
-using Arnible.MathModeling.Analysis.Optimization;
 using Arnible.Xunit;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Arnible.MathModeling.Optimization.Test
+namespace Arnible.MathModeling.Analysis.Optimization.Test
 {
-  public class MultimodalGoldenSecantTests : TestsWithLogger
+  public class GoldenSecantMinimumTests : TestsWithLogger
   {
-    public MultimodalGoldenSecantTests(ITestOutputHelper output) : base(output)
+    private readonly GoldenSecantMinimum _method;
+    
+    public GoldenSecantMinimumTests(ITestOutputHelper output) : base(output)
     {
+      _method = new GoldenSecantMinimum(Logger);
     }
     
     [Fact]
@@ -20,16 +22,24 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(-1);
       var b = f.ValueWithDerivative(2);
       
-      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(2);
-      method.Y.AssertIsEqualTo(4);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(2);
+      point.BorderSmaller.Y.AssertIsEqualTo(4);
       
-      method.MoveNext().AssertIsTrue();
-      method.X.AssertIsEqualTo(1);
-      method.Y.AssertIsEqualTo(3);
+      _method.MoveNext(ref point);
+      point.BorderSmaller.X.AssertIsEqualTo(1);
+      point.BorderSmaller.Y.AssertIsEqualTo(3);
       
-      method.IsOptimal.AssertIsTrue();
-      method.MoveNext().AssertIsFalse();
+      point.IsOptimal.AssertIsTrue();
+      try
+      {
+        _method.MoveNext(ref point);
+        throw new Exception("I should never get here");
+      }
+      catch (AssertException)
+      {
+        // all is fine.
+      }
     }
     
     [Fact]
@@ -39,12 +49,12 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(1.5);
       var b = f.ValueWithDerivative(2);
       
-      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(1.5);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(1.5);
 
-      ushort i = OptimizationHelper.FindOptimal(method);
+      ushort i = _method.FindOptimal(ref point);
       
-      method.X.AssertIsEqualTo(1.5);
+      point.BorderSmaller.X.AssertIsEqualTo(1.5);
       i.AssertIsEqualTo(21);
     }
     
@@ -55,12 +65,12 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(1);
       var b = f.ValueWithDerivative(2);
       
-      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(1);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(1);
 
-      ushort i = OptimizationHelper.FindOptimal(method);
+      ushort i = _method.FindOptimal(ref point);
       
-      method.X.AssertIsEqualTo(1);
+      point.BorderSmaller.X.AssertIsEqualTo(1);
       i.AssertIsEqualTo(22);
     }
     
@@ -71,12 +81,12 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(0.5);
       var b = f.ValueWithDerivative(-2);
       
-      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(0.5);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(0.5);
 
-      ushort i = OptimizationHelper.FindOptimal(method);
+      ushort i = _method.FindOptimal(ref point);
       
-      method.X.AssertIsEqualTo(0.5);
+      point.BorderSmaller.X.AssertIsEqualTo(0.5);
       i.AssertIsEqualTo(24);
     }
     
@@ -87,13 +97,13 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(1);
       var b = f.ValueWithDerivative(-2);
       
-      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(1);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(1);
 
-      ushort i = OptimizationHelper.FindOptimal(method);
+      ushort i = _method.FindOptimal(ref point);
       
-      method.X.AssertIsEqualTo(1);
-      i.AssertIsEqualTo(23);
+      point.BorderSmaller.X.AssertIsEqualTo(1);
+      i.AssertIsEqualTo(24);
     }
     
     /*
@@ -107,13 +117,13 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(-1);
       var b = f.ValueWithDerivative(2);
       
-      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(-1);
-      method.Y.AssertIsEqualTo(-1);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(-1);
+      point.BorderSmaller.Y.AssertIsEqualTo(-1);
 
-      ushort i = OptimizationHelper.FindOptimal(method);
+      ushort i = _method.FindOptimal(ref point);
       
-      method.X.AssertIsEqualTo(-1);
+      point.BorderSmaller.X.AssertIsEqualTo(-1);
       i.AssertIsEqualTo(23);
     }
     
@@ -128,13 +138,13 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(-1.3 * Math.PI);
       var b = f.ValueWithDerivative(0.4 * Math.PI);
       
-      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(a.X);
-      method.Y.AssertIsEqualTo(a.Y);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(a.X);
+      point.BorderSmaller.Y.AssertIsEqualTo(a.Y);
 
-      ushort i = OptimizationHelper.FindOptimal(method);
+      ushort i = _method.FindOptimal(ref point);
       
-      method.Y.AssertIsEqualTo(2);
+      point.BorderSmaller.Y.AssertIsEqualTo(2);
       i.AssertIsEqualTo(6);
     }
     
@@ -145,14 +155,14 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(0.3 * Math.PI);
       var b = f.ValueWithDerivative(Math.PI);
       
-      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(b.X);
-      method.Y.AssertIsEqualTo(b.Y);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(b.X);
+      point.BorderSmaller.Y.AssertIsEqualTo(b.Y);
       a.Y.AssertIsGreaterThan(b.Y);
 
-      ushort i = OptimizationHelper.FindOptimal(method);
+      ushort i = _method.FindOptimal(ref point);
       
-      method.Y.AssertIsEqualTo(3);
+      point.BorderSmaller.Y.AssertIsEqualTo(3);
       i.AssertIsEqualTo(22);
     }
     
@@ -163,23 +173,23 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(0);
       var b = f.ValueWithDerivative(0.7 * Math.PI);
       
-      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(a.X);
-      method.Y.AssertIsEqualTo(a.Y);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(a.X);
+      point.BorderSmaller.Y.AssertIsEqualTo(a.Y);
       b.Y.AssertIsGreaterThan(a.Y);
 
-      ushort i = OptimizationHelper.FindOptimal(method);
+      ushort i = _method.FindOptimal(ref point);
       
-      method.Y.AssertIsEqualTo(3);
+      point.BorderSmaller.Y.AssertIsEqualTo(3);
       i.AssertIsEqualTo(23);
     }
     
     /*
-     * Polimodal sin
+     * Multimodal sin
      */
     
     [Fact]
-    public void Polimodal_Sin()
+    public void Multimodal_Sin()
     {
       var f = new SinTestFunction();
       var a = f.ValueWithDerivative(1.4 * Math.PI);
@@ -189,13 +199,13 @@ namespace Arnible.MathModeling.Optimization.Test
       a.First.AssertIsLessThan(0);
       b.First.AssertIsGreaterThan(0);
       
-      var method = new PolimodalGoldenSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(a.X);
-      method.Y.AssertIsEqualTo(a.Y);
-
-      ushort i = OptimizationHelper.FindOptimal(method);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(a.X);
+      point.BorderSmaller.Y.AssertIsEqualTo(a.Y);
       
-      method.Y.AssertIsEqualTo(2);
+      ushort i = _method.FindOptimal(ref point);
+      
+      point.BorderSmaller.Y.AssertIsEqualTo(2);
       i.AssertIsEqualTo(6);
     }
   }

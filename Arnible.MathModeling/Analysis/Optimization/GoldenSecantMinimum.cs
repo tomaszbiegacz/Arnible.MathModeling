@@ -1,97 +1,34 @@
 namespace Arnible.MathModeling.Analysis.Optimization
 {
-  public class GoldenSecant
+  public class GoldenSecantMinimum : INumberFunctionOptimization
   {
-    private readonly 
-    public GoldenSecant(ISimpleLogger logger)
+    private readonly GoldenSectionWithDerivativeConstrainedMinimum _goldenSection;
+    private readonly UnimodalSecantMinimum _secant;
+
+    public GoldenSecantMinimum(ISimpleLogger logger)
     {
-      // intentionally empty
+      _goldenSection = new GoldenSectionWithDerivativeConstrainedMinimum(logger);
+      _secant = new UnimodalSecantMinimum(logger);
     }
 
-    private bool TryUnimodalSecant()
+    public void MoveNext(ref NumberFunctionOptimizationSearchRange point)
     {
-      Sign d1Sign = BorderSmaller.First.GetSign();
-      Sign d2Sign = BorderGreater.First.GetSign();
-      if (d1Sign == d2Sign || d1Sign == Sign.None || d2Sign == Sign.None)
+      UnimodalSecantAnalysis secantApplication = point.GetSecantApplicability();
+      if(secantApplication == UnimodalSecantAnalysis.HasMinimum)
       {
-        // this is not a good candidate for secant method
-        return false;
-      }
-      
-      FunctionPointWithDerivative a;
-      FunctionPointWithDerivative b;
-      if (d1Sign < d2Sign)
-      {
-        a = BorderSmaller;
-        b = BorderGreater;
+        try
+        {
+          _secant.MoveNext(ref point);
+        }
+        catch(MultimodalFunctionException)
+        {
+          // fallback
+          _goldenSection.MoveNext(ref point);
+        }  
       }
       else
       {
-        a = BorderGreater;
-        b = BorderSmaller;
-      }
-      FunctionPointWithDerivative c = UnimodalSecant.CalculateMinimum(F, in a, in b);
-      if (c.First == 0)
-      {
-        if (c.Y > Y)
-        {
-          Log("Secant found maximum", in c);
-          return false;
-        }
-        else
-        {
-          Log("Found minimum", in c);
-          Update(in c, in c);
-          return true;
-        }
-      }
-      else
-      {
-        if (c.First > 0)
-        {
-          if (c.Y > b.Y)
-          {
-            Log("Not unimodal at b", in c);
-            return false;
-          }
-          else
-          {
-            Log("Moving point with positive derivative", in c);
-            Update(in a, in c);
-            return true;
-          }
-        }
-        else
-        {
-          if (c.Y > a.Y)
-          {
-            Log("Stop, not unimodal at a", in c);
-            return false;
-          }
-          else
-          {
-            Log("Moving point with negative derivative", in c);
-            Update(in c, in b);
-            return true;
-          }
-        } 
-      }
-    }
-
-    public override bool MoveNext()
-    {
-      if (IsOptimal)
-      {
-        return false;
-      }
-      
-      if (TryUnimodalSecant())
-      {
-        return true;
-      }
-      else
-      {
-        return base.MoveNext();  
+        _goldenSection.MoveNext(ref point);
       }
     }
   }

@@ -1,19 +1,18 @@
 using System;
 using Arnible.Assertions;
-using Arnible.MathModeling.Analysis.Optimization;
-using Arnible.MathModeling.Test;
 using Arnible.Xunit;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Arnible.MathModeling.Optimization.Test
+namespace Arnible.MathModeling.Analysis.Optimization.Test
 {
-  public class UnimodalSecantTests : TestsWithLogger
+  public class UnimodalSecantMinimumTests : TestsWithLogger
   {
     private readonly UnimodalSecantMinimum _method;
     
-    public UnimodalSecantTests(ITestOutputHelper output) : base(output)
+    public UnimodalSecantMinimumTests(ITestOutputHelper output) : base(output)
     {
+      _method = new UnimodalSecantMinimum(Logger);
     }
     
     [Fact]
@@ -23,16 +22,24 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(-1);
       var b = f.ValueWithDerivative(2);
       
-      var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(2);
-      method.Y.AssertIsEqualTo(4);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(2);
+      point.BorderSmaller.Y.AssertIsEqualTo(4);
       
-      method.MoveNext().AssertIsTrue();
-      method.X.AssertIsEqualTo(1);
-      method.Y.AssertIsEqualTo(3);
+      _method.MoveNext(ref point);
+      point.BorderSmaller.X.AssertIsEqualTo(1);
+      point.BorderSmaller.Y.AssertIsEqualTo(3);
       
-      method.IsOptimal.AssertIsTrue();
-      method.MoveNext().AssertIsFalse();
+      point.IsOptimal.AssertIsTrue();
+      try
+      {
+        _method.MoveNext(ref point);
+        throw new Exception("I should never get here");
+      }
+      catch (AssertException)
+      {
+        // all is fine.
+      }
     }
     
     /*
@@ -46,17 +53,20 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(-1);
       var b = f.ValueWithDerivative(2);
       
-      var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(-1);
-      method.Y.AssertIsEqualTo(-1);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(-1);
+      point.BorderSmaller.Y.AssertIsEqualTo(-1);
 
-      method.IsOptimal.AssertIsFalse();
-      method.IsPolimodal.AssertIsFalse();
-      
-      method.MoveNext().AssertIsFalse();
-
-      method.IsOptimal.AssertIsFalse();
-      method.IsPolimodal.AssertIsTrue();
+      point.IsOptimal.AssertIsFalse();
+      try
+      {
+        _method.MoveNext(ref point);  
+        throw new Exception("I should never get here");
+      }
+      catch (MultimodalFunctionException)
+      {
+        // all is fine
+      }
     }
     
     /*
@@ -70,16 +80,13 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(-1.3 * Math.PI);
       var b = f.ValueWithDerivative(0.4 * Math.PI);
       
-      var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(a.X);
-      method.Y.AssertIsEqualTo(a.Y);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(a.X);
+      point.BorderSmaller.Y.AssertIsEqualTo(a.Y);
       
-      Number width = method.Width;
-      Number value = method.Y;
-
-      ushort i = OptimizationHelper.FindOptimal(method);
+      ushort i = _method.FindOptimal(ref point);
       
-      method.Y.AssertIsEqualTo(2);
+      point.BorderSmaller.Y.AssertIsEqualTo(2);
       i.AssertIsEqualTo(6);
     }
     
@@ -90,18 +97,21 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(0.3 * Math.PI);
       var b = f.ValueWithDerivative(Math.PI);
       
-      var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(b.X);
-      method.Y.AssertIsEqualTo(b.Y);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(b.X);
+      point.BorderSmaller.Y.AssertIsEqualTo(b.Y);
       a.Y.AssertIsGreaterThan(b.Y);
 
-      method.IsOptimal.AssertIsFalse();
-      method.IsPolimodal.AssertIsFalse();
-      
-      method.MoveNext().AssertIsFalse();
-
-      method.IsOptimal.AssertIsFalse();
-      method.IsPolimodal.AssertIsTrue();
+      point.IsOptimal.AssertIsFalse();
+      try
+      {
+        _method.MoveNext(ref point);  
+        throw new Exception("I should never get here");
+      }
+      catch (MultimodalFunctionException)
+      {
+        // all is fine
+      }
     }
     
     [Fact]
@@ -111,26 +121,29 @@ namespace Arnible.MathModeling.Optimization.Test
       var a = f.ValueWithDerivative(0);
       var b = f.ValueWithDerivative(0.7 * Math.PI);
       
-      var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(a.X);
-      method.Y.AssertIsEqualTo(a.Y);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(a.X);
+      point.BorderSmaller.Y.AssertIsEqualTo(a.Y);
       b.Y.AssertIsGreaterThan(a.Y);
 
-      method.IsOptimal.AssertIsFalse();
-      method.IsPolimodal.AssertIsFalse();
-      
-      method.MoveNext().AssertIsFalse();
-
-      method.IsOptimal.AssertIsFalse();
-      method.IsPolimodal.AssertIsTrue();
+      point.IsOptimal.AssertIsFalse();
+      try
+      {
+        _method.MoveNext(ref point);  
+        throw new Exception("I should never get here");
+      }
+      catch (MultimodalFunctionException)
+      {
+        // all is fine
+      }
     }
     
     /*
-     * Polimodal sin
+     * Multimodal sin
      */
     
     [Fact]
-    public void Polimodal_Sin()
+    public void Multimodal_Sin()
     {
       var f = new SinTestFunction();
       var a = f.ValueWithDerivative(1.4 * Math.PI);
@@ -140,17 +153,20 @@ namespace Arnible.MathModeling.Optimization.Test
       a.First.AssertIsLessThan(0);
       b.First.AssertIsGreaterThan(0);
       
-      var method = new UnimodalSecant(f: f, a: a, b: b, Logger);
-      method.X.AssertIsEqualTo(a.X);
-      method.Y.AssertIsEqualTo(a.Y);
+      var point = new NumberFunctionOptimizationSearchRange(f: f, a: a, b: b);
+      point.BorderSmaller.X.AssertIsEqualTo(a.X);
+      point.BorderSmaller.Y.AssertIsEqualTo(a.Y);
 
-      method.IsOptimal.AssertIsFalse();
-      method.IsPolimodal.AssertIsFalse();
-      
-      method.MoveNext().AssertIsFalse();
-
-      method.IsOptimal.AssertIsFalse();
-      method.IsPolimodal.AssertIsTrue();
+      point.IsOptimal.AssertIsFalse();
+      try
+      {
+        _method.MoveNext(ref point);  
+        throw new Exception("I should never get here");
+      }
+      catch (MultimodalFunctionException)
+      {
+        // all is fine
+      }
     }
   }
 }

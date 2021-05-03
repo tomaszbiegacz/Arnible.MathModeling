@@ -1,5 +1,3 @@
-using System;
-
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
 {
   public static class ISingleStepOptimizationExtensions
@@ -7,20 +5,13 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
     public static Number Optimize(
       this ISingleStepOptimization optimization,
       INumberFunctionWithDerivative f,
-      in Number minValue,
-      in Number maxValue)
+      in Number startPoint,
+      in Number maxX)
     {
-      if(minValue < f.MinValue)
-      {
-        throw new ArgumentException(nameof(minValue));
-      }
-      if(maxValue > f.MaxValue)
-      {
-        throw new ArgumentException(nameof(maxValue));
-      }
-      
-      FunctionPointWithDerivative startPoint = f.ValueWithDerivative(minValue);
-      return optimization.Optimize(f, in startPoint, in maxValue);
+      return optimization.Optimize(
+        f, 
+        f.ValueWithDerivative(in startPoint), 
+        in maxX);
     }
   }
 }

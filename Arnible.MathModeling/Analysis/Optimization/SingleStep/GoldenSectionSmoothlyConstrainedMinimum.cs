@@ -2,17 +2,20 @@ using System;
 
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
 {
-  public class GoldenSectionSmoothlyConstrained : ISingleStepOptimization
+  public class GoldenSectionSmoothlyConstrainedMinimum : ISingleStepOptimization
   {
     public const double Ratio = 0.618;
     
     private readonly ISimpleLogger _logger;
+    private readonly GoldenSectionWithDerivativeConstrainedMinimum _goldenSection;
+    private readonly UnimodalSecantMinimum _secant; 
     public uint IterationLimit { get; set; }
     
-    public GoldenSectionSmoothlyConstrained(
-      ISimpleLogger logger)
+    public GoldenSectionSmoothlyConstrainedMinimum(ISimpleLogger logger)
     {
       _logger = logger;
+      _goldenSection = new GoldenSectionWithDerivativeConstrainedMinimum(logger);
+      _secant = new UnimodalSecantMinimum(logger);
       IterationLimit = 10;
     }
 
@@ -61,18 +64,17 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
         throw new NotAbleToOptimizeException();
       }
       
-      FunctionPointWithDerivative p1 = f.ValueWithDerivative(b - Ratio * width);
-      FunctionPointWithDerivative p2 = f.ValueWithDerivative(a.X + Ratio * width);
-      FunctionPointWithDerivative pMinValue = p1.Y < p2.Y ? p1 : p2;
+      NumberFunctionPointWithDerivative p1 = f.ValueWithDerivative(b - Ratio * width);
+      NumberFunctionPointWithDerivative p2 = f.ValueWithDerivative(a.X + Ratio * width);
+      NumberFunctionPointWithDerivative pMinValue = p1.Y < p2.Y ? p1 : p2;
       
       // try to apply secant method
-      FunctionPointWithDerivative? pSecant = ApplyUnimodalSecantIfPossible(f, in a, in p1, in p2);
-      if (pSecant.HasValue)
+      if (ApplyUnimodalSecantIfPossible(f, in a, in p1, in p2, out NumberFunctionPointWithDerivative pSecant))
       {
-        if (pSecant.Value.Y < pMinValue.Y)
+        if (pSecant.Y < pMinValue.Y)
         {
-          Log(iteration, "Secant", pSecant.Value, in a, in p1, in p2);
-          return pSecant.Value.X;
+          Log(iteration, "Secant", pSecant, in a, in p1, in p2);
+          return pSecant.X;
         }
       }
 
@@ -87,35 +89,44 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       return Optimize((ushort)(iteration + 1), f, in a, p1.X);
     }
 
-    static FunctionPointWithDerivative? ApplyUnimodalSecantIfPossible(
+    private bool ApplyUnimodalSecantIfPossible(
       INumberFunctionWithDerivative f,
-      in FunctionPointWithDerivative a,
-      in FunctionPointWithDerivative p1,
-      in FunctionPointWithDerivative p2)
+      in NumberFunctionPointWithDerivative a,
+      in NumberFunctionPointWithDerivative p1,
+      in NumberFunctionPointWithDerivative p2,
+      out NumberFunctionPointWithDerivative result)
     {
-      UnimodalSecantAnalysis r1Secant = UnimodalSecant.AnalyseApplicability(in a, in p1);
-      if (r1Secant == UnimodalSecantAnalysis.HasMinimum)
+      NumberFunctionOptimizationSearchRange r1 = new NumberFunctionOptimizationSearchRange(f, in a, in p1);
+      if (r1.GetSecantApplicability() == UnimodalSecantAnalysis.HasMinimum)
       {
-        return UnimodalSecant.CalculateMinimum(f, in a, in p1);
+        _secant.MoveNext(ref r1);
+        result = r1.BorderSmaller; 
+        return true;
       }
       else
       {
-        UnimodalSecantAnalysis r2Secant = UnimodalSecant.AnalyseApplicability(in p1, in p2);
-        if (r2Secant == UnimodalSecantAnalysis.HasMinimum)
+        NumberFunctionOptimizationSearchRange r2 = new NumberFunctionOptimizationSearchRange(f, in p1, in p2);
+        if (r2.GetSecantApplicability() == UnimodalSecantAnalysis.HasMinimum)
         {
-          return UnimodalSecant.CalculateMinimum(f, in p1, in p2);
+          _secant.MoveNext(ref r2);
+          result = r2.BorderSmaller; 
+          return true;
+        }
+        else
+        {
+          result = default;
+          return false;
         }
       }
-      return null;
     }
     
     protected void Log(
       ushort iteration,
       string message,
-      in FunctionPointWithDerivative result,
-      in FunctionPointWithDerivative a,
-      in FunctionPointWithDerivative p1,
-      in FunctionPointWithDerivative p2)
+      in NumberFunctionPointWithDerivative result,
+      in NumberFunctionPointWithDerivative a,
+      in NumberFunctionPointWithDerivative p1,
+      in NumberFunctionPointWithDerivative p2)
     {
       Span<char> iterationBuffer = stackalloc char[SpanCharFormatter.BufferSize];
       SpanCharFormatter.ToString(iteration, in iterationBuffer);

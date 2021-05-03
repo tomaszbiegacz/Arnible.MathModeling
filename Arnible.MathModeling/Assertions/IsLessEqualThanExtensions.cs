@@ -1,12 +1,12 @@
-using System;
+using Arnible.MathModeling;
 
 namespace Arnible.Assertions
 {
   public static class IsLessEqualThanExtensions
   {
-    public static void AssertIsLessEqualThan<T>(this T currentValue, in T baseValue) where T: IComparable<T>
+    public static void AssertIsLessEqualThan(in this Number currentValue, in Number baseValue)
     {
-      if(baseValue.CompareTo(currentValue) < 0)
+      if(baseValue < currentValue)
       {
         throw new AssertException($"Expected lower or equal than {baseValue} got {currentValue}");
       }
