@@ -14,17 +14,55 @@ namespace Arnible.Linq.Test
     }
     
     [Fact]
-    public void IList_Single()
+    public void IEnumerable_Single_Empty()
     {
-      IList<int> v = new [] { 1 };
-      Assert.Equal(1, v.Single());
+      IEnumerable<int> v = new int[0];
+      try
+      {
+        v.Single();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
     }
     
+    [Fact]
+    public void IEnumerable_Single_Two()
+    {
+      IEnumerable<int> v = new int[] { 1, 2 };
+      try
+      {
+        v.Single();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
+    }
+
     [Fact]
     public void IReadOnlyList_Single()
     {
       IReadOnlyList<int> v = new [] { 1 };
       Assert.Equal(1, v.Single());
+    }
+    
+    [Fact]
+    public void IReadOnlyList_Single_Empty()
+    {
+      IReadOnlyList<int> v = new int[0];
+      try
+      {
+        v.Single();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
     }
     
     [Fact]
@@ -35,10 +73,40 @@ namespace Arnible.Linq.Test
     }
     
     [Fact]
+    public void ReadOnlySpan_Single_Empty()
+    {
+      ReadOnlySpan<int> v = stackalloc int[0];
+      try
+      {
+        v.Single();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
+    }
+    
+    [Fact]
     public void Span_Single()
     {
       Span<int> v = stackalloc [] { 1 };
       Assert.Equal(1, v.Single());
+    }
+    
+    [Fact]
+    public void Span_Single_Empty()
+    {
+      Span<int> v = stackalloc int[0];
+      try
+      {
+        v.Single();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
     }
     
     [Fact]

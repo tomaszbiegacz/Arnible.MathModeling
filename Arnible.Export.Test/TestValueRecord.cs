@@ -2,7 +2,7 @@
 
 namespace Arnible.Export.Test
 {
-  public struct TestRecord
+  public struct TestValueRecord
   {
     public byte ByteValue { get; set; }
 
@@ -26,15 +26,15 @@ namespace Arnible.Export.Test
 
     public Number NumberValue { get; set; }
     
-    public ReadOnlyArray<Number> NumberArray { get; set; }
+    public ReadOnlyArray<Number>? NumberArray { get; set; }
     
     //
     // Serialization
     //
     
-    public class Serializer : IValueRecordSerializer<TestRecord>
+    public class Serializer : IValueRecordSerializer<TestValueRecord>
     {
-      public void Serialize(IRecordFieldSerializer serializer, in TestRecord record)
+      public void Serialize(IRecordFieldSerializer serializer, in TestValueRecord record)
       {
         serializer.Write(nameof(ByteValue), record.ByteValue);
         serializer.Write(nameof(SbyteValue), record.SbyteValue);
@@ -50,7 +50,7 @@ namespace Arnible.Export.Test
         serializer.WriteValueField(nameof(NumberArray), record.NumberArray);
       }
       
-      public void Serialize(IRecordFieldSerializer serializer, in TestRecord? record)
+      public void Serialize(IRecordFieldSerializer serializer, in TestValueRecord? record)
       {
         serializer.Write(nameof(ByteValue), record?.ByteValue);
         serializer.Write(nameof(SbyteValue), record?.SbyteValue);

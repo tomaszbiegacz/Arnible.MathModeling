@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Arnible.Linq.Test
 {
-  public class FirstExtensionsTests
+  public class FirstTests
   {
     [Fact]
     public void IEnumerable_First()
@@ -14,10 +14,18 @@ namespace Arnible.Linq.Test
     }
     
     [Fact]
-    public void IList_First()
+    public void IEnumerable_First_Empty()
     {
-      IList<int> v = new [] { 1, 2};
-      Assert.Equal(1, v.First());
+      IEnumerable<int> v = new int[0];
+      try
+      {
+        v.First();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
     }
     
     [Fact]
@@ -28,6 +36,21 @@ namespace Arnible.Linq.Test
     }
     
     [Fact]
+    public void IReadOnlyList_First_Empty()
+    {
+      IReadOnlyList<int> v = new int[0];
+      try
+      {
+        v.First();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
+    }
+    
+    [Fact]
     public void ReadOnlySpan_First()
     {
       ReadOnlySpan<int> v = stackalloc [] { 1, 2};
@@ -35,10 +58,40 @@ namespace Arnible.Linq.Test
     }
     
     [Fact]
+    public void ReadOnlySpan_First_Empty()
+    {
+      ReadOnlySpan<int> v = stackalloc int[0];
+      try
+      {
+        v.First();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
+    }
+    
+    [Fact]
     public void Span_First()
     {
       Span<int> v = stackalloc [] { 1, 2};
       Assert.Equal(1, v.First());
+    }
+    
+    [Fact]
+    public void Span_First_Empty()
+    {
+      Span<int> v = stackalloc int[0];
+      try
+      {
+        v.First();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
     }
     
     [Fact]
