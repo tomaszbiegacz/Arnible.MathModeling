@@ -9,7 +9,7 @@ namespace Arnible.Assertions
     {
       if(!expected.Equals(actual))
       {
-        throw new AssertException($"Expected {expected} got {actual}");
+        throw new AssertException($"Expected \n{expected}\n got \n{actual}");
       }
       return actual;
     }
@@ -29,11 +29,11 @@ namespace Arnible.Assertions
     {
        if(!actual.HasValue)
        {
-         throw new AssertException($"Expected {expected} got {actual}");
+         throw new AssertException($"Expected \n{expected}\n got \n{actual}");
        }
        else if(!expected.Equals(actual.Value))
        {
-        throw new AssertException($"Expected {expected} got {actual}");
+         throw new AssertException($"Expected \n{expected}\n got \n{actual}");
        }
        return actual;
     }

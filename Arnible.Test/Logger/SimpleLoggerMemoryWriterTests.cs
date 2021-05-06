@@ -2,7 +2,9 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Arnible.Xunit;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Arnible.Logger.Test
 {

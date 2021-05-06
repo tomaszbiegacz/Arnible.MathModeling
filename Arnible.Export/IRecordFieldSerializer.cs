@@ -7,9 +7,6 @@ namespace Arnible.Export
   /// </summary>
   public interface IRecordFieldSerializer
   {
-    void WriteNull(in ReadOnlySpan<char> fieldName);
-    
-    
     void Write(in ReadOnlySpan<char> fieldName, byte value);
     void Write(in ReadOnlySpan<char> fieldName, byte? value);
     void Write(in ReadOnlySpan<char> fieldName, sbyte value);
@@ -26,7 +23,8 @@ namespace Arnible.Export
     void Write(in ReadOnlySpan<char> fieldName, in long value);
     void Write(in ReadOnlySpan<char> fieldName, in ulong? value);
     void Write(in ReadOnlySpan<char> fieldName, in ulong value);
-    void Write(in ReadOnlySpan<char> fieldName, in float? value);
+    void Write(in ReadOnlySpan<char> fieldName, float value);
+    void Write(in ReadOnlySpan<char> fieldName, float? value);
     void Write(in ReadOnlySpan<char> fieldName, in double? value);
     void Write(in ReadOnlySpan<char> fieldName, in double value);
     void Write(in ReadOnlySpan<char> fieldName, in decimal? value);

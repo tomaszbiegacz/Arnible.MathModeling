@@ -34,7 +34,7 @@ namespace Arnible.Export.RecordPerTextRow.Test
       string result;
       using (var writer = new SimpleLoggerMemoryWriter())
       {
-        var logger = writer.WithWriterFactory(TestRecordWriterBuilder.Default);
+        var logger = writer.WithWriterFactory(RecordWriterBuilderForTests.Default);
         await using (var serializer = logger.CreateTsvValueNotepad<TestValueRecord>("test"))
         {
           serializer.Write(in record);
@@ -84,7 +84,7 @@ namespace Arnible.Export.RecordPerTextRow.Test
       string result;
       using (var writer = new SimpleLoggerMemoryWriter())
       {
-        var logger = writer.WithWriterFactory(TestRecordWriterBuilder.Default);
+        var logger = writer.WithWriterFactory(RecordWriterBuilderForTests.Default);
         await using (var serializer = logger.CreateTsvReferenceNotepad<TestReferenceRecord>("test"))
         {
           serializer.Write(record);

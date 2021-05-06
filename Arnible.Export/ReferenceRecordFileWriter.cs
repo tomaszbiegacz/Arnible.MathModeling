@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 namespace Arnible.Export
 {
-  public interface IReferenceRecordFileWriter<TRecord> : IReferenceRecordWriter<TRecord>, IAsyncDisposable where TRecord: class?
+  public interface IReferenceRecordFileWriter<TRecord> : IReferenceRecordWriter<TRecord>, IAsyncDisposable where TRecord: class
   {
     FileInfo Destination { get; }
   }
 
-  class ReferenceRecordFileWriter<TRecord> : IReferenceRecordFileWriter<TRecord> where TRecord: class?
+  class ReferenceRecordFileWriter<TRecord> : IReferenceRecordFileWriter<TRecord> where TRecord: class
   {
     private readonly IAsyncDisposable _stream;
     private readonly IReferenceRecordWriter<TRecord> _writer;

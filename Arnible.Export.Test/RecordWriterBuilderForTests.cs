@@ -1,10 +1,10 @@
 namespace Arnible.Export.Test
 {
-  public static class TestRecordWriterBuilder
+  public static class RecordWriterBuilderForTests
   {
     private static readonly RecordWriterBuilder _builder;
     
-    static TestRecordWriterBuilder()
+    static RecordWriterBuilderForTests()
     {
       _builder = new RecordWriterBuilder()
         .RegisterTestSerializers();

@@ -47,7 +47,7 @@ namespace Arnible.Test
         typeof(ReadOnlyArray<>).IsImplementingGenericInterface(typeof(Exception));
         throw new Exception("I should not get here");
       }
-      catch(AssertException)
+      catch(ArgumentException)
       {
         // all is ok
       }

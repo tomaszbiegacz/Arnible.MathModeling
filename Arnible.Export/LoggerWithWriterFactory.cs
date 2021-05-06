@@ -6,7 +6,7 @@ namespace Arnible.Export
 {
   public interface ILoggerWithWriterFactory : ISimpleLogger
   {
-    IReferenceRecordFileWriter<TRecord> CreateTsvReferenceNotepad<TRecord>(string name) where TRecord: class?;
+    IReferenceRecordFileWriter<TRecord> CreateTsvReferenceNotepad<TRecord>(string name) where TRecord: class;
     
     IValueRecordFileWriter<TRecord> CreateTsvValueNotepad<TRecord>(string name) where TRecord: struct;
   }
@@ -29,7 +29,7 @@ namespace Arnible.Export
     public void Write(in ReadOnlySpan<char> message) => _logger.Write(in message);
     public void Write(MemoryStream message) => _logger.Write(message);
 
-    public IReferenceRecordFileWriter<TRecord> CreateTsvReferenceNotepad<TRecord>(string name) where TRecord : class?
+    public IReferenceRecordFileWriter<TRecord> CreateTsvReferenceNotepad<TRecord>(string name) where TRecord : class
     {
       IReferenceRecordFileWriter<TRecord> writer = new ReferenceRecordFileWriter<TRecord>(
         StreamExtensions.GetTempFile(TsvConst.FileExtension), 

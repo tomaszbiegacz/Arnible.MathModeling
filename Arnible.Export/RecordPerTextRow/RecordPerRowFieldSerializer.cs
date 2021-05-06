@@ -77,11 +77,6 @@ namespace Arnible.Export.RecordPerTextRow
     //
     // Write
     //
-    
-    public void WriteNull(in ReadOnlySpan<char> fieldName)
-    {
-      _stream.WriteNull(FieldNamespace, in fieldName);
-    }
 
     public void Write(in ReadOnlySpan<char> fieldName, byte value)
     {
@@ -127,7 +122,7 @@ namespace Arnible.Export.RecordPerTextRow
     {
       if(value is null)
       {
-        _stream.WriteNull(FieldNamespace, in fieldName);
+        _stream.WriteValue(FieldNamespace, in fieldName, string.Empty);
       }
       else
       {
@@ -148,7 +143,7 @@ namespace Arnible.Export.RecordPerTextRow
     {
       if(value is null)
       {
-        _stream.WriteNull(FieldNamespace, in fieldName);
+        _stream.WriteValue(FieldNamespace, in fieldName, string.Empty);
       }
       else
       {
@@ -169,7 +164,7 @@ namespace Arnible.Export.RecordPerTextRow
     {
       if(value is null)
       {
-        _stream.WriteNull(FieldNamespace, in fieldName);
+        _stream.WriteValue(FieldNamespace, in fieldName, string.Empty);
       }
       else
       {
@@ -190,7 +185,7 @@ namespace Arnible.Export.RecordPerTextRow
     {
       if(value is null)
       {
-        _stream.WriteNull(FieldNamespace, in fieldName);
+        _stream.WriteValue(FieldNamespace, in fieldName, string.Empty);
       }
       else
       {
@@ -207,27 +202,32 @@ namespace Arnible.Export.RecordPerTextRow
         SpanCharFormatter.ToString(in value, buffer));
     }
     
-    public void Write(in ReadOnlySpan<char> fieldName, in float? value)
+    public void Write(in ReadOnlySpan<char> fieldName, float? value)
     {
       if(value is null)
       {
-        _stream.WriteNull(FieldNamespace, in fieldName);
+        _stream.WriteValue(FieldNamespace, in fieldName, string.Empty);
       }
       else
       {
-        Span<char> buffer = stackalloc char[SpanCharFormatter.BufferSize];
-        _stream.WriteValue(
-          FieldNamespace, 
-          in fieldName, 
-          SpanCharFormatter.ToString(value.Value, buffer));
+        Write(in fieldName, value.Value);
       }
+    }
+    
+    public void Write(in ReadOnlySpan<char> fieldName, float value)
+    {
+      Span<char> buffer = stackalloc char[SpanCharFormatter.BufferSize];
+      _stream.WriteValue(
+        FieldNamespace, 
+        in fieldName, 
+        SpanCharFormatter.ToString(value, buffer));
     }
     
     public void Write(in ReadOnlySpan<char> fieldName, in double? value)
     {
       if(value is null)
       {
-        _stream.WriteNull(FieldNamespace, in fieldName);
+        _stream.WriteValue(FieldNamespace, in fieldName, string.Empty);
       }
       else
       {
@@ -248,7 +248,7 @@ namespace Arnible.Export.RecordPerTextRow
     {
       if(value is null)
       {
-        _stream.WriteNull(FieldNamespace, in fieldName);
+        _stream.WriteValue(FieldNamespace, in fieldName, string.Empty);
       }
       else
       {
@@ -269,7 +269,7 @@ namespace Arnible.Export.RecordPerTextRow
     {
       if(value is null)
       {
-        _stream.WriteNull(FieldNamespace, in fieldName);
+        _stream.WriteValue(FieldNamespace, in fieldName, string.Empty);
       }
       else
       {
@@ -282,7 +282,7 @@ namespace Arnible.Export.RecordPerTextRow
     {
       if(string.IsNullOrWhiteSpace(value))
       {
-        _stream.WriteNull(FieldNamespace, in fieldName);
+        _stream.WriteValue(FieldNamespace, in fieldName, string.Empty);
       }
       else
       {

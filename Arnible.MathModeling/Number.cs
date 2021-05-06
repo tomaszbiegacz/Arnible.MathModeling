@@ -36,9 +36,14 @@ namespace Arnible.MathModeling
     // Serializable
     //
     
-    public class Serializer : ValueRecordSerializerSimple<Number>
+    public class Serializer : IValueRecordSerializer<Number>
     {
-      public override void Serialize(IRecordFieldSerializer serializer, in Number? record)
+      public void Serialize(IRecordFieldSerializer serializer, in Number record)
+      {
+        serializer.Write(string.Empty, record._value);
+      }
+      
+      public void Serialize(IRecordFieldSerializer serializer, in Number? record)
       {
         serializer.Write(string.Empty, record?._value);
       }

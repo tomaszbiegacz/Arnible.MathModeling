@@ -7,13 +7,17 @@ namespace Arnible.Export.Test
       return src
         .RegisterCoreSerializers()
         .RegisterMathModellingSerializers()
+        
         .RegisterReferenceSerializer<NullableSubRecord, NullableSubRecord.Serializer>()
-        .RegisterValueSerializer<TestValueRecord, TestValueRecord.Serializer>()
         .RegisterReferenceSerializer<TestReferenceRecord, TestReferenceRecord.Serializer>()
-        .RegisterValueSerializer<TestRecordArray, TestRecordArray.Serializer>()
-        .RegisterValueSerializer<TestSubRecord, TestSubRecord.Serializer>()
-        .RegisterValueSerializer<ValueRecord, ValueRecord.Serializer>()
-        .RegisterGenericReferenceSerializer(typeof(ReadOnlyArrayWrapper<>), typeof(ReadOnlyArrayWrapperSerializer<>));
+        .RegisterReferenceSerializer<TestSubReferenceRecord, TestSubReferenceRecord.Serializer>()
+        .RegisterReferenceSerializer<TestArraysReferenceRecord, TestArraysReferenceRecord.Serializer>()
+        .RegisterGenericReferenceSerializer(typeof(ReadOnlyArrayWrapper<>), typeof(ReadOnlyArrayWrapperSerializer<>))
+        
+        .RegisterValueSerializer<TestValueRecord, TestValueRecord.Serializer>()
+        .RegisterValueSerializer<TestReferenceRecordArray, TestReferenceRecordArray.Serializer>()
+        .RegisterValueSerializer<TestSubValueRecord, TestSubValueRecord.Serializer>()
+        .RegisterValueSerializer<ValueRecord, ValueRecord.Serializer>();
     }
   }
 }

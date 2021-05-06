@@ -1,12 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using Xunit.Abstractions;
 
 namespace Arnible.Xunit
 {
-  public sealed class XunitLogger : ISimpleLogger, ILogger, IDisposable
+  public sealed class XunitLogger : ISimpleLogger, IDisposable
   {
     private readonly ITestOutputHelper _output;
     private readonly StringBuilder _stringBuffer;
@@ -21,6 +20,7 @@ namespace Arnible.Xunit
     }
 
     public bool IsLoggerEnabled { get; set; }
+    
     public void Write(in ReadOnlySpan<char> message)
     {
       if(IsLoggerEnabled)
@@ -39,22 +39,6 @@ namespace Arnible.Xunit
     }
 
     public bool SaveLogsToFile { get; set; }
-
-    //
-    // ILogger
-    //
-
-    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
-    {
-      if (IsLoggerEnabled)
-      {
-        Write(formatter(state, exception));
-      }
-    }
-
-    public bool IsEnabled(LogLevel logLevel) => IsLoggerEnabled;
-
-    public IDisposable BeginScope<TState>(TState state) => this;
 
     //
     // IDisposable
