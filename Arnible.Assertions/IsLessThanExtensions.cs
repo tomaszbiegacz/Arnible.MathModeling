@@ -2,9 +2,9 @@ using System;
 
 namespace Arnible.Assertions
 {
-  public static class IsLessThanExtensions2
+  public static class IsLessThanExtensions
   {
-    public static void AssertIsLessThan<T>(this T currentValue, T baseValue) where T: IComparable<T>
+    public static void AssertIsLessThan<T>(this T currentValue, in T baseValue) where T: IComparable<T>
     {
       if(baseValue.CompareTo(currentValue) <= 0)
       {

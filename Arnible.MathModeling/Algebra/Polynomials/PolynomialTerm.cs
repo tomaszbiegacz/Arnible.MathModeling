@@ -373,7 +373,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
       }
     }
 
-    public PolynomialTerm ToPower(uint power)
+    public PolynomialTerm ToPower(ushort power)
     {
       switch (power)
       {
@@ -395,7 +395,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
       var remainingTerms = toReduce.ToDictionary(t => t.Variable, t => t.Power);
       foreach (var expression in source)
       {
-        if (!expression.HasUnaryModifier && remainingTerms.TryGetValue(expression.Variable, out uint reducePowerBy))
+        if (!expression.HasUnaryModifier && remainingTerms.TryGetValue(expression.Variable, out ushort reducePowerBy))
         {
           yield return expression.ReducePowerBy(reducePowerBy);
           remainingTerms.Remove(expression.Variable);
@@ -500,7 +500,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
         }
         else
         {
-          uint power = toReplace.Single().Power;
+          ushort power = toReplace.Single().Power;
           if (replacement.IsSingleTerm)
           {
             var temp = (PolynomialTerm)replacement;

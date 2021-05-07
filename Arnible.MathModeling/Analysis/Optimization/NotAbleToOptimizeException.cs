@@ -4,6 +4,10 @@ namespace Arnible.MathModeling.Analysis.Optimization
 {
   public class NotAbleToOptimizeException : Exception
   {
-    // intentionally empty
+    public NotAbleToOptimizeException()
+      : base("Not able to optimize")
+    {
+      // intentionally empty
+    }
   }
 }

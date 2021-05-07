@@ -4,7 +4,7 @@ namespace Arnible.Assertions
 {
   public static class IsLessEqualThanExtensions
   {
-    public static void AssertIsLessEqualThan<T>(this T currentValue, T baseValue) where T: IComparable<T>
+    public static void AssertIsLessEqualThan<T>(this T currentValue, in T baseValue) where T: IComparable<T>
     {
       if(baseValue.CompareTo(currentValue) < 0)
       {

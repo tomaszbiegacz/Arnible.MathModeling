@@ -13,19 +13,7 @@ namespace Arnible.Linq
       }
       throw new ArgumentException(nameof(source));
     }
-    
-    public static T First<T>(this IList<T> source)
-    {
-      if(source.Count > 0)
-      {
-        return source[0];
-      }
-      else
-      {
-        throw new ArgumentException(nameof(source));
-      }
-    }
-    
+
     public static T First<T>(this IReadOnlyList<T> source)
     {
       if(source.Count > 0)

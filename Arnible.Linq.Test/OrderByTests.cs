@@ -65,5 +65,21 @@ namespace Arnible.Linq.Test
         new[] { new ForOrdering(2), new ForOrdering(3), new ForOrdering(1) },
         (new[] { new ForOrdering(1), new ForOrdering(2), new ForOrdering(3) }).OrderByDescending(i => i.Root).ThenOrderBy(i => i.Reminder));
     }
+    
+    [Fact]
+    public void IEnumerable_OrderByDescending_WithThenDescending()
+    {
+      AssertExtensions.AreEquals(
+        new[] { new ForOrdering(3), new ForOrdering(2), new ForOrdering(1) },
+        (new[] { new ForOrdering(1), new ForOrdering(2), new ForOrdering(3) }).OrderByDescending(i => i.Root).ThenOrderByDescending(i => i.Reminder));
+    }
+    
+    [Fact]
+    public void IEnumerable_OrderBy_Default()
+    {
+      AssertExtensions.AreEquals(
+        new[] { new ForOrdering(1), new ForOrdering(2), new ForOrdering(3) }, 
+        (new[] { new ForOrdering(1), new ForOrdering(2), new ForOrdering(3) }).OrderBy(i => i.Root, i => i.Reminder));
+    }
   }
 }

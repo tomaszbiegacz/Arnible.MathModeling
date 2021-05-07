@@ -21,5 +21,12 @@ namespace Arnible.MathModeling
     public static Number Sin(in Number a) => RoundedSin((double)a);
 
     public static Number Cos(in Number a) => RoundedCos((double)a);
+    
+    public static Number Abs(this in Number a)
+    {
+      return Math.Abs((double)a);
+    }
+    
+    public static Number ToPower(this in Number a, ushort b) => DoubleExtension.ToPower((double)a, b);
   }
 }

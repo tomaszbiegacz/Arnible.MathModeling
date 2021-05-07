@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace Arnible
 {
@@ -8,65 +9,65 @@ namespace Arnible
     
     public static Span<char> ToString(int value, in Span<char> buffer)
     {
-      if(!value.TryFormat(buffer, out int charsWritten))
+      if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
         throw new ArgumentException(nameof(buffer));
       }
-      return buffer.Slice(0, charsWritten);
+      return buffer[..charsWritten];
     }
     
     public static Span<char> ToString(uint value, in Span<char> buffer)
     {
-      if(!value.TryFormat(buffer, out int charsWritten))
+      if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
         throw new ArgumentException(nameof(buffer));
       }
-      return buffer.Slice(0, charsWritten);
+      return buffer[..charsWritten];
     }
     
     public static Span<char> ToString(in long value, in Span<char> buffer)
     {
-      if(!value.TryFormat(buffer, out int charsWritten))
+      if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
         throw new ArgumentException(nameof(buffer));
       }
-      return buffer.Slice(0, charsWritten);
+      return buffer[..charsWritten];
     }
     
     public static Span<char> ToString(in ulong value, in Span<char> buffer)
     {
-      if(!value.TryFormat(buffer, out int charsWritten))
+      if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
         throw new ArgumentException(nameof(buffer));
       }
-      return buffer.Slice(0, charsWritten);
+      return buffer[..charsWritten];
     }
     
     public static Span<char> ToString(float value, in Span<char> buffer)
     {
-      if(!value.TryFormat(buffer, out int charsWritten))
+      if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
         throw new ArgumentException(nameof(buffer));
       }
-      return buffer.Slice(0, charsWritten);
+      return buffer[..charsWritten];
     }
     
     public static Span<char> ToString(in double value, in Span<char> buffer)
     {
-      if(!value.TryFormat(buffer, out int charsWritten))
+      if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
         throw new ArgumentException(nameof(buffer));
       }
-      return buffer.Slice(0, charsWritten);
+      return buffer[..charsWritten];
     }
     
     public static Span<char> ToString(in decimal value, in Span<char> buffer)
     {
-      if(!value.TryFormat(buffer, out int charsWritten))
+      if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
         throw new ArgumentException(nameof(buffer));
       }
-      return buffer.Slice(0, charsWritten);
+      return buffer[..charsWritten];
     }
   }
 }

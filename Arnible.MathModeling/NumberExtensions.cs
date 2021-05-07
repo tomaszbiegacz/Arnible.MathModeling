@@ -4,6 +4,18 @@ namespace Arnible.MathModeling
 {
   public static class NumberExtensions
   {
+    public static Sign GetSign(this in Number v)
+    {
+      if (v == 0)
+      {
+        return Sign.None;
+      }
+      else
+      {
+        return v > 0 ? Sign.Positive : Sign.Negative;
+      }
+    }
+    
     /// <summary>
     /// True if all values are zero or enumerator is empty
     /// </summary>

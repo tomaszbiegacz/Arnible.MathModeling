@@ -188,5 +188,109 @@ namespace Arnible.MathModeling.Test
       (v == 1L).AssertIsTrue();
       (v == 0L).AssertIsFalse();
     }
+    
+    [Fact]
+    public void OneTest()
+    {
+      default(Number).One.AssertIsEqualTo(1);
+    }
+    
+    [Fact]
+    public void ZeroTest()
+    {
+      default(Number).Zero.AssertIsEqualTo(0);
+    }
+    
+    [Fact]
+    public void InverseTest()
+    {
+      Number v = 1;
+      v.Inverse().AssertIsEqualTo(-1);
+    }
+    
+    [Fact]
+    public void GetHashCodeTests()
+    {
+      Number v = 1;
+      
+      Number v1 = 1;
+      Number v2 = 2;
+      
+      v.GetHashCode().AssertIsEqualTo(v1.GetHashCode());
+      v.GetHashCode().AssertIsNotEqualTo(v2.GetHashCode());
+    }
+    
+    [Fact]
+    public void NumberDoubleTests()
+    {
+      double other = 2;
+      Number value = 0.5;
+      (value / other).AssertIsEqualTo(0.25);
+      (value + other).AssertIsEqualTo(2.5);
+      (value - other).AssertIsEqualTo(-1.5);
+      (value * other).AssertIsEqualTo(1);
+    }
+    
+    [Fact]
+    public void NumberIntTests()
+    {
+      int other = 2;
+      Number value = 0.5;
+      (value / other).AssertIsEqualTo(0.25);
+      (value + other).AssertIsEqualTo(2.5);
+      (value - other).AssertIsEqualTo(-1.5);
+      (value * other).AssertIsEqualTo(1);
+    }
+    
+    [Fact]
+    public void NumberUintTests()
+    {
+      uint other = 2;
+      Number value = 0.5;
+      (value / other).AssertIsEqualTo(0.25);
+      (value + other).AssertIsEqualTo(2.5);
+      (value - other).AssertIsEqualTo(-1.5);
+      (value * other).AssertIsEqualTo(1);
+    }
+    
+    [Fact]
+    public void DoubleNumberTests()
+    {
+      Number other = 0.5;
+      double value = 2;
+      (value / other).AssertIsEqualTo(4);
+      (value + other).AssertIsEqualTo(2.5);
+      (value - other).AssertIsEqualTo(1.5);
+      (value * other).AssertIsEqualTo(1);
+    }
+    
+    [Fact]
+    public void IntNumberTests()
+    {
+      Number other = 0.5;
+      int value = 2;
+      (value / other).AssertIsEqualTo(4);
+      (value + other).AssertIsEqualTo(2.5);
+      (value - other).AssertIsEqualTo(1.5);
+      (value * other).AssertIsEqualTo(1);
+    }
+    
+    [Fact]
+    public void UintNumberTests()
+    {
+      Number other = 0.5;
+      uint value = 2;
+      (value / other).AssertIsEqualTo(4);
+      (value + other).AssertIsEqualTo(2.5);
+      (value - other).AssertIsEqualTo(1.5);
+      (value * other).AssertIsEqualTo(1);
+    }
+    
+    [Fact]
+    public void EqualsOtherObject()
+    {
+      Number val = 1;
+      val.Equals(new int[0]).AssertIsFalse();
+    }
   }
 }

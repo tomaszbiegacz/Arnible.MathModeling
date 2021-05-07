@@ -2,9 +2,9 @@ namespace Arnible.MathModeling.Analysis.Optimization
 {
   public interface INumberFunctionWithDerivative
   {
-    ref readonly Number MinValue { get; }
-    ref readonly Number MaxValue { get; }
+    ref readonly Number MinX { get; }
+    ref readonly Number MaxX { get; }
     
-    FunctionPointWithDerivative ValueWithDerivative(in Number x);
+    NumberFunctionPointWithDerivative ValueWithDerivative(in Number x);
   }
 }

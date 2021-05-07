@@ -148,7 +148,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
      * Query
      */
 
-    internal Dictionary<char, uint> GetIdentityVariableTerms()
+    internal Dictionary<char, ushort> GetIdentityVariableTerms()
     {
       return _terms.AsList().Select(t => t.GetIdentityVariableTerms())
         .AggregateCommonBy(v => v.Variable, vc => vc.Select(v => v.Power).MinDefensive());

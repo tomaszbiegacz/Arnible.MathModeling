@@ -39,7 +39,7 @@ namespace Arnible.MathModeling
       return !double.IsNaN(a) && !double.IsInfinity(a);
     }    
 
-    public static double ToPower(in this double a, in uint b)
+    public static double ToPower(in this double a, ushort b)
     {
       if (a.NumericEquals(1))
       {
@@ -54,14 +54,18 @@ namespace Arnible.MathModeling
           return a;
         case 2:
           return a * a;
-        case 3:
-          return a * a * a;
-        case 4:
-          return a * a * a * a;
-        case 5:
-          return a * a * a * a * a;
         default:
-          return Math.Pow(a, b);
+        {
+          double temp = ToPower(a, (ushort)(b / 2));
+          if (b % 2 == 0)
+          {
+            return temp*temp;
+          }
+          else
+          {
+           return temp*temp*a; 
+          }
+        }
       }
     }
   }

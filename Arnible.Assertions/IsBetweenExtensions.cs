@@ -4,7 +4,7 @@ namespace Arnible.Assertions
 {
   public static class IsBetweenExtensions
   {
-    public static void AssertIsBetween<T>(this T value, T bottom, T up) where T: IComparable<T>
+    public static void AssertIsBetween<T>(this T value, in T bottom, in T up) where T: IComparable<T>
     {
       if(value.CompareTo(bottom) < 0 || value.CompareTo(up) > 0)
       {

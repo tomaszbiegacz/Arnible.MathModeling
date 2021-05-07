@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Arnible.Export.RecordPerTextRow;
+using Arnible.Export.Serializers;
 
 namespace Arnible.Export
 {
-  public interface IRecordWriterBuilder
-  {
-    IReferenceRecordWriter<TRecord> CreateTsvReferenceRecordWriter<TRecord>(ISimpleLogger logger) where TRecord : class?;
-    IValueRecordWriter<TRecord> CreateTsvValueRecordWriter<TRecord>(ISimpleLogger logger) where TRecord : struct;
-  }
-  
   public class RecordWriterBuilder : IRecordWriterBuilder
   {
     private readonly Dictionary<Type, Func<Type[], object>> _serializersFactories;
@@ -17,6 +12,18 @@ namespace Arnible.Export
     public RecordWriterBuilder()
     {
       _serializersFactories = new Dictionary<Type, Func<Type[], object>>();
+      
+      RegisterValueSerializer<byte, ByteSerializer>();
+      RegisterValueSerializer<sbyte, SbyteSerializer>();
+      RegisterValueSerializer<ushort, UshortSerializer>();
+      RegisterValueSerializer<short, ShortSerializer>();
+      RegisterValueSerializer<int, IntSerializer>();
+      RegisterValueSerializer<uint, UintSerializer>();
+      RegisterValueSerializer<long, LongSerializer>();
+      RegisterValueSerializer<ulong, UlongSerializer>();
+      RegisterValueSerializer<float, FloatSerializer>();
+      RegisterValueSerializer<double, DoubleSerializer>();
+      RegisterValueSerializer<decimal, DecimalSerializer>();
     }
     
     public RecordWriterBuilder RegisterReferenceSerializer<TField, TRecordSerializer>()
@@ -89,7 +96,8 @@ namespace Arnible.Export
       return this;
     }
 
-    public IReferenceRecordWriter<TRecord> CreateTsvReferenceRecordWriter<TRecord>(ISimpleLogger logger) where TRecord : class?
+    public IReferenceRecordWriter<TRecord> CreateTsvReferenceRecordWriter<TRecord>(
+      ISimpleLogger logger) where TRecord : class
     {
       return new RecordPerRowReferenceWriter<TRecord>(
         headerFieldSubNameSeparator: TsvConst.HeaderFieldSubNameSeparator,
@@ -98,9 +106,19 @@ namespace Arnible.Export
         logger);
     }
     
-    public IValueRecordWriter<TRecord> CreateTsvValueRecordWriter<TRecord>(ISimpleLogger logger) where TRecord : struct
+    public IValueRecordWriter<TRecord> CreateTsvValueRecordWriter<TRecord>(
+      ISimpleLogger logger) where TRecord : struct
     {
       return new RecordPerRowValueWriter<TRecord>(
+        headerFieldSubNameSeparator: TsvConst.HeaderFieldSubNameSeparator,
+        rowFieldSeparator: TsvConst.RowFieldSeparator,
+        _serializersFactories,
+        logger);
+    }
+    
+    public IRecordWriter CreateTsvRecordWriter(ISimpleLogger logger)
+    {
+      return new RecordPerRowWriter(
         headerFieldSubNameSeparator: TsvConst.HeaderFieldSubNameSeparator,
         rowFieldSeparator: TsvConst.RowFieldSeparator,
         _serializersFactories,

@@ -36,12 +36,24 @@ namespace Arnible.MathModeling
     // Serializable
     //
     
-    public class Serializer : ValueRecordSerializerSimple<Number>
+    public class Serializer : IValueRecordSerializer<Number>
     {
-      public override void Serialize(IRecordFieldSerializer serializer, in Number? record)
+      public void Serialize(IRecordFieldSerializer serializer, in Number record)
+      {
+        serializer.Write(string.Empty, record._value);
+      }
+      
+      public void Serialize(IRecordFieldSerializer serializer, in Number? record)
       {
         serializer.Write(string.Empty, record?._value);
       }
+    }
+    
+    public void Write(ISimpleLogger logger)
+    {
+      Span<char> buffer = stackalloc char[SpanCharFormatter.BufferSize];
+      SpanCharFormatter.ToString(in _value, in buffer);
+      logger.Write(buffer);
     }
 
     //
@@ -112,21 +124,6 @@ namespace Arnible.MathModeling
       {
         return _value > other._value ? 1 : -1;  
       }
-    }
-    
-    //
-    // Arithmetic operators
-    //
-
-    public Number ToPower(in uint b) => DoubleExtension.ToPower(in _value, in b);
-    
-    //
-    // Extensions
-    //
-    
-    public Number Abs()
-    {
-      return Math.Abs(_value);
     }
   }
 }

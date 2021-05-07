@@ -64,12 +64,5 @@ namespace Arnible.Export.RecordPerTextRow
         _secondaryWriter.WriteValue(in value);
       }
     }
-    
-    public void WriteNull(
-      NamespaceWithName? prefix,
-      in ReadOnlySpan<char> fieldName)
-    {
-      WriteValue(prefix, in fieldName, String.Empty); 
-    }
   }
 }

@@ -34,6 +34,15 @@ namespace Arnible.MathModeling
     public static explicit operator PolynomialDivision(in Number v) => v._value;
     
     //
+    // Serializable
+    //
+    
+    public void Write(ISimpleLogger logger)
+    {
+      logger.Write(_value.ToString());
+    }
+    
+    //
     // Comparision operators
     //
 
@@ -72,7 +81,7 @@ namespace Arnible.MathModeling
     public static Number operator *(in Number a, in Polynomial b) => a._value * b;
     public static Number operator *(in Polynomial a, in Number b) => a * b._value;    
     
-    public Number ToPower(in uint b) => _value.ToPower(in b);
+    public Number ToPower(ushort b) => _value.ToPower(b);
 
     //
     // IComparable

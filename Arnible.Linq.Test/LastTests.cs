@@ -14,17 +14,40 @@ namespace Arnible.Linq.Test
     }
     
     [Fact]
-    public void IList_Last()
+    public void IEnumerable_Last_Empty()
     {
-      IList<int> v = new [] { 1, 2};
-      Assert.Equal(2, v.Last());
+      IEnumerable<int> v = new int[0];
+      try
+      {
+        v.Last();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
     }
-    
+
     [Fact]
     public void IReadOnlyList_Last()
     {
       IReadOnlyList<int> v = new [] { 1, 2};
       Assert.Equal(2, v.Last());
+    }
+    
+    [Fact]
+    public void IReadOnlyList_Last_Empty()
+    {
+      IReadOnlyList<int> v = new int[0];
+      try
+      {
+        v.Last();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
     }
     
     [Fact]
@@ -35,10 +58,40 @@ namespace Arnible.Linq.Test
     }
     
     [Fact]
+    public void ReadOnlySpan_Last_Empty()
+    {
+      ReadOnlySpan<int> v = stackalloc int[0];
+      try
+      {
+        v.Last();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
+    }
+    
+    [Fact]
     public void Span_Last()
     {
       Span<int> v = stackalloc [] { 1, 2};
       Assert.Equal(2, v.Last());
+    }
+    
+    [Fact]
+    public void Span_Last_Empty()
+    {
+      Span<int> v = stackalloc int[0];
+      try
+      {
+        v.Last();
+        throw new Exception("I should not get");
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
     }
     
     [Fact]

@@ -31,6 +31,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Arnible.Assertions\Arnible.Assertions.csproj" />
+      <ProjectReference Include="..\Arnible.Xunit\Arnible.Xunit.csproj" />
       <ProjectReference Include="..\Arnible\Arnible.csproj" />
     </ItemGroup>
 

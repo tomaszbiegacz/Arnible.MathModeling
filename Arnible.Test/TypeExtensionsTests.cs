@@ -1,4 +1,5 @@
 using System;
+using Arnible.Assertions;
 using Xunit;
 
 namespace Arnible.Test
@@ -37,5 +38,19 @@ namespace Arnible.Test
     {
       Assert.True(typeof(ReadOnlyArray<>).IsImplementingGenericInterface(typeof(IEquatable<>)));
     }
+    
+    [Fact]
+    public void IsImplementingGenericInterface_NotInterface()
+    {
+      try
+      {
+        typeof(ReadOnlyArray<>).IsImplementingGenericInterface(typeof(Exception));
+        throw new Exception("I should not get here");
+      }
+      catch(ArgumentException)
+      {
+        // all is ok
+      }
+    } 
   }
 }

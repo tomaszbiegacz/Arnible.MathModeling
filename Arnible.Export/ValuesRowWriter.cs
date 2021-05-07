@@ -20,6 +20,12 @@ namespace Arnible.Export
       _isEmptyRow = true;
     }
 
+    public void WriteValueAppend(in ReadOnlySpan<char> value)
+    {
+      _writer.Write(in value);
+      _isEmptyRow = false;
+    }
+    
     public void WriteValue(in ReadOnlySpan<char> value)
     {
       if (!_isEmptyRow)
@@ -29,11 +35,6 @@ namespace Arnible.Export
       
       _writer.Write(in value);
       _isEmptyRow = false;
-    }
-    
-    public void WriteValueAppend(in ReadOnlySpan<char> value)
-    {
-      _writer.Write(in value);
     }
 
     public void CommitRow()
@@ -52,6 +53,7 @@ namespace Arnible.Export
         throw new InvalidOperationException("Commit row first.");
       }
       logger.Flush(_writer);
+      _isEmptyRow = false;
     }
   }
 }

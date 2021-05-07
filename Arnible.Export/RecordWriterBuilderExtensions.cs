@@ -1,3 +1,5 @@
+using Arnible.Export.Serializers;
+
 namespace Arnible.Export
 {
   public static class RecordWriterBuilderExtensions
