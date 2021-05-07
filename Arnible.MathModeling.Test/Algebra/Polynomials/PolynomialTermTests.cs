@@ -19,7 +19,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 
       v.PowerSum.AssertIsEqualTo(0u);
       v.GreatestPowerIndeterminate.Variable.AssertIsEqualTo((char)0);
-      v.GreatestPowerIndeterminate.Power.AssertIsEqualTo(0u);
+      v.GreatestPowerIndeterminate.Power.AssertIsEqualTo(0);
 
       v.AssertIsEqualTo(0);
       (1 == v).AssertIsFalse();
@@ -43,7 +43,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 
       v.PowerSum.AssertIsEqualTo(0u);
       v.GreatestPowerIndeterminate.Variable.AssertIsEqualTo((char)0);
-      v.GreatestPowerIndeterminate.Power.AssertIsEqualTo(0u);
+      v.GreatestPowerIndeterminate.Power.AssertIsEqualTo(0);
 
       v.AssertIsEqualTo(2);
       (1 == v).AssertIsFalse();
@@ -66,7 +66,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 
       v.PowerSum.AssertIsEqualTo(1u);
       v.GreatestPowerIndeterminate.Variable.AssertIsEqualTo('a');
-      v.GreatestPowerIndeterminate.Power.AssertIsEqualTo(1u);
+      v.GreatestPowerIndeterminate.Power.AssertIsEqualTo(1);
 
       v.ToString().AssertIsEqualTo("a");
       ('b' == v).AssertIsFalse();
@@ -91,7 +91,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 
       v.PowerSum.AssertIsEqualTo(4u);
       v.GreatestPowerIndeterminate.Variable.AssertIsEqualTo('c');
-      v.GreatestPowerIndeterminate.Power.AssertIsEqualTo(3u);      
+      v.GreatestPowerIndeterminate.Power.AssertIsEqualTo(3);      
 
       v.DerivativeBy('a').Single().AssertIsEqualTo(2.1 * Term.c.ToPower(3));
       v.DerivativeBy('b').AssertIsEmpty();

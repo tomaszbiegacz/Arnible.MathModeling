@@ -125,20 +125,5 @@ namespace Arnible.MathModeling
         return _value > other._value ? 1 : -1;  
       }
     }
-    
-    //
-    // Arithmetic operators
-    //
-
-    public Number ToPower(in uint b) => DoubleExtension.ToPower(in _value, in b);
-    
-    //
-    // Extensions
-    //
-    
-    public Number Abs()
-    {
-      return Math.Abs(_value);
-    }
   }
 }

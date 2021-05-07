@@ -6,9 +6,9 @@ namespace Arnible.MathModeling.Algebra.Polynomials
   {
     public char Variable { get; }
 
-    public uint Power { get; }
+    public ushort Power { get; }
 
-    public VariableTerm(char variable, uint power)
+    public VariableTerm(char variable, ushort power)
     {
       if (power < 1)
       {
@@ -51,7 +51,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
       }
       else
       {
-        return $"{Variable.ToString()}{Power.ToSuperscriptString()}";
+        return $"{Variable.ToString()}{NumericFormatting.ToSuperscriptString(Power)}";
       }
     }
   }

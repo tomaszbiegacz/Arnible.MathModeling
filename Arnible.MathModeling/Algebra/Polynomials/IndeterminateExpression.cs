@@ -11,7 +11,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
   {
     private readonly ElementaryUnaryOperation _modifier;
 
-    private IndeterminateExpression(in char name, in ElementaryUnaryOperation modifier, in uint power)
+    private IndeterminateExpression(char name, in ElementaryUnaryOperation modifier, ushort power)
     {
       _modifier = modifier;
       Variable = name;
@@ -20,11 +20,11 @@ namespace Arnible.MathModeling.Algebra.Polynomials
 
     public static implicit operator IndeterminateExpression(in char name)
     {
-      return new IndeterminateExpression(in name, ElementaryUnaryOperation.Identity, 1);
+      return new IndeterminateExpression(name, ElementaryUnaryOperation.Identity, 1);
     }
 
-    public static IndeterminateExpression Sin(in char name) => new IndeterminateExpression(in name, ElementaryUnaryOperation.Sine, 1);
-    public static IndeterminateExpression Cos(in char name) => new IndeterminateExpression(in name, ElementaryUnaryOperation.Cosine, 1);
+    public static IndeterminateExpression Sin(in char name) => new IndeterminateExpression(name, ElementaryUnaryOperation.Sine, 1);
+    public static IndeterminateExpression Cos(in char name) => new IndeterminateExpression(name, ElementaryUnaryOperation.Cosine, 1);
     
     public override string ToString()
     {
@@ -37,7 +37,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
           powerExpression = string.Empty;
           break;
         default:
-          powerExpression = Power.ToSuperscriptString();
+          powerExpression = NumericFormatting.ToSuperscriptString(Power);
           break;
       }
 
@@ -101,7 +101,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
 
     public bool IsOne => Power == 0;
 
-    public uint Power { get; }
+    public ushort Power { get; }
 
     public char Variable { get; }
 
@@ -177,7 +177,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
           {
             if (vi1.Power + vi2.Power > 0)
             {
-              yield return new IndeterminateExpression(vi1.Variable, vi1._modifier, vi1.Power + vi2.Power);
+              yield return new IndeterminateExpression(vi1.Variable, vi1._modifier, (ushort)(vi1.Power + vi2.Power));
             }
             isEi1Valid = ei1.MoveNext();
             isEi2Valid = ei2.MoveNext();
@@ -198,22 +198,22 @@ namespace Arnible.MathModeling.Algebra.Polynomials
       }
     }
 
-    public IndeterminateExpression ToPower(in uint power)
+    public IndeterminateExpression ToPower(ushort power)
     {
       if (power == 0)
       {
         throw new ArgumentException(nameof(power));
       }
-      return new IndeterminateExpression(Variable, _modifier, Power * power);
+      return new IndeterminateExpression(Variable, _modifier, (ushort)(Power * power));
     }
 
-    public IndeterminateExpression ReducePowerBy(in uint power)
+    public IndeterminateExpression ReducePowerBy(ushort power)
     {
       if (power == 0 || power > Power)
       {
         throw new ArgumentException(nameof(power));
       }
-      return new IndeterminateExpression(Variable, _modifier, Power - power);
+      return new IndeterminateExpression(Variable, _modifier, (ushort)(Power - power));
     }
 
     public bool TryDivide(in IndeterminateExpression b, out IndeterminateExpression result)
@@ -225,7 +225,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
       }
       else
       {
-        result = new IndeterminateExpression(Variable, _modifier, Power - b.Power);
+        result = new IndeterminateExpression(Variable, _modifier, (ushort)(Power - b.Power));
         return true;
       }
     }
@@ -234,14 +234,14 @@ namespace Arnible.MathModeling.Algebra.Polynomials
     {
       if (IsOne)
       {
-        throw new InvalidOperationException("Cannot derivative intermediate expresion being IsOne.");
+        throw new InvalidOperationException("Cannot derivative intermediate expression being IsOne.");
       }
       if (Variable != name)
       {
         throw new InvalidOperationException($"Cannot derivative intermediate expression of {Variable} by {name}.");
       }
 
-      PolynomialTerm result = Power * (PolynomialTerm)(new IndeterminateExpression(Variable, _modifier, Power - 1));
+      PolynomialTerm result = Power * (PolynomialTerm)(new IndeterminateExpression(Variable, _modifier, (ushort)(Power - 1)));
       switch (_modifier)
       {
         case ElementaryUnaryOperation.Identity:

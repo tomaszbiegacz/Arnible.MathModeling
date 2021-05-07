@@ -86,10 +86,6 @@
     <Compile Include="..\Arnible.MathModeling\Number.Common.cs">
       <Link>Number.Common.cs</Link>
     </Compile>
-    <Compile Include="..\Arnible.MathModeling\Sign.cs" Link="Sign.cs" />
-    <Compile Include="..\Arnible.MathModeling\SignExtensions.cs">
-      <Link>SignExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\Arnible.MathModeling\Angle.cs" Link="Angle.cs" />
     <Compile Include="..\Arnible.MathModeling\Analysis\Derivative1Value.cs" Link="Analysis\Derivative1Value.cs" />
     <Compile Include="..\Arnible.MathModeling\Analysis\Derivative2Value.cs" Link="Analysis\Derivative2Value.cs" />
@@ -117,6 +113,9 @@
     <Compile Include="..\Arnible.MathModeling\NumericFormatting.cs" Link="NumericFormatting.cs" />
     <Compile Include="..\Arnible.MathModeling\Analysis\ValueWithDerivative1.cs">
       <Link>Analysis\ValueWithDerivative1.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Sign.cs">
+      <Link>Sign.cs</Link>
     </Compile>
   </ItemGroup>
 
