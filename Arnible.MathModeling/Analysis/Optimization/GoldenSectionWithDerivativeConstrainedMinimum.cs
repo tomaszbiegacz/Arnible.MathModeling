@@ -17,7 +17,9 @@ namespace Arnible.MathModeling.Analysis.Optimization
       _logger = logger;
     }
     
-    public void MoveNext(ref NumberFunctionOptimizationSearchRange point)
+    public void MoveNext(
+      in FunctionValueAnalysisForDirection functionToAnalyse,
+      ref NumberFunctionOptimizationSearchRange point)
     {
       point.IsOptimal.AssertIsFalse();
       
@@ -26,11 +28,11 @@ namespace Arnible.MathModeling.Analysis.Optimization
       Number x2 = point.Start.X + Ratio * width;
       
       _logger.Log("> x1");
-      MoveNext(ref point, point.ValueWithDerivative(in x1));
+      MoveNext(ref point, functionToAnalyse.ValueWithDerivative(in x1));
       if (point.End.X > x2)
       {
         _logger.Log("> x2");
-        MoveNext(ref point, point.ValueWithDerivative(in x2));  
+        MoveNext(ref point, functionToAnalyse.ValueWithDerivative(in x2));  
       }
     }
 

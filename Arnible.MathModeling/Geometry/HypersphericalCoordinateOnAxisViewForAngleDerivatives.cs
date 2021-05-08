@@ -90,7 +90,10 @@ namespace Arnible.MathModeling.Geometry
 
     public uint AnglePos { get; }
 
-    public IEnumerable<Derivative1Value> CartesianAxisViewsRatiosDerivatives => _angleDerivatives.AsList().Select(v => new Derivative1Value(v));
+    public IEnumerable<Derivative1Value> CartesianAxisViewsRatiosDerivatives => _angleDerivatives.AsList().Select(v => new Derivative1Value
+    {
+      First = v
+    });
 
     //
     // Operations
@@ -100,8 +103,14 @@ namespace Arnible.MathModeling.Geometry
     {
       return new HypersphericalCoordinateOnRectangularViewWithDerivative(
         view: View.GetRectangularView(axisA: axisA, axisB: axisB),
-        xDerivative: new Derivative1Value(_angleDerivatives[axisA]),
-        yDerivative: new Derivative1Value(_angleDerivatives[axisB])
+        xDerivative: new Derivative1Value
+        {
+          First = _angleDerivatives[axisA] 
+        },
+        yDerivative: new Derivative1Value
+        {
+          First = _angleDerivatives[axisB]
+        }
         );
     }
   }

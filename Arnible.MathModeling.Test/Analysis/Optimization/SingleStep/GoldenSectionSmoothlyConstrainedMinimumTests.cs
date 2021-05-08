@@ -22,7 +22,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
     [Fact]
     public void Unimodal_Square_Optimum()
     {
-      var f = new SquareTestFunction();
+      var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
       var a = f.ValueWithDerivative(-1);
       var b = f.ValueWithDerivative(3);
 
@@ -33,7 +33,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
     [Fact]
     public void Unimodal_SquareReversed_Maximum()
     {
-      var f = new SquareReversedTestFunction();
+      var f = new SquareReversedTestFunction().FunctionValueAnalysisFor1D();
       var a = f.ValueWithDerivative(-1);
       var b = f.ValueWithDerivative(3);
       
@@ -51,7 +51,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
     [Fact]
     public void Unimodal_Square_WrongDirection_PositiveDerivative()
     {
-      var f = new SquareTestFunction();
+      var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
       var a = f.ValueWithDerivative(1.5);
       var b = f.ValueWithDerivative(2);
 
@@ -69,7 +69,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
     [Fact]
     public void Unimodal_Square_WrongDirection_NegativeDerivative()
     {
-      var f = new SquareTestFunction();
+      var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
       var a = f.ValueWithDerivative(0.5);
       var b = f.ValueWithDerivative(-2);
 
@@ -87,7 +87,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
     [Fact]
     public void Unimodal_Square_AtOptimum()
     {
-      var f = new SquareTestFunction();
+      var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
       var a = f.ValueWithDerivative(1);
       var b = f.ValueWithDerivative(2);
       
@@ -105,7 +105,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
     [Fact]
     public void Unimodal_Sin_Optimum()
     {
-      var f = new SinTestFunction();
+      var f = new SinTestFunction().FunctionValueAnalysisFor1D();
       var a = f.ValueWithDerivative(-1.3 * Math.PI);
       var b = f.ValueWithDerivative(0.4 * Math.PI);
       
@@ -116,7 +116,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
     [Fact]
     public void Multimodal_Sin()
     {
-      var f = new SinTestFunction();
+      var f = new SinTestFunction().FunctionValueAnalysisFor1D();
       var a = f.ValueWithDerivative(-1.1 * Math.PI);
       var b = f.ValueWithDerivative(2 * Math.PI);
       

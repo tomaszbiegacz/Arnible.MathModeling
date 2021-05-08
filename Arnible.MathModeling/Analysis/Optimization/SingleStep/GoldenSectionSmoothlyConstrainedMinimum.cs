@@ -20,12 +20,12 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
     }
 
     public Number Optimize(
-      INumberFunctionWithDerivative f,
+      in FunctionValueAnalysisForDirection functionToAnalyse,
       in NumberFunctionPointWithDerivative startPoint,
-      in Number maxX)
+      in Number borderX)
     {
       var aSign = startPoint.First.GetSign();
-      if (startPoint.X < maxX)
+      if (startPoint.X < borderX)
       {
         if (aSign != Sign.Negative)
         {
@@ -42,14 +42,14 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
 
       return Optimize(
         iteration: 0, 
-        f: f, 
+        f: in functionToAnalyse, 
         a: in startPoint, 
-        b: in maxX);
+        b: in borderX);
     }
 
     private Number Optimize(
       ushort iteration,
-      INumberFunctionWithDerivative f,
+      in FunctionValueAnalysisForDirection f,
       in NumberFunctionPointWithDerivative a,
       in Number b)
     {
@@ -69,7 +69,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       NumberFunctionPointWithDerivative pMinValue = p1.Y < p2.Y ? p1 : p2;
       
       // try to apply secant method
-      if (ApplyUnimodalSecantIfPossible(f, in a, in p1, in p2, out NumberFunctionPointWithDerivative pSecant))
+      if (ApplyUnimodalSecantIfPossible(in f, in a, in p1, in p2, out NumberFunctionPointWithDerivative pSecant))
       {
         if (pSecant.Y < pMinValue.Y)
         {
@@ -86,29 +86,29 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       }
       
       // not much luck, let's focus on first range
-      return Optimize((ushort)(iteration + 1), f, in a, p1.X);
+      return Optimize((ushort)(iteration + 1), in f, in a, p1.X);
     }
 
     private bool ApplyUnimodalSecantIfPossible(
-      INumberFunctionWithDerivative f,
+      in FunctionValueAnalysisForDirection f,
       in NumberFunctionPointWithDerivative a,
       in NumberFunctionPointWithDerivative p1,
       in NumberFunctionPointWithDerivative p2,
       out NumberFunctionPointWithDerivative result)
     {
-      NumberFunctionOptimizationSearchRange r1 = new NumberFunctionOptimizationSearchRange(f, in a, in p1);
+      NumberFunctionOptimizationSearchRange r1 = new(in a, in p1);
       if (r1.GetSecantApplicability() == UnimodalSecantAnalysis.HasMinimum)
       {
-        _secant.MoveNext(ref r1);
+        _secant.MoveNext(in f, ref r1);
         result = r1.BorderSmaller; 
         return true;
       }
       else
       {
-        NumberFunctionOptimizationSearchRange r2 = new NumberFunctionOptimizationSearchRange(f, in p1, in p2);
+        NumberFunctionOptimizationSearchRange r2 = new(in p1, in p2);
         if (r2.GetSecantApplicability() == UnimodalSecantAnalysis.HasMinimum)
         {
-          _secant.MoveNext(ref r2);
+          _secant.MoveNext(in f, ref r2);
           result = r2.BorderSmaller; 
           return true;
         }

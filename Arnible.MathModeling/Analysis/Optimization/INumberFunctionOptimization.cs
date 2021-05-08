@@ -5,6 +5,8 @@ namespace Arnible.MathModeling.Analysis.Optimization
     /// <summary>
     /// Improve solution
     /// </summary>
-    void MoveNext(ref NumberFunctionOptimizationSearchRange point);
+    void MoveNext(
+      in FunctionValueAnalysisForDirection functionToAnalyse,
+      ref NumberFunctionOptimizationSearchRange point);
   }
 }

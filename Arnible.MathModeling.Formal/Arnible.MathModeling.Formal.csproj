@@ -81,6 +81,9 @@
     <Compile Include="..\Arnible.MathModeling\Analysis\OperationExtension.cs">
       <Link>Analysis\OperationExtension.cs</Link>
     </Compile>
+    <Compile Include="..\Arnible.MathModeling\Analysis\Optimization\IFunctionValueAnalysis.cs">
+      <Link>Analysis\Optimization\IFunctionValueAnalysis.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordianteOnLineView.cs">
       <Link>Geometry\HypersphericalCoordianteOnLineView.cs</Link>
     </Compile>

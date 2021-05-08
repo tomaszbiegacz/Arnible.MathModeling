@@ -11,24 +11,26 @@ namespace Arnible.MathModeling.Analysis.Optimization
       _secant = new UnimodalSecantMinimum(logger);
     }
 
-    public void MoveNext(ref NumberFunctionOptimizationSearchRange point)
+    public void MoveNext(
+      in FunctionValueAnalysisForDirection functionToAnalyse,
+      ref NumberFunctionOptimizationSearchRange point)
     {
       UnimodalSecantAnalysis secantApplication = point.GetSecantApplicability();
       if(secantApplication == UnimodalSecantAnalysis.HasMinimum)
       {
         try
         {
-          _secant.MoveNext(ref point);
+          _secant.MoveNext(in functionToAnalyse, ref point);
         }
         catch(MultimodalFunctionException)
         {
           // fallback
-          _goldenSection.MoveNext(ref point);
+          _goldenSection.MoveNext(in functionToAnalyse, ref point);
         }  
       }
       else
       {
-        _goldenSection.MoveNext(ref point);
+        _goldenSection.MoveNext(in functionToAnalyse, ref point);
       }
     }
   }

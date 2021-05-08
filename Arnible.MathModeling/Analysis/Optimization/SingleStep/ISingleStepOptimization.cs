@@ -3,11 +3,11 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
   public interface ISingleStepOptimization
   {
     /// <summary>
-    /// find optimum between startPoint (inclusive) and maxValue (exclusive)
+    /// find optimum between startPoint (inclusive) and borderX (exclusive)
     /// </summary>
     Number Optimize(
-      INumberFunctionWithDerivative f,
+      in FunctionValueAnalysisForDirection functionToAnalyse,
       in NumberFunctionPointWithDerivative startPoint,
-      in Number maxX);
+      in Number borderX);
   }
 }

@@ -16,7 +16,10 @@ namespace Arnible.MathModeling.Geometry
 
     public static IEnumerable<Derivative1Value> DerivativeByR(HypersphericalAngleVector angles)
     {
-      return angles.GetCartesianAxisViewsRatios().GetInternalEnumerable().Select(v => new Derivative1Value(v));
+      return angles.GetCartesianAxisViewsRatios().GetInternalEnumerable().Select(v => new Derivative1Value
+      {
+        First = v
+      });
     }
 
     /// <summary>

@@ -1,26 +1,12 @@
-﻿using System;
-
-namespace Arnible.MathModeling.Analysis
+﻿namespace Arnible.MathModeling.Analysis
 {
-  interface IDerivative1
+  public readonly struct Derivative1Value : IValueEquatable<Derivative1Value>
   {
-    Number First { get; }
-  }
-
-  public readonly struct Derivative1Value : IDerivative1, IValueEquatable<Derivative1Value>
-  {
-    public Derivative1Value(in Number first)
-    {
-      First = first;
-    }
-    
-    public static explicit operator Derivative1Value(in Number v) => new Derivative1Value(in v);
-
     //
     // Properties
     //
 
-    public Number First { get; }
+    public Number First { get; init; }
     
     //
     // IEquatable

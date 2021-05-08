@@ -11,11 +11,13 @@ namespace Arnible.MathModeling.Analysis.Optimization
       _logger = logger;
     }
 
-    public void MoveNext(ref NumberFunctionOptimizationSearchRange point)
+    public void MoveNext(
+      in FunctionValueAnalysisForDirection functionToAnalyse,
+      ref NumberFunctionOptimizationSearchRange point)
     {
       point.IsOptimal.AssertIsFalse();
 
-      NumberFunctionPointWithDerivative c = point.CalculateOptimum();
+      NumberFunctionPointWithDerivative c = point.CalculateOptimum(in functionToAnalyse);
       if (c.First == 0)
       {
         if (c.Y > point.BorderSmaller.Y)

@@ -3,18 +3,15 @@ using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Analysis.Optimization
 {
-  public ref struct NumberFunctionOptimizationSearchRange
+  public struct NumberFunctionOptimizationSearchRange
   {
-    private readonly INumberFunctionWithDerivative _f;
     private NumberFunctionPointWithDerivative _a;
     private NumberFunctionPointWithDerivative _b;
 
     public NumberFunctionOptimizationSearchRange(
-      INumberFunctionWithDerivative f,
       in NumberFunctionPointWithDerivative a,
       in NumberFunctionPointWithDerivative b)
     {
-      _f = f;
       if ((double)a.X <= (double)b.X)
       {
         _a = a;
@@ -26,7 +23,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
         _b = a;
       }
     }
-    
+
     private void AssignRange(
       in NumberFunctionPointWithDerivative a,
       in NumberFunctionPointWithDerivative b)
@@ -48,11 +45,6 @@ namespace Arnible.MathModeling.Analysis.Optimization
     public readonly Number Width => _b.X - _a.X;
     public readonly bool IsOptimal => _a.X == _b.X;
 
-    public readonly NumberFunctionPointWithDerivative ValueWithDerivative(in Number x)
-    {
-      return _f.ValueWithDerivative(in x);
-    }
-    
     //
     // Value comparison
     //
