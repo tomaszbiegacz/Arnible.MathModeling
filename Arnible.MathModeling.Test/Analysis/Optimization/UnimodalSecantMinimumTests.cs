@@ -63,7 +63,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
         _method.MoveNext(in f, ref point);  
         throw new Exception("I should never get here");
       }
-      catch (MultimodalFunctionException)
+      catch (AssertException)
       {
         // all is fine
       }
@@ -108,7 +108,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
         _method.MoveNext(in f, ref point);  
         throw new Exception("I should never get here");
       }
-      catch (MultimodalFunctionException)
+      catch (AssertException)
       {
         // all is fine
       }
@@ -132,7 +132,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
         _method.MoveNext(in f, ref point);  
         throw new Exception("I should never get here");
       }
-      catch (MultimodalFunctionException)
+      catch (AssertException)
       {
         // all is fine
       }
@@ -174,7 +174,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
      */
 
     [Fact]
-    public void Multimodal_Rosenbrock_Optimum()
+    public void Multimodal_Rosenbrock_LocalMinimum()
     {
       var f = new RosenbrockTestFunction();
       FunctionValueAnalysisForDirection fa = new(
@@ -196,10 +196,10 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       b.First.AssertIsGreaterThan(0);
       
       var point = new NumberFunctionOptimizationSearchRange(a: a, b: b);
-      
       ushort i = _method.FindOptimal(in fa, ref point);
       
       point.BorderSmaller.First.AssertIsEqualTo(0);
+      point.BorderSmaller.X.AssertIsLessThan(0.2);
       point.BorderSmaller.Y.AssertIsNotEqualTo(0);
       i.AssertIsEqualTo(7);
     }

@@ -23,7 +23,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       range.BorderGreater.X.AssertIsEqualTo(b.X);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(a.X);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(b.X);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(b.X);
     }
     
     [Fact]
@@ -42,7 +42,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       range.BorderGreater.X.AssertIsEqualTo(a.X);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(a.X);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(b.X);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(b.X);
     }
     
     [Fact]
@@ -60,7 +60,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       range.BorderGreater.X.AssertIsEqualTo(a.X);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(a.X);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(a.X);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(a.X);
     }
     
     [Fact]
@@ -103,12 +103,12 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       NumberFunctionOptimizationSearchRange range = new(in a, in b);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(a.X);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(b.X);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(b.X);
       
       range.BorderLowestDerivative = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(1.5);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(1.5);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(b.X);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(b.X);
     }
     
     [Fact]
@@ -119,12 +119,12 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       NumberFunctionOptimizationSearchRange range = new(in a, in b);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(a.X);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(b.X);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(b.X);
       
-      range.BorderGreatestDerivative = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(3.5);
+      range.BorderHighestDerivative = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(3.5);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(a.X);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(3.5);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(3.5);
     }
   }
 }

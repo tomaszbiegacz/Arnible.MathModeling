@@ -26,7 +26,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
     }
     
     public static ushort FindOptimal(
-      this INumberFunctionOptimization method,
+      this INumberFunctionOptimizationForSearchRange method,
       in FunctionValueAnalysisForDirection functionToAnalyse,
       ref NumberFunctionOptimizationSearchRange point)
     {
@@ -43,6 +43,31 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
         point.BorderSmaller.Y.AssertIsLessEqualThan(in value);
       }
 
+      return i;
+    }
+    
+    public static ushort FindOptimal(
+      this INumberFunctionOptimizationForSmoothSearchRange method,
+      in FunctionValueAnalysisForDirection functionToAnalyse,
+      NumberFunctionPointWithDerivative a,
+      Number b,
+      out NumberFunctionPointWithDerivative solution)
+    {
+      ushort i = 0;
+      bool isTheEnd = false;
+      while(!isTheEnd)
+      {
+        Number width = b - a.X;
+        Number value = a.Y;
+        
+        isTheEnd = !method.MoveNext(functionToAnalyse, ref a, in b);
+        i++;
+
+        (b - a.X).AssertIsLessThan(in width);
+        a.Y.AssertIsLessEqualThan(in value);
+      }
+
+      solution = a;
       return i;
     }
   }

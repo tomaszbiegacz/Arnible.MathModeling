@@ -13,7 +13,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
     
     public GoldenSectionSmoothlyConstrainedMinimumTests(ITestOutputHelper output) : base(output)
     {
-      _optimizer = new GoldenSectionSmoothlyConstrainedMinimum(Logger);
+      _optimizer = new GoldenSecantSmoothlyConstrainedMinimum(Logger);
     }
     
     /// <summary>

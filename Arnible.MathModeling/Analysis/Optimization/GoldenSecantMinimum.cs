@@ -1,6 +1,6 @@
 namespace Arnible.MathModeling.Analysis.Optimization
 {
-  public class GoldenSecantMinimum : INumberFunctionOptimization
+  public class GoldenSecantMinimum : INumberFunctionOptimizationForSearchRange
   {
     private readonly GoldenSectionWithDerivativeConstrainedMinimum _goldenSection;
     private readonly UnimodalSecantMinimum _secant;

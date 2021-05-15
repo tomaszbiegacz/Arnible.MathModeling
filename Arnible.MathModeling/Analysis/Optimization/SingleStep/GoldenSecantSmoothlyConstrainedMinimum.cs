@@ -2,19 +2,19 @@ using System;
 
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
 {
-  public class GoldenSectionSmoothlyConstrainedMinimum : ISingleStepOptimization
+  public record GoldenSecantSmoothlyConstrainedMinimum : ISingleStepOptimization
   {
     public const double Ratio = 0.618;
     
     private readonly ISimpleLogger _logger;
-    private readonly GoldenSectionWithDerivativeConstrainedMinimum _goldenSection;
+    private readonly GoldenSectionWithDerivativeSmoothlyConstrainedMinimum _goldenSection;
     private readonly UnimodalSecantMinimum _secant; 
     public uint IterationLimit { get; set; }
     
-    public GoldenSectionSmoothlyConstrainedMinimum(ISimpleLogger logger)
+    public GoldenSecantSmoothlyConstrainedMinimum(ISimpleLogger logger)
     {
       _logger = logger;
-      _goldenSection = new GoldenSectionWithDerivativeConstrainedMinimum(logger);
+      _goldenSection = new(logger);
       _secant = new UnimodalSecantMinimum(logger);
       IterationLimit = 10;
     }
@@ -79,6 +79,13 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       }
 
       // well, maybe we made some progress with golden ratio
+      NumberFunctionPointWithDerivative rangeStart = a;
+      _goldenSection.MoveNext(in f, ref rangeStart, in b, out NumberFunctionOptimizationSearchRange goldenRatioResult);
+      if (goldenRatioResult.BorderSmaller.Y < pMinValue.Y)
+      {
+        pMinValue = goldenRatioResult.BorderSmaller;
+      }
+      
       if (pMinValue.Y < a.Y)
       {
         Log(iteration, "Golden section", pMinValue, in a, in p1, in p2);

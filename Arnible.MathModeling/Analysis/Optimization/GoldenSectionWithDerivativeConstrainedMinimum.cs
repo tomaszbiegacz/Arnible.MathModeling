@@ -3,11 +3,11 @@ using Arnible.Assertions;
 namespace Arnible.MathModeling.Analysis.Optimization
 {
   /// <summary>
-  /// Golden section search for minimum.
+  /// Golden section search for minimum with inclusive border.
   /// Search is capable of dealing with multimodal functions and it uses sign of derivative 
   /// to find section where secant method can be used to speed up optimization task.    
   /// </summary>
-  public class GoldenSectionWithDerivativeConstrainedMinimum : INumberFunctionOptimization
+  public record GoldenSectionWithDerivativeConstrainedMinimum : INumberFunctionOptimizationForSearchRange
   {
     public const double Ratio = 0.618;
     private readonly ISimpleLogger _logger;
@@ -35,8 +35,8 @@ namespace Arnible.MathModeling.Analysis.Optimization
         MoveNext(ref point, functionToAnalyse.ValueWithDerivative(in x2));  
       }
     }
-
-    protected void MoveNext(
+    
+    internal void MoveNext(
       ref NumberFunctionOptimizationSearchRange point,
       in NumberFunctionPointWithDerivative c)
     {

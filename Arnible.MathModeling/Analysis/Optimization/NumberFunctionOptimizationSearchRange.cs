@@ -111,7 +111,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
         }
       }
     }
-    public NumberFunctionPointWithDerivative BorderGreatestDerivative
+    public NumberFunctionPointWithDerivative BorderHighestDerivative
     {
       readonly get => (double)_a.First <= (double)_b.First ? _b : _a;
       set

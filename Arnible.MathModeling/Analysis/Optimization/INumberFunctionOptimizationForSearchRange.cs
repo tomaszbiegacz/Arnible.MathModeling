@@ -1,6 +1,6 @@
 namespace Arnible.MathModeling.Analysis.Optimization
 {
-  public interface INumberFunctionOptimization
+  public interface INumberFunctionOptimizationForSearchRange
   {
     /// <summary>
     /// Improve solution
