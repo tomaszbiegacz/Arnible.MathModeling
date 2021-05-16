@@ -115,7 +115,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       ushort i = _method.FindOptimal(in f, a, b, out NumberFunctionPointWithDerivative solution);
       
       solution.Y.AssertIsEqualTo(2);
-      i.AssertIsEqualTo(21);
+      i.AssertIsEqualTo(22);
     }
     
     [Fact]

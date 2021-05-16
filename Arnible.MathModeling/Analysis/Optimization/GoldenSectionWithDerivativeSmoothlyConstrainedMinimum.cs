@@ -18,29 +18,30 @@ namespace Arnible.MathModeling.Analysis.Optimization
       _goldenSection = new GoldenSectionWithDerivativeConstrainedMinimum(logger);
     }
     
-    public bool MoveNext(
+    public void MoveNext(
       in FunctionValueAnalysisForDirection f,
-      ref NumberFunctionPointWithDerivative a,
-      in Number b)
+      ref NumberFunctionOptimizationSearchRange searchRange)
     {
-      return MoveNext(in f, ref a, in b, out _);
+      _goldenSection.MoveNext(in f, ref searchRange);
     }
     
-    internal bool MoveNext(
+    public bool MoveNext(
       in FunctionValueAnalysisForDirection f,
       ref NumberFunctionPointWithDerivative a,
       in Number b,
       out NumberFunctionOptimizationSearchRange searchRange)
     {
-      Number width = a.X - b;
+      Number width = b - a.X;
       width.AssertIsNotEqualTo(0);
       Number x1 = b - Ratio * width;
       Number x2 = a.X + Ratio * width;
       
       searchRange = new(in a, f.ValueWithDerivative(in x2));
-      _goldenSection.MoveNext(ref searchRange, f.ValueWithDerivative(in x1));
-      
-      if(searchRange.BorderSmaller.X == a.X)
+      if (!searchRange.IsOptimal)
+      {
+        _goldenSection.MoveNext(ref searchRange, f.ValueWithDerivative(in x1));  
+      }
+      if (searchRange.BorderSmaller.X == a.X)
       {
         return false;
       }

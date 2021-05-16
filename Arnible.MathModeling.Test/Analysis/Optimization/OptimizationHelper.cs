@@ -53,21 +53,62 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       Number b,
       out NumberFunctionPointWithDerivative solution)
     {
+      solution = default;
+      
       ushort i = 0;
+      NumberFunctionOptimizationSearchRange searchRange = default;
+      bool useSearchRange = false;
       bool isTheEnd = false;
       while(!isTheEnd)
       {
-        Number width = b - a.X;
-        Number value = a.Y;
-        
-        isTheEnd = !method.MoveNext(functionToAnalyse, ref a, in b);
         i++;
+        
+        if(useSearchRange)
+        {
+          Number width = searchRange.Width;
+          Number value = searchRange.BorderSmaller.Y;
+        
+          method.MoveNext(in functionToAnalyse, ref searchRange);
 
-        (b - a.X).AssertIsLessThan(in width);
-        a.Y.AssertIsLessEqualThan(in value);
+          searchRange.Width.AssertIsLessThan(in width);
+          searchRange.BorderSmaller.Y.AssertIsLessEqualThan(in value);
+          
+          if (searchRange.IsOptimal)
+          {
+            isTheEnd = true;
+            solution = searchRange.BorderSmaller;
+          }
+        }
+        else
+        {
+          Number width = b - a.X;
+          Number value = a.Y;
+          
+          bool hasImproved = method.MoveNext(functionToAnalyse, ref a, in b, out searchRange);
+          if(hasImproved)
+          {
+            (b - a.X).AssertIsLessThan(in width);
+            a.Y.AssertIsLessEqualThan(in value);
+            
+            // optimum seems to be on b, or at least nearby
+            if (a.X == b)
+            {
+              isTheEnd = true;
+              solution = a;
+            }
+          }
+          else
+          {
+            useSearchRange = true;
+            if (searchRange.IsOptimal)
+            {
+              isTheEnd = true;
+              solution = searchRange.BorderSmaller; 
+            }
+          }
+        }
       }
-
-      solution = a;
+      
       return i;
     }
   }
