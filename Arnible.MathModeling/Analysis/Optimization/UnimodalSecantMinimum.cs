@@ -2,7 +2,7 @@ using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Analysis.Optimization
 {
-  public class UnimodalSecantMinimum : INumberFunctionOptimization
+  public class UnimodalSecantMinimum : INumberFunctionOptimizationForSearchRange
   {
     private readonly ISimpleLogger _logger;
 
@@ -10,24 +10,37 @@ namespace Arnible.MathModeling.Analysis.Optimization
     {
       _logger = logger;
     }
+    
+    public void MoveNext(
+      in FunctionValueAnalysisForDirection functionToAnalyse,
+      ref NumberFunctionOptimizationSearchRange point)
+    {
+      if (!TryMoveNext(in functionToAnalyse, ref point))
+      {
+        throw new MultimodalFunctionException();
+      }
+    }
 
-    public void MoveNext(ref NumberFunctionOptimizationSearchRange point)
+    public bool TryMoveNext(
+      in FunctionValueAnalysisForDirection functionToAnalyse,
+      ref NumberFunctionOptimizationSearchRange point)
     {
       point.IsOptimal.AssertIsFalse();
 
-      NumberFunctionPointWithDerivative c = point.CalculateOptimum();
+      NumberFunctionPointWithDerivative c = point.CalculateMinimumCandidate(in functionToAnalyse);
       if (c.First == 0)
       {
         if (c.Y > point.BorderSmaller.Y)
         {
           point.Log(_logger, "Stop, found maximum", in c);
-          throw new MultimodalFunctionException();
+          return false;
         }
         else
         {
           point.Log(_logger, "Found minimum", in c);
           point.BorderLowestDerivative = c;
-          point.BorderGreatestDerivative = c;
+          point.BorderHighestDerivative = c;
+          return true;
         }
       }
       else
@@ -36,28 +49,30 @@ namespace Arnible.MathModeling.Analysis.Optimization
         // stop if found not to be unimodal
         if (c.First > 0)
         {
-          if (c.Y > point.BorderGreatestDerivative.Y)
+          if (c.Y > point.BorderHighestDerivative.Y || c.X < point.BorderLowestDerivative.X)
           {
             point.Log(_logger, "Stop, not unimodal at b", in c);
-            throw new MultimodalFunctionException();
+            return false;
           }
           else
           {
             point.Log(_logger, "Moving point with positive derivative", in c);
-            point.BorderGreatestDerivative = c;
+            point.BorderHighestDerivative = c;
+            return true;
           }
         }
         else
         {
-          if (c.Y > point.BorderLowestDerivative.Y)
+          if (c.Y > point.BorderLowestDerivative.Y || c.X > point.BorderHighestDerivative.X)
           {
             point.Log(_logger, "Stop, not unimodal at a", in c);
-            throw new MultimodalFunctionException();
+            return false;
           }
           else
           {
             point.Log(_logger, "Moving point with negative derivative", in c);
             point.BorderLowestDerivative = c;
+            return true;
           }
         }
       }

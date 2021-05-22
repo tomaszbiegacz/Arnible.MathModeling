@@ -10,9 +10,9 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
     [Fact]
     public void ReadConstructorOrder()
     {
-      NumberFunctionPointWithDerivative a = _function.ValueWithDerivative(0);
-      NumberFunctionPointWithDerivative b = _function.ValueWithDerivative(3);
-      NumberFunctionOptimizationSearchRange range = new(_function, in a, in b);
+      NumberFunctionPointWithDerivative a = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(0);
+      NumberFunctionPointWithDerivative b = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(3);
+      NumberFunctionOptimizationSearchRange range = new(in a, in b);
       
       range.Start.X.AssertIsEqualTo(a.X);
       range.End.X.AssertIsEqualTo(b.X);
@@ -23,15 +23,15 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       range.BorderGreater.X.AssertIsEqualTo(b.X);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(a.X);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(b.X);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(b.X);
     }
     
     [Fact]
     public void ReadConstructorInverseOrder()
     {
-      NumberFunctionPointWithDerivative a = _function.ValueWithDerivative(0);
-      NumberFunctionPointWithDerivative b = _function.ValueWithDerivative(1.5);
-      NumberFunctionOptimizationSearchRange range = new(_function, in b, in a);
+      NumberFunctionPointWithDerivative a = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(0);
+      NumberFunctionPointWithDerivative b = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(1.5);
+      NumberFunctionOptimizationSearchRange range = new(in b, in a);
       
       range.Start.X.AssertIsEqualTo(a.X);
       range.End.X.AssertIsEqualTo(b.X);
@@ -42,14 +42,14 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       range.BorderGreater.X.AssertIsEqualTo(a.X);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(a.X);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(b.X);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(b.X);
     }
     
     [Fact]
     public void ReadConstructorOptimum()
     {
-      NumberFunctionPointWithDerivative a = _function.ValueWithDerivative(0);
-      NumberFunctionOptimizationSearchRange range = new(_function, in a, in a);
+      NumberFunctionPointWithDerivative a = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(0);
+      NumberFunctionOptimizationSearchRange range = new(in a, in a);
       
       range.Start.X.AssertIsEqualTo(a.X);
       range.End.X.AssertIsEqualTo(a.X);
@@ -60,20 +60,20 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       range.BorderGreater.X.AssertIsEqualTo(a.X);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(a.X);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(a.X);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(a.X);
     }
     
     [Fact]
     public void AssignBorderSmaller()
     {
-      NumberFunctionPointWithDerivative a = _function.ValueWithDerivative(0);
-      NumberFunctionPointWithDerivative b = _function.ValueWithDerivative(3);
-      NumberFunctionOptimizationSearchRange range = new(_function, in a, in b);
+      NumberFunctionPointWithDerivative a = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(0);
+      NumberFunctionPointWithDerivative b = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(3);
+      NumberFunctionOptimizationSearchRange range = new(in a, in b);
       
       range.BorderSmaller.X.AssertIsEqualTo(a.X);
       range.BorderGreater.X.AssertIsEqualTo(b.X);
       
-      range.BorderSmaller = _function.ValueWithDerivative(1.5);
+      range.BorderSmaller = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(1.5);
       
       range.BorderSmaller.X.AssertIsEqualTo(1.5);
       range.BorderGreater.X.AssertIsEqualTo(b.X);
@@ -82,14 +82,14 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
     [Fact]
     public void AssignBorderGreater()
     {
-      NumberFunctionPointWithDerivative a = _function.ValueWithDerivative(0);
-      NumberFunctionPointWithDerivative b = _function.ValueWithDerivative(3);
-      NumberFunctionOptimizationSearchRange range = new(_function, in a, in b);
+      NumberFunctionPointWithDerivative a = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(0);
+      NumberFunctionPointWithDerivative b = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(3);
+      NumberFunctionOptimizationSearchRange range = new(in a, in b);
       
       range.BorderSmaller.X.AssertIsEqualTo(a.X);
       range.BorderGreater.X.AssertIsEqualTo(b.X);
       
-      range.BorderGreater = _function.ValueWithDerivative(3.5);
+      range.BorderGreater = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(3.5);
       
       range.BorderSmaller.X.AssertIsEqualTo(a.X);
       range.BorderGreater.X.AssertIsEqualTo(3.5);
@@ -98,33 +98,33 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
     [Fact]
     public void AssignBorderLowestDerivative()
     {
-      NumberFunctionPointWithDerivative a = _function.ValueWithDerivative(0);
-      NumberFunctionPointWithDerivative b = _function.ValueWithDerivative(3);
-      NumberFunctionOptimizationSearchRange range = new(_function, in a, in b);
+      NumberFunctionPointWithDerivative a = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(0);
+      NumberFunctionPointWithDerivative b = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(3);
+      NumberFunctionOptimizationSearchRange range = new(in a, in b);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(a.X);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(b.X);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(b.X);
       
-      range.BorderLowestDerivative = _function.ValueWithDerivative(1.5);
+      range.BorderLowestDerivative = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(1.5);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(1.5);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(b.X);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(b.X);
     }
     
     [Fact]
     public void AssignBorderGreatestDerivative()
     {
-      NumberFunctionPointWithDerivative a = _function.ValueWithDerivative(0);
-      NumberFunctionPointWithDerivative b = _function.ValueWithDerivative(3);
-      NumberFunctionOptimizationSearchRange range = new(_function, in a, in b);
+      NumberFunctionPointWithDerivative a = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(0);
+      NumberFunctionPointWithDerivative b = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(3);
+      NumberFunctionOptimizationSearchRange range = new(in a, in b);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(a.X);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(b.X);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(b.X);
       
-      range.BorderGreatestDerivative = _function.ValueWithDerivative(3.5);
+      range.BorderHighestDerivative = _function.FunctionValueAnalysisFor1D().ValueWithDerivative(3.5);
       
       range.BorderLowestDerivative.X.AssertIsEqualTo(a.X);
-      range.BorderGreatestDerivative.X.AssertIsEqualTo(3.5);
+      range.BorderHighestDerivative.X.AssertIsEqualTo(3.5);
     }
   }
 }

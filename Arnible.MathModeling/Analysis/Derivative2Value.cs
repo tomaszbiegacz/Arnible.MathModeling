@@ -1,27 +1,19 @@
 ﻿namespace Arnible.MathModeling.Analysis
 {
-  interface IDerivative2 : IDerivative1
+  public readonly struct Derivative2Value
   {
-    Number Second { get; }
-  }
-
-  public readonly struct Derivative2Value : IDerivative2
-  {
-    public Derivative2Value(in Number first, in Number second)
+    public static implicit operator Derivative1Value(in Derivative2Value v) => new Derivative1Value
     {
-      First = first;
-      Second = second;
-    }
-
-    public static implicit operator Derivative1Value(in Derivative2Value v) => new Derivative1Value(v.First);
+      First = v.First
+    };
 
     //
     // Properties
     //
 
-    public Number First { get; }
+    public Number First { get; init; }
 
-    public Number Second { get; }    
+    public Number Second { get; init; }
     
     //
     // Object

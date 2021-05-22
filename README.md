@@ -7,11 +7,10 @@
 [![CodeQL](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/codeql-analysis.yml)
 
 Tooltik manifesto:
-* I should have support for value type similar to `ReadOnlyMemory<T>` that would have exactly the same size as `IntPtr`.
-  This toolkit introduces `ReadOnlyArray<T>`.
 * I should have support for LINQ operators over `Span<T>`, `ReadOnlySpan<T>`, `Memory<T>` and `ReadOnlyMemory<T>`.
   I need this to allow me writing quick and dirty prototypes over new collections in the same way as I do for `IEnumerable<T>`.
 * LINQ should have clear API that will allow me to write defensive and self validating logic, like for example `SumDefensive` that will throw an error when being called over empty collection.
+* Provide basic optimization algorithms for functions in multidimensional space.
 
 Arnible toolkit is meant to address the above limitations by providing extensions over latest .Net framework.
 The toolkit is split into libraries:
@@ -23,10 +22,10 @@ The toolkit is split into libraries:
 * [Arnible.xunit](./Arnible.xunit) simplifies writing xunit tests for projects using Arnible toolkit.
 
 Basic assumptions:
-* Leverage `stackalloc` to avoid GC involvement and overall performance degradation.
-* Avoid using `IEnumerable<T>` due to boxing and GC overhead.
 * Optimize code for `x86` architecture. Prefer horizontal over vertical scalling.
-* Avoid asynchronous operations at all cost.
+* Leverage `stackalloc` to avoid GC involvement and overall performance degradation.
+* Avoid asynchronous operations as part of diagnostics at all cost.
+* Avoid using `IEnumerable<T>` due to boxing and GC overhead.
 
 ## How to use it
 

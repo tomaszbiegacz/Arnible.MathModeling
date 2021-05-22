@@ -1,25 +1,27 @@
 using System;
+using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Analysis.Optimization.Test
 {
   /// <summary>
   /// Sin(x) + 3
   /// </summary>
-  public class SinTestFunction : INumberFunctionWithDerivative
+  public record SinTestFunction : IFunctionValueAnalysis
   {
-    private static readonly Number _minValue = -100;
-    private static readonly Number _maxValue = 100;
-      
-    public ref readonly Number MinX => ref _minValue;
-    public ref readonly Number MaxX => ref _maxValue;
-
-    public NumberFunctionPointWithDerivative ValueWithDerivative(in Number x)
+    public ValueWithDerivative1 ValueWithDerivativeByArgumentsChangeDirection(
+      in ReadOnlySpan<Number> arguments,
+      in ReadOnlySpan<Number> directionDerivativeRatios)
     {
-      return new NumberFunctionPointWithDerivative(
-        x: x,
-        y: Math.Sin((double)x) + 3,
-        first: Math.Cos((double)x)
-      );
+      arguments.Length
+        .AssertIsEqualTo(1)
+        .AssertIsEqualTo(directionDerivativeRatios.Length);
+      
+      double x = (double)arguments[0];
+      return new ValueWithDerivative1
+      {
+        Value = Math.Sin(x) + 3,
+        First = Math.Cos(x) * directionDerivativeRatios[0] 
+      };
     }
   }
 }

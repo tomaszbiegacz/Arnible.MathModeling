@@ -22,19 +22,21 @@ namespace Arnible.MathModeling.Analysis.Optimization
       }
     }
     
-    public static NumberFunctionPointWithDerivative CalculateOptimum(this in NumberFunctionOptimizationSearchRange src)
+    public static NumberFunctionPointWithDerivative CalculateMinimumCandidate(
+      this in NumberFunctionOptimizationSearchRange src,
+      in FunctionValueAnalysisForDirection functionToAnalyse)
     {
       NumberFunctionPointWithDerivative a = src.Start;
       NumberFunctionPointWithDerivative b = src.End;
       
-      a.First.GetSign().AssertIsNotEqualToEnum(b.First.GetSign());
       // a.First < 0 && b.First > 0 => minimum
-      // a.First > 0 && b.First < 0 => maximum
-      
+      a.First.GetSign().AssertIsEqualToEnum(Sign.Negative);
+      b.First.GetSign().AssertIsEqualToEnum(Sign.Positive);
+
       Number step = a.First * (b.X - a.X) / (b.First - a.First);
       step.AssertIsBetween(a.X - b.X, 0);
 
-      return src.ValueWithDerivative(a.X - step);
+      return functionToAnalyse.ValueWithDerivative(a.X - step);
     }
   }
 }

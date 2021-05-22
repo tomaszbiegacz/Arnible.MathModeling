@@ -36,7 +36,10 @@ namespace Arnible.MathModeling.Analysis
       IEnumerable<Derivative1Value> parametersDerivatives)
     {
       return valueDerivativeByParameters
-          .ZipDefensive(parametersDerivatives, (a, b) => new Derivative1Value(a.First * b.First));
+          .ZipDefensive(parametersDerivatives, (a, b) => new Derivative1Value
+          {
+            First = a.First * b.First
+          });
     }
 
     /// <summary>
@@ -44,9 +47,11 @@ namespace Arnible.MathModeling.Analysis
     /// </summary>    
     public static Derivative2Value ForComposition(this IReadOnlyList<Derivative2Value> args)
     {
-      return new Derivative2Value(
-        first: args.Select(d => d.First).ProductDefensive(),
-        second: args.Indexes().Select(pos => Derivative2Ingredient(args, pos)).SumDefensive());
+      return new Derivative2Value
+      {
+        First = args.Select(d => d.First).ProductDefensive(),
+        Second = args.Indexes().Select(pos => Derivative2Ingredient(args, pos)).SumDefensive() 
+      };
     }
     
     /// <summary>
@@ -54,7 +59,10 @@ namespace Arnible.MathModeling.Analysis
     /// </summary>    
     public static Derivative1Value ForComposition(this IEnumerable<Derivative1Value> derivatives)
     {
-      return new Derivative1Value(derivatives.Select(d => d.First).ProductDefensive());
+      return new Derivative1Value
+      {
+        First = derivatives.Select(d => d.First).ProductDefensive()
+      };
     }
 
     /// <summary>
@@ -87,7 +95,10 @@ namespace Arnible.MathModeling.Analysis
           result += productValues.ExcludeAt(i).ProductWithDefault() * derivative;
         }
       }
-      return new Derivative1Value(in result);
+      return new Derivative1Value
+      {
+        First = result
+      };
     }
   }
 }

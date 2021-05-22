@@ -1,6 +1,6 @@
 namespace Arnible.MathModeling.Analysis.Optimization
 {
-  public readonly ref struct NumberFunctionPointWithDerivative
+  public readonly struct NumberFunctionPointWithDerivative
   {
     public NumberFunctionPointWithDerivative(in Number x, in Number y, in Number first)
     {
