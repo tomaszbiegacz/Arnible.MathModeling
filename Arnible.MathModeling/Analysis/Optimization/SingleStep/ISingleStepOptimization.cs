@@ -5,9 +5,13 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
     /// <summary>
     /// find optimum between startPoint (inclusive) and borderX (exclusive)
     /// </summary>
-    Number Optimize(
+    NumberFunctionPointWithDerivative MoveNext(
       in FunctionValueAnalysisForDirection functionToAnalyse,
       in NumberFunctionPointWithDerivative startPoint,
       in Number borderX);
+    
+    void MoveNext(
+      in FunctionValueAnalysisForDirection f,
+      ref NumberFunctionOptimizationSearchRange searchRange);
   }
 }

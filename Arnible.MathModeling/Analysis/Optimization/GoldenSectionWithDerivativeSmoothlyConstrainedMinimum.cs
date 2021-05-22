@@ -41,6 +41,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
       {
         _goldenSection.MoveNext(ref searchRange, f.ValueWithDerivative(in x1));  
       }
+      
       if (searchRange.BorderSmaller.X == a.X)
       {
         return false;

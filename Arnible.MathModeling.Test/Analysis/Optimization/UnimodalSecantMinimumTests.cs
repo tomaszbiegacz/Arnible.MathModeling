@@ -170,7 +170,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
     }
     
     /*
-     * Unimodal Rosenbrock
+     * Rosenbrock
      */
 
     [Fact]
@@ -202,6 +202,35 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       point.BorderSmaller.X.AssertIsLessThan(0.2);
       point.BorderSmaller.Y.AssertIsNotEqualTo(0);
       i.AssertIsEqualTo(7);
+    }
+    
+    [Fact]
+    public void Multimodal_Rosenbrock_Minimum()
+    {
+      var f = new RosenbrockTestFunction();
+      FunctionValueAnalysisForDirection fa = new(
+        f, 
+        stackalloc Number[] { 0, 0 }, 
+        OptimizationHelper.DirectionDerivativeRatiosD2.Span);
+      
+      var a = fa.ValueWithDerivative(0.8);
+      var opt = fa.ValueWithDerivative(2 / Math.Sqrt(2));
+      var b = fa.ValueWithDerivative(2);
+      
+      opt.Y.AssertIsEqualTo(0);
+      opt.First.AssertIsEqualTo(0);
+      
+      a.Y.AssertIsGreaterThan(0);
+      a.First.AssertIsLessThan(0);
+      
+      b.Y.AssertIsGreaterThan(0);
+      b.First.AssertIsGreaterThan(0);
+      
+      var point = new NumberFunctionOptimizationSearchRange(a: a, b: b);
+      ushort i = _method.FindOptimal(in fa, ref point);
+      
+      point.BorderSmaller.X.AssertIsEqualTo(opt.X);
+      i.AssertIsEqualTo(46);
     }
   }
 }

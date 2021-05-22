@@ -18,15 +18,10 @@ namespace Arnible.MathModeling.Analysis.Optimization
       UnimodalSecantAnalysis secantApplication = point.GetSecantApplicability();
       if(secantApplication == UnimodalSecantAnalysis.HasMinimum)
       {
-        try
+        if (!_secant.TryMoveNext(in functionToAnalyse, ref point))
         {
-          _secant.MoveNext(in functionToAnalyse, ref point);
-        }
-        catch(MultimodalFunctionException)
-        {
-          // fallback
           _goldenSection.MoveNext(in functionToAnalyse, ref point);
-        }  
+        }
       }
       else
       {
