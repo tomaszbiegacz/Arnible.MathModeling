@@ -13,6 +13,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Arnible.MathModeling.Test\Analysis\Derivative1ValueTests.cs">
+      <Link>Analysis\Derivative1ValueTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Analysis\Derivative2ValueTests.cs">
+      <Link>Analysis\Derivative2ValueTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Analysis\ValueWithDerivative1Tests.cs">
+      <Link>Analysis\ValueWithDerivative1Tests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Linq\Algebra\AddTests.cs">
+      <Link>Linq\Algebra\AddTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Linq\Algebra\MultiplyTests.cs">
+      <Link>Linq\Algebra\MultiplyTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Linq\Algebra\SumDefensiveTests.cs">
+      <Link>Linq\Algebra\SumDefensiveTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Linq\Algebra\SumWithDefaultTests.cs">
+      <Link>Linq\Algebra\SumWithDefaultTests.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling.Test\SquareError.cs" Link="SquareError.cs" />
   </ItemGroup>
 

@@ -1,9 +1,10 @@
 using System;
 using Arnible.Assertions;
+using Arnible.MathModeling;
 using Arnible.MathModeling.Algebra;
 using Xunit;
 
-namespace Arnible.MathModeling.Test.Algebra
+namespace Arnible.Linq.Algebra.Tests
 {
   public class MultiplyTests
   {
@@ -16,8 +17,8 @@ namespace Arnible.MathModeling.Test.Algebra
     [Fact]
     public void Multiply_ReadOnlySpan()
     {
-      ReadOnlySpan<Number> src = stackalloc Number[] { 1, 2 };
-      Span<Number> output = stackalloc Number[2];
+      ReadOnlySpan<Number> src = new Number[] { 1, 2 };
+      Span<Number> output = new Number[2];
       src.Multiply(2, in output);
       output.AssertSequenceEqualsTo(new Number[] {2, 4});
     }
@@ -25,7 +26,7 @@ namespace Arnible.MathModeling.Test.Algebra
     [Fact]
     public void Multiply_Span()
     {
-      Span<Number> output = stackalloc Number[] { 1, 2 };
+      Span<Number> output = new Number[] { 1, 2 };
       output.Multiply(2);
       output.AssertSequenceEqualsTo(new Number[] {2, 4});
     }

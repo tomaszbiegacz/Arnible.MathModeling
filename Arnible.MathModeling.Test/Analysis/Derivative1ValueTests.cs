@@ -26,6 +26,8 @@ namespace Arnible.MathModeling.Analysis.Test
       
       (v1 == v2).AssertIsTrue();
       (v1 != v2).AssertIsFalse();
+      
+      v1.Equals(null).AssertIsFalse();
     }
   }
 }

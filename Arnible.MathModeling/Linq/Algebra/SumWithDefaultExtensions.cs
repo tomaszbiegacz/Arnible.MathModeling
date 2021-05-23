@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Arnible.MathModeling.Algebra;
 
-namespace Arnible.MathModeling.Algebra
+namespace Arnible.Linq.Algebra
 {
   public static class SumWithDefaultExtensions
   {

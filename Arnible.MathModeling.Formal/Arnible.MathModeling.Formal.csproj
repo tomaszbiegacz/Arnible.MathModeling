@@ -12,9 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Arnible.MathModeling\Algebra\AddExtensions.cs">
-      <Link>Algebra\AddExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\Arnible.MathModeling\Algebra\IAlgebraGroup.cs">
       <Link>Algebra\IAlgebraGroup.cs</Link>
     </Compile>
@@ -60,29 +57,23 @@
     <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\VariableTerm.cs">
       <Link>Algebra\Polynomials\VariableTerm.cs</Link>
     </Compile>
-    <Compile Include="..\Arnible.MathModeling\Algebra\ProductDefensiveExtensions.cs">
-      <Link>Algebra\ProductDefensiveExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Arnible.MathModeling\Algebra\ProductWithDefaultExtensions.cs">
-      <Link>Algebra\ProductWithDefaultExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Arnible.MathModeling\Algebra\SumDefensiveExtensions.cs">
-      <Link>Algebra\SumDefensiveExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Arnible.MathModeling\Algebra\SumWithDefaultExtensions.cs">
-      <Link>Algebra\SumWithDefaultExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\Arnible.MathModeling\Analysis\IBinaryOperation.cs">
       <Link>Analysis\IBinaryOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Analysis\IDifferentiableFunction.cs">
+      <Link>Analysis\IDifferentiableFunction.cs</Link>
     </Compile>
     <Compile Include="..\Arnible.MathModeling\Analysis\IFinitaryOperation.cs">
       <Link>Analysis\IFinitaryOperation.cs</Link>
     </Compile>
+    <Compile Include="..\Arnible.MathModeling\Analysis\Learning\Error\SquareErrorMeasure.cs">
+      <Link>Analysis\Learning\Error\SquareErrorMeasure.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Analysis\Learning\IErrorMeasureSupervisedLearning.cs">
+      <Link>Analysis\Learning\IErrorMeasureSupervisedLearning.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\Analysis\OperationExtension.cs">
       <Link>Analysis\OperationExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\Arnible.MathModeling\Analysis\Optimization\IFunctionValueAnalysis.cs">
-      <Link>Analysis\Optimization\IFunctionValueAnalysis.cs</Link>
     </Compile>
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordianteOnLineView.cs">
       <Link>Geometry\HypersphericalCoordianteOnLineView.cs</Link>
@@ -98,16 +89,26 @@
     </Compile>
     <Compile Include="..\Arnible.MathModeling\INumberRangeDomain.cs" Link="INumberRangeDomain.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\NumberVector.cs" Link="Geometry\NumberVector.cs" />
+    <Compile Include="..\Arnible.MathModeling\Linq\Algebra\AddExtensions.cs">
+      <Link>Linq\Algebra\AddExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Linq\Algebra\MultiplyExtensions.cs">
+      <Link>Linq\Algebra\MultiplyExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Linq\Algebra\SumDefensiveExtensions.cs">
+      <Link>Linq\Algebra\SumDefensiveExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling\Linq\Algebra\SumWithDefaultExtensions.cs">
+      <Link>Linq\Algebra\SumWithDefaultExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\Number.Common.cs">
       <Link>Number.Common.cs</Link>
     </Compile>
     <Compile Include="..\Arnible.MathModeling\Angle.cs" Link="Angle.cs" />
     <Compile Include="..\Arnible.MathModeling\Analysis\Derivative1Value.cs" Link="Analysis\Derivative1Value.cs" />
     <Compile Include="..\Arnible.MathModeling\Analysis\Derivative2Value.cs" Link="Analysis\Derivative2Value.cs" />
-    <Compile Include="..\Arnible.MathModeling\Analysis\DerivativeOperator.cs" Link="Analysis\DerivativeOperator.cs" />
     <Compile Include="..\Arnible.MathModeling\DoubleExtension.cs" Link="DoubleExtension.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\CartesianCoordinate.cs" Link="Geometry\CartesianCoordinate.cs" />
-    <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleTranslationVector.cs" Link="Geometry\HypersphericalAngleTranslationVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleVector.cs" Link="Geometry\HypersphericalAngleVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleVectorExtensions.cs" Link="Geometry\HypersphericalAngleVectorExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinate.cs" Link="Geometry\HypersphericalCoordinate.cs" />

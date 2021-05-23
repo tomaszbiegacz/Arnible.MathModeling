@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Arnible.Linq;
+using Arnible.MathModeling;
+using Arnible.MathModeling.Algebra;
 
-namespace Arnible.MathModeling.Algebra
+namespace Arnible.Linq.Algebra
 {
   public static class SumDefensiveExtensions
   {
@@ -40,7 +42,7 @@ namespace Arnible.MathModeling.Algebra
     public static T SumDefensive<T>(in this ReadOnlySpan<T> x) where T: struct, IAlgebraGroup<T>
     {
       T? current = null;
-      foreach (T v in x)
+      foreach (ref readonly T v in x)
       {
         if(current.HasValue)
         {
@@ -65,22 +67,29 @@ namespace Arnible.MathModeling.Algebra
     /// <summary>
     /// Calculate items sum or throw ArgumentException if passed enumerable is empty
     /// </summary>
-    public static T[] SumDefensive<T>(this IEnumerable<IReadOnlyCollection<T>> x) where T: struct, IAlgebraGroup<T>
+    public static Number SumDefensive<T>(in this ReadOnlySpan<T> x, FuncIn<T, Number> getItem)
     {
-      T[]? current = null;
-      foreach (IReadOnlyCollection<T> v in x)
+      Number? current = 0;
+      foreach (ref readonly T v in x)
       {
-        if(current is not null)
+        if(current.HasValue)
         {
-          current =  current.Add(v);  
+          current =  current + getItem(in v);  
         }
         else
         {
-          current = v.ToArray();
+          current = getItem(in v);
         }
       }
       
-      return current ?? throw new ArgumentException("Empty enumerator");
+      if (current.HasValue)
+      {
+        return current.Value;
+      }
+      else
+      {
+        throw new ArgumentException("Empty enumerator");
+      }
     }
   }
 }
