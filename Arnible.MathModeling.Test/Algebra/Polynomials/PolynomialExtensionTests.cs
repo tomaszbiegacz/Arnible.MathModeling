@@ -1,4 +1,5 @@
 ﻿using Arnible.Assertions;
+using Arnible.Linq.Algebra;
 using Xunit;
 
 namespace Arnible.MathModeling.Algebra.Polynomials.Tests

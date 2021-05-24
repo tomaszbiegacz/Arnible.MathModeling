@@ -13,6 +13,51 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Arnible.MathModeling.Test\Algebra\Polynomials\IndeterminateExpressionTests.cs">
+      <Link>Algebra\IndeterminateExpressionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Algebra\Polynomials\PolarCoordinatesTest.cs">
+      <Link>Algebra\PolarCoordinatesTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Algebra\Polynomials\PolynomialDerivativeTests.cs">
+      <Link>Algebra\PolynomialDerivativeTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Algebra\Polynomials\PolynomialDivisionTests.cs">
+      <Link>Algebra\PolynomialDivisionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Algebra\Polynomials\PolynomialExtensionTests.cs">
+      <Link>Algebra\PolynomialExtensionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Algebra\Polynomials\PolynomialTautology.cs">
+      <Link>Algebra\PolynomialTautology.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Algebra\Polynomials\PolynomialTermTests.cs">
+      <Link>Algebra\PolynomialTermTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Algebra\Polynomials\PolynomialTests.cs">
+      <Link>Algebra\PolynomialTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Analysis\Derivative1ValueTests.cs">
+      <Link>Analysis\Derivative1ValueTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Analysis\Derivative2ValueTests.cs">
+      <Link>Analysis\Derivative2ValueTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Analysis\ValueWithDerivative1Tests.cs">
+      <Link>Analysis\ValueWithDerivative1Tests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Linq\Algebra\AddTests.cs">
+      <Link>Linq\Algebra\AddTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Linq\Algebra\MultiplyTests.cs">
+      <Link>Linq\Algebra\MultiplyTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Linq\Algebra\SumDefensiveTests.cs">
+      <Link>Linq\Algebra\SumDefensiveTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Linq\Algebra\SumWithDefaultTests.cs">
+      <Link>Linq\Algebra\SumWithDefaultTests.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling.Test\SquareError.cs" Link="SquareError.cs" />
   </ItemGroup>
 
@@ -36,10 +81,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Arnible.MathModeling.Formal\Arnible.MathModeling.Formal.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Algebra" />
   </ItemGroup>
 
 </Project>

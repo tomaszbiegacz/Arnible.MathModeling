@@ -16,13 +16,5 @@ namespace Arnible.Linq
         yield return source[i];
       }
     }
-    
-    public static IEnumerable<T> Reverse<T>(this IList<T> source)
-    {
-      for(int i=source.Count - 1; i>=0; --i)
-      {
-        yield return source[i];
-      }
-    }
   }
 }

@@ -7,18 +7,18 @@
 [![CodeQL](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/tomaszbiegacz/Arnible.MathModeling/actions/workflows/codeql-analysis.yml)
 
 Tooltik manifesto:
-* I should have support for LINQ operators over `Span<T>`, `ReadOnlySpan<T>`, `Memory<T>` and `ReadOnlyMemory<T>`.
+* I should have support for LINQ operators over `Span<T>` and `ReadOnlySpan<T>`.
   I need this to allow me writing quick and dirty prototypes over new collections in the same way as I do for `IEnumerable<T>`.
 * LINQ should have clear API that will allow me to write defensive and self validating logic, like for example `SumDefensive` that will throw an error when being called over empty collection.
 * Provide basic optimization algorithms for functions in multidimensional space.
 
 Arnible toolkit is meant to address the above limitations by providing extensions over latest .Net framework.
 The toolkit is split into libraries:
-* [Arnible](./Arnible) with basic interfaces and utilities like logger interface or ReadOnlyArray value type.
+* [Arnible](./Arnible) with basic interfaces and utilities like logger interface.
 * [Arnible.Assertions](./Arnible.Assertions) focusing on defensive programming support, like extensions method `.AssertIsEqualTo`.
 * [Arnible.Export](./Arnible.Export) is boxing free exporting library focused on minimal memory and processing footprint needed for diagnostics.
 * [Arnible.Linq](./Arnible.Linq) adds support for LINQ with defensive API like "SumDefensive" or "SumWithDefault" together with LINQ for combinatorics and ReadOnlySpan support.
-* [Arnible.MathModeling](./Arnible.MathModeling) and [Arnible.MathModeling.Formal](./Arnible.MathModeling.Formal) contains various tools for numeric and symbolic math analysis.
+* [Arnible.MathModeling](./Arnible.MathModeling) and [Arnible.MathModeling.Formal](./Arnible.MathModeling.Formal) contains various tools for numeric and symbolic math analysis together with basic abstractions for machine learning.
 * [Arnible.xunit](./Arnible.xunit) simplifies writing xunit tests for projects using Arnible toolkit.
 
 Basic assumptions:
@@ -29,11 +29,10 @@ Basic assumptions:
 
 ## How to use it
 
+If you want to use this toolkit simply get it locally and build it via `dotnet build`. Linux and Windows OS are supported.
+
 I haven't reached yet version 1.0, work is still in progress.
 For this reason the toolkit is not yet available as NuGet. There is simply too much risk of breaking backward compatibility with next revisions. Anyway I am open for negotiations.
-
-If you want to use this toolkit simply get it locally and build it via `dotnet build` or run unit tests with `dotnet test`. Linux and Windows OS are supported.
-
 
 ## Arnible.MathModeling
 

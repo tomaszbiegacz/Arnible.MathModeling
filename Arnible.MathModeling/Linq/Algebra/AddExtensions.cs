@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Arnible.Assertions;
+using Arnible.MathModeling.Algebra;
 
-namespace Arnible.MathModeling.Algebra
+namespace Arnible.Linq.Algebra
 {
   public static class AddExtensions
   {

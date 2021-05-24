@@ -56,5 +56,27 @@ namespace Arnible.Assertions.Test
             Span<int> actual = stackalloc int[] {1, 2};
             actual.AssertSequenceEqualsTo(stackalloc int[] {1, 2});
         }
+        
+        [Fact]
+        public void ReadOnlySpan_Ok()
+        {
+            ReadOnlySpan<int> actual = stackalloc int[] {1, 2};
+            actual.AssertSequenceEqualsTo(stackalloc int[] {1, 2});
+        }
+        
+        [Fact]
+        public void ReadOnlySpan_Error()
+        {
+            ReadOnlySpan<int> actual = stackalloc int[] {1, 2};
+            try
+            {
+                actual.AssertSequenceEqualsTo(stackalloc int[] {1, 3});
+                throw new Exception("I should not got here");
+            }
+            catch (AssertException)
+            {
+                // all is fine
+            }
+        }
     }
 }
