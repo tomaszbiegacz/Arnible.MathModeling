@@ -69,7 +69,7 @@ namespace Arnible.Linq.Algebra
     /// </summary>
     public static Number SumDefensive<T>(in this ReadOnlySpan<T> x, FuncIn<T, Number> getItem)
     {
-      Number? current = 0;
+      Number? current = null;
       foreach (ref readonly T v in x)
       {
         if(current.HasValue)

@@ -95,6 +95,9 @@
     <Compile Include="..\Arnible.MathModeling\Linq\Algebra\MultiplyExtensions.cs">
       <Link>Linq\Algebra\MultiplyExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Arnible.MathModeling\Linq\Algebra\ProductWithDefaultExtensions.cs">
+      <Link>Linq\Algebra\ProductWithDefaultExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\Linq\Algebra\SumDefensiveExtensions.cs">
       <Link>Linq\Algebra\SumDefensiveExtensions.cs</Link>
     </Compile>
