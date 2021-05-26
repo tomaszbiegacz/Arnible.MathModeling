@@ -30,5 +30,15 @@ namespace Arnible.MathModeling
       }
       return true;
     }
+    
+    public static Number[] ToNumberArray(this IReadOnlyList<double> values)
+    {
+      Number[] result = new Number[values.Count];
+      for(ushort i=0; i<values.Count; ++i)
+      {
+        result[i] = values[i];
+      }
+      return result;
+    }
   }
 }

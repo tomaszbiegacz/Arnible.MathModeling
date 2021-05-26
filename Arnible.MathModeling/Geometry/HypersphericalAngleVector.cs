@@ -99,7 +99,7 @@ namespace Arnible.MathModeling.Geometry
 
     public ushort Length => _angles.Length;
 
-    public Number GetOrDefault(ushort pos) => _angles.GetOrDefault(pos);
+    public Number GetOrDefault(ushort pos) => _angles.AsList().GetOrDefault(pos);
 
     //
     // IArray

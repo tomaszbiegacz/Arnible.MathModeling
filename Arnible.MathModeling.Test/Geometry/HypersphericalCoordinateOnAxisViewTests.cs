@@ -12,11 +12,11 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void ConversationCircle()
     {
-      CartesianCoordinate cc = new CartesianCoordinate(1, 2, 3, 4);
+      var cc = new Number[] {1, 2, 3, 4};
 
       HypersphericalCoordinateOnAxisView view = cc.ToSphericalView();
-      view.Coordinates.AssertIsEqualTo(cc.Coordinates);
-      view.DimensionsCount.AssertIsEqualTo(cc.DimensionsCount);
+      view.Coordinates.AssertIsEqualTo(cc);
+      view.DimensionsCount.AssertIsEqualTo(cc.Length);
 
       HypersphericalCoordinate hc = view;
       hc.R.AssertIsEqualTo(view.R);
@@ -28,15 +28,15 @@ namespace Arnible.MathModeling.Geometry.Test
       view2.Angles.AssertIsEqualTo(hc.Angles);
       view2.DimensionsCount.AssertIsEqualTo(hc.DimensionsCount);
 
-      CartesianCoordinate cc2 = view2;
-      cc2.Coordinates.AssertIsEqualTo(cc.Coordinates);
-      cc2.DimensionsCount.AssertIsEqualTo(cc.DimensionsCount);
+      var cc2 = view2.Coordinates;
+      cc2.AssertIsEqualTo(cc);
+      cc2.Length.AssertIsEqualTo(cc.Length);
     }
 
     [Fact]
     public void GetRectangularView()
     {
-      CartesianCoordinate cc = new CartesianCoordinate(1, 2, 3, 4);
+      var cc = new Number[] { 1, 2, 3, 4 };
       HypersphericalCoordinateOnAxisView view = cc.ToSphericalView();
 
       var rcView = view.GetRectangularView(1, 3);
@@ -48,7 +48,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void GetLineView()
     {
-      CartesianCoordinate cc = new CartesianCoordinate(1, 2, 3, 4);
+      var cc = new Number[] { 1, 2, 3, 4 };
       HypersphericalCoordinateOnAxisView view = cc.ToSphericalView();
 
       var rcView = view.GetLineView(1);

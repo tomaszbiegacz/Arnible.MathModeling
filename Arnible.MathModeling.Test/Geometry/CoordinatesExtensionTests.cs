@@ -1,9 +1,8 @@
-﻿using Arnible.MathModeling.Algebra;
-using System;
+﻿using System;
 using Arnible.Assertions;
-using Arnible.MathModeling.Test;
 using Xunit;
 using Arnible.Linq;
+using Arnible.Linq.Algebra;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
@@ -38,7 +37,7 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Cast_HyperspehricalEqualsRectangular(double x, double y)
     {
       var rc = new RectangularCoordinate(x, y);
-      CartesianCoordinate cc = rc;
+      var cc = rc.ToCartesian();
 
       var pc = rc.ToPolar();
       HypersphericalCoordinate sc = cc.ToSphericalView();
@@ -54,7 +53,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [InlineData(new[] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4, new[] { π_4, π_3 })]
     public void Cast_ToHypersphericalView(double[] cartesian, double r, double[] angles)
     {
-      CartesianCoordinate cc = cartesian;
+      var cc = cartesian.ToNumberArray();
 
       HypersphericalCoordinate sc = cc.ToSphericalView();
       sc.R.AssertIsEqualTo(r);
@@ -70,7 +69,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [InlineData(new[] { 0d, 0d, 0d, 0, -1d }, 1, new[] { 0, 0, 0, -1 * π_2 })]
     public void Cast_ToHyperspherical(double[] cartesian, double r, double[] angles)
     {
-      CartesianCoordinate cc = cartesian;
+      var cc = cartesian.ToNumberArray();
 
       HypersphericalCoordinate sc = cc.ToSpherical();
       sc.R.AssertIsEqualTo(r);
@@ -95,12 +94,52 @@ namespace Arnible.MathModeling.Geometry.Test
     [InlineData(new[] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4, new[] { π_4, π_3 })]
     public void AddDimension(double[] cartesian, double r, double[] angles)
     {
-      CartesianCoordinate cc = cartesian;
+      var cc = cartesian.ToNumberArray();
       var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
+      
+      var cc1 = cc.Append(0).ToArray();
 
       var v = sc.AddDimension();
-      ((CartesianCoordinate)v.ToCartesianView()).AssertIsEqualTo(cc.AddDimension());
-      ((HypersphericalCoordinate)cc.AddDimension().ToSphericalView()).AssertIsEqualTo(sc.AddDimension());
+      v.ToCartesianView().Coordinates.AssertSequenceEqualsTo(cc1.ToArray());
+      ((HypersphericalCoordinate)cc1.ToSphericalView()).AssertIsEqualTo(sc.AddDimension());
+    }
+    
+    [Fact]
+    public void GetDirectionDerivativeRatios_Identity_2()
+    {
+      Number[] c = new Number[] { 1, 1 };
+      var actual = c.GetDirectionDerivativeRatios();
+
+      ReadOnlyArray<Number> expected = HypersphericalAngleVector.GetIdentityVector(2).GetCartesianAxisViewsRatios();
+      expected.AssertIsEqualTo(actual);
+    }
+    
+    [Fact]
+    public void GetDirectionDerivativeRatios_Identity_3()
+    {
+      Number[] c = new Number[] {4, 4, 4};
+      var actual = c.GetDirectionDerivativeRatios();
+
+      ReadOnlyArray<Number> expected = HypersphericalAngleVector.GetIdentityVector(3).GetCartesianAxisViewsRatios();
+      expected.AssertIsEqualTo(actual);
+    }
+    
+    [Fact]
+    public void GetDirectionDerivativeRatios_Random()
+    {
+      Number[] c = new Number[] { 1, 2, -3 };
+      var radios = c.GetDirectionDerivativeRatios();
+      3.AssertIsEqualTo(radios.Length);
+      
+      for (ushort i = 0; i < 2; ++i)
+      {
+        radios[i].AssertIsGreaterThan(0);
+        radios[i].AssertIsLessThan(1);
+      }
+      radios[2].AssertIsGreaterThan(-1);
+      radios[2].AssertIsLessThan(0);
+      
+      radios.Select(r => r*r).SumDefensive().AssertIsEqualTo(1);
     }
   }
 }

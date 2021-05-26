@@ -50,9 +50,9 @@ namespace Arnible.MathModeling.Geometry
       return sum.Select(v => v / count).ToArray();
     }
     
-    public static Number GetOrDefault(this ReadOnlyArray<Number> src, ushort pos)
+    public static Number GetOrDefault(this IReadOnlyList<Number> src, ushort pos)
     {
-      if (pos >= src.Length)
+      if (pos >= src.Count)
       {
         return 0;
       }

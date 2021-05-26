@@ -17,5 +17,10 @@
       X = x;
       Y = y;
     }
+    
+    public Number[] ToCartesian()
+    {
+      return new Number[] { X, Y };
+    }
   }
 }

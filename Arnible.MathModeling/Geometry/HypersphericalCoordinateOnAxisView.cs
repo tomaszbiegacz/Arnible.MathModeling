@@ -5,12 +5,7 @@ using Arnible.MathModeling.Analysis;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public readonly struct HypersphericalCoordinateOnAxisView :
-    IEquatable<HypersphericalCoordinateOnAxisView>,
-    IEquatable<CartesianCoordinate>,
-    IEquatable<HypersphericalCoordinate>,
-    ICartesianCoordinate,
-    IHypersphericalCoordinate
+  public readonly struct HypersphericalCoordinateOnAxisView : IEquatable<HypersphericalCoordinateOnAxisView>
   {
     private readonly HypersphericalCoordinate _p;
 
@@ -62,15 +57,10 @@ namespace Arnible.MathModeling.Geometry
       Coordinates = p.Angles.GetCartesianAxisViewsRatios().Select(v => p.R * v).ToArray();
     }
 
-    public HypersphericalCoordinateOnAxisView(CartesianCoordinate p)
+    public HypersphericalCoordinateOnAxisView(IReadOnlyList<Number> p)
     {
-      Coordinates = p.Coordinates;
+      Coordinates = p.ToArray();
       _p = p.ToSpherical();
-    }
-
-    public static implicit operator CartesianCoordinate(HypersphericalCoordinateOnAxisView rc)
-    {
-      return rc.Coordinates;
     }
 
     public static implicit operator HypersphericalCoordinate(HypersphericalCoordinateOnAxisView rc)
@@ -93,16 +83,6 @@ namespace Arnible.MathModeling.Geometry
     public bool Equals(HypersphericalCoordinateOnAxisView other)
     {
       return Coordinates == other.Coordinates;
-    }
-
-    public bool Equals(CartesianCoordinate other)
-    {
-      return other.Equals(this);
-    }
-
-    public bool Equals(HypersphericalCoordinate other)
-    {
-      return other.Equals(this);
     }
 
     public override int GetHashCode()
@@ -162,8 +142,8 @@ namespace Arnible.MathModeling.Geometry
       {
         return HypersphericalCoordinateOnRectangularView.FromCartesian(
           r: R,
-          x: Coordinates.GetOrDefault(axisA),
-          y: Coordinates.GetOrDefault(axisB));
+          x: Coordinates.AsList().GetOrDefault(axisA),
+          y: Coordinates.AsList().GetOrDefault(axisB));
       }
     }
 
@@ -175,7 +155,7 @@ namespace Arnible.MathModeling.Geometry
       }
       else
       {
-        return new HypersphericalCoordianteOnLineView(r: R, ratioX: Coordinates.GetOrDefault(axis) / R);
+        return new HypersphericalCoordianteOnLineView(r: R, ratioX: Coordinates.AsList().GetOrDefault(axis) / R);
       }
     }
 

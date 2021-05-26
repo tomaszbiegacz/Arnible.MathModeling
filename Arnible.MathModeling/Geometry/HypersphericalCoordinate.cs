@@ -2,16 +2,7 @@
 
 namespace Arnible.MathModeling.Geometry
 {
-  interface IHypersphericalCoordinate
-  {
-    Number R { get; }
-    HypersphericalAngleVector Angles { get; }
-  }
-
-  public readonly struct HypersphericalCoordinate : 
-    IEquatable<HypersphericalCoordinate>, 
-    IHypersphericalCoordinate, 
-    ICoordinate<HypersphericalCoordinate>
+  public readonly struct HypersphericalCoordinate : IEquatable<HypersphericalCoordinate>
   {
     /// <summary>
     /// Angles:

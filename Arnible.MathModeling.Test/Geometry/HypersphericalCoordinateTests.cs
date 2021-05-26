@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Arnible.Assertions;
 using Arnible.Linq;
 using Arnible.MathModeling.Analysis;
@@ -41,7 +42,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void RectangularToPolarTransformation()
     {
-      var cc = new CartesianCoordinate(1, Math.Sqrt(3));
+      var cc = new Number[] { 1, Math.Sqrt(3) };
 
       HypersphericalCoordinate hc = cc.ToSphericalView();
       hc.DimensionsCount.AssertIsEqualTo(2);
@@ -55,16 +56,17 @@ namespace Arnible.MathModeling.Geometry.Test
       derrivatives[0].First.AssertIsEqualTo(0.5);                 // x
       derrivatives[1].First.AssertIsEqualTo(Math.Sqrt(3) / 2);    // y
 
-      ((CartesianCoordinate)hc.ToCartesianView()).AssertIsEqualTo(cc);
+      hc.ToCartesianView().Coordinates.AssertIsEqualTo(cc);
       VerifyCartesianCoordinateAngle(hc, cc);
     }
 
-    private static void VerifyCartesianCoordinateAngle(HypersphericalCoordinate hc, CartesianCoordinate cc)
+    private static void VerifyCartesianCoordinateAngle(HypersphericalCoordinate hc, IReadOnlyList<Number> cc)
     {
+      if (cc == null) throw new ArgumentNullException(nameof(cc));
       var cartesianCoordinatesAngles = hc.ToCartesianView().CartesianCoordinatesAngles().ToArray();
-      cc.DimensionsCount.AssertIsEqualTo(cartesianCoordinatesAngles.Length);
+      cc.Count.AssertIsEqualTo(cartesianCoordinatesAngles.Length);
 
-      for (ushort pos = 0; pos < cc.DimensionsCount; ++pos)
+      for (ushort pos = 0; pos < cc.Count; ++pos)
       {
         var axisCc = new HypersphericalCoordinate(hc.R, cartesianCoordinatesAngles[pos]).ToCartesianView();
         axisCc.Coordinates[pos].AssertIsEqualTo(hc.R);
@@ -75,7 +77,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void CubeToSphericalTransformation()
     {
-      var cc = new CartesianCoordinate(1, Math.Sqrt(2), 2 * Math.Sqrt(3));
+      var cc = new Number[] { 1, Math.Sqrt(2), 2 * Math.Sqrt(3) };
 
       HypersphericalCoordinate hc = cc.ToSphericalView();
       hc.DimensionsCount.AssertIsEqualTo(3);
@@ -90,14 +92,14 @@ namespace Arnible.MathModeling.Geometry.Test
       derrivatives[1].First.AssertIsEqualTo(Math.Cos(θ) * Math.Sin(φ));   // y
       derrivatives[2].First.AssertIsEqualTo(Math.Sin(θ));                 // z
 
-      ((CartesianCoordinate)hc.ToCartesianView()).AssertIsEqualTo(cc);
+      hc.ToCartesianView().Coordinates.AssertIsEqualTo(cc);
       VerifyCartesianCoordinateAngle(hc, cc);
     }
 
     [Fact]
     public void CubeToSphericalTransformation_Known()
     {
-      var cc = new CartesianCoordinate(Math.Sqrt(2), Math.Sqrt(2), 2 * Math.Sqrt(3));
+      var cc = new Number[] { Math.Sqrt(2), Math.Sqrt(2), 2 * Math.Sqrt(3) };
 
       const double φ = Math.PI / 4;   // x to r(xy)
       const double θ = Math.PI / 3;   // xy to r
@@ -114,7 +116,7 @@ namespace Arnible.MathModeling.Geometry.Test
       derivatives[1].First.AssertIsEqualTo(Math.Sqrt(2) / 4);      // y
       derivatives[2].First.AssertIsEqualTo(Math.Sqrt(3) / 2);      // z
 
-      ((CartesianCoordinate)hc.ToCartesianView()).AssertIsEqualTo(cc);
+      hc.ToCartesianView().Coordinates.AssertIsEqualTo(cc);
     }
 
     [Fact]

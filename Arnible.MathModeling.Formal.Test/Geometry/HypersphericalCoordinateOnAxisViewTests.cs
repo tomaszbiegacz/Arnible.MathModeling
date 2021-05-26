@@ -12,15 +12,15 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void DerivativeByR()
     {
-      CartesianCoordinate cartesianPoint = new Number[] {x, y, z};
+      var cartesianPoint = new Number[] {x, y, z};
       var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(θ, φ));
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 
       var derivatives = view.DerivativeByR().ToArray();
-      IsEqualToExtensions.AssertIsEqualTo(cartesianPoint.DimensionsCount, derivatives.Length);
-      for (ushort dimensionPos = 0; dimensionPos < cartesianPoint.DimensionsCount; ++dimensionPos)
+      IsEqualToExtensions.AssertIsEqualTo(cartesianPoint.Length, derivatives.Length);
+      for (ushort dimensionPos = 0; dimensionPos < cartesianPoint.Length; ++dimensionPos)
       {
-        var symbol = (PolynomialDivision)cartesianPoint.Coordinates[dimensionPos];
+        var symbol = (PolynomialDivision)cartesianPoint[dimensionPos];
         IsEqualToExtensions.AssertIsEqualTo(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[dimensionPos].First);
       }
     }

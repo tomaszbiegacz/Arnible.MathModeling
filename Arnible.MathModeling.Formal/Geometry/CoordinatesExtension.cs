@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using static Arnible.MathModeling.Algebra.Polynomials.MetaMath;
 using Arnible.Linq;
 using Arnible.MathModeling.Algebra.Polynomials;
@@ -18,7 +19,7 @@ namespace Arnible.MathModeling.Geometry
       return source.Composition(x, r * Cos(φ)).Composition(y, r * Sin(φ));
     }
 
-    public static HypersphericalCoordinate ToSpherical(in this CartesianCoordinate p)
+    public static HypersphericalCoordinate ToSpherical(this IReadOnlyList<Number> p)
     {
       throw new NotImplementedException("Roots are not yet supported");
     }
@@ -30,10 +31,10 @@ namespace Arnible.MathModeling.Geometry
 
     public static PolynomialDivision ToSpherical(
       in this PolynomialDivision source, 
-      in CartesianCoordinate cartesianPoint, 
+      IReadOnlyList<Number> cartesianPoint, 
       in HypersphericalCoordinate hypersphericalPoint)
     {
-      if (cartesianPoint.DimensionsCount != hypersphericalPoint.DimensionsCount)
+      if (cartesianPoint.Count != hypersphericalPoint.DimensionsCount)
       {
         throw new ArgumentException($"Invalid dimensions count");
       }
@@ -41,7 +42,7 @@ namespace Arnible.MathModeling.Geometry
       PolynomialDivision replacement = (PolynomialDivision)hypersphericalPoint.R;
       PolynomialDivision result = source;
 
-      ReadOnlyArray<Number> cd = cartesianPoint.Coordinates.AsList().Reverse().ToArray();
+      ReadOnlyArray<Number> cd = cartesianPoint.Reverse().ToArray();
       ReadOnlyArray<Number> ad = hypersphericalPoint.Angles.GetInternalEnumerable().Reverse().ToArray();
       for (ushort i = 0; i < ad.Length; ++i)
       {
@@ -57,29 +58,32 @@ namespace Arnible.MathModeling.Geometry
 
     public static Number ToSpherical(
       in this Number source, 
-      in CartesianCoordinate cartesianPoint, 
+      IReadOnlyList<Number> cartesianPoint, 
       in HypersphericalCoordinate hypersphericalPoint)
     {
-      return ToSpherical((PolynomialDivision)source, in cartesianPoint, in hypersphericalPoint);
+      return ToSpherical((PolynomialDivision)source, cartesianPoint, in hypersphericalPoint);
     }
 
-    public static HypersphericalCoordinateOnAxisView ToSphericalView(in this CartesianCoordinate p)
+    public static HypersphericalCoordinateOnAxisView ToSphericalView(this IReadOnlyList<Number> p)
     {
       throw new NotImplementedException("Not yet supported");
     }
 
-    public static PolynomialDivision Composition(in this Number source, in CartesianCoordinate c1, in CartesianCoordinate c2)
+    public static PolynomialDivision Composition(
+      in this Number source, 
+      in IReadOnlyList<Number> c1, 
+      in IReadOnlyList<Number> c2)
     {
-      if(c1.DimensionsCount != c2.DimensionsCount)
+      if(c1.Count != c2.Count)
       {
         throw new ArgumentException("Coordinates are with different dimensions");
       }
 
       PolynomialDivision result = (PolynomialDivision)source;
-      for(ushort i=0; i<c1.Coordinates.Length; ++i)
+      for(ushort i=0; i<c1.Count; ++i)
       {
-        var cartesianDimension = (PolynomialTerm)c1.Coordinates[i];
-        result = result.Composition(cartesianDimension, (PolynomialDivision)c2.Coordinates[i]);
+        var cartesianDimension = (PolynomialTerm)c1[i];
+        result = result.Composition(cartesianDimension, (PolynomialDivision)c2[i]);
       }
       return result;
     }

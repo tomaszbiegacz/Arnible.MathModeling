@@ -31,18 +31,17 @@ namespace Arnible.MathModeling.Geometry
         φ: GetFirstAngle(p.X, p.Y));
     }
 
-    public static HypersphericalCoordinate ToSpherical(in this CartesianCoordinate p)
+    public static HypersphericalCoordinate ToSpherical(this IReadOnlyList<Number> pc)
     {
-      ReadOnlyArray<Number> pc = p.Coordinates;
-      ReadOnlyArray<Number> pc2 = pc.AsList().Select(c => c * c).ToArray();
+      Number[] pc2 = pc.Select(c => c * c).ToArray();
 
-      Number r = Sqrt(pc2.AsList().SumDefensive());
+      Number r = Sqrt(pc2.SumDefensive());
       if (r > 0)
       {
         var angles = new List<Number>();
-        for (ushort i = p.DimensionsCount; i > 2; i--)
+        for (ushort i = (ushort)pc.Count; i > 2; i--)
         {
-          Number radius2 = pc2.AsList().TakeExactly(i).SumDefensive();
+          Number radius2 = pc2.TakeExactly(i).SumDefensive();
           if (radius2 == 0)
           {
             angles.Add(0);
@@ -65,24 +64,24 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public static HypersphericalCoordinateOnAxisView ToSphericalView(in this CartesianCoordinate p)
+    public static HypersphericalCoordinateOnAxisView ToSphericalView(this IReadOnlyList<Number> p)
     {
       return new HypersphericalCoordinateOnAxisView(p);
     }
 
-    public static Number VectorLength(in this CartesianCoordinate point)
+    public static Number VectorLength(this IReadOnlyList<Number> point)
     {
-      return Sqrt(point.Coordinates.AsList().Select(d => d * d).SumDefensive());
+      return Sqrt(point.Select(d => d * d).SumDefensive());
     }
 
     /// <summary>
     /// Calculate derivative ratios by moving along the array vector
     /// </summary>
-    public static ReadOnlyArray<Number> GetDirectionDerivativeRatios(in this ReadOnlyArray<Number> direction)
+    public static Number[] GetDirectionDerivativeRatios(
+      this IReadOnlyList<Number> direction)
     {
-      CartesianCoordinate point = direction;
-      Number[] result = point.ToSpherical().Angles.GetCartesianAxisViewsRatios();
-      result.Length.AssertIsEqualTo(direction.Length);
+      Number[] result = direction.ToSpherical().Angles.GetCartesianAxisViewsRatios();
+      result.Length.AssertIsEqualTo(direction.Count);
       return result;
     }
   }

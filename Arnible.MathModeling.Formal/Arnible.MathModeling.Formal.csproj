@@ -110,13 +110,11 @@
     <Compile Include="..\Arnible.MathModeling\Analysis\Derivative1Value.cs" Link="Analysis\Derivative1Value.cs" />
     <Compile Include="..\Arnible.MathModeling\Analysis\Derivative2Value.cs" Link="Analysis\Derivative2Value.cs" />
     <Compile Include="..\Arnible.MathModeling\DoubleExtension.cs" Link="DoubleExtension.cs" />
-    <Compile Include="..\Arnible.MathModeling\Geometry\CartesianCoordinate.cs" Link="Geometry\CartesianCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleVector.cs" Link="Geometry\HypersphericalAngleVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalAngleVectorExtensions.cs" Link="Geometry\HypersphericalAngleVectorExtensions.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinate.cs" Link="Geometry\HypersphericalCoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinateOnAxisView.cs" Link="Geometry\HypersphericalCoordinateOnAxisView.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\HypersphericalCoordinateOnAxisViewForAngleDerivatives.cs" Link="Geometry\HypersphericalCoordinateOnAxisViewForAngleDerivatives.cs" />
-    <Compile Include="..\Arnible.MathModeling\Geometry\ICoordinate.cs" Link="Geometry\ICoordinate.cs" />
     <Compile Include="..\Arnible.MathModeling\Geometry\NumberVectorExtensions.cs">
       <Link>Geometry\NumberVectorExtensions.cs</Link>
     </Compile>
