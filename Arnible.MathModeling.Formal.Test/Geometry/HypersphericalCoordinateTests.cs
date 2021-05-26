@@ -2,6 +2,8 @@
 using Arnible.MathModeling.Analysis;
 using System;
 using Arnible.Assertions;
+using Arnible.Linq;
+using Arnible.Linq.Algebra;
 using Xunit;
 
 namespace Arnible.MathModeling.Geometry.Test
@@ -10,7 +12,7 @@ namespace Arnible.MathModeling.Geometry.Test
   {
     private static PolynomialDivision GetSum(uint inputCount)
     {
-      var cartesianInputs = Number.Terms(inputCount).ToVector();
+      var cartesianInputs = Number.Terms(inputCount).ToArray();
       CartesianCoordinate cartesianPoint = cartesianInputs;
       var sphericalPoint = new HypersphericalCoordinate((PolynomialTerm)'R', Number.GreekTerms(inputCount - 1).ToAngleVector());
 
@@ -35,7 +37,7 @@ namespace Arnible.MathModeling.Geometry.Test
 
     private static void EqualityAfterTransformation(PolynomialDivision polynomial)
     {
-      CartesianCoordinate cartesianPoint = new NumberVector(Term.x, Term.y, Term.z);
+      CartesianCoordinate cartesianPoint = new Number[] {Term.x, Term.y, Term.z};
       var sphericalPoint = new HypersphericalCoordinate(Term.r, new HypersphericalAngleVector(Term.θ, Term.φ));
 
       PolynomialDivision sphericalPolynomial = polynomial.ToSpherical(cartesianPoint, sphericalPoint);

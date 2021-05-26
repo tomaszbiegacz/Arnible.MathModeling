@@ -15,7 +15,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var pc = new PolarCoordinate(r, φ);
       var expected = expression.ToPolar(rc, pc);
 
-      CartesianCoordinate cc = new NumberVector(x, y);
+      CartesianCoordinate cc = new Number[] {x, y};
       var hc = new HypersphericalCoordinate(r, new HypersphericalAngleVector(φ));
       var actual = expression.ToSpherical(cc, hc);
 

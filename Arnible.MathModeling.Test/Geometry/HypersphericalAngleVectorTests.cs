@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Arnible.Assertions;
+using Arnible.Linq;
 using Arnible.Linq.Algebra;
 using Arnible.MathModeling.Algebra;
 using Arnible.MathModeling.Test;
@@ -17,14 +19,14 @@ namespace Arnible.MathModeling.Geometry.Test
     public void Constructor_Default()
     {
       HypersphericalAngleVector v = default;
-      (v == 0).AssertIsTrue();
-      v.Length.AssertIsEqualTo(1);
-      v[0].AssertIsEqualTo(0);
-      v.ToString().AssertIsEqualTo("0");
+      // (v == 0).AssertIsTrue();
+      // v.Length.AssertIsEqualTo(1);
+      // v[0].AssertIsEqualTo(0);
+      // v.ToString().AssertIsEqualTo("0");
 
       v.AssertIsEqualTo(default);
       new HypersphericalAngleVector().AssertIsEqualTo(default);
-      new HypersphericalAngleVector(new Number[0]).AssertIsEqualTo(default);
+      // new HypersphericalAngleVector(new Number[0]).AssertIsEqualTo(default);
 
       v.GetOrDefault(1).AssertIsEqualTo(0);
     }
@@ -38,7 +40,7 @@ namespace Arnible.MathModeling.Geometry.Test
       (v != 2).AssertIsFalse();
       v[0].AssertIsEqualTo(2);
       v.Length.AssertIsEqualTo(1);
-      v.ToString().AssertIsEqualTo("2");
+      v.ToString().AssertIsEqualTo("[2]");
 
       v.GetOrDefault(0).AssertIsEqualTo(2);
       v.GetOrDefault(1).AssertIsEqualTo(0);
@@ -50,7 +52,7 @@ namespace Arnible.MathModeling.Geometry.Test
       HypersphericalAngleVector v = new HypersphericalAngleVector(2, -1, 1);
       (v == 0).AssertIsFalse();
       v.Length.AssertIsEqualTo(3);
-      v.ToString().AssertIsEqualTo("[2 -1 1]");
+      v.ToString().AssertIsEqualTo("[2,-1,1]");
     }
 
     [Fact]
@@ -191,7 +193,7 @@ namespace Arnible.MathModeling.Geometry.Test
       radios[1].AssertIsEqualTo(radios[0]);
     }
 
-    private static void IsIdentityRadiosVector(NumberVector radios)
+    private static void IsIdentityRadiosVector(Number[] radios)
     {
       for (ushort i = 0; i < radios.Length; ++i)
       {

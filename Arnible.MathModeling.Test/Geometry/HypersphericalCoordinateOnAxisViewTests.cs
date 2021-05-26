@@ -67,11 +67,11 @@ namespace Arnible.MathModeling.Geometry.Test
     [InlineData(8u)]
     public void GetIdentityVector(ushort dimensionsCount)
     {
-      NumberVector vector = HypersphericalCoordinateOnAxisView.GetIdentityVector(dimensionsCount);
+      Number[] vector = HypersphericalCoordinateOnAxisView.GetIdentityVector(dimensionsCount);
       vector.Length.AssertIsEqualTo(dimensionsCount);
 
-      vector.AllWithDefault(v => v > 0 && v <= 1).AssertIsTrue();
-      NumberVector.Repeat(HypersphericalCoordinateOnAxisView.GetIdentityVectorRatio(dimensionsCount), dimensionsCount).GetInternalEnumerable().AssertSequenceEqualsTo(vector.GetInternalEnumerable().ToArray());      
+      Number ratio = HypersphericalCoordinateOnAxisView.GetIdentityVectorRatio(dimensionsCount);
+      vector.AssertAll(v => v == ratio);
       vector.Select(v => v * v).SumDefensive().AssertIsEqualTo(1d);
     }
   }

@@ -24,7 +24,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void Constructor_3d()
     {
-      CartesianCoordinate cc = new NumberVector(2, 3, 4);
+      CartesianCoordinate cc = new Number[] { 2, 3, 4 };
 
       cc.DimensionsCount.AssertIsEqualTo(3);
       cc.Coordinates[0].AssertIsEqualTo(2);
@@ -35,28 +35,28 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void Equal_Rounding()
     {
-      CartesianCoordinate v1 = new NumberVector(1, 1, 0);
-      CartesianCoordinate v2 = new NumberVector(1, 1, 8.65956056235496E-17);
+      CartesianCoordinate v1 = new Number[] {1, 1, 0};
+      CartesianCoordinate v2 = new Number[] {1, 1, 8.65956056235496E-17};
       v1.AssertIsEqualTo(v2);
     }
 
     [Fact]
     public void GetDirectionDerivativeRatios_Identity_2()
     {
-      NumberVector c = new NumberVector(1, 1);
+      ReadOnlyArray<Number> c = new Number[] { 1, 1 };
       var actual = c.GetDirectionDerivativeRatios();
 
-      var expected = HypersphericalAngleVector.GetIdentityVector(2).GetCartesianAxisViewsRatios();
+      ReadOnlyArray<Number> expected = HypersphericalAngleVector.GetIdentityVector(2).GetCartesianAxisViewsRatios();
       expected.AssertIsEqualTo(actual);
     }
     
     [Fact]
     public void GetDirectionDerivativeRatios_Identity_3()
     {
-      NumberVector c = new NumberVector(4, 4, 4);
+      ReadOnlyArray<Number> c = new Number[] {4, 4, 4};
       var actual = c.GetDirectionDerivativeRatios();
 
-      var expected = HypersphericalAngleVector.GetIdentityVector(3).GetCartesianAxisViewsRatios();
+      ReadOnlyArray<Number> expected = HypersphericalAngleVector.GetIdentityVector(3).GetCartesianAxisViewsRatios();
       expected.AssertIsEqualTo(actual);
     }
     

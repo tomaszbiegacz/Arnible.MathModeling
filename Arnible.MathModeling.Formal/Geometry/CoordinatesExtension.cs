@@ -41,7 +41,7 @@ namespace Arnible.MathModeling.Geometry
       PolynomialDivision replacement = (PolynomialDivision)hypersphericalPoint.R;
       PolynomialDivision result = source;
 
-      ReadOnlyArray<Number> cd = cartesianPoint.Coordinates.GetInternalEnumerable().Reverse().ToArray();
+      ReadOnlyArray<Number> cd = cartesianPoint.Coordinates.AsList().Reverse().ToArray();
       ReadOnlyArray<Number> ad = hypersphericalPoint.Angles.GetInternalEnumerable().Reverse().ToArray();
       for (ushort i = 0; i < ad.Length; ++i)
       {

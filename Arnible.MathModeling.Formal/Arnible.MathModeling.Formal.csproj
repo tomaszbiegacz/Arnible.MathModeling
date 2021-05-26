@@ -88,7 +88,6 @@
       <Link>Geometry\HypersphericalDirectionOnRectangularView.cs</Link>
     </Compile>
     <Compile Include="..\Arnible.MathModeling\INumberRangeDomain.cs" Link="INumberRangeDomain.cs" />
-    <Compile Include="..\Arnible.MathModeling\Geometry\NumberVector.cs" Link="Geometry\NumberVector.cs" />
     <Compile Include="..\Arnible.MathModeling\Linq\Algebra\AddExtensions.cs">
       <Link>Linq\Algebra\AddExtensions.cs</Link>
     </Compile>

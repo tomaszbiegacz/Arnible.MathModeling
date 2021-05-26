@@ -8,25 +8,16 @@ namespace Arnible.MathModeling.Geometry
   public static class INumberRangeDomainExtensions
   {
     //
-    // Validate
-    //
-    
-    public static void Validate(this INumberRangeDomain domain, NumberVector value)
-    {
-      domain.Validate(value.GetInternalEnumerable());
-    }
-    
-    //
     // IsValidTranslation
     //
     
     public static bool IsValidTranslation(
       this INumberRangeDomain domain, 
-      in NumberVector value, 
-      in NumberVector delta)
+      in ReadOnlyArray<Number> value, 
+      in ReadOnlyArray<Number> delta)
     {
-      return value.GetInternalEnumerable().ZipValue(
-        col2: delta.GetInternalEnumerable(), 
+      return value.AsList().ZipValue(
+        col2: delta.AsList(), 
         merge: (v, t) => Arnible.MathModeling.INumberRangeDomainExtensions.IsValidTranslation(
           domain,
           v ?? 0, 
@@ -58,9 +49,9 @@ namespace Arnible.MathModeling.Geometry
       HypersphericalCoordinate value,
       HypersphericalAngleTranslationVector delta)
     {
-      domain.Validate(value.ToCartesianView().Coordinates);
-      NumberVector coordinates = delta.Translate(value).ToCartesianView().Coordinates;
-      return coordinates.AllWithDefault(v => domain.IsValid(v));
+      domain.Validate(value.ToCartesianView().Coordinates.AsList());
+      var coordinates = delta.Translate(value).ToCartesianView().Coordinates;
+      return coordinates.AsList().AllWithDefault(v => domain.IsValid(v));
     }
 
     //
@@ -72,7 +63,7 @@ namespace Arnible.MathModeling.Geometry
       HypersphericalCoordinate value,
       HypersphericalAngleTranslationVector delta)
     {
-      domain.Validate(value.ToCartesianView().Coordinates);
+      domain.Validate(value.ToCartesianView().Coordinates.AsList());
       IReadOnlyList<ushort> nonZeroAngles = LinqEnumerable.RangeUshort(0, delta.Length)
         .Where(i => delta[i] != 0)
         .ToArray();

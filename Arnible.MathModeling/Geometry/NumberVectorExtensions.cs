@@ -6,26 +6,16 @@ namespace Arnible.MathModeling.Geometry
 {
   public static class NumberVectorExtensions
   {
-    public static NumberVector ToVector(this IEnumerable<Number> numbers)
-    {
-      return NumberVector.Create(numbers);
-    }
-
-    public static NumberVector ToVector(this IEnumerable<double> numbers)
-    {
-      return numbers.Select(v => (Number)v).ToVector();
-    }
-
-    private static (NumberVector, uint) SumWithCount(IEnumerable<NumberVector> vectors)
+    private static (Number[], uint) SumWithCount(IEnumerable<ReadOnlyArray<Number>> vectors)
     {
       List<Number>? result = null;
       uint itemsCount = 0;
-      foreach (NumberVector item in vectors)
+      foreach (ReadOnlyArray<Number> item in vectors)
       {
         itemsCount++;
         if (result == null)
         {
-          result = new List<Number>(item.GetInternalEnumerable());
+          result = new List<Number>(item.AsList());
         }
         else
         {
@@ -45,19 +35,31 @@ namespace Arnible.MathModeling.Geometry
           }
         }
       }
-      return (result?.ToVector() ?? default, itemsCount);
+      return (result?.ToArray() ?? new Number[0], itemsCount);
     }
 
-    public static NumberVector Sum(this IEnumerable<NumberVector> vectors)
+    public static ReadOnlyArray<Number> Sum(this IEnumerable<ReadOnlyArray<Number>> vectors)
     {
-      (NumberVector sum, _) = SumWithCount(vectors);
+      (Number[] sum, _) = SumWithCount(vectors);
       return sum;
     }
 
-    public static NumberVector Average(this IEnumerable<NumberVector> vectors)
+    public static ReadOnlyArray<Number> Average(this IEnumerable<ReadOnlyArray<Number>> vectors)
     {
-      (NumberVector sum, var count) = SumWithCount(vectors);
-      return sum / count;
+      (Number[] sum, var count) = SumWithCount(vectors);
+      return sum.Select(v => v / count).ToArray();
+    }
+    
+    public static Number GetOrDefault(this ReadOnlyArray<Number> src, ushort pos)
+    {
+      if (pos >= src.Length)
+      {
+        return 0;
+      }
+      else
+      {
+        return src[pos];
+      }
     }
   }
 }

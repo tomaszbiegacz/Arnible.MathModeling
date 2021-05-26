@@ -12,7 +12,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void DerivativeByR()
     {
-      CartesianCoordinate cartesianPoint = new NumberVector(x, y, z);
+      CartesianCoordinate cartesianPoint = new Number[] {x, y, z};
       var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(θ, φ));
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 

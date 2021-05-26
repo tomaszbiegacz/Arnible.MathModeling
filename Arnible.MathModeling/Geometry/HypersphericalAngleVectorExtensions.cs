@@ -10,11 +10,6 @@ namespace Arnible.MathModeling.Geometry
     {
       return HypersphericalAngleVector.Create(numbers);
     }
-    
-    public static HypersphericalAngleVector ToAngleVector(this NumberVector numbers)
-    {
-      return numbers.GetInternalEnumerable().ToAngleVector();
-    }
 
     public static HypersphericalAngleVector ToAngleVector(this IEnumerable<double> numbers)
     {
@@ -23,7 +18,7 @@ namespace Arnible.MathModeling.Geometry
 
     public static HypersphericalAngleVector Average(this IEnumerable<HypersphericalAngleVector> angles)
     {
-      return angles.Select(v => (NumberVector)v).Average().GetInternalEnumerable().ToAngleVector();
+      return new HypersphericalAngleVector(angles.Select(a => a.AsArray()).Average());
     }
     
     //

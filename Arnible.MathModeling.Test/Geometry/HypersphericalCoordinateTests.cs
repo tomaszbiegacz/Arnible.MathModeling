@@ -68,7 +68,7 @@ namespace Arnible.MathModeling.Geometry.Test
       {
         var axisCc = new HypersphericalCoordinate(hc.R, cartesianCoordinatesAngles[pos]).ToCartesianView();
         axisCc.Coordinates[pos].AssertIsEqualTo(hc.R);
-        axisCc.Coordinates.GetInternalEnumerable().Count(v => v != 0).AssertIsEqualTo(1u);
+        axisCc.Coordinates.AsList().Count(v => v != 0).AssertIsEqualTo(1u);
       }
     }
 

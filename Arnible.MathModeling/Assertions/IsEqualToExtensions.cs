@@ -6,10 +6,7 @@ namespace Arnible.Assertions
   {
     public static void AssertIsEqualTo(in this Number actual, double expected)
     {
-      if(actual != expected)
-      {
-        throw new AssertException($"Expected {expected} got {actual}");
-      }
+      actual.AssertIsEqualTo((Number)expected);
     }
   }
 }

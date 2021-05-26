@@ -5,7 +5,7 @@ namespace Arnible.MathModeling.Geometry
 {
   interface ICartesianCoordinate
   {
-    NumberVector Coordinates { get; }
+    ReadOnlyArray<Number> Coordinates { get; }
   }
 
   public readonly struct CartesianCoordinate : 
@@ -25,34 +25,39 @@ namespace Arnible.MathModeling.Geometry
       return new CartesianCoordinate(coordinates);
     }
 
-    public NumberVector Coordinates { get; }
+    public ReadOnlyArray<Number> Coordinates { get; }
 
-    private CartesianCoordinate(in NumberVector coordinates)
+    private CartesianCoordinate(in ReadOnlyArray<Number> coordinates)
     {
       Coordinates = coordinates;
     }
 
     public CartesianCoordinate(params Number[] args)
-      : this(args.ToVector())
+      : this((ReadOnlyArray<Number>)args)
     {
       // intentionally empty
     }
     
     public static implicit operator CartesianCoordinate(in RectangularCoordinate rc)
     {
-      return new CartesianCoordinate(new[] { rc.X, rc.Y }.ToVector());
+      return new CartesianCoordinate(new[] { rc.X, rc.Y });
     }
 
-    public static implicit operator CartesianCoordinate(in ReadOnlyArray<Number> rc)
+    public static implicit operator CartesianCoordinate(Number[] rc)
     {
-      return new CartesianCoordinate(rc.AsList().ToVector());
+      return new CartesianCoordinate(rc);
     }
-
-    public static implicit operator CartesianCoordinate(in NumberVector rc)
+    
+    public static implicit operator CartesianCoordinate(double[] rc)
     {
-      return new CartesianCoordinate(in rc);
+      return new CartesianCoordinate(rc.Select(v => (Number)v).ToArray());
     }
-
+    
+    public static implicit operator CartesianCoordinate(ReadOnlyArray<Number> rc)
+    {
+      return new CartesianCoordinate(rc);
+    }
+    
     public bool Equals(in CartesianCoordinate other)
     {
       return other.Coordinates == Coordinates;
@@ -96,7 +101,8 @@ namespace Arnible.MathModeling.Geometry
 
     public CartesianCoordinate AddDimension()
     {
-      return new CartesianCoordinate(Coordinates.GetInternalEnumerable().Append(0).ToVector());
+      var coordinates = Coordinates.AsList().Append(0).ToArray();
+      return new CartesianCoordinate(coordinates);
     }    
   }
 }

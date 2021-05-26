@@ -1,4 +1,5 @@
 using Arnible.Linq;
+using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -16,43 +17,32 @@ namespace Arnible.MathModeling.Geometry
     
     private static Number GetValidTranslationRatio(
       INumberRangeDomain domain,
-      in NumberVector value,
-      in NumberVector delta)
+      in ReadOnlyArray<Number> value,
+      in ReadOnlyArray<Number> delta)
     {
-      return value.GetInternalEnumerable().ZipValue(
-        col2: delta.GetInternalEnumerable(), 
+      return value.AsList().ZipValue(
+        col2: delta.AsList(), 
         merge: (v, t) => domain.GetValidTranslationRatio(v ?? 0, t ?? 0)).MinDefensive();
     }
     
     public static Number? GetMaximumValidTranslationRatio(
       this INumberRangeDomain domain,
       ReadOnlyArray<Number> value,
-      in NumberVector transaction)
+      in ReadOnlyArray<Number> transaction)
     {
       return value.AsList().ZipValue(
-        col2: transaction.GetInternalEnumerable(), 
+        col2: transaction.AsList(), 
         merge: (v, t) => domain.GetMaximumValidTranslationRatio(v ?? 0, t ?? 0)
       ).MinOrNone();
     }
 
-    public static NumberVector GetValidTranslation(
+    public static ReadOnlyArray<Number> GetValidTranslation(
       this INumberRangeDomain domain,
-      in NumberVector value,
-      in NumberVector delta)
+      in ReadOnlyArray<Number> value,
+      in ReadOnlyArray<Number> delta)
     {
       Number ratio = GetValidTranslationRatio(domain, in value, in delta);
-      if (ratio == 0)
-      {
-        return default;
-      }
-      else if (ratio == 1)
-      {
-        return delta;
-      }
-      else
-      {
-        return ratio * delta;
-      }
+      return delta.AsList().Multiply(ratio);
     }
   }
 }

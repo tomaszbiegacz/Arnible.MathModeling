@@ -49,16 +49,16 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void Vector_IsValid_True()
     {
-      NumberVector src = new NumberVector(0.1, 0.2, 0.3);
-      NumberVector delta = new NumberVector(0.2, 0.3);
+      var src = new Number[] { 0.1, 0.2, 0.3 };
+      var delta = new Number[] {0.2, 0.3};
       _range.IsValidTranslation(src, delta).AssertIsTrue();
     }
 
     [Fact]
     public void Vector_IsValid_False()
     {
-      NumberVector src = new NumberVector(0.1, 0.2, 0.3);
-      NumberVector delta = new NumberVector(0.2, 0.9);
+      var src = new Number[] {0.1, 0.2, 0.3};
+      var delta = new Number[] {0.2, 0.9};
       _range.IsValidTranslation(src, delta).AssertIsFalse();
     }
 
@@ -89,29 +89,29 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void GetValidTranslation_Passthrough()
     {
-      var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.2), new NumberVector(0.2, 0.3));
-      translation.AssertIsEqualTo(new NumberVector(0.2, 0.3));
+      var translation = _range.GetValidTranslation(new Number[] { 0.5, 0.2 }, new Number[] {0.2, 0.3});
+      translation.AssertIsEqualTo(new Number[] {0.2, 0.3});
     }
 
     [Fact]
     public void GetValidTranslation_PassthroughDefault()
     {
-      var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.2), default);
+      var translation = _range.GetValidTranslation(new Number[] {0.5, 0.2}, default);
       translation.AssertIsEqualTo(default);
     }
 
     [Fact]
     public void GetValidTranslation_Default()
     {
-      var translation = _range.GetValidTranslation(new NumberVector(1, 0.2), new NumberVector(0.2, 0.3));
-      translation.AssertIsEqualTo(0);
+      var translation = _range.GetValidTranslation(new Number[] {1, 0.2}, new Number[] {0.2, 0.3});
+      translation.AssertIsEqualTo(new Number[] { 0, 0 });
     }
 
     [Fact]
     public void GetValidTranslation_Half()
     {
-      var translation = _range.GetValidTranslation(new NumberVector(0.5, 0.8), new NumberVector(0.2, 0.4));
-      translation.AssertIsEqualTo(new NumberVector(0.1, 0.2));
+      var translation = _range.GetValidTranslation(new Number[] {0.5, 0.8}, new Number[] {0.2, 0.4});
+      translation.AssertIsEqualTo(new Number[] {0.1, 0.2});
     }
 
     [Fact]
@@ -180,7 +180,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {1, 0.2, 0.1}, 
-        transaction: new NumberVector(0.2, 0.3));
+        transaction: new Number[] {0.2, 0.3});
       translation.AssertIsEqualTo(0);
     }
     
@@ -189,7 +189,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {1, 0.2, 0.1}, 
-        transaction: new NumberVector(0, 0));
+        transaction: new Number[] {0, 0});
       translation.AssertIsNull();
     }
     
@@ -198,7 +198,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {0, 0, 0.1}, 
-        transaction: new NumberVector(0.2, 0.1));
+        transaction: new Number[] {0.2, 0.1});
       translation.AssertIsEqualTo(5);
     }
     
@@ -207,7 +207,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] { 0.2, 0, 0.1 }, 
-        transaction: new NumberVector( -2.4, 0.1 ));
+        transaction: new Number[] { -2.4, 0.1 });
       translation.AssertIsEqualTo(0.5);
     }
 

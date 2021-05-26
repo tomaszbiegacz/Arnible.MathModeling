@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Arnible.Assertions;
+using Arnible.Linq;
 using Arnible.Linq.Algebra;
 using Arnible.MathModeling.Algebra;
 
@@ -31,16 +33,16 @@ namespace Arnible.MathModeling.Geometry
 
     public static HypersphericalCoordinate ToSpherical(in this CartesianCoordinate p)
     {
-      NumberVector pc = p.Coordinates;
-      NumberVector pc2 = pc.Transform(c => c * c);
+      ReadOnlyArray<Number> pc = p.Coordinates;
+      ReadOnlyArray<Number> pc2 = pc.AsList().Select(c => c * c).ToArray();
 
-      Number r = Sqrt(pc2.SumDefensive());
+      Number r = Sqrt(pc2.AsList().SumDefensive());
       if (r > 0)
       {
         var angles = new List<Number>();
         for (ushort i = p.DimensionsCount; i > 2; i--)
         {
-          Number radius2 = pc2.TakeExactly(i).SumDefensive();
+          Number radius2 = pc2.AsList().TakeExactly(i).SumDefensive();
           if (radius2 == 0)
           {
             angles.Add(0);
@@ -59,7 +61,7 @@ namespace Arnible.MathModeling.Geometry
       }
       else
       {
-        return default;
+        return new HypersphericalCoordinate(0, new HypersphericalAngleVector(0));
       }
     }
 
@@ -70,25 +72,18 @@ namespace Arnible.MathModeling.Geometry
 
     public static Number VectorLength(in this CartesianCoordinate point)
     {
-      return Sqrt(point.Coordinates.Select(d => d * d).SumDefensive());
+      return Sqrt(point.Coordinates.AsList().Select(d => d * d).SumDefensive());
     }
 
-    /// <summary>
-    /// Calculate derivative ratios by moving along the vector
-    /// </summary>
-    public static NumberVector GetDirectionDerivativeRatios(in this NumberVector direction)
-    {
-      CartesianCoordinate point = direction;
-      return point.ToSpherical().Angles.GetCartesianAxisViewsRatios();
-    }
-    
     /// <summary>
     /// Calculate derivative ratios by moving along the array vector
     /// </summary>
     public static ReadOnlyArray<Number> GetDirectionDerivativeRatios(in this ReadOnlyArray<Number> direction)
     {
       CartesianCoordinate point = direction;
-      return point.ToSpherical().Angles.GetCartesianAxisViewsRatios().ToArray(direction.Length);
+      Number[] result = point.ToSpherical().Angles.GetCartesianAxisViewsRatios();
+      result.Length.AssertIsEqualTo(direction.Length);
+      return result;
     }
   }
 }
