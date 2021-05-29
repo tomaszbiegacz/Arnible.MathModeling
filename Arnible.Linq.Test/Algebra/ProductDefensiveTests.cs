@@ -28,7 +28,7 @@ namespace Arnible.Linq.Algebra.Test
     {
       try
       {
-        LinqArray<double>.Empty.ProductWithDefault();
+        LinqArray<double>.Empty.ProductDefensive();
         throw new Exception("I should not get here");
       }
       catch(ArgumentException)
