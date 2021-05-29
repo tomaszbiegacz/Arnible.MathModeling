@@ -48,18 +48,7 @@ namespace Arnible.Linq
     
     public static T? SingleOrNone<T>(in this Span<T> source) where T: struct
     {
-      if(source.Length > 1)
-      {
-        throw new ArgumentException(nameof(source));
-      }
-      if(source.Length > 0)
-      {
-        return source[0];
-      }
-      else
-      {
-        return null;
-      }
+      return SingleOrNone((ReadOnlySpan<T>)source);
     }
     
     public static T? SingleOrNull<T>(this IEnumerable<T> source) where T: class

@@ -65,15 +65,7 @@ namespace Arnible.Linq
     
     public static ushort Count<T>(in this Span<T> src, FuncIn<T, bool> func)
     {
-      ushort count = 0;
-      foreach(ref readonly T item in src)
-      {
-        if(func(in item))
-        {
-          count++;
-        }
-      }
-      return count;
+      return Count((ReadOnlySpan<T>)src, func);
     }
   }
 }

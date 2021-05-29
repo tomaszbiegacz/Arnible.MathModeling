@@ -1,4 +1,5 @@
 ﻿using System;
+using Arnible.Linq.Algebra;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -89,6 +90,14 @@ namespace Arnible.MathModeling.Geometry
       var angleDelta = HypersphericalAngleVector.CreateOrthogonalDirection(anglePos, in delta);
       var angles = Angles + angleDelta;
       return new HypersphericalCoordinate(R, in angles);
+    }
+    
+    public HypersphericalCoordinate Translate(in Span<Number> translation)
+    {
+      translation.AddInPlace(Angles.Span);
+      
+      // TODO: remove array creation
+      return new HypersphericalCoordinate(R, new HypersphericalAngleVector(translation.ToArray()));
     }
   }
 }

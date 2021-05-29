@@ -1,4 +1,5 @@
-﻿using Arnible.Assertions;
+﻿using System;
+using Arnible.Assertions;
 using Arnible.Linq;
 using Arnible.Linq.Algebra;
 using Arnible.MathModeling.Algebra;
@@ -57,7 +58,6 @@ namespace Arnible.MathModeling.Geometry.Test
     }
 
     [Theory]
-    [InlineData(1u)]
     [InlineData(2u)]
     [InlineData(3u)]
     [InlineData(4u)]
@@ -67,12 +67,13 @@ namespace Arnible.MathModeling.Geometry.Test
     [InlineData(8u)]
     public void GetIdentityVector(ushort dimensionsCount)
     {
-      Number[] vector = HypersphericalCoordinateOnAxisView.GetIdentityVector(dimensionsCount);
+      Span<Number> vector = stackalloc Number[dimensionsCount];
+      HypersphericalCoordinateOnAxisView.GetIdentityVector(in vector);
       vector.Length.AssertIsEqualTo(dimensionsCount);
 
       Number ratio = HypersphericalCoordinateOnAxisView.GetIdentityVectorRatio(dimensionsCount);
-      vector.AssertAll(v => v == ratio);
-      vector.Select(v => v * v).SumDefensive().AssertIsEqualTo(1d);
+      vector.AssertAll((in Number v) => v == ratio);
+      vector.SumDefensive((in Number v) => v * v).AssertIsEqualTo(1d);
     }
   }
 }

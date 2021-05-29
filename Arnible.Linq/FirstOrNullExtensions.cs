@@ -28,14 +28,7 @@ namespace Arnible.Linq
     
     public static T? FirstOrNone<T>(in this Span<T> source) where T: struct
     {
-      if(source.Length > 0)
-      {
-        return source[0];
-      }
-      else
-      {
-        return null;
-      }
+      return FirstOrNone((ReadOnlySpan<T>)source);
     }
     
     public static T? FirstOrNull<T>(this IEnumerable<T> source) where T: class

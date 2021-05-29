@@ -42,9 +42,9 @@ namespace Arnible.MathModeling.Analysis.Learning
           Parent.Function,
           Parent.ErrorMeasure,
           Parameters);
-        itemGradient.Multiply(errorDerivative.First);
+        itemGradient.MultiplyInPlace(errorDerivative.First);
         
-        output.Add(itemGradient);
+        output.AddInPlace(itemGradient);
       }
     }
     

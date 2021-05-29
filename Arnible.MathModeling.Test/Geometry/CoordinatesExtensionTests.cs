@@ -100,35 +100,40 @@ namespace Arnible.MathModeling.Geometry.Test
       var cc1 = cc.Append(0).ToArray();
 
       var v = sc.AddDimension();
-      v.ToCartesianView().Coordinates.AssertSequenceEqualsTo(cc1.ToArray());
+      v.ToCartesianView().Coordinates.AsList().AssertSequenceEqualsTo(cc1.ToArray());
       ((HypersphericalCoordinate)cc1.ToSphericalView()).AssertIsEqualTo(sc.AddDimension());
     }
     
     [Fact]
     public void GetDirectionDerivativeRatios_Identity_2()
     {
-      Number[] c = new Number[] { 1, 1 };
-      var actual = c.GetDirectionDerivativeRatios();
+      ReadOnlySpan<Number> c = new Number[] { 1, 1 };
+      Span<Number> actual = stackalloc Number[2];
+      c.GetDirectionDerivativeRatios(in actual);
 
-      ReadOnlyArray<Number> expected = HypersphericalAngleVector.GetIdentityVector(2).GetCartesianAxisViewsRatios();
-      expected.AssertIsEqualTo(actual);
+      Span<Number> expected = stackalloc Number[2];
+      HypersphericalAngleVector.GetIdentityVector(2).GetCartesianAxisViewsRatios(in expected);
+      expected.AssertSequenceEqualsTo(actual);
     }
     
     [Fact]
     public void GetDirectionDerivativeRatios_Identity_3()
     {
-      Number[] c = new Number[] {4, 4, 4};
-      var actual = c.GetDirectionDerivativeRatios();
+      Span<Number> c = new Number[] {4, 4, 4};
+      Span<Number> actual = stackalloc Number[3];
+      c.GetDirectionDerivativeRatios(in actual);
 
-      ReadOnlyArray<Number> expected = HypersphericalAngleVector.GetIdentityVector(3).GetCartesianAxisViewsRatios();
-      expected.AssertIsEqualTo(actual);
+      Span<Number> expected = stackalloc Number[3];
+      HypersphericalAngleVector.GetIdentityVector(3).GetCartesianAxisViewsRatios(in expected);
+      expected.AssertSequenceEqualsTo(actual);
     }
     
     [Fact]
     public void GetDirectionDerivativeRatios_Random()
     {
       Number[] c = new Number[] { 1, 2, -3 };
-      var radios = c.GetDirectionDerivativeRatios();
+      Span<Number> radios = stackalloc Number[3];
+      c.GetDirectionDerivativeRatios(in radios);
       3.AssertIsEqualTo(radios.Length);
       
       for (ushort i = 0; i < 2; ++i)
@@ -139,7 +144,7 @@ namespace Arnible.MathModeling.Geometry.Test
       radios[2].AssertIsGreaterThan(-1);
       radios[2].AssertIsLessThan(0);
       
-      radios.Select(r => r*r).SumDefensive().AssertIsEqualTo(1);
+      radios.SumDefensive((in Number r) => r*r).AssertIsEqualTo(1);
     }
   }
 }

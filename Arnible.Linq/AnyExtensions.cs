@@ -19,14 +19,7 @@ namespace Arnible.Linq
 
     public static bool Any<T>(this IEnumerable<T> source, Func<T, bool> predicate)
     {
-      foreach (T item in source)
-      {
-        if (predicate(item))
-        {
-          return true;
-        }
-      }
-      return false;
+      return Any(source.Select(predicate));
     }
   }
 }

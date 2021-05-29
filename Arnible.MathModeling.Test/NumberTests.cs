@@ -292,5 +292,13 @@ namespace Arnible.MathModeling.Test
       Number val = 1;
       val.Equals(new int[0]).AssertIsFalse();
     }
+    
+    [Fact]
+    public void ToNumberArray()
+    {
+      double[] src = { 1d, 2d, 3d };
+      Number[] expected = { 1d, 2d, 3d };
+      src.ToNumberArray().AssertSequenceEqualsTo(expected);
+    }
   }
 }

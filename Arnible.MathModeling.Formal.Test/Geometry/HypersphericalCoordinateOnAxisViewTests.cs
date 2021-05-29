@@ -1,4 +1,5 @@
-﻿using Arnible.Assertions;
+﻿using System;
+using Arnible.Assertions;
 using Arnible.Linq;
 using Arnible.MathModeling.Algebra.Polynomials;
 using Xunit;
@@ -16,12 +17,12 @@ namespace Arnible.MathModeling.Geometry.Test
       var sphericalPoint = new HypersphericalCoordinate(r, new HypersphericalAngleVector(θ, φ));
       HypersphericalCoordinateOnAxisView view = sphericalPoint.ToCartesianView();
 
-      var derivatives = view.DerivativeByR().ToArray();
-      IsEqualToExtensions.AssertIsEqualTo(cartesianPoint.Length, derivatives.Length);
+      Span<Number> derivatives = new Number[cartesianPoint.Length];
+      view.DerivativeByR(in derivatives);
       for (ushort dimensionPos = 0; dimensionPos < cartesianPoint.Length; ++dimensionPos)
       {
         var symbol = (PolynomialDivision)cartesianPoint[dimensionPos];
-        IsEqualToExtensions.AssertIsEqualTo(symbol.ToSpherical(cartesianPoint, sphericalPoint), r * derivatives[dimensionPos].First);
+        (r * derivatives[dimensionPos]).AssertIsEqualTo(symbol.ToSpherical(cartesianPoint, sphericalPoint));
       }
     }
 

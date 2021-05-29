@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Arnible.Assertions;
 using Arnible.Linq;
 using Arnible.MathModeling.Algebra;
 
@@ -9,11 +10,7 @@ namespace Arnible.MathModeling.Geometry
   /// <summary>
   /// Hyperspherical angle vector, where first coordinate angle range over [-π, π] and others range over [-π/2, π/2].
   /// </summary>
-  [Serializable]
-  public readonly struct HypersphericalAngleVector : 
-    IEquatable<HypersphericalAngleVector>, 
-    IEquatable<Number>,
-    IAlgebraGroup<HypersphericalAngleVector>
+  public readonly struct HypersphericalAngleVector
   {
     static readonly HypersphericalAngleVector _zero = 0;
     
@@ -111,6 +108,14 @@ namespace Arnible.MathModeling.Geometry
 
     public IEnumerator<Number> GetEnumerator() => _angles.GetEnumerator();
     
+    public ReadOnlySpan<Number> Span
+    {
+      get
+      {
+        return _angles;
+      }
+    }
+    
 
     //
     // IEquatable
@@ -190,19 +195,18 @@ namespace Arnible.MathModeling.Geometry
 
     public HypersphericalAngleVector Mirror => new HypersphericalAngleVector(MirrorAngles.ToArray());
 
-    public Number[] GetCartesianAxisViewsRatios()
+    public void GetCartesianAxisViewsRatios(in Span<Number> cartesianDimensions)
     {
-      var cartesianDimensions = new List<Number>();
+      cartesianDimensions.Length.AssertIsEqualTo(_angles.Length + 1);
+
       Number replacement = 1;
-      foreach (var angle in GetInternalEnumerable().Reverse())
+      for(ushort anglePos = 0; anglePos < _angles.Length; ++anglePos)
       {
-        cartesianDimensions.Add(replacement * NumberMath.Sin(angle));
+        Number angle = _angles[_angles.Length - 1 - anglePos];
+        cartesianDimensions[_angles.Length - anglePos] = replacement * NumberMath.Sin(angle);
         replacement *= NumberMath.Cos(angle);
       }
-      cartesianDimensions.Add(replacement);
-      cartesianDimensions.Reverse();
-
-      return cartesianDimensions.ToArray();
+      cartesianDimensions[0] = replacement;
     }
 
     //
@@ -257,11 +261,5 @@ namespace Arnible.MathModeling.Geometry
     {
       return new HypersphericalAngleVector(ScaleAngles(b, a).ToArray());
     }
-    
-    public ref readonly HypersphericalAngleVector Zero => ref _zero;
-
-    public HypersphericalAngleVector Add(in HypersphericalAngleVector component) => this + component;
-    
-    public HypersphericalAngleVector Inverse() => throw new NotImplementedException();
   }
 }

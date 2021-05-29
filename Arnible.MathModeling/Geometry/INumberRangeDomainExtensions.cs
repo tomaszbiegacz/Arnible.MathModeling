@@ -1,113 +1,52 @@
 ﻿using Arnible.MathModeling.Algebra;
 using System;
-using System.Collections.Generic;
+using Arnible.Assertions;
 using Arnible.Linq;
 
 namespace Arnible.MathModeling.Geometry
 {
   public static class INumberRangeDomainExtensions
   {
-    //
-    // IsValidTranslation
-    //
-    
-    public static bool IsValidTranslation(
-      this INumberRangeDomain domain, 
-      in ReadOnlyArray<Number> value, 
-      in ReadOnlyArray<Number> delta)
-    {
-      return value.AsList().ZipValue(
-        col2: delta.AsList(), 
-        merge: (v, t) => Arnible.MathModeling.INumberRangeDomainExtensions.IsValidTranslation(
-          domain,
-          v ?? 0, 
-          t ?? 0)).AllWithDefault();
-    }
-
     public static bool IsValidTranslation(
       this INumberRangeDomain domain,
-      ReadOnlyArray<Number> value,
-      ReadOnlyArray<Number> delta)
+      in HypersphericalCoordinate value,
+      in ReadOnlySpan<Number> delta)
     {
-      if (delta.Length > value.Length)
-      {
-        return false;
-      }
-      else
-      {
-        return value.AsList().ZipValue(
-          col2: delta.AsList(), 
-          merge: (v, t) => Arnible.MathModeling.INumberRangeDomainExtensions.IsValidTranslation(
-            domain,
-            v ?? throw new ArgumentException(nameof(value)), 
-            t ?? 0)).AllWithDefault();
-      }
-    }
+      Span<Number> translation = stackalloc Number[delta.Length];
+      delta.CopyTo(translation);
 
-    public static bool IsValidTranslation(
-      this INumberRangeDomain domain,
-      HypersphericalCoordinate value,
-      HypersphericalAngleTranslationVector delta)
-    {
-      domain.Validate(value.ToCartesianView().Coordinates.AsList());
-      var coordinates = delta.Translate(value).ToCartesianView().Coordinates;
+      var coordinates = value.Translate(in translation).ToCartesianView().Coordinates;
       return coordinates.AsList().AllWithDefault(v => domain.IsValid(v));
     }
-
-    //
-    // GetValidTranslation
-    //    
-
-    public static HypersphericalAngleTranslationVector GetValidTranslation(
+    
+    public static void GetValidTranslationForLastAngle(
       this INumberRangeDomain domain,
-      HypersphericalCoordinate value,
-      HypersphericalAngleTranslationVector delta)
+      in HypersphericalCoordinate value,
+      in Span<Number> delta)
     {
-      domain.Validate(value.ToCartesianView().Coordinates.AsList());
-      IReadOnlyList<ushort> nonZeroAngles = LinqEnumerable.RangeUshort(0, delta.Length)
-        .Where(i => delta[i] != 0)
-        .ToArray();
-      
-      if (nonZeroAngles.Count != 1)
-      {
-        throw new ArgumentException("Exactly one angle has to be non-negative. Other options are not yet supported.");
-      }
-      if (nonZeroAngles[0] != delta.Length - 1)
-      {
-        throw new InvalidOperationException($"Something went wrong, only last angle should be not empty, in {delta}");
-      }
+      value.Angles.Length.AssertIsEqualTo(delta.Length);
+      delta.Count((in Number v) => v != 0).AssertIsEqualTo(1);
+      delta[^1].AssertIsNotEqualTo(0, "Something went wrong, only last angle should be not empty");
 
       ushort anglePos = (ushort)(delta.Length - 1);
       Number ratio = domain.GetValidTranslationRatioForLastAngle(
         radius: value.R,
-        currentAngle: value.Angles.GetOrDefault(anglePos),
+        currentAngle: value.Angles[anglePos],
         angleDelta: in delta[anglePos]);
 
-      if (ratio == 0)
-      {
-        return default;
-      }
-      else if (ratio == 1)
-      {
-        return delta;
-      }
-      else
-      {
-        return ratio * delta;
-      }
+      delta.MultiplyInPlace(ratio);
     }
-
-    //
-    // Translate
-    //
-
+    
     public static HypersphericalCoordinate Translate(
       this INumberRangeDomain domain,
-      HypersphericalCoordinate value,
-      HypersphericalAngleTranslationVector delta)
+      in HypersphericalCoordinate value,
+      in ReadOnlySpan<Number> delta)
     {
-      HypersphericalAngleTranslationVector tr = domain.GetValidTranslation(value, delta);
-      return new HypersphericalCoordinate(value.R, tr.Translate(value.Angles));
+      Span<Number> validTranslation = stackalloc Number[delta.Length];
+      delta.CopyTo(validTranslation);
+      domain.GetValidTranslationForLastAngle(value, in validTranslation);
+      
+      return value.Translate(in validTranslation);
     }
   }
 }

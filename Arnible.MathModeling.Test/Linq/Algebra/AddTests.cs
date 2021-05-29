@@ -29,7 +29,7 @@ namespace Arnible.Linq.Algebra.Tests
     {
       Span<Number> output = new Number[] { 1, 2 };
       ReadOnlySpan<Number> value = new Number[] { 3, 4 };
-      output.Add(in value);
+      output.AddInPlace(in value);
       output.AssertSequenceEqualsTo(new Number[] {4, 6});
     }
   }

@@ -7,7 +7,10 @@ namespace Arnible.Assertions
   {
     public static void AssertIsEmpty<T>(this IEnumerable<T> actual)
     {
-      AssertIsEmpty(actual.ToArray());
+      foreach(T _ in actual)
+      {
+        throw new AssertException($"Expected empty");
+      }
     }
     
     public static void AssertIsEmpty(this string actual)

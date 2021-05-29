@@ -13,30 +13,36 @@ namespace Arnible.MathModeling.Geometry.Test
     public void HypersphericalCoordinate_IsValidTranslation_ok()
     {
       HypersphericalCoordinate hc = new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.HalfRightAngle));
-      _range.IsValidTranslation(hc, new HypersphericalAngleTranslationVector(Angle.HalfRightAngle)).AssertIsTrue();
+      _range.IsValidTranslation(hc, new Number[] {Angle.HalfRightAngle}).AssertIsTrue();
     }
 
     [Fact]
     public void HypersphericalCoordinate_IsValidTranslation_false()
     {
       HypersphericalCoordinate hc = new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.HalfRightAngle));
-      _range.IsValidTranslation(hc, new HypersphericalAngleTranslationVector(Angle.RightAngle)).AssertIsFalse();
+      _range.IsValidTranslation(hc, new Number[] {Angle.RightAngle}).AssertIsFalse();
     }
 
     [Fact]
     public void HypersphericalCoordinate_GetValidTranslation_ok()
     {
       HypersphericalCoordinate hc = new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.HalfRightAngle));
-      var expected = new HypersphericalAngleTranslationVector(Angle.HalfRightAngle);
-      _range.GetValidTranslation(hc, expected).AssertIsEqualTo(expected);
+      ReadOnlySpan<Number> expected = new Number[] {Angle.HalfRightAngle};
+      
+      Span<Number> current = new Number[] {Angle.HalfRightAngle};
+      _range.GetValidTranslationForLastAngle(hc, in current);
+      current.AssertSequenceEqualsTo(expected);
     }
 
     [Fact]
     public void HypersphericalCoordinate_GetValidTranslation_fullRadius_cutAngle()
     {
       HypersphericalCoordinate hc = new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.HalfRightAngle));
-      var expected = new HypersphericalAngleTranslationVector(Angle.HalfRightAngle);
-      _range.GetValidTranslation(hc, new HypersphericalAngleTranslationVector(Angle.RightAngle)).AssertIsEqualTo(expected);
+      ReadOnlySpan<Number> expected = new Number[] {Angle.HalfRightAngle};
+      
+      Span<Number> current = new Number[] {Angle.RightAngle};
+      _range.GetValidTranslationForLastAngle(hc, in current);
+      current.AssertSequenceEqualsTo(expected);
     }
 
     [Fact]
@@ -44,22 +50,25 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       double r = 2 * Math.Sqrt(3) / 3;
       HypersphericalCoordinate hc = new HypersphericalCoordinate(r, new HypersphericalAngleVector(Angle.HalfRightAngle));
-      var expected = new HypersphericalAngleTranslationVector(Angle.HalfCycle / 2 / 6);
-      _range.GetValidTranslation(hc, new HypersphericalAngleTranslationVector(Angle.HalfRightAngle)).AssertIsEqualTo(expected);
+      ReadOnlySpan<Number> expected = new Number[] {Angle.HalfCycle / 2 / 6};
+      
+      Span<Number> current = new Number[] {Angle.HalfRightAngle};
+      _range.GetValidTranslationForLastAngle(hc, in current);
+      current.AssertSequenceEqualsTo(expected);
     }
 
     [Fact]
     public void HypersphericalCoordinate_Translate_ok()
     {
       HypersphericalCoordinate hc = new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.HalfRightAngle));
-      _range.Translate(hc, new HypersphericalAngleTranslationVector(Angle.HalfRightAngle)).AssertIsEqualTo(new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.RightAngle)));
+      _range.Translate(hc, new Number[] {Angle.HalfRightAngle}).AssertIsEqualTo(new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.RightAngle)));
     }
 
     [Fact]
     public void HypersphericalCoordinate_Translate_fullRadius_cutAngle()
     {
       HypersphericalCoordinate hc = new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.HalfRightAngle));
-      _range.Translate(hc, new HypersphericalAngleTranslationVector(Angle.RightAngle)).AssertIsEqualTo(new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.RightAngle)));
+      _range.Translate(hc, new Number[] {Angle.RightAngle}).AssertIsEqualTo(new HypersphericalCoordinate(1, new HypersphericalAngleVector(Angle.RightAngle)));
     }
 
     [Fact]
@@ -67,7 +76,7 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       double r = 2 * Math.Sqrt(3) / 3;
       HypersphericalCoordinate hc = new HypersphericalCoordinate(r, new HypersphericalAngleVector(Angle.HalfRightAngle));
-      _range.Translate(hc, new HypersphericalAngleTranslationVector(Angle.HalfRightAngle)).AssertIsEqualTo(new HypersphericalCoordinate(r, new HypersphericalAngleVector(Angle.HalfCycle / 3)));
+      _range.Translate(hc, new Number[] { Angle.HalfRightAngle}).AssertIsEqualTo(new HypersphericalCoordinate(r, new HypersphericalAngleVector(Angle.HalfCycle / 3)));
     }
   }
 }

@@ -73,16 +73,5 @@ namespace Arnible.MathModeling.Geometry
     {
       return Sqrt(point.Select(d => d * d).SumDefensive());
     }
-
-    /// <summary>
-    /// Calculate derivative ratios by moving along the array vector
-    /// </summary>
-    public static Number[] GetDirectionDerivativeRatios(
-      this IReadOnlyList<Number> direction)
-    {
-      Number[] result = direction.ToSpherical().Angles.GetCartesianAxisViewsRatios();
-      result.Length.AssertIsEqualTo(direction.Count);
-      return result;
-    }
   }
 }

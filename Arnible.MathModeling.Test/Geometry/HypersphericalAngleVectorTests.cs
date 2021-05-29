@@ -131,18 +131,11 @@ namespace Arnible.MathModeling.Geometry.Test
     }
 
     [Fact]
-    public void Sum_One()
-    {
-      var a = new HypersphericalAngleVector(π, π_2);
-      new[] { a }.SumDefensive().AssertIsEqualTo(a);
-    }
-
-    [Fact]
     public void Sum_Two()
     {
       var a = new HypersphericalAngleVector(π_4, π_4);
       var b = new HypersphericalAngleVector(π_2, -1 * π_4);
-      new[] { a, b }.SumDefensive().AssertIsEqualTo(new HypersphericalAngleVector(3 * π_4, 0));
+      (a + b).AssertIsEqualTo(new HypersphericalAngleVector(3 * π_4, 0));
     }
 
     [Fact]
@@ -187,20 +180,20 @@ namespace Arnible.MathModeling.Geometry.Test
       a.Length.AssertIsEqualTo(1);
       a[0].AssertIsEqualTo(π_4);
 
-      var radios = a.GetCartesianAxisViewsRatios();
-      radios.Length.AssertIsEqualTo(2);
+      Span<Number> radios = stackalloc Number[2];
+      a.GetCartesianAxisViewsRatios(in radios);
       radios[0].AssertIsEqualTo(Math.Sqrt(2) / 2);
       radios[1].AssertIsEqualTo(radios[0]);
     }
 
-    private static void IsIdentityRadiosVector(Number[] radios)
+    private static void IsIdentityRadiosVector(Span<Number> radios)
     {
       for (ushort i = 0; i < radios.Length; ++i)
       {
         radios[i].AssertIsGreaterEqualThan(0);
         radios[i].AssertIsLessEqualThan(1);
       }
-      radios.Select(r => r*r).SumDefensive().AssertIsEqualTo(1);
+      radios.SumDefensive((in Number r) => r*r).AssertIsEqualTo(1);
     }
     
     [Fact]
@@ -210,8 +203,8 @@ namespace Arnible.MathModeling.Geometry.Test
       a.Length.AssertIsEqualTo(2);
       a[0].AssertIsEqualTo(π_4);
 
-      var radios = a.GetCartesianAxisViewsRatios();
-      radios.Length.AssertIsEqualTo(3);
+      Span<Number> radios = stackalloc Number[3];
+      a.GetCartesianAxisViewsRatios(in radios);
       IsIdentityRadiosVector(radios);
     }
     
@@ -222,8 +215,8 @@ namespace Arnible.MathModeling.Geometry.Test
       a.Length.AssertIsEqualTo(3);
       a[0].AssertIsEqualTo(π_4);
 
-      var radios = a.GetCartesianAxisViewsRatios();
-      radios.Length.AssertIsEqualTo(4);
+      Span<Number> radios = stackalloc Number[4];
+      a.GetCartesianAxisViewsRatios(in radios);
       IsIdentityRadiosVector(radios);
     }
   }

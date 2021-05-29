@@ -15,9 +15,8 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       in ReadOnlySpan<Number> arguments,
       in ReadOnlySpan<Number> directionDerivativeRatios)
     {
-      arguments.Length
-        .AssertIsEqualTo(2)
-        .AssertIsEqualTo(directionDerivativeRatios.Length);
+      arguments.Length.AssertIsEqualTo(2);
+      directionDerivativeRatios.Length.AssertIsEqualTo(2);
       
       ref readonly Number x = ref arguments[0];
       ref readonly Number dx = ref directionDerivativeRatios[0];

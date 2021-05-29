@@ -51,12 +51,13 @@ namespace Arnible.MathModeling.Geometry.Test
       const double φ = Math.PI / 3;                           // x to r
       hc.Angles.Single().AssertIsEqualTo(φ);
 
-      var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
-      derrivatives.Length.AssertIsEqualTo(2);
-      derrivatives[0].First.AssertIsEqualTo(0.5);                 // x
-      derrivatives[1].First.AssertIsEqualTo(Math.Sqrt(3) / 2);    // y
+      var cv = hc.ToCartesianView(); 
+      Span<Number> derivatives = stackalloc Number[2];
+      cv.DerivativeByR(in derivatives);
+      derivatives[0].AssertIsEqualTo(0.5);                 // x
+      derivatives[1].AssertIsEqualTo(Math.Sqrt(3) / 2);    // y
 
-      hc.ToCartesianView().Coordinates.AssertIsEqualTo(cc);
+      cv.Coordinates.AssertIsEqualTo(cc);
       VerifyCartesianCoordinateAngle(hc, cc);
     }
 
@@ -86,11 +87,11 @@ namespace Arnible.MathModeling.Geometry.Test
       double φ = (double)hc.Angles[0];    // r to y
       double θ = (double)hc.Angles[1];    // r to xy
 
-      var derrivatives = hc.ToCartesianView().DerivativeByR().ToArray();
-      derrivatives.Length.AssertIsEqualTo(3);
-      derrivatives[0].First.AssertIsEqualTo(Math.Cos(θ) * Math.Cos(φ));   // x
-      derrivatives[1].First.AssertIsEqualTo(Math.Cos(θ) * Math.Sin(φ));   // y
-      derrivatives[2].First.AssertIsEqualTo(Math.Sin(θ));                 // z
+      Span<Number> derivatives = stackalloc Number[3];
+      hc.ToCartesianView().DerivativeByR(in derivatives);
+      derivatives[0].AssertIsEqualTo(Math.Cos(θ) * Math.Cos(φ));   // x
+      derivatives[1].AssertIsEqualTo(Math.Cos(θ) * Math.Sin(φ));   // y
+      derivatives[2].AssertIsEqualTo(Math.Sin(θ));                 // z
 
       hc.ToCartesianView().Coordinates.AssertIsEqualTo(cc);
       VerifyCartesianCoordinateAngle(hc, cc);
@@ -110,11 +111,11 @@ namespace Arnible.MathModeling.Geometry.Test
       hc.Angles[0].AssertIsEqualTo(φ);
       hc.Angles[1].AssertIsEqualTo(θ);
 
-      Derivative1Value[] derivatives = hc.ToCartesianView().DerivativeByR().ToArray();
-      derivatives.Length.AssertIsEqualTo(3);
-      derivatives[0].First.AssertIsEqualTo(Math.Sqrt(2) / 4);      // x
-      derivatives[1].First.AssertIsEqualTo(Math.Sqrt(2) / 4);      // y
-      derivatives[2].First.AssertIsEqualTo(Math.Sqrt(3) / 2);      // z
+      Span<Number> derivatives = stackalloc Number[3];
+      hc.ToCartesianView().DerivativeByR(in derivatives);
+      derivatives[0].AssertIsEqualTo(Math.Sqrt(2) / 4);      // x
+      derivatives[1].AssertIsEqualTo(Math.Sqrt(2) / 4);      // y
+      derivatives[2].AssertIsEqualTo(Math.Sqrt(3) / 2);      // z
 
       hc.ToCartesianView().Coordinates.AssertIsEqualTo(cc);
     }

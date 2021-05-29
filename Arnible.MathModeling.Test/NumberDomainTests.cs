@@ -1,3 +1,4 @@
+using System;
 using Arnible.Assertions;
 using Xunit;
 
@@ -40,7 +41,10 @@ namespace Arnible.MathModeling.Test
     [Fact]
     public void GetValidTranslationRatioForLastAngle()
     {
-      _domain.GetValidTranslationRatio(1000, 1001).AssertIsEqualTo(1);
+      _domain.GetValidTranslationRatioForLastAngle(
+        radius: 1,
+        currentAngle: 2,
+        angleDelta: 3).AssertIsEqualTo(3);
     }
     
     [Fact]

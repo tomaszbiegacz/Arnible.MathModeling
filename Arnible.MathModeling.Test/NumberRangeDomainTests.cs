@@ -50,7 +50,7 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Vector_IsValid_True()
     {
       var src = new Number[] { 0.1, 0.2, 0.3 };
-      var delta = new Number[] {0.2, 0.3};
+      var delta = new Number[] {0.2, 0.3, 0};
       _range.IsValidTranslation(src, delta).AssertIsTrue();
     }
 
@@ -58,7 +58,7 @@ namespace Arnible.MathModeling.Algebra.Test
     public void Vector_IsValid_False()
     {
       var src = new Number[] {0.1, 0.2, 0.3};
-      var delta = new Number[] {0.2, 0.9};
+      var delta = new Number[] {0.2, 0.9, 0};
       _range.IsValidTranslation(src, delta).AssertIsFalse();
     }
 
@@ -68,14 +68,6 @@ namespace Arnible.MathModeling.Algebra.Test
       var src = new Number[] {0.1, 0.2};
       var delta = new Number[] {0.2, 0.3};
       _range.IsValidTranslation(src, delta).AssertIsTrue();
-    }
-
-    [Fact]
-    public void Array_IsValid_False()
-    {
-      var src = new Number[] {0.1, 0.2};
-      var delta = new Number[] {0.2, 0.3, 0.1};
-      _range.IsValidTranslation(src, delta).AssertIsFalse();
     }
 
     [Fact]
@@ -89,29 +81,41 @@ namespace Arnible.MathModeling.Algebra.Test
     [Fact]
     public void GetValidTranslation_Passthrough()
     {
-      var translation = _range.GetValidTranslation(new Number[] { 0.5, 0.2 }, new Number[] {0.2, 0.3});
-      translation.AssertIsEqualTo(new Number[] {0.2, 0.3});
+      Span<Number> translation = new Number[] {0.2, 0.3};
+      _range.GetValidTranslation(new Number[] { 0.5, 0.2 }, in translation);
+      translation.AssertSequenceEqualsTo(new Number[] {0.2, 0.3});
     }
 
     [Fact]
     public void GetValidTranslation_PassthroughDefault()
     {
-      var translation = _range.GetValidTranslation(new Number[] {0.5, 0.2}, default);
-      translation.AssertIsEqualTo(default);
+      Span<Number> translation = new Number[] {0, 0};
+      _range.GetValidTranslation(new Number[] {0.5, 0.2}, in translation);
+      translation.AssertSequenceEqualsTo(new Number[] { 0, 0 });
     }
 
     [Fact]
     public void GetValidTranslation_Default()
     {
-      var translation = _range.GetValidTranslation(new Number[] {1, 0.2}, new Number[] {0.2, 0.3});
-      translation.AssertIsEqualTo(new Number[] { 0, 0 });
+      Span<Number> translation = new Number[] {0.2, 0.3};
+      _range.GetValidTranslation(new Number[] {1, 0.2}, in translation);
+      translation.AssertSequenceEqualsTo(new Number[] { 0, 0 });
     }
 
     [Fact]
     public void GetValidTranslation_Half()
     {
-      var translation = _range.GetValidTranslation(new Number[] {0.5, 0.8}, new Number[] {0.2, 0.4});
-      translation.AssertIsEqualTo(new Number[] {0.1, 0.2});
+      Span<Number> translation = new Number[] {0.2, 0.4};
+      _range.GetValidTranslation(new Number[] {0.5, 0.8}, in translation);
+      translation.AssertSequenceEqualsTo(new Number[] {0.1, 0.2});
+    }
+    
+    [Fact]
+    public void GetValidTranslationRatioForLastAngle_None()
+    {
+      INumberRangeDomain range = new NumberRangeDomain(0, 1);
+      Number ratio = range.GetValidTranslationRatioForLastAngle(radius: 1, currentAngle: Angle.HalfRightAngle, angleDelta: 0);
+      ratio.AssertIsEqualTo(1);
     }
 
     [Fact]
@@ -144,7 +148,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {1, 0.2}, 
-        gradient: new Number[] {0.2, 0.3});
+        delta: new Number[] {0.2, 0.3});
       translation.AssertIsEqualTo(0);
     }
     
@@ -153,7 +157,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {1, 0.2}, 
-        gradient: new Number[] {0, 0});
+        delta: new Number[] {0, 0});
       translation.AssertIsNull();
     }
     
@@ -162,7 +166,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {0, 0}, 
-        gradient: new Number[] {0.2, 0.1});
+        delta: new Number[] {0.2, 0.1});
       translation.AssertIsEqualTo(5);
     }
     
@@ -171,7 +175,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] { 0.2, 0 }, 
-        gradient: new Number[] { -2.4, 0.1 });
+        delta: new Number[] { -2.4, 0.1 });
       translation.AssertIsEqualTo(0.5);
     }
     
@@ -180,7 +184,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {1, 0.2, 0.1}, 
-        transaction: new Number[] {0.2, 0.3});
+        delta: new Number[] {0.2, 0.3, 0});
       translation.AssertIsEqualTo(0);
     }
     
@@ -189,7 +193,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {1, 0.2, 0.1}, 
-        transaction: new Number[] {0, 0});
+        delta: new Number[] {0, 0, 0});
       translation.AssertIsNull();
     }
     
@@ -198,7 +202,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] {0, 0, 0.1}, 
-        transaction: new Number[] {0.2, 0.1});
+        delta: new Number[] {0.2, 0.1, 0});
       translation.AssertIsEqualTo(5);
     }
     
@@ -207,7 +211,7 @@ namespace Arnible.MathModeling.Algebra.Test
     {
       var translation = _range.GetMaximumValidTranslationRatio(
         value: new Number[] { 0.2, 0, 0.1 }, 
-        transaction: new Number[] { -2.4, 0.1 });
+        delta: new Number[] { -2.4, 0.1, 0 });
       translation.AssertIsEqualTo(0.5);
     }
 
@@ -245,6 +249,26 @@ namespace Arnible.MathModeling.Algebra.Test
     public void IsValidTranslation_Positive_Valid()
     {
       _range.IsValidTranslation(0.9, Sign.Positive).AssertIsTrue();
+    }
+    
+    [Fact]
+    public void IncorrectRange()
+    {
+      Assert.Throws<ArgumentException>(() => new NumberRangeDomain(minimum: 2, maximum: 1));
+    }
+    
+    [Fact]
+    public void IsValidTranslation_UnknownSign()
+    {
+      try
+      {
+        _range.IsValidTranslation(0, (Sign)1000);
+        throw new Exception("I should not get here");
+      }
+      catch(ArgumentException)
+      {
+        // all is ok
+      }
     }
   }
 }

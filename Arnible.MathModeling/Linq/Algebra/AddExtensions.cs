@@ -7,7 +7,7 @@ namespace Arnible.Linq.Algebra
 {
   public static class AddExtensions
   {
-    public static T[] Add<T>(this T[] src, IReadOnlyCollection<T> value) where T: struct, IAlgebraGroup<T>
+    public static T[] Add<T>(this T[] src, IReadOnlyCollection<T> value) where T: IAlgebraGroup<T>
     {
       src.Length.AssertIsEqualTo(value.Count);
       
@@ -23,11 +23,10 @@ namespace Arnible.Linq.Algebra
     public static void Add<T>(
       in this ReadOnlySpan<T> src, 
       in ReadOnlySpan<T> value,
-      in Span<T> output) where T: struct, IAlgebraGroup<T>
+      in Span<T> output) where T: IAlgebraGroup<T>
     {
-      src.Length
-        .AssertIsEqualTo(value.Length)
-        .AssertIsEqualTo(output.Length);
+      src.Length.AssertIsEqualTo(value.Length);
+      src.Length.AssertIsEqualTo(output.Length);
       
       for(ushort pos = 0; pos < src.Length; pos++)
       {
@@ -35,9 +34,9 @@ namespace Arnible.Linq.Algebra
       }
     }
     
-    public static void Add<T>(
+    public static void AddInPlace<T>(
       in this Span<T> src, 
-      in ReadOnlySpan<T> value) where T: struct, IAlgebraGroup<T>
+      in ReadOnlySpan<T> value) where T: IAlgebraGroup<T>
     {
       src.Length.AssertIsEqualTo(value.Length);
 

@@ -29,14 +29,7 @@ namespace Arnible.Linq
     
     public static T? LastOrNone<T>(in this Span<T> source) where T: struct
     {
-      if(source.Length > 0)
-      {
-        return source[^1];
-      }
-      else
-      {
-        return null;
-      }
+      return LastOrNone((ReadOnlySpan<T>)source);
     }
     
     public static T? LastOrNull<T>(this IEnumerable<T> source) where T: class
