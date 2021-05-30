@@ -44,7 +44,7 @@ namespace Arnible.MathModeling.Geometry.Test
 
       sc.DimensionsCount.AssertIsEqualTo(2);
       sc.R.AssertIsEqualTo(pc.R);
-      sc.Angles.Single().AssertIsEqualTo(pc.Φ);
+      sc.Angles.ToArray().Single().AssertIsEqualTo(pc.Φ);
     }
 
     [Theory]
@@ -57,7 +57,7 @@ namespace Arnible.MathModeling.Geometry.Test
 
       HypersphericalCoordinate sc = cc.ToSphericalView();
       sc.R.AssertIsEqualTo(r);
-      sc.Angles.GetInternalEnumerable().AssertSequenceEqualsTo(angles);
+      sc.Angles.ToArray().AssertSequenceEqualsTo(angles);
     }
 
     [Theory]
@@ -73,7 +73,7 @@ namespace Arnible.MathModeling.Geometry.Test
 
       HypersphericalCoordinate sc = cc.ToSpherical();
       sc.R.AssertIsEqualTo(r);
-      sc.Angles.GetInternalEnumerable().AssertSequenceEqualsTo(angles);
+      sc.Angles.ToArray().AssertSequenceEqualsTo(angles);
     }
 
     [Theory]
@@ -82,7 +82,7 @@ namespace Arnible.MathModeling.Geometry.Test
     [InlineData(new[] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4, new[] { π_4, π_3 })]
     public void Cast_ToCartesian(double[] cartesian, double r, double[] angles)
     {
-      var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
+      var sc = new HypersphericalCoordinate(r, angles.ToNumberArray());
 
       var cc = sc.ToCartesianView();
       cc.Coordinates.AsList().AssertSequenceEqualsTo(cartesian);
@@ -95,7 +95,7 @@ namespace Arnible.MathModeling.Geometry.Test
     public void AddDimension(double[] cartesian, double r, double[] angles)
     {
       var cc = cartesian.ToNumberArray();
-      var sc = new HypersphericalCoordinate(r, angles.ToAngleVector());
+      var sc = new HypersphericalCoordinate(r, angles.ToNumberArray());
       
       var cc1 = cc.Append(0).ToArray();
 

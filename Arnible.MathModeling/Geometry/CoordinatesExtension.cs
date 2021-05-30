@@ -56,11 +56,11 @@ namespace Arnible.MathModeling.Geometry
         angles.Add(GetFirstAngle(pc.GetOrDefault(0), pc.GetOrDefault(1)));
         angles.Reverse();
 
-        return new HypersphericalCoordinate(in r, angles.ToAngleVector());
+        return new HypersphericalCoordinate(in r, angles.ToArray());
       }
       else
       {
-        return new HypersphericalCoordinate(0, new HypersphericalAngleVector(0));
+        return new HypersphericalCoordinate(0, new HypersphericalAngleVector(new Number[] { 0 }));
       }
     }
 

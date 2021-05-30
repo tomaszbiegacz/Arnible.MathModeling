@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Geometry.Test
       var expected = expression.ToPolar(rc, pc);
 
       var cc = new Number[] {x, y};
-      var hc = new HypersphericalCoordinate(r, new HypersphericalAngleVector(φ));
+      var hc = new HypersphericalCoordinate(r, new Number[] {φ});
       var actual = expression.ToSpherical(cc, hc);
 
       IsEqualToExtensions.AssertIsEqualTo(expected, actual);

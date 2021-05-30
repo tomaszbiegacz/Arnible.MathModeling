@@ -52,7 +52,7 @@ namespace Arnible.MathModeling
       in Span<Number> delta)
     {
       Number ratio = GetValidTranslationRatio(domain, in value, delta);
-      delta.MultiplyInPlace(ratio);
+      delta.MultiplySelf(ratio);
     }
   }
 }

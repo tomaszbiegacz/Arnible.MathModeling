@@ -6,23 +6,15 @@ using Arnible.MathModeling.Analysis;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public readonly struct HypersphericalCoordinateOnAxisView : IEquatable<HypersphericalCoordinateOnAxisView>
+  public readonly ref struct HypersphericalCoordinateOnAxisView
   {
     private readonly HypersphericalCoordinate _p;
 
     /// <summary>
     /// Return ratio of an identity vector. All coefficients should be equal to it
     /// </summary>
-    public static Number GetIdentityVectorRatio(uint dimensionsCount)
+    public static Number GetIdentityVectorRatio(ushort dimensionsCount)
     {
-      switch (dimensionsCount)
-      {
-        case 0:
-          throw new ArgumentException(nameof(dimensionsCount));
-        case 1:
-          return 1;
-      }
-
       var angles = HypersphericalAngleVector.GetIdentityVector(dimensionsCount);
       double lastAngle = (double)angles[(ushort)(angles.Length - 1)];
       return Math.Sin(lastAngle);
@@ -35,7 +27,7 @@ namespace Arnible.MathModeling.Geometry
     {
       if (result.Length > 0 )
       {
-        HypersphericalAngleVector.GetIdentityVector((uint)result.Length).GetCartesianAxisViewsRatios(in result);
+        HypersphericalAngleVector.GetIdentityVector((ushort)result.Length).GetCartesianAxisViewsRatios(in result);
       }
     }
 
@@ -59,33 +51,6 @@ namespace Arnible.MathModeling.Geometry
       return rc._p;
     }
 
-    public override bool Equals(object? obj)
-    {
-      if (obj is HypersphericalCoordinateOnAxisView casted)
-      {
-        return Equals(casted);
-      }
-      else
-      {
-        return false;
-      }
-    }
-
-    public bool Equals(HypersphericalCoordinateOnAxisView other)
-    {
-      return Coordinates == other.Coordinates;
-    }
-
-    public override int GetHashCode()
-    {
-      return Coordinates.GetHashCode();
-    }
-
-    public override string ToString()
-    {
-      return Coordinates.ToString();
-    }
-
     //
     // Properties
     //
@@ -102,23 +67,27 @@ namespace Arnible.MathModeling.Geometry
     // Operators
     //        
 
-    public IEnumerable<HypersphericalAngleVector> CartesianCoordinatesAngles()
-    {
-      uint anglesCount = _p.Angles.Length;
-      List<Number> x = new(LinqEnumerable.Repeat<Number>(0, anglesCount));
-
-      yield return x.ToAngleVector();
-      for (int i = 0; i < anglesCount; ++i)
-      {
-        x[i] = Angle.RightAngle;
-        yield return x.ToAngleVector();
-        x[i] = 0;
-      }
-    }
-
     public void DerivativeByR(in Span<Number> derivativeOnAxis)
     {
       Angles.GetCartesianAxisViewsRatios(in derivativeOnAxis);
+    }
+    
+    public HypersphericalAngleVector CartesianCoordinatesAngles(ushort dimensionPos)
+    {
+      uint anglesCount = _p.Angles.Length;
+      Span<Number> x = LinqEnumerable.Repeat<Number>(0, anglesCount).ToArray();
+
+      if(dimensionPos == 0)
+      {
+        // on 'X' axis all angles are O
+        return new HypersphericalAngleVector(x);
+      }
+      else
+      {
+        ushort anglePos = (ushort)(dimensionPos - 1);
+        x[anglePos] = Angle.RightAngle;
+        return new HypersphericalAngleVector(x);
+      }
     }
 
     public HypersphericalCoordinateOnRectangularView GetRectangularView(ushort axisA, ushort axisB)
@@ -153,14 +122,9 @@ namespace Arnible.MathModeling.Geometry
       }
     }
 
-    public HypersphericalCoordinateOnAxisViewForAngleDerivatives GetAngleDerivativesView(uint anglesCount, uint anglePos)
+    public HypersphericalCoordinateOnAxisViewForAngleDerivatives GetAngleDerivativesView(ushort anglePos)
     {
-      return new HypersphericalCoordinateOnAxisViewForAngleDerivatives(view: this, anglesCount: anglesCount, anglePos: anglePos);
-    }
-
-    public IEnumerable<Derivative1Value> GetCartesianAxisViewsRatiosDerivativesByAngle(uint anglesCount, uint anglePos)
-    {
-      return GetAngleDerivativesView(anglesCount: anglesCount, anglePos: anglePos).CartesianAxisViewsRatiosDerivatives;
+      return new HypersphericalCoordinateOnAxisViewForAngleDerivatives(view: this, anglePos: anglePos);
     }
 
     public IEnumerable<Number> GetCoordinatesRatios()

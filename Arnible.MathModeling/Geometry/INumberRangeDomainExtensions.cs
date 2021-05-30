@@ -15,7 +15,7 @@ namespace Arnible.MathModeling.Geometry
       Span<Number> translation = stackalloc Number[delta.Length];
       delta.CopyTo(translation);
 
-      var coordinates = value.Translate(in translation).ToCartesianView().Coordinates;
+      var coordinates = value.Translate(translation).ToCartesianView().Coordinates;
       return coordinates.AsList().AllWithDefault(v => domain.IsValid(v));
     }
     
@@ -34,7 +34,7 @@ namespace Arnible.MathModeling.Geometry
         currentAngle: value.Angles[anglePos],
         angleDelta: in delta[anglePos]);
 
-      delta.MultiplyInPlace(ratio);
+      delta.MultiplySelf(ratio);
     }
     
     public static HypersphericalCoordinate Translate(
@@ -42,11 +42,11 @@ namespace Arnible.MathModeling.Geometry
       in HypersphericalCoordinate value,
       in ReadOnlySpan<Number> delta)
     {
-      Span<Number> validTranslation = stackalloc Number[delta.Length];
+      Span<Number> validTranslation = new Number[delta.Length];
       delta.CopyTo(validTranslation);
       domain.GetValidTranslationForLastAngle(value, in validTranslation);
       
-      return value.Translate(in validTranslation);
+      return value.Translate(validTranslation);
     }
   }
 }

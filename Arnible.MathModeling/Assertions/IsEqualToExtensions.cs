@@ -12,7 +12,13 @@ namespace Arnible.Assertions
     
     public static void AssertIsEqualTo(in this HypersphericalAngleVector actual, in HypersphericalAngleVector expected)
     {
-      actual.Span.AssertSequenceEqualsTo(expected.Span);
+      actual.Equals(in expected).AssertIsTrue();
+    }
+    
+    public static void AssertIsEqualTo(in this HypersphericalCoordinate actual, in HypersphericalCoordinate expected)
+    {
+      actual.Angles.AssertIsEqualTo(expected.Angles);
+      actual.R.AssertIsEqualTo(expected.R);
     }
   }
 }

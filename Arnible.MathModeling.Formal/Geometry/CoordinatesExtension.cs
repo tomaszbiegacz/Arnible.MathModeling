@@ -43,7 +43,7 @@ namespace Arnible.MathModeling.Geometry
       PolynomialDivision result = source;
 
       ReadOnlyArray<Number> cd = cartesianPoint.Reverse().ToArray();
-      ReadOnlyArray<Number> ad = hypersphericalPoint.Angles.GetInternalEnumerable().Reverse().ToArray();
+      ReadOnlyArray<Number> ad = hypersphericalPoint.Angles.ToArray().Reverse().ToArray();
       for (ushort i = 0; i < ad.Length; ++i)
       {
         var cartesianDimension = (PolynomialTerm)cd[i];

@@ -31,7 +31,7 @@ namespace Arnible.MathModeling.Algebra
       }
     }
     
-    public static void MultiplyInPlace<T>(
+    public static void MultiplySelf<T>(
       in this Span<T> arg, 
       in T value) where T: IAlgebraRing<T>
     {

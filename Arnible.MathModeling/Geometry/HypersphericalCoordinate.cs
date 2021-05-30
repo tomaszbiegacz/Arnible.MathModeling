@@ -1,9 +1,11 @@
 ﻿using System;
+using Arnible.Assertions;
+using Arnible.Linq;
 using Arnible.Linq.Algebra;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public readonly struct HypersphericalCoordinate : IEquatable<HypersphericalCoordinate>
+  public readonly ref struct HypersphericalCoordinate
   {
     /// <summary>
     /// Angles:
@@ -18,54 +20,27 @@ namespace Arnible.MathModeling.Geometry
 
     public Number R { get; }
 
+    public HypersphericalCoordinate(in Number r, in Span<Number> angles)
+    : this(in r, new HypersphericalAngleVector(angles))
+    {
+      // intentionally empty
+    }
+    
     public HypersphericalCoordinate(in Number r, in HypersphericalAngleVector angles)
     {
-      if (r < 0)
+      r.AssertIsGreaterEqualThan(0);
+      if (r == 0 && !angles.IsZero())
       {
-        throw new ArgumentException($"Negative r: {r}");
-      }
-      if (r == 0 && angles != 0)
-      {
-        throw new ArgumentException($"For zero r, angles also has to be empty, got {angles}");
+        throw new ArgumentException("For zero r, angles also has to be empty");
       }
 
       R = r;
       Angles = angles;
     }
-
+    
     public static implicit operator HypersphericalCoordinate(in PolarCoordinate pc)
     {
-      return new HypersphericalCoordinate(pc.R, new HypersphericalAngleVector(pc.Φ));
-    }
-
-    public bool Equals(in HypersphericalCoordinate other)
-    {
-      return other.R == R && other.Angles == Angles;
-    }
-
-    public bool Equals(HypersphericalCoordinate other) => Equals(in other);
-
-    public override bool Equals(object? obj)
-    {
-      if (obj is HypersphericalCoordinate typed)
-      {
-        return Equals(in typed);
-      }
-      else
-      {
-        return false;
-      }
-    }
-
-    public override int GetHashCode()
-    {
-      return R.GetHashCode() ^ Angles.GetHashCode();
-    }
-    public int GetHashCodeValue() => GetHashCode();
-
-    public override string ToString()
-    {
-      return $"{{{R.ToString()}, {Angles.ToString()}}}";
+      return new HypersphericalCoordinate(pc.R, new [] { pc.Φ });
     }
 
     //
@@ -85,19 +60,17 @@ namespace Arnible.MathModeling.Geometry
 
     public HypersphericalCoordinateOnAxisView ToCartesianView() => new HypersphericalCoordinateOnAxisView(this);
 
-    public HypersphericalCoordinate TranslateByAngle(uint anglePos, in Number delta)
+    public HypersphericalCoordinate Translate(ushort anglePos, in Number delta)
     {
-      var angleDelta = HypersphericalAngleVector.CreateOrthogonalDirection(anglePos, in delta);
+      var angleDelta = HypersphericalAngleVector.CreateOrthogonalDirection(Angles.Length, anglePos, in delta);
       var angles = Angles + angleDelta;
       return new HypersphericalCoordinate(R, in angles);
     }
     
-    public HypersphericalCoordinate Translate(in Span<Number> translation)
+    public HypersphericalCoordinate Translate(in HypersphericalAngleVector translation)
     {
-      translation.AddInPlace(Angles.Span);
-      
       // TODO: remove array creation
-      return new HypersphericalCoordinate(R, new HypersphericalAngleVector(translation.ToArray()));
+      return new HypersphericalCoordinate(R, translation + Angles);
     }
   }
 }

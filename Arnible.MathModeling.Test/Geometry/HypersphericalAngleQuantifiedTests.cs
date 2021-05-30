@@ -25,10 +25,10 @@ namespace Arnible.MathModeling.Geometry.Test
     {
       var directions = HypersphericalAngleQuantified.GetQuantifiedDirections(anglesCount: 1, resolution: 2).ToArray();
 
-      directions.Where(d => d.Angles.Single() == -1).Single().ToAngleVector().AssertIsEqualTo(new HypersphericalAngleVector(-1 * Math.PI / 4));
-      directions.Where(d => d.Angles.Single() == 0).Single().ToAngleVector().AssertIsEqualTo(new HypersphericalAngleVector(0));
-      directions.Where(d => d.Angles.Single() == 1).Single().ToAngleVector().AssertIsEqualTo(new HypersphericalAngleVector(Math.PI / 4));
-      directions.Where(d => d.Angles.Single() == 2).Single().ToAngleVector().AssertIsEqualTo(new HypersphericalAngleVector(Math.PI / 2));
+      directions.Where(d => d.Angles.Single() == -1).Single().ToAngleVector().AssertIsEqualTo(new HypersphericalAngleVector(new Number[] {-1 * Math.PI / 4}));
+      directions.Where(d => d.Angles.Single() == 0).Single().ToAngleVector().AssertIsEqualTo(new HypersphericalAngleVector(new Number[] { 0 }));
+      directions.Where(d => d.Angles.Single() == 1).Single().ToAngleVector().AssertIsEqualTo(new HypersphericalAngleVector(new Number[] { Math.PI / 4}));
+      directions.Where(d => d.Angles.Single() == 2).Single().ToAngleVector().AssertIsEqualTo(new HypersphericalAngleVector(new Number[] { Math.PI / 2}));
     }
 
     [Fact]

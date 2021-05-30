@@ -1,38 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using Arnible.Linq;
+using Arnible.Assertions;
 using Arnible.MathModeling.Analysis;
 
 namespace Arnible.MathModeling.Geometry
 {
-  public class HypersphericalCoordinateOnAxisViewForAngleDerivatives
+  public readonly ref struct HypersphericalCoordinateOnAxisViewForAngleDerivatives
   {
-    private static ReadOnlyArray<Number> GetCartesianAxisViewsRatiosDerivativesByAngle(
+    private static Number[] GetCartesianAxisViewsRatiosDerivativesByAngle(
       in Number r, 
-      in HypersphericalAngleVector anglesVector, 
-      in uint anglesCount, 
-      in uint pos)
+      in HypersphericalAngleVector angles,
+      in ushort pos)
     {
-      if (anglesCount < anglesVector.Length)
-      {
-        throw new ArgumentException(nameof(anglesCount));
-      }
-      if (pos >= anglesCount)
-      {
-        throw new ArgumentException(nameof(pos));
-      }
-
-      IReadOnlyCollection<Number> angles = anglesVector
-        .GetInternalEnumerable()
-        .Concat(LinqEnumerable.Repeat<Number>(0, anglesCount - anglesVector.Length))
-        .ToArray();
+      pos.AssertIsLessEqualThan(angles.Length);
 
       var cartesianDimensions = new List<Number>();
       Number replacement = r;
-      uint currentAnglePos = (uint)angles.Count;
-      foreach (var angle in angles.Reverse())
+      for(int currentAnglePos = angles.Length - 1; currentAnglePos >= 0; --currentAnglePos)
       {
-        currentAnglePos--;
+        ref readonly Number angle = ref angles[(ushort)currentAnglePos]; 
         if (currentAnglePos == pos)
         {
           // derivative by angle
@@ -62,24 +48,17 @@ namespace Arnible.MathModeling.Geometry
       cartesianDimensions.Add(replacement);
       cartesianDimensions.Reverse();
 
-      return cartesianDimensions.Concat(LinqEnumerable.Repeat<Number>(0, (uint)(cartesianDimensions.Count - anglesCount - 1))).ToArray();
+      return cartesianDimensions.ToArray();
     }
 
-    private readonly ReadOnlyArray<Number> _angleDerivatives;
-
     public HypersphericalCoordinateOnAxisViewForAngleDerivatives(
-      in HypersphericalCoordinateOnAxisView view, 
-      in uint anglesCount, 
-      in uint anglePos)
+      in HypersphericalCoordinateOnAxisView view,
+      in ushort anglePos)
     {
       View = view;
       AnglePos = anglePos;
-      _angleDerivatives = GetCartesianAxisViewsRatiosDerivativesByAngle(view.R, view.Angles, anglesCount: in anglesCount, pos: in anglePos);
-
-      if(_angleDerivatives.Length != anglesCount + 1)
-      {
-        throw new InvalidOperationException("Something went wrong");
-      }
+      CartesianAxisViewsRatiosDerivatives = GetCartesianAxisViewsRatiosDerivativesByAngle(view.R, view.Angles, pos: anglePos);
+      CartesianAxisViewsRatiosDerivatives.Length.AssertIsEqualTo(view.Angles.Length + 1);
     }    
 
     //
@@ -88,12 +67,9 @@ namespace Arnible.MathModeling.Geometry
 
     public HypersphericalCoordinateOnAxisView View { get; }
 
-    public uint AnglePos { get; }
+    public ushort AnglePos { get; }
 
-    public IEnumerable<Derivative1Value> CartesianAxisViewsRatiosDerivatives => _angleDerivatives.AsList().Select(v => new Derivative1Value
-    {
-      First = v
-    });
+    public ReadOnlySpan<Number> CartesianAxisViewsRatiosDerivatives { get; }
 
     //
     // Operations
@@ -105,11 +81,11 @@ namespace Arnible.MathModeling.Geometry
         view: View.GetRectangularView(axisA: axisA, axisB: axisB),
         xDerivative: new Derivative1Value
         {
-          First = _angleDerivatives[axisA] 
+          First = CartesianAxisViewsRatiosDerivatives[axisA] 
         },
         yDerivative: new Derivative1Value
         {
-          First = _angleDerivatives[axisB]
+          First = CartesianAxisViewsRatiosDerivatives[axisB]
         }
         );
     }
