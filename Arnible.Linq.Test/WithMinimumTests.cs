@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 
 namespace Arnible.Linq.Test
@@ -22,6 +23,15 @@ namespace Arnible.Linq.Test
         new Value(4), new Value(2), new Value(3)
       }).WithMinimum(v => v.V);
       Assert.Equal(2d, r.V);
+    }
+    
+    [Fact]
+    public void WithMinimum_Error()
+    {
+      Assert.Throws<ArgumentException>(() =>
+      {
+        (new double[0]).WithMinimum(v => v);
+      });
     }
   }
 }
