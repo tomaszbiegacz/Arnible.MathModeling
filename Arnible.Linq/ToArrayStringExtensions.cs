@@ -3,9 +3,9 @@ using System.Text;
 
 namespace Arnible.Linq
 {
-  public static class ToCharMemoryExtensions
+  public static class ToArrayStringExtensions
   {
-    public static ReadOnlyMemory<char> ToCharMemory<T>(this in ReadOnlySpan<T> src, string separator = ",")
+    public static string ToArrayString<T>(this in ReadOnlySpan<T> src, string separator = ",")
     {
       StringBuilder builder = new();
       builder.Append("[");
@@ -18,7 +18,7 @@ namespace Arnible.Linq
         currentSeparator = separator;
       }
       builder.Append("]");
-      return builder.ToString().AsMemory();
+      return builder.ToString();
     }
   }
 }

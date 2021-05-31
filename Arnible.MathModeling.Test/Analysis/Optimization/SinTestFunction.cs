@@ -8,7 +8,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
   /// </summary>
   public record SinTestFunction : IFunctionValueAnalysis
   {
-    public ValueWithDerivative1 ValueWithDerivativeByArgumentsChangeDirection(
+    public ValueWithDerivative1 GetValueWithDerivativeByArgumentsChangeDirection(
       in ReadOnlySpan<Number> arguments,
       in ReadOnlySpan<Number> directionDerivativeRatios)
     {
@@ -21,6 +21,11 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
         Value = Math.Sin(x) + 3,
         First = Math.Cos(x) * directionDerivativeRatios[0] 
       };
+    }
+    
+    public Number GetValue(in ReadOnlySpan<Number> arguments)
+    {
+      return GetValueWithDerivativeByArgumentsChangeDirection(in arguments, new Number[] { 1 }).Value;
     }
   }
 }

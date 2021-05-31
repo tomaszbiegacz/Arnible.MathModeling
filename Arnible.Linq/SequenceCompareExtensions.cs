@@ -5,7 +5,7 @@ namespace Arnible.Linq
 {
   public static class SequenceCompareExtensions
   {
-    public static int SequenceCompare<T>(this IEnumerable<T> col1, IEnumerable<T> col2) where T : struct, IComparable<T>
+    public static int SequenceCompare<T>(this IEnumerable<T> col1, IEnumerable<T> col2) where T : IComparable<T>
     {
       using var col1Enum = col1.GetEnumerator();
       using var col2Enum = col2.GetEnumerator();

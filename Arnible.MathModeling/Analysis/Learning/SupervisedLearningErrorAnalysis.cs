@@ -33,7 +33,7 @@ namespace Arnible.MathModeling.Analysis.Learning
      * Queries
      */
 
-    public Number ErrorValue(in ReadOnlySpan<Number> parameters)
+    public Number GetValue(in ReadOnlySpan<Number> parameters)
     {
       Number result = 0;
       foreach(ref readonly SupervisedLearningCase learningCase in LearningCases.Span)
@@ -79,7 +79,7 @@ namespace Arnible.MathModeling.Analysis.Learning
       };
     }
     
-    public ValueWithDerivative1 ValueWithDerivativeByArgumentsChangeDirection(
+    public ValueWithDerivative1 GetValueWithDerivativeByArgumentsChangeDirection(
       in ReadOnlySpan<Number> parameters, 
       in ReadOnlySpan<Number> directionDerivativeRatios)
     {

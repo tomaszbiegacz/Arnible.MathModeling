@@ -11,7 +11,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
     public Number A { get; init; } = 1;
     public Number B { get; init; } = 100;
     
-    public ValueWithDerivative1 ValueWithDerivativeByArgumentsChangeDirection(
+    public ValueWithDerivative1 GetValueWithDerivativeByArgumentsChangeDirection(
       in ReadOnlySpan<Number> arguments,
       in ReadOnlySpan<Number> directionDerivativeRatios)
     {
@@ -29,6 +29,11 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
         First = 
           2*(A - x)*(-1)*dx + B*2*(y - x.ToPower(2))*(dy - 2*x*dx) 
       };
+    }
+    
+    public Number GetValue(in ReadOnlySpan<Number> arguments)
+    {
+      return GetValueWithDerivativeByArgumentsChangeDirection(in arguments, new Number[] { 1, 1 }).Value;
     }
   }
 }

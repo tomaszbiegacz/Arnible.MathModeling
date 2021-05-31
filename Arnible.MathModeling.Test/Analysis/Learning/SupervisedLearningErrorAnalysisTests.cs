@@ -79,7 +79,7 @@ namespace Arnible.MathModeling.Analysis.Test.Learning
       errorAnalysis.LearningCases.Length.AssertIsEqualTo(3);
       
       errorAnalysis
-        .ErrorValue(new Number[] { 1, 2 })
+        .GetValue(new Number[] { 1, 2 })
         .AssertIsEqualTo(9 + 4);
     }
     
@@ -120,7 +120,7 @@ namespace Arnible.MathModeling.Analysis.Test.Learning
         function: _function);
       
       ValueWithDerivative1 result = errorAnalysis
-        .ValueWithDerivativeByArgumentsChangeDirection(
+        .GetValueWithDerivativeByArgumentsChangeDirection(
           new Number[] { 1, 2 },
           new Number[] { 5, 6 }
         );

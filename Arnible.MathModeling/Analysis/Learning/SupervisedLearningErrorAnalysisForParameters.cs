@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Analysis.Learning
       Parent = parent;
       
       Parameters = parameters;
-      ErrorValue = Parent.ErrorValue(in parameters);
+      ErrorValue = Parent.GetValue(in parameters);
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ namespace Arnible.MathModeling.Analysis.Learning
           Parameters);
         itemGradient.MultiplySelf(errorDerivative.First);
         
-        output.AddSelf(itemGradient);
+        output.AddSelf(in itemGradient);
       }
     }
     
