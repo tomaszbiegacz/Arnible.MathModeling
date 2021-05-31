@@ -1,71 +1,166 @@
-﻿using Arnible.Assertions;
+﻿using System;
+using Arnible.Assertions;
+using Xunit;
 using Arnible.Linq;
 using Arnible.Linq.Algebra;
-using Arnible.MathModeling.Algebra;
-using Arnible.MathModeling.Test;
-using Xunit;
 
 namespace Arnible.MathModeling.Geometry.Test
 {
-  public class CartesianCoordinatesTests
+  public class CoordinatesExtensionTests
   {
-    [Fact]
-    public void Cast_RectangularCoordinates()
-    {
-      var rc = new RectangularCoordinate(3, 4);
-      CartesianCoordinate cc = rc;
+    const double Sqrt2 = 1.4142135623731;
+    const double Sqrt3 = 1.7320508075689;
 
-      cc.DimensionsCount.AssertIsEqualTo(2);
-      cc.Coordinates.Length.AssertIsEqualTo(2);
-      cc.Coordinates[0].AssertIsEqualTo(3);
-      cc.Coordinates[1].AssertIsEqualTo(4);
+    const double one_Sqrt2 = 1 / Sqrt2;
+
+    /// <summary>
+    /// 45 degrees
+    /// </summary>
+    const double π_4 = Math.PI / 4;
+
+    /// <summary>
+    /// 60 degres
+    /// </summary>
+    const double π_3 = Math.PI / 3;
+
+    /// <summary>
+    /// 90 degrees
+    /// </summary>
+    const double π_2 = Math.PI / 2;
+
+    [Theory]
+    [InlineData(1, 1)]
+    [InlineData(2, 3)]
+    [InlineData(3, 2)]
+    [InlineData(-3, 2)]
+    [InlineData(3, -2)]
+    public void Cast_HyperspehricalEqualsRectangular(double x, double y)
+    {
+      var rc = new RectangularCoordinate(x, y);
+      Span<Number> cc = new Number[] { x, y };
+
+      Span<Number> buffer = stackalloc Number[1];
+      var pc = rc.ToPolar();
+      HypersphericalCoordinate sc = cc.ToSpherical(in buffer);
+
+      sc.DimensionsCount.AssertIsEqualTo(2);
+      sc.R.AssertIsEqualTo(pc.R);
+      sc.Angles.Span.Single().AssertIsEqualTo(pc.Φ);
     }
 
-    [Fact]
-    public void Constructor_3d()
+    [Theory]
+    [InlineData(new[] { 1d, 1d }, Sqrt2, new[] { π_4 })]
+    [InlineData(new[] { one_Sqrt2, one_Sqrt2, 1 }, Sqrt2, new[] { π_4, π_4 })]
+    [InlineData(new[] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4, new[] { π_4, π_3 })]
+    public void Cast_ToHypersphericalView(double[] cartesian, double r, double[] angles)
     {
-      CartesianCoordinate cc = new NumberVector(2, 3, 4);
+      Span<Number> cc = cartesian.ToNumberArray();
 
-      cc.DimensionsCount.AssertIsEqualTo(3);
-      cc.Coordinates[0].AssertIsEqualTo(2);
-      cc.Coordinates[1].AssertIsEqualTo(3);
-      cc.Coordinates[2].AssertIsEqualTo(4);
+      Span<Number> buffer = stackalloc Number[cartesian.Length - 1];
+      HypersphericalCoordinate sc = cc.ToSpherical(in buffer);
+      sc.R.AssertIsEqualTo(r);
+      sc.Angles.Span.AssertSequenceEqualsTo(angles);
     }
 
-    [Fact]
-    public void Equal_Rounding()
+    [Theory]
+    [InlineData(new[] { 0d, 1d }, 1, new[] { π_2 })]
+    [InlineData(new[] { 0d, 0d, 1d }, 1, new[] { 0, π_2 })]
+    [InlineData(new[] { 0d, 0d, 0d, 1d }, 1, new[] { 0, 0, π_2 })]
+    [InlineData(new[] { 0d, 0d, 0d, 0, 1d }, 1, new[] { 0, 0, 0, π_2 })]
+    [InlineData(new[] { 0d, 0d, 0d, 0, -1d }, 1, new[] { 0, 0, 0, -1 * π_2 })]
+    public void Cast_ToHyperspherical(double[] cartesian, double r, double[] angles)
     {
-      CartesianCoordinate v1 = new NumberVector(1, 1, 0);
-      CartesianCoordinate v2 = new NumberVector(1, 1, 8.65956056235496E-17);
-      v1.AssertIsEqualTo(v2);
+      Span<Number> cc = cartesian.ToNumberArray();
+
+      Span<Number> buffer = stackalloc Number[cartesian.Length - 1];
+      HypersphericalCoordinate sc = cc.ToSpherical(in buffer);
+      sc.R.AssertIsEqualTo(r);
+      sc.Angles.Span.AssertSequenceEqualsTo(angles);
     }
 
+    [Theory]
+    [InlineData(new[] { 1d, 1d }, Sqrt2, new[] { π_4 })]
+    [InlineData(new[] { one_Sqrt2, one_Sqrt2, 1 }, Sqrt2, new[] { π_4, π_4 })]
+    [InlineData(new[] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4, new[] { π_4, π_3 })]
+    public void Cast_ToCartesian(double[] cartesian, double r, double[] angles)
+    {
+      var sc = new HypersphericalCoordinate(r, angles.ToNumberArray());
+
+      Span<Number> cc = stackalloc Number[cartesian.Length];
+      sc.ToCartesian(in cc);
+      cc.AssertSequenceEqualsTo(cartesian);
+    }
+
+    [Theory]
+    [InlineData(new[] { 1d, 1d }, Sqrt2, new[] { π_4 })]
+    [InlineData(new[] { one_Sqrt2, one_Sqrt2, 1 }, Sqrt2, new[] { π_4, π_4 })]
+    [InlineData(new[] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4, new[] { π_4, π_3 })]
+    public void AddDimension_ToCartesian(double[] cartesian, double r, double[] angles)
+    {
+      HypersphericalCoordinate sc = new HypersphericalCoordinate(r, angles.ToNumberArray());
+      
+      Span<Number> scBuffer = new Number[sc.Angles.Length + 1];
+      HypersphericalCoordinate scWithExtraDimension = sc.Clone(in scBuffer);
+
+      Span<Number> ccActual = stackalloc Number[cartesian.Length + 1];
+      scWithExtraDimension.ToCartesian(in ccActual);
+      ccActual.AssertSequenceEqualsTo(cartesian.Append(0).ToArray());
+    }
+    
+    [Theory]
+    [InlineData(new[] { 1d, 1d }, Sqrt2, new[] { π_4 })]
+    [InlineData(new[] { one_Sqrt2, one_Sqrt2, 1 }, Sqrt2, new[] { π_4, π_4 })]
+    [InlineData(new[] { Sqrt2, Sqrt2, 2 * Sqrt3 }, 4, new[] { π_4, π_3 })]
+    public void AddDimension_ToSpherical(double[] cartesian, double r, double[] angles)
+    {
+      HypersphericalCoordinate sc = new HypersphericalCoordinate(r, angles.ToNumberArray());
+      
+      Span<Number> scBuffer = new Number[sc.Angles.Length + 1];
+      HypersphericalCoordinate scWithExtraDimension = sc.Clone(in scBuffer);
+      
+      Span<Number> ccWithExtraDimension = stackalloc Number[cartesian.Length + 1];
+      ccWithExtraDimension.Clear();
+      cartesian.ToNumberArray().CopyTo(ccWithExtraDimension);
+      
+      Span<Number> scBuffer2 = new Number[sc.Angles.Length + 1];
+      HypersphericalCoordinate scActual = ccWithExtraDimension.ToSpherical(in scBuffer);
+      
+      scActual.AssertIsEqualTo(in scWithExtraDimension);
+    }
+    
     [Fact]
     public void GetDirectionDerivativeRatios_Identity_2()
     {
-      NumberVector c = new NumberVector(1, 1);
-      var actual = c.GetDirectionDerivativeRatios();
+      ReadOnlySpan<Number> c = new Number[] { 1, 1 };
+      Span<Number> actual = stackalloc Number[2];
+      c.GetDirectionDerivativeRatios(in actual);
 
-      var expected = HypersphericalAngleVector.GetIdentityVector(2).GetCartesianAxisViewsRatios();
-      expected.AssertIsEqualTo(actual);
+      Span<Number> buffer = stackalloc Number[1];
+      Span<Number> expected = stackalloc Number[2];
+      HypersphericalAngleVector.GetIdentityVector(in buffer).GetCartesianAxisViewsRatios(in expected);
+      expected.AssertSequenceEqualsTo(actual);
     }
     
     [Fact]
     public void GetDirectionDerivativeRatios_Identity_3()
     {
-      NumberVector c = new NumberVector(4, 4, 4);
-      var actual = c.GetDirectionDerivativeRatios();
+      Span<Number> c = new Number[] {4, 4, 4};
+      Span<Number> actual = stackalloc Number[3];
+      c.GetDirectionDerivativeRatios(in actual);
 
-      var expected = HypersphericalAngleVector.GetIdentityVector(3).GetCartesianAxisViewsRatios();
-      expected.AssertIsEqualTo(actual);
+      Span<Number> buffer = stackalloc Number[2];
+      Span<Number> expected = stackalloc Number[3];
+      HypersphericalAngleVector.GetIdentityVector(in buffer).GetCartesianAxisViewsRatios(in expected);
+      expected.AssertSequenceEqualsTo(actual);
     }
     
     [Fact]
     public void GetDirectionDerivativeRatios_Random()
     {
-      ReadOnlyArray<Number> c = new Number[] { 1, 2, -3 };
-      var radios = c.GetDirectionDerivativeRatios();
-      3u.AssertIsEqualTo(radios.Length);
+      Span<Number> c = new Number[] { 1, 2, -3 };
+      Span<Number> radios = stackalloc Number[3];
+      c.GetDirectionDerivativeRatios(in radios);
+      3.AssertIsEqualTo(radios.Length);
       
       for (ushort i = 0; i < 2; ++i)
       {
@@ -75,7 +170,7 @@ namespace Arnible.MathModeling.Geometry.Test
       radios[2].AssertIsGreaterThan(-1);
       radios[2].AssertIsLessThan(0);
       
-      radios.AsList().Select(r => r*r).SumDefensive().AssertIsEqualTo(1);
+      radios.SumDefensive((in Number r) => r*r).AssertIsEqualTo(1);
     }
   }
 }

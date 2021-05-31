@@ -10,6 +10,11 @@ namespace Arnible.Assertions
     {
       return "[" + string.Join(',', actual.ToArray()) + "]";
     }
+    
+    public static string ToString<T>(in ReadOnlySpan<T> actual)
+    {
+      return "[" + string.Join(',', actual.ToArray()) + "]";
+    }
 
     public AssertException(string message)
       : base(message)

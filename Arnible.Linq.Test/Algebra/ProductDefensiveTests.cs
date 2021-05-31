@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 
 namespace Arnible.Linq.Algebra.Test
@@ -20,6 +21,20 @@ namespace Arnible.Linq.Algebra.Test
     public void Product_Default()
     {
       Assert.Equal(1d, LinqArray<double>.Empty.ProductWithDefault());
+    }
+    
+    [Fact]
+    public void Product_Default_Defensive()
+    {
+      try
+      {
+        LinqArray<double>.Empty.ProductDefensive();
+        throw new Exception("I should not get here");
+      }
+      catch(ArgumentException)
+      {
+        // all is ok
+      }
     }
   }
 }

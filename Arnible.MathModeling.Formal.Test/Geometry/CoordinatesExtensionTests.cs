@@ -15,11 +15,11 @@ namespace Arnible.MathModeling.Geometry.Test
       var pc = new PolarCoordinate(r, φ);
       var expected = expression.ToPolar(rc, pc);
 
-      CartesianCoordinate cc = new NumberVector(x, y);
-      var hc = new HypersphericalCoordinate(r, new HypersphericalAngleVector(φ));
+      var cc = new Number[] {x, y};
+      var hc = new HypersphericalCoordinate(r, new Number[] {φ});
       var actual = expression.ToSpherical(cc, hc);
 
-      IsEqualToExtensions.AssertIsEqualTo(expected, actual);
+      expected.AssertIsEqualTo(actual);
     }
   }
 }

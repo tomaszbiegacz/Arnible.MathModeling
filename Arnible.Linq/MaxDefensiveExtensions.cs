@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Arnible.Assertions;
 
 namespace Arnible.Linq
 {
@@ -43,9 +44,32 @@ namespace Arnible.Linq
     /// <summary>
     /// Finds maximum value or throw ArgumentException if passed enumerable is empty
     /// </summary>
-    public static T MaxDefensive<T>(this ReadOnlyArray<T> x) where T: IComparable<T>, IEquatable<T>
+    public static ref readonly T MaxDefensive<T>(this in ReadOnlySpan<T> x) where T: IComparable<T>
     {      
-      return x.AsList().MaxDefensive();
+      x.Length.AssertIsGreaterThan(0);
+      ref readonly T result = ref x[0];
+      for(ushort i=1; i<x.Length; ++i)
+      {
+        if (x[i].CompareTo(result) > 0)
+        {
+          result = ref x[i];
+        }
+      }
+      return ref result;
+    }
+    
+    public static ref readonly T MaxDefensive<T>(this in Span<T> x) where T: IComparable<T>
+    {
+      x.Length.AssertIsGreaterThan(0);
+      ref readonly T result = ref x[0];
+      for(ushort i=1; i<x.Length; ++i)
+      {
+        if (x[i].CompareTo(result) > 0)
+        {
+          result = ref x[i];
+        }
+      }
+      return ref result;
     }
   }
 }

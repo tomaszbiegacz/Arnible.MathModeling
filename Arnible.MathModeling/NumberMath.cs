@@ -18,6 +18,11 @@ namespace Arnible.MathModeling
       else return Math.Cos(value);
     }
     
+    public static Number Sqrt(in Number x)
+    {
+      return Math.Sqrt((double)x);
+    }
+    
     public static Number Sin(in Number a) => RoundedSin((double)a);
 
     public static Number Cos(in Number a) => RoundedCos((double)a);

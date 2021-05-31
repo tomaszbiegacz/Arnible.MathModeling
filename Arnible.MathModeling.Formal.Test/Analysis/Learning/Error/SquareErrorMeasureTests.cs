@@ -11,7 +11,7 @@ namespace Arnible.MathModeling.Analysis.Learning.Error.Test
     {
       PolynomialTerm termSingle = (PolynomialTerm)term;
       PolynomialDivision firstDerivative = value.DerivativeBy(termSingle);
-      IsEqualToExtensions.AssertIsEqualTo<Number>(firstDerivative, actual.First);
+      actual.First.AssertIsEqualTo(firstDerivative);
     }
     
     [Fact]

@@ -4,42 +4,42 @@ using Xunit;
 
 namespace Arnible.Assertions.Test
 {
-    public class AllExtensionsTests
+    public class AnyExtensionsTests
     {
         [Fact]
-        public void IEnumerable_All_Error()
+        public void IEnumerable_Any_Error()
         {
             IEnumerable<int> toCheck = new int[] {1, 2};
-            Assert.Throws<AssertException>(() => toCheck.AssertAll(i => i != 2));
+            Assert.Throws<AssertException>(() => toCheck.AssertAny(i => i == 3));
         }
         
         [Fact]
-        public void IEnumerable_All()
+        public void IEnumerable_Any()
         {
             IEnumerable<int> toCheck = new int[] {1, 2};
-            toCheck.AssertAll(i => i > 0);
+            toCheck.AssertAny(i => i == 2);
         }
         
         [Fact]
-        public void Span_All_Error()
+        public void Span_Any_Error()
         {
             Span<int> toCheck = new int[] {1, 2};
             try
             {
-                toCheck.AssertAll((in int i) => i != 2);
+                toCheck.AssertAny((in int i) => i == 3);
                 throw new Exception("I should not get here");
             }
             catch(AssertException)
             {
-                // all is OK
+                // All is OK
             }
         }
         
         [Fact]
-        public void Span_All()
+        public void Span_Any()
         {
             Span<int> toCheck = new int[] {1, 2};
-            toCheck.AssertAll((in int i) => i > 0);
+            toCheck.AssertAny((in int i) => i == 2);
         }
     }
 }

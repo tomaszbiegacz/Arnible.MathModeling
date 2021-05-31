@@ -11,24 +11,32 @@ namespace Arnible.Linq.Algebra
     /// <summary>
     /// Calculate items sum or throw ArgumentException if passed enumerable is empty
     /// </summary>
-    public static T SumDefensive<T>(this IEnumerable<T> x) where T: struct, IAlgebraGroup<T>
+    public static T SumDefensive<T>(this IEnumerable<T> x) where T: IAlgebraGroup<T>
     {
-      T? current = null;
+      bool isCurrentSet = false;
+#pragma warning disable 8600
+      T current = default;
+#pragma warning restore 8600
       foreach (T v in x)
       {
-        if(current.HasValue)
+        if(isCurrentSet)
         {
-          current =  current.Value.Add(in v);  
+#pragma warning disable 8602
+          current =  current.Add(in v);  
+#pragma warning restore 8602
         }
         else
         {
           current = v;
+          isCurrentSet = true;
         }
       }
       
-      if (current.HasValue)
+      if (isCurrentSet)
       {
-        return current.Value;
+#pragma warning disable 8603
+        return current;
+#pragma warning restore 8603
       }
       else
       {
@@ -39,29 +47,42 @@ namespace Arnible.Linq.Algebra
     /// <summary>
     /// Calculate items sum or throw ArgumentException if passed enumerable is empty
     /// </summary>
-    public static T SumDefensive<T>(in this ReadOnlySpan<T> x) where T: struct, IAlgebraGroup<T>
+    public static T SumDefensive<T>(in this ReadOnlySpan<T> x) where T: IAlgebraGroup<T>
     {
-      T? current = null;
+      bool isCurrentSet = false;
+#pragma warning disable 8600
+      T current = default;
+#pragma warning restore 8600
       foreach (ref readonly T v in x)
       {
-        if(current.HasValue)
+        if(isCurrentSet)
         {
-          current =  current.Value.Add(in v);  
+#pragma warning disable 8602
+          current =  current.Add(in v);  
+#pragma warning restore 8602
         }
         else
         {
           current = v;
+          isCurrentSet = true;
         }
       }
       
-      if (current.HasValue)
+      if (isCurrentSet)
       {
-        return current.Value;
+#pragma warning disable 8603
+        return current;
+#pragma warning restore 8603
       }
       else
       {
         throw new ArgumentException("Empty enumerator");
       }
+    }
+    
+    public static T SumDefensive<T>(in this Span<T> x) where T: IAlgebraGroup<T>
+    {
+      return SumDefensive((ReadOnlySpan<T>)x);
     }
     
     /// <summary>
@@ -90,6 +111,14 @@ namespace Arnible.Linq.Algebra
       {
         throw new ArgumentException("Empty enumerator");
       }
+    }
+    
+    /// <summary>
+    /// Calculate items sum or throw ArgumentException if passed enumerable is empty
+    /// </summary>
+    public static Number SumDefensive<T>(in this Span<T> x, FuncIn<T, Number> getItem)
+    {
+      return SumDefensive((ReadOnlySpan<T>)x, getItem);
     }
   }
 }

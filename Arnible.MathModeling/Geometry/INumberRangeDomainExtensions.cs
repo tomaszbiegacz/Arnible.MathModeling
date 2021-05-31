@@ -1,122 +1,40 @@
-﻿using Arnible.MathModeling.Algebra;
-using System;
-using System.Collections.Generic;
-using Arnible.Linq;
+﻿using System;
+using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Geometry
 {
   public static class INumberRangeDomainExtensions
   {
-    //
-    // Validate
-    //
-    
-    public static void Validate(this INumberRangeDomain domain, NumberVector value)
-    {
-      domain.Validate(value.GetInternalEnumerable());
-    }
-    
-    //
-    // IsValidTranslation
-    //
-    
-    public static bool IsValidTranslation(
-      this INumberRangeDomain domain, 
-      in NumberVector value, 
-      in NumberVector delta)
-    {
-      return value.GetInternalEnumerable().ZipValue(
-        col2: delta.GetInternalEnumerable(), 
-        merge: (v, t) => Arnible.MathModeling.INumberRangeDomainExtensions.IsValidTranslation(
-          domain,
-          v ?? 0, 
-          t ?? 0)).AllWithDefault();
-    }
-
     public static bool IsValidTranslation(
       this INumberRangeDomain domain,
-      ReadOnlyArray<Number> value,
-      ReadOnlyArray<Number> delta)
+      in HypersphericalCoordinate value,
+      in HypersphericalAngleVector delta)
     {
-      if (delta.Length > value.Length)
-      {
-        return false;
-      }
-      else
-      {
-        return value.AsList().ZipValue(
-          col2: delta.AsList(), 
-          merge: (v, t) => Arnible.MathModeling.INumberRangeDomainExtensions.IsValidTranslation(
-            domain,
-            v ?? throw new ArgumentException(nameof(value)), 
-            t ?? 0)).AllWithDefault();
-      }
-    }
-
-    public static bool IsValidTranslation(
-      this INumberRangeDomain domain,
-      HypersphericalCoordinate value,
-      HypersphericalAngleTranslationVector delta)
-    {
-      domain.Validate(value.ToCartesianView().Coordinates);
-      NumberVector coordinates = delta.Translate(value).ToCartesianView().Coordinates;
-      return coordinates.AllWithDefault(v => domain.IsValid(v));
-    }
-
-    //
-    // GetValidTranslation
-    //    
-
-    public static HypersphericalAngleTranslationVector GetValidTranslation(
-      this INumberRangeDomain domain,
-      HypersphericalCoordinate value,
-      HypersphericalAngleTranslationVector delta)
-    {
-      domain.Validate(value.ToCartesianView().Coordinates);
-      IReadOnlyList<ushort> nonZeroAngles = LinqEnumerable.RangeUshort(0, delta.Length)
-        .Where(i => delta[i] != 0)
-        .ToArray();
+      Span<Number> bufferValue = stackalloc Number[value.Angles.Length];
+      HypersphericalCoordinate translatedValue = value.Clone(in bufferValue);
+      translatedValue.TranslateSelf(in delta);
       
-      if (nonZeroAngles.Count != 1)
-      {
-        throw new ArgumentException("Exactly one angle has to be non-negative. Other options are not yet supported.");
-      }
-      if (nonZeroAngles[0] != delta.Length - 1)
-      {
-        throw new InvalidOperationException($"Something went wrong, only last angle should be not empty, in {delta}");
-      }
+      Span<Number> coordinates = stackalloc Number[value.Angles.Length + 1];
+      translatedValue.ToCartesian(in coordinates);
+      return domain.IsValid(in coordinates);
+    }
+    
+    public static void GetValidTranslationForLastAngle(
+      this INumberRangeDomain domain,
+      in HypersphericalCoordinate value,
+      in HypersphericalAngleVector delta)
+    {
+      value.Angles.Length.AssertIsEqualTo(delta.Length);
+      delta.IsOrthogonal().AssertIsTrue();
+      delta.Span[^1].AssertIsNotEqualTo(0, "Something went wrong, only last angle should be not empty");
 
       ushort anglePos = (ushort)(delta.Length - 1);
       Number ratio = domain.GetValidTranslationRatioForLastAngle(
         radius: value.R,
-        currentAngle: value.Angles.GetOrDefault(anglePos),
-        angleDelta: in delta[anglePos]);
+        currentAngle: value.Angles.Span[anglePos],
+        angleDelta: in delta.Span[anglePos]);
 
-      if (ratio == 0)
-      {
-        return default;
-      }
-      else if (ratio == 1)
-      {
-        return delta;
-      }
-      else
-      {
-        return ratio * delta;
-      }
-    }
-
-    //
-    // Translate
-    //
-
-    public static HypersphericalCoordinate Translate(
-      this INumberRangeDomain domain,
-      HypersphericalCoordinate value,
-      HypersphericalAngleTranslationVector delta)
-    {
-      HypersphericalAngleTranslationVector tr = domain.GetValidTranslation(value, delta);
-      return new HypersphericalCoordinate(value.R, tr.Translate(value.Angles));
+      delta.ScaleSelf(ratio);
     }
   }
 }

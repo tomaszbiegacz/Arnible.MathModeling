@@ -19,43 +19,9 @@ namespace Arnible.Linq
       
       if(found)
       {
-        return result ?? throw new InvalidOperationException("Something went wrong");
-      }
-      else
-      {
-        throw new ArgumentException(nameof(source));
-      }
-    }
-
-    public static T Last<T>(this IReadOnlyList<T> source)
-    {
-      if(source.Count > 0)
-      {
-        return source[^1];
-      }
-      else
-      {
-        throw new ArgumentException(nameof(source));
-      }
-    }
-    
-    public static ref readonly T Last<T>(in this ReadOnlySpan<T> source) 
-    {
-      if(source.Length > 0)
-      {
-        return ref source[^1];
-      }
-      else
-      {
-        throw new ArgumentException(nameof(source));
-      }
-    }
-    
-    public static ref readonly T Last<T>(in this Span<T> source) 
-    {
-      if(source.Length > 0)
-      {
-        return ref source[^1];
+#pragma warning disable 8603
+        return result;
+#pragma warning restore 8603
       }
       else
       {

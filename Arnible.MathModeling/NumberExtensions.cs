@@ -15,20 +15,15 @@ namespace Arnible.MathModeling
         return v > 0 ? Sign.Positive : Sign.Negative;
       }
     }
-    
-    /// <summary>
-    /// True if all values are zero or enumerator is empty
-    /// </summary>
-    public static bool IsZero(this IEnumerable<Number> values)
+
+    public static Number[] ToNumberArray(this IReadOnlyList<double> values)
     {
-      foreach (Number val in values)
+      Number[] result = new Number[values.Count];
+      for(ushort i=0; i<values.Count; ++i)
       {
-        if(val != 0)
-        {
-          return false;
-        }
+        result[i] = values[i];
       }
-      return true;
+      return result;
     }
   }
 }

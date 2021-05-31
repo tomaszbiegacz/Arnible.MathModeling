@@ -5,16 +5,15 @@ namespace Arnible.Assertions
 {
   public static class IsEqualToExtensions
   {
-    public static T AssertIsEqualTo<T>(this T actual, in T expected) where T: IEquatable<T>
+    public static void AssertIsEqualTo<T>(this T actual, in T expected, string message = "") where T: IEquatable<T>
     {
       if(!expected.Equals(actual))
       {
-        throw new AssertException($"Expected \n{expected}\n got \n{actual}");
+        throw new AssertException($"Expected \n{expected}\n got \n{actual}. " + message);
       }
-      return actual;
     }
     
-    public static T AssertIsEqualToEnum<T>(this T actual, T expected) where T: Enum
+    public static void AssertIsEqualToEnum<T>(this T actual, T expected) where T: Enum
     {
       int actualValue = Unsafe.As<T, int>(ref actual);
       int expectedValue = Unsafe.As<T, int>(ref expected);
@@ -22,10 +21,9 @@ namespace Arnible.Assertions
       {
         throw new AssertException($"Expected {expected} got {actual}");
       }
-      return actual;
     }
     
-    public static T? AssertIsEqualTo<T>(in this T? actual, in T expected) where T: struct, IEquatable<T>
+    public static void AssertIsEqualTo<T>(in this T? actual, in T expected) where T: struct, IEquatable<T>
     {
        if(!actual.HasValue)
        {
@@ -35,7 +33,6 @@ namespace Arnible.Assertions
        {
          throw new AssertException($"Expected \n{expected}\n got \n{actual}");
        }
-       return actual;
     }
     
     public static void AssertIsEqualTo(this ushort actual, int expected)

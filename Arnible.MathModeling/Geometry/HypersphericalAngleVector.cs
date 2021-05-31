@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+using Arnible.Assertions;
 using Arnible.Linq;
+using Arnible.Linq.Algebra;
 using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling.Geometry
@@ -9,254 +9,160 @@ namespace Arnible.MathModeling.Geometry
   /// <summary>
   /// Hyperspherical angle vector, where first coordinate angle range over [-π, π] and others range over [-π/2, π/2].
   /// </summary>
-  [Serializable]
-  public readonly struct HypersphericalAngleVector : 
-    IEquatable<HypersphericalAngleVector>, 
-    IEquatable<Number>,
-    IAlgebraGroup<HypersphericalAngleVector>
+  public readonly ref struct HypersphericalAngleVector
   {
-    static readonly HypersphericalAngleVector _zero = 0;
-    
-    private readonly NumberVector _angles;
-    
-    public static HypersphericalAngleVector CreateOrthogonalDirection(uint anglePos, in Number value)
-    {
-      return new HypersphericalAngleVector(NumberVector.NonZeroValueAt(pos: anglePos, value: in value));
-    }    
+    private readonly Span<Number> _angles;
 
-    private static IEnumerable<Number> Normalize(IEnumerable<Number> angles)
-    {
-      bool isFirst = true;
-      foreach (Number v in angles)
-      {
-        if (isFirst)
-        {
-          yield return RoundAngleFullCycle(v);
-          isFirst = false;
-        }
-        else
-        {
-          yield return RoundAngleHalfCycle(v);
-        }
-      }
-    }
-
-    internal static HypersphericalAngleVector Create(IEnumerable<Number> angles)
-    {
-      return new HypersphericalAngleVector(Normalize(angles).ToVector());
-    }
-
-    public static HypersphericalAngleVector GetIdentityVector(uint dimensionsCount)
-    {
-      switch (dimensionsCount)
-      {
-        case 0:
-        case 1:
-          throw new ArgumentException(nameof(dimensionsCount));
-      }
-
-      List<double> angles = new List<double> { Angle.HalfRightAngle };
-      for (uint anglePos = 2; anglePos < dimensionsCount; ++anglePos)
-      {
-        double angle = Math.Atan(Math.Sin(angles[angles.Count - 1]));
-        angles.Add(angle);
-      }
-      return new HypersphericalAngleVector(angles.ToVector());
-    }
-
-    public HypersphericalAngleVector(params Number[] angles)
-      : this(new NumberVector(angles))
-    {
-      // intentionally empty
-    }
-
-    private HypersphericalAngleVector(NumberVector angles)
+    public HypersphericalAngleVector(in Span<Number> angles)
     {      
-      Number first = angles.First;
-      if (first > Angle.HalfCycle || first < -1 * Angle.HalfCycle)
-      {
-        throw new ArgumentException($"Invalid first angular coordinate: {first}");
-      }
-      if (angles.GetInternalEnumerable().SkipExactly(1).Any(a => a > Angle.RightAngle || a < -1 * Angle.RightAngle))
-      {
-        throw new ArgumentException($"Invalid angular coordinates: {angles}");
-      }      
+      angles.Length.AssertIsGreaterThan(0);
+      angles[0].AssertIsBetween(-1 * Angle.HalfCycle, Angle.HalfCycle);
+      angles[1..].AssertIsBetween(-1 * Angle.RightAngle, Angle.RightAngle);
 
       _angles = angles;
     }
-
-    public static implicit operator HypersphericalAngleVector(in Number v) => new HypersphericalAngleVector(v);
-    public static implicit operator HypersphericalAngleVector(in double v) => new HypersphericalAngleVector(v);
-
-    public static implicit operator NumberVector(HypersphericalAngleVector v) => v._angles;
+    
+    public static implicit operator HypersphericalAngleVector(in Span<Number> angles) => new(in angles); 
+    public static implicit operator HypersphericalAngleVector(Number[] angles) => new(angles);
 
     //
     // Properties
-    //    
-
-    public ref readonly Number this[ushort pos] => ref _angles[pos];
-
-    public ushort Length => _angles.Length;
-
-    public Number GetOrDefault(ushort pos) => _angles.GetOrDefault(pos);
-
-    //
-    // IArray
     //
 
-    internal IEnumerable<Number> GetInternalEnumerable() => _angles.GetInternalEnumerable();
-
-    public IEnumerator<Number> GetEnumerator() => _angles.GetEnumerator();
+    public ushort Length => (ushort)_angles.Length;
     
+    public ReadOnlySpan<Number> Span => _angles;
+    
+    public bool IsOrthogonal()
+    {
+      return _angles.Count((in Number v) => v != 0) == 1;
+    }
 
     //
-    // IEquatable
-    //    
-
-    public bool Equals(HypersphericalAngleVector other) => other._angles == _angles;
-
-    public bool Equals(in Number other) => other == _angles;
-
-    public bool Equals(Number other) => Equals(in other);
-
-    public override bool Equals(object? obj)
+    // Query operators
+    //
+    
+    public bool Equals(in HypersphericalAngleVector b)
     {
-      if (obj is HypersphericalAngleVector v)
+      return _angles.SequenceEqual(in b._angles);
+    }
+    
+    public bool IsZero() => _angles.IsZero();
+    
+    public void GetCartesianAxisViewsRatios(in Span<Number> cartesianCoordinate)
+    {
+      cartesianCoordinate.Length.AssertIsEqualTo(_angles.Length + 1);
+
+      Number replacement = 1;
+      for(ushort anglePos = 0; anglePos < _angles.Length; ++anglePos)
       {
-        return Equals(v);
+        Number angle = _angles[_angles.Length - 1 - anglePos];
+        cartesianCoordinate[_angles.Length - anglePos] = replacement * NumberMath.Sin(in angle);
+        replacement *= NumberMath.Cos(in angle);
       }
-      else if (obj is Number v2)
+      cartesianCoordinate[0] = replacement;
+    }
+    
+    //
+    // Factories
+    //
+    
+    public static HypersphericalAngleVector CreateOrthogonalDirection(
+      ushort anglePos, 
+      in Number value,
+      in Span<Number> buffer)
+    {
+      buffer.Length.AssertIsGreaterThan(anglePos);
+      
+      buffer.Clear();
+      buffer[anglePos] = value;
+      return new HypersphericalAngleVector(in buffer);
+    }
+
+    public static HypersphericalAngleVector GetIdentityVector(in Span<Number> buffer)
+    {
+      buffer.Length.AssertIsGreaterThan(0);
+      
+      buffer[0] = Angle.HalfRightAngle;
+      for (ushort anglePos = 1; anglePos < buffer.Length; ++anglePos)
       {
-        return Equals(in v2);
+        buffer[anglePos] = Math.Atan(Math.Sin((double)buffer[anglePos - 1]));
+      }
+
+      return new HypersphericalAngleVector(in buffer);
+    }
+    
+    public HypersphericalAngleVector Clone(in Span<Number> buffer)
+    {
+      _angles.CopyTo(buffer);
+      if(buffer.Length > _angles.Length)
+      {
+        buffer[_angles.Length..].Clear();
+      }
+      return new HypersphericalAngleVector(in buffer);
+    }
+    
+    public HypersphericalAngleVector GetMirrorAngles(in Span<Number> buffer)
+    {
+      buffer.Length.AssertIsEqualTo(_angles.Length);
+
+      ref readonly Number firstAngle = ref _angles[0];
+      if (firstAngle > 0)
+      {
+        buffer[0] = -1 * Angle.HalfCycle + firstAngle;
       }
       else
       {
-        return false;
+        buffer[0] = Angle.HalfCycle + firstAngle;
       }
-    }
-    
-    public override string ToString() => _angles.ToString();
-    public override int GetHashCode() => _angles.GetHashCode();
 
-    public static bool operator ==(HypersphericalAngleVector a, HypersphericalAngleVector b) => a.Equals(b);
-    public static bool operator !=(HypersphericalAngleVector a, HypersphericalAngleVector b) => !a.Equals(b);
-
-    public static bool operator ==(in Number a, HypersphericalAngleVector b) => b.Equals(in a);
-    public static bool operator !=(in Number a, HypersphericalAngleVector b) => !b.Equals(in a);
-
-    public static bool operator ==(HypersphericalAngleVector a, in Number b) => a.Equals(in b);
-    public static bool operator !=(HypersphericalAngleVector a, in Number b) => !a.Equals(in b);
-
-    //
-    // query operators
-    //
-
-    public HypersphericalAngleVector GetOrthogonalDirection(ushort anglePos)
-    {
-      ref readonly Number angle = ref _angles[anglePos];
-      return new HypersphericalAngleVector(NumberVector.NonZeroValueAt(pos: anglePos, value: in angle));
-    }
-
-    public HypersphericalAngleVector AddDimension()
-    {
-      return new HypersphericalAngleVector(_angles.GetInternalEnumerable().Append(0).ToVector());
-    }
-
-    private IEnumerable<Number> MirrorAngles
-    {
-      get
+      for(ushort i=1; i<_angles.Length; ++i)
       {
-        Number firstAngle = _angles.First;
-        if (firstAngle > 0)
-        {
-          yield return -1 * Angle.HalfCycle + firstAngle;
-        }
-        else
-        {
-          yield return Angle.HalfCycle + firstAngle;
-        }
-
-        foreach (Number angle in _angles.GetInternalEnumerable().SkipExactly(1))
-        {
-          yield return -1 * angle;
-        }
+        buffer[i] = -1 * _angles[i];
       }
-    }
-
-    public HypersphericalAngleVector Mirror => new HypersphericalAngleVector(MirrorAngles.ToVector());
-
-    public NumberVector GetCartesianAxisViewsRatios()
-    {
-      var cartesianDimensions = new List<Number>();
-      Number replacement = 1;
-      foreach (var angle in GetInternalEnumerable().Reverse())
-      {
-        cartesianDimensions.Add(replacement * NumberMath.Sin(angle));
-        replacement *= NumberMath.Cos(angle);
-      }
-      cartesianDimensions.Add(replacement);
-      cartesianDimensions.Reverse();
-
-      return cartesianDimensions.ToVector();
+      
+      return new HypersphericalAngleVector(in buffer);
     }
 
     //
     // Arithmetic operators
     //
 
-    private static Number RoundAngleFullCycle(in Number v)
+    private static void RoundAngleFullCycle(ref Number v)
     {
       if (v > Angle.HalfCycle)
-        return v - Angle.FullCycle;
-
-      if (v < -1 * Angle.HalfCycle)
-        return Angle.FullCycle + v;
-
-      return v;
+        v = v - Angle.FullCycle;
+      else if (v < -1 * Angle.HalfCycle)
+        v = Angle.FullCycle + v;
     }
 
-    private static Number RoundAngleHalfCycle(in Number v)
+    private static void RoundAngleHalfCycle(ref Number v)
     {
       if (v > Angle.RightAngle)
-        return v - Angle.HalfCycle;
-
-      if (v < -1 * Angle.RightAngle)
-        return Angle.HalfCycle + v;
-
-      return v;
+        v = v - Angle.HalfCycle;
+      else if (v < -1 * Angle.RightAngle)
+        v = Angle.HalfCycle + v;
     }    
-
-    private static IEnumerable<Number> AddAngles(NumberVector a, NumberVector b)
-    {
-      return Normalize(a.GetInternalEnumerable().ZipValue(
-        col2: b.GetInternalEnumerable(), 
-        merge: (v1, v2) => (v1 ?? 0) + (v2 ?? 0)));      
-    }
-
-    private static IEnumerable<Number> ScaleAngles(NumberVector a, in Number b)
-    {
-      return Normalize((a * b).GetInternalEnumerable());
-    }
-
-    public static HypersphericalAngleVector operator +(HypersphericalAngleVector a, HypersphericalAngleVector b)
-    {
-      return new HypersphericalAngleVector(AddAngles(a, b).ToVector());
-    }
-
-    public static HypersphericalAngleVector operator *(HypersphericalAngleVector a, in Number b)
-    {
-      return new HypersphericalAngleVector(ScaleAngles(a, b).ToVector());
-    }
-
-    public static HypersphericalAngleVector operator *(in Number a, HypersphericalAngleVector b)
-    {
-      return new HypersphericalAngleVector(ScaleAngles(b, a).ToVector());
-    }
     
-    public ref readonly HypersphericalAngleVector Zero => ref _zero;
+    private static void Normalize(in Span<Number> angles)
+    {
+      RoundAngleFullCycle(ref angles[0]);
+      for(ushort i=1; i<angles.Length; ++i)
+      {
+        RoundAngleHalfCycle(ref angles[i]);
+      }
+    }
 
-    public HypersphericalAngleVector Add(in HypersphericalAngleVector component) => this + component;
-    
-    public HypersphericalAngleVector Inverse() => throw new NotImplementedException();
+    public void AddSelf(in HypersphericalAngleVector b)
+    {
+      _angles.AddSelf(in b._angles);
+      Normalize(in _angles);
+    }
+
+    public void ScaleSelf(in Number b)
+    {
+      _angles.MultiplySelf(in b);
+      Normalize(in _angles);
+    }
   }
 }

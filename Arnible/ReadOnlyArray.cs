@@ -43,7 +43,7 @@ namespace Arnible
     public ushort Length => (ushort)Src.Count;
     public bool IsEmpty => Src.Count == 0;
 
-    public ref T this[ushort pos] => ref (_src ?? throw new InvalidOperationException())[pos];
+    public ref T this[int pos] => ref (_src ?? throw new InvalidOperationException())[pos];
     
     public ref T First => ref (_src ?? throw new InvalidOperationException())[0];
     public ref T Last => ref (_src ?? throw new InvalidOperationException())[^1];

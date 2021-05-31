@@ -11,9 +11,7 @@ namespace Arnible.MathModeling
   /// </summary>
   /// <remarks> 
   /// Features:
-  /// * DoubleExtension.NumericEquals is used for equality decision  
-  /// Usage considerations:
-  /// * Structure size is less then IntPtr.Size on 64-bit processes, hence it is suggested to not return/receive structure instance by reference
+  /// * DoubleExtension.NumericEquals is used for equality decision
   /// </remarks>  
   [Serializable]
   public readonly partial struct Number 

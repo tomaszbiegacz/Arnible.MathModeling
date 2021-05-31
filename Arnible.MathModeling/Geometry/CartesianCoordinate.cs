@@ -1,102 +1,100 @@
-﻿using System;
+using System;
+using Arnible.Assertions;
 using Arnible.Linq;
+using Arnible.Linq.Algebra;
 
 namespace Arnible.MathModeling.Geometry
 {
-  interface ICartesianCoordinate
+  public static class CartesianCoordinate
   {
-    NumberVector Coordinates { get; }
-  }
-
-  public readonly struct CartesianCoordinate : 
-    IEquatable<CartesianCoordinate>, 
-    ICartesianCoordinate, 
-    ICoordinate<CartesianCoordinate>
-  {
-    public static CartesianCoordinate ForAxis(uint dimensionsCount, uint axisNumber, Number value)
+    /// <summary>
+    /// Return ratio of an identity vector. All coefficients should be equal to it
+    /// </summary>
+    public static Number GetIdentityVectorRatio(ushort dimensionsCount)
     {
-      if (dimensionsCount == 0)
-        throw new ArgumentException(nameof(dimensionsCount));
-      if (axisNumber >= dimensionsCount)
-        throw new ArgumentException(nameof(dimensionsCount));
-
-      var coordinates = new Number[dimensionsCount];
-      coordinates[axisNumber] = value;
-      return new CartesianCoordinate(coordinates);
-    }
-
-    public NumberVector Coordinates { get; }
-
-    private CartesianCoordinate(in NumberVector coordinates)
-    {
-      Coordinates = coordinates;
-    }
-
-    public CartesianCoordinate(params Number[] args)
-      : this(args.ToVector())
-    {
-      // intentionally empty
+      return Math.Sqrt(1.0 / dimensionsCount);
     }
     
-    public static implicit operator CartesianCoordinate(in RectangularCoordinate rc)
+    /// <summary>
+    /// Get identity vector coefficients
+    /// </summary>
+    public static void GetIdentityVector(in Span<Number> result)
     {
-      return new CartesianCoordinate(new[] { rc.X, rc.Y }.ToVector());
-    }
-
-    public static implicit operator CartesianCoordinate(in ReadOnlyArray<Number> rc)
-    {
-      return new CartesianCoordinate(rc.AsList().ToVector());
-    }
-
-    public static implicit operator CartesianCoordinate(in NumberVector rc)
-    {
-      return new CartesianCoordinate(in rc);
-    }
-
-    public bool Equals(in CartesianCoordinate other)
-    {
-      return other.Coordinates == Coordinates;
-    }
-
-    public bool Equals(CartesianCoordinate other) => Equals(in other);
-
-    public override bool Equals(object? obj)
-    {
-      if(obj is CartesianCoordinate typed)
+      if (result.Length > 0)
       {
-        return Equals(in typed);
-      }
-      else
-      {
-        return false;
+        Number ratio = GetIdentityVectorRatio((ushort)result.Length);
+        result.Fill(ratio);
       }
     }
-
-    public override int GetHashCode()
+    
+    private static Number Sqr(in Number x)
     {
-      return Coordinates.GetHashCode();
+      return x*x;
     }
-    public int GetHashCodeValue() => GetHashCode();
 
-    public override string ToString()
+    private static Number Asin(in Number x)
     {
-      return Coordinates.ToString();
+      return Math.Asin((double)x);
     }
-    public string ToStringValue() => ToString();
 
-    //
-    // Properties
-    //
-
-    public ushort DimensionsCount => Coordinates.Length;
-
-    //
-    // Operations
-    //
-
-    public CartesianCoordinate AddDimension()
+    private static Number GetFirstAngle(in Number x, in Number y)
     {
-      return new CartesianCoordinate(Coordinates.GetInternalEnumerable().Append(0).ToVector());
-    }    
+      return Math.Atan2((double)y, (double)x);
+    }
+
+    public static PolarCoordinate ToPolar(in this RectangularCoordinate p)
+    {
+      return new PolarCoordinate(
+        r: NumberMath.Sqrt(p.X * p.X + p.Y * p.Y),
+        φ: GetFirstAngle(p.X, p.Y));
+    }
+    
+    public static Number GetVectorLength(in this ReadOnlySpan<Number> point)
+    {
+      return NumberMath.Sqrt(point.SumDefensive(Sqr));
+    }
+    
+    public static Number GetVectorLength(in this Span<Number> point)
+    {
+      return GetVectorLength((ReadOnlySpan<Number>)point);
+    }
+
+    public static HypersphericalCoordinate ToSpherical(
+      in this ReadOnlySpan<Number> cartesianPoint,
+      in Span<Number> buffer)
+    {
+      cartesianPoint.Length.AssertIsGreaterEqualThan(2);
+      cartesianPoint.Length.AssertIsEqualTo(buffer.Length + 1);
+      
+      Number r2 = Sqr(in cartesianPoint[0]) + Sqr(in cartesianPoint[1]);
+      buffer[0] = GetFirstAngle(in cartesianPoint[0], in cartesianPoint[1]);
+      for (ushort i = 1; i < buffer.Length; i++)
+      {
+        ref readonly Number coordinate = ref cartesianPoint[1 + i]; 
+        r2 += Sqr(in coordinate);
+        if (r2 == 0)
+        {
+          buffer[i] = 0;
+        }
+        else
+        {
+          buffer[i] = Asin(coordinate / NumberMath.Sqrt(r2));
+        }
+      }
+      
+      return new HypersphericalCoordinate(NumberMath.Sqrt(in r2), in buffer);
+    }
+    
+    public static HypersphericalCoordinate ToSpherical(
+      in this Span<Number> cartesianPoint,
+      in Span<Number> buffer)
+    {
+      return ToSpherical((ReadOnlySpan<Number>)cartesianPoint, in buffer);
+    }
+    
+    public static bool IsOrthogonal(in this Span<Number> cartesianVector)
+    {
+      return cartesianVector.Count((in Number v) => v != 0) == 1;
+    }
   }
 }

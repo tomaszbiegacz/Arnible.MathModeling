@@ -9,23 +9,31 @@ namespace Arnible.Linq.Algebra
     /// <summary>
     /// Calculate items product or throw ArgumentException if passed enumerable is empty
     /// </summary>
-    public static T ProductDefensive<T>(this IEnumerable<T> x) where T: struct, IAlgebraUnitRing<T>
+    public static T ProductDefensive<T>(this IEnumerable<T> x) where T: IAlgebraUnitRing<T>
     {
-      T? current = null;
+      bool isCurrentSet = false;
+#pragma warning disable 8600
+      T current = default;
+#pragma warning restore 8600
       foreach (T v in x)
       {
-        if(current.HasValue)
+        if(isCurrentSet)
         {
-          current =  current.Value.Multiply(in v);  
+#pragma warning disable 8602
+          current =  current.Multiply(in v);  
+#pragma warning restore 8602
         }
         else
         {
           current = v;
+          isCurrentSet = true;
         }
       }
-      if (current.HasValue)
+      if (isCurrentSet)
       {
-        return current.Value;
+#pragma warning disable 8603
+        return current;
+#pragma warning restore 8603
       }
       else
       {

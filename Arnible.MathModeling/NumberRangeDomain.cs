@@ -1,4 +1,5 @@
 ﻿using System;
+using Arnible.Assertions;
 
 namespace Arnible.MathModeling
 {
@@ -53,11 +54,8 @@ namespace Arnible.MathModeling
 
     public Number GetValidTranslationRatio(in Number value, in Number delta)
     {
-      if (!IsValid(in value))
-      {
-        throw new ArgumentException(nameof(value));
-      }
-
+      IsValid(in value).AssertIsTrue();
+      
       if (delta == 0)
       {
         return 1;
@@ -78,10 +76,7 @@ namespace Arnible.MathModeling
 
     public Number? GetMaximumValidTranslationRatio(in Number value, in Number delta)
     {
-      if (!IsValid(in value))
-      {
-        throw new ArgumentException(nameof(value));
-      }
+      IsValid(in value).AssertIsTrue();
 
       if (delta == 0)
       {
@@ -109,22 +104,13 @@ namespace Arnible.MathModeling
 
     private Number GetTranslationDeltaForLastAngle(in Number radius, in Number currentAngle, in Number angleDelta)
     {
-      if (radius == 0)
-      {
-        throw new ArgumentException(nameof(radius));
-      }
+      radius.AssertIsNotEqualTo(0);
 
       Number angleMin = Asin(Minimum / radius);
-      if (currentAngle < angleMin)
-      {
-        throw new ArgumentException(nameof(currentAngle));
-      }
+      currentAngle.AssertIsGreaterEqualThan(angleMin);
 
       Number angleMax = Asin(Maximum / radius);
-      if (currentAngle > angleMax)
-      {
-        throw new ArgumentException(nameof(currentAngle));
-      }
+      currentAngle.AssertIsLessEqualThan(angleMax);
 
       Number minimum = angleMin - currentAngle;
       if (angleDelta < minimum)
@@ -143,21 +129,14 @@ namespace Arnible.MathModeling
 
     public Number GetValidTranslationRatioForLastAngle(in Number radius, in Number currentAngle, in Number angleDelta)
     {
-      if (angleDelta == 0)
+      Number validDelta = GetTranslationDeltaForLastAngle(radius: radius, currentAngle: currentAngle, angleDelta: angleDelta);
+      if (validDelta == angleDelta)
       {
         return 1;
       }
       else
       {
-        Number validDelta = GetTranslationDeltaForLastAngle(radius: radius, currentAngle: currentAngle, angleDelta: angleDelta);
-        if (validDelta == angleDelta)
-        {
-          return 1;
-        }
-        else
-        {
-          return validDelta / angleDelta;
-        }
+        return validDelta / angleDelta;
       }
     }
 

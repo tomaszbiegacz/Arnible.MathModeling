@@ -46,6 +46,9 @@
     <Compile Include="..\Arnible.MathModeling.Test\Analysis\ValueWithDerivative1Tests.cs">
       <Link>Analysis\ValueWithDerivative1Tests.cs</Link>
     </Compile>
+    <Compile Include="..\Arnible.MathModeling.Test\Geometry\HypersphericalAngleVectorTests.cs">
+      <Link>Geometry\HypersphericalAngleVectorTests.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling.Test\Linq\Algebra\AddTests.cs">
       <Link>Linq\Algebra\AddTests.cs</Link>
     </Compile>

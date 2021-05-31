@@ -20,21 +20,7 @@ namespace Arnible.Assertions.Test
             IEnumerable<int> actual = new int[] {1, 2};
             actual.AssertSequenceEqualsTo(new int[] {1, 2});
         }
-        
-        [Fact]
-        public void ReadOnlyArray_Error()
-        {
-            ReadOnlyArray<int> actual = new int[] {1, 2};
-            Assert.Throws<AssertException>(() => actual.AssertSequenceEqualsTo(new int[] {1, 3}));
-        }
-        
-        [Fact]
-        public void ReadOnlyArray_Ok()
-        {
-            ReadOnlyArray<int> actual = new int[] {1, 2};
-            actual.AssertSequenceEqualsTo(new int[] {1, 2});
-        }
-        
+
         [Fact]
         public void Span_Error()
         {

@@ -6,7 +6,7 @@ namespace Arnible.MathModeling.Algebra
 {
   public static class MultiplyExtensions
   {
-    public static T[] Multiply<T>(this IReadOnlyCollection<T> arg, in T value) where T: struct, IAlgebraRing<T>
+    public static T[] Multiply<T>(this IReadOnlyCollection<T> arg, in T value) where T: IAlgebraRing<T>
     {
       T[] result = new T[arg.Count];
       ushort pos = 0;
@@ -17,11 +17,11 @@ namespace Arnible.MathModeling.Algebra
       }
       return result;
     }
-    
+
     public static void Multiply<T>(
       in this ReadOnlySpan<T> arg, 
       in T value,
-      in Span<T> output) where T: struct, IAlgebraRing<T>
+      in Span<T> output) where T: IAlgebraRing<T>
     {
       arg.Length.AssertIsEqualTo(output.Length);
       
@@ -31,9 +31,9 @@ namespace Arnible.MathModeling.Algebra
       }
     }
     
-    public static void Multiply<T>(
+    public static void MultiplySelf<T>(
       in this Span<T> arg, 
-      in T value) where T: struct, IAlgebraRing<T>
+      in T value) where T: IAlgebraRing<T>
     {
       for (ushort i =0; i<arg.Length; ++i)
       {

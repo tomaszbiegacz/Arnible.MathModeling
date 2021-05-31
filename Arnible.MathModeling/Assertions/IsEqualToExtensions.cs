@@ -1,4 +1,5 @@
 using Arnible.MathModeling;
+using Arnible.MathModeling.Geometry;
 
 namespace Arnible.Assertions
 {
@@ -6,10 +7,18 @@ namespace Arnible.Assertions
   {
     public static void AssertIsEqualTo(in this Number actual, double expected)
     {
-      if(actual != expected)
-      {
-        throw new AssertException($"Expected {expected} got {actual}");
-      }
+      actual.AssertIsEqualTo((Number)expected);
+    }
+    
+    public static void AssertIsEqualTo(in this HypersphericalAngleVector actual, in HypersphericalAngleVector expected)
+    {
+      actual.Equals(in expected).AssertIsTrue();
+    }
+    
+    public static void AssertIsEqualTo(in this HypersphericalCoordinate actual, in HypersphericalCoordinate expected)
+    {
+      actual.Angles.AssertIsEqualTo(expected.Angles);
+      actual.R.AssertIsEqualTo(expected.R);
     }
   }
 }

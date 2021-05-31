@@ -44,5 +44,13 @@ namespace Arnible.Linq
       
       return true;
     }
+    
+    public static bool SequenceEqual<TSource>(
+      in this Span<TSource> first, 
+      in Span<TSource> second
+    ) where TSource: IEquatable<TSource>
+    {
+      return SequenceEqual((ReadOnlySpan<TSource>)first, (ReadOnlySpan<TSource>)second);
+    }
   }
 }

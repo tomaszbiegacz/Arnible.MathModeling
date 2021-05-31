@@ -5,16 +5,15 @@ namespace Arnible.Assertions
 {
   public static class IsNotEqualToExtensions
   {
-    public static T AssertIsNotEqualTo<T>(this T actual, in T expected) where T: IEquatable<T>
+    public static void AssertIsNotEqualTo<T>(this T actual, in T expected, string message = "") where T: IEquatable<T>
     {
       if(expected.Equals(actual))
       {
-        throw new AssertException($"Not expected {expected}");
+        throw new AssertException($"Not expected {expected}. " + message);
       }
-      return actual;
     }
     
-    public static T AssertIsNotEqualToEnum<T>(this T actual, T expected) where T: Enum
+    public static void AssertIsNotEqualToEnum<T>(this T actual, T expected) where T: Enum
     {
       int actualValue = Unsafe.As<T, int>(ref actual);
       int expectedValue = Unsafe.As<T, int>(ref expected);
@@ -22,7 +21,6 @@ namespace Arnible.Assertions
       {
         throw new AssertException($"Not expected {expected}");
       }
-      return actual;
     }
   }
 }

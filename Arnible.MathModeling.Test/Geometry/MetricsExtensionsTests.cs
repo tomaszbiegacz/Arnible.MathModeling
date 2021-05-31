@@ -1,3 +1,4 @@
+using System;
 using Arnible.Assertions;
 using Xunit;
 
@@ -8,14 +9,14 @@ namespace Arnible.MathModeling.Geometry.Test
     [Fact]
     public void ManhattanDistance()
     {
-      ReadOnlyArray<Number> src = new Number[] {1, 2, 3};
+      ReadOnlySpan<Number> src = new Number[] {1, 2, 3};
       src.ManhattanDistance(new Number[] { 2, -2, 3 }).AssertIsEqualTo(5);
     }
     
     [Fact]
     public void ChebyshevDistance()
     {
-      ReadOnlyArray<Number> src = new Number[] {1, 2, 3};
+      ReadOnlySpan<Number> src = new Number[] {1, 2, 3};
       src.ChebyshevDistance(new Number[] { 2, -2, 3 }).AssertIsEqualTo(4);
     }
   }

@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 
 namespace Arnible.Linq.Test
@@ -19,9 +20,18 @@ namespace Arnible.Linq.Test
     {
       Value r = (new[]
       {
-        new Value(4), new Value(2), new Value(3)
+        new Value(2), new Value(4), new Value(3)
       }).WithMaximum(v => v.V);
       Assert.Equal(4d, r.V);
+    }
+    
+    [Fact]
+    public void WithMaximum_Error()
+    {
+      Assert.Throws<ArgumentException>(() =>
+      {
+        (new double[0]).WithMaximum(v => v);
+      });
     }
   }
 }

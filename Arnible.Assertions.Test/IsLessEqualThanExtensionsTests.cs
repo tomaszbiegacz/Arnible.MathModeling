@@ -15,5 +15,19 @@ namespace Arnible.Assertions.Test
         {
             2.AssertIsLessEqualThan(2);
         }
+        
+        [Fact]
+        public void UShort_Error()
+        {
+            ushort value = 3;
+            Assert.Throws<AssertException>(() => value.AssertIsLessEqualThan(2));
+        }
+        
+        [Fact]
+        public void UShort_Ok()
+        {
+            ushort value = 2;
+            value.AssertIsLessEqualThan(2);
+        }
     }
 }
