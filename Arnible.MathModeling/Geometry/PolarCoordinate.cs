@@ -13,14 +13,6 @@ namespace Arnible.MathModeling.Geometry
 
     public PolarCoordinate(in Number r, in Number φ)
     {
-      R = r;
-      Φ = φ;
-
-      if (r < 0)
-      {
-        throw new ArgumentException($"Negative r: {r}");
-      }
-
       if (r == 0)
       {
         if (φ != 0)
@@ -32,9 +24,12 @@ namespace Arnible.MathModeling.Geometry
       {
         if (φ < -1 * Angle.HalfCycle || φ >= Angle.HalfCycle)
         {
-          throw new ArgumentException($"Invalid angualr coordinate: {φ}");
+          throw new ArgumentException($"Invalid angle coordinate: {φ}");
         }
       }
+      
+      R = r;
+      Φ = φ;
     }
   }
 }

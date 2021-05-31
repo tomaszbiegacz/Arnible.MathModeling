@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using Arnible.Assertions;
 using Arnible.Linq;
 using Arnible.Linq.Algebra;
@@ -14,31 +12,6 @@ namespace Arnible.MathModeling.Geometry
   public readonly ref struct HypersphericalAngleVector
   {
     private readonly Span<Number> _angles;
-    
-    public static HypersphericalAngleVector CreateOrthogonalDirection(
-      ushort anglesCount,
-      ushort anglePos, 
-      in Number value)
-    {
-      anglesCount.AssertIsGreaterThan(anglePos);
-      Span<Number> vector = new Number[anglesCount];
-      vector[anglePos] = value;
-      return new HypersphericalAngleVector(in vector);
-    }
-
-    public static HypersphericalAngleVector GetIdentityVector(ushort dimensionsCount)
-    {
-      dimensionsCount.AssertIsGreaterThan(1);
-
-      Span<Number> angles = new Number[dimensionsCount - 1];
-      angles[0] = Angle.HalfRightAngle;
-      for (ushort anglePos = 1; anglePos < dimensionsCount - 1; ++anglePos)
-      {
-        angles[anglePos] = Math.Atan(Math.Sin((double)angles[anglePos - 1]));
-      }
-
-      return new HypersphericalAngleVector(in angles);
-    }
 
     public HypersphericalAngleVector(in Span<Number> angles)
     {      
@@ -54,14 +27,19 @@ namespace Arnible.MathModeling.Geometry
 
     //
     // Properties
-    //    
-
-    public ref readonly Number this[ushort pos] => ref _angles[pos];
+    //
 
     public ushort Length => (ushort)_angles.Length;
+    
+    public ReadOnlySpan<Number> Span => _angles;
+    
+    public bool IsOrthogonal()
+    {
+      return _angles.Count((in Number v) => v != 0) == 1;
+    }
 
     //
-    // query operators
+    // Query operators
     //
     
     public bool Equals(in HypersphericalAngleVector b)
@@ -71,53 +49,79 @@ namespace Arnible.MathModeling.Geometry
     
     public bool IsZero() => _angles.IsZero();
     
-    public Number[] ToArray()
+    public void GetCartesianAxisViewsRatios(in Span<Number> cartesianCoordinate)
     {
-      return _angles.ToArray();
-    }
-
-    public HypersphericalAngleVector AddDimension()
-    {
-      Span<Number> angles = new Number[_angles.Length + 1];
-      _angles.CopyTo(angles);
-      angles[^1] = 0;
-      return new HypersphericalAngleVector(in angles);
-    }
-    
-    public HypersphericalAngleVector GetMirrorAngles()
-    {
-      Span<Number> angles = new Number[_angles.Length];
-
-      ref readonly Number firstAngle = ref _angles[0];
-      if (firstAngle > 0)
-      {
-        angles[0] = -1 * Angle.HalfCycle + firstAngle;
-      }
-      else
-      {
-        angles[0] = Angle.HalfCycle + firstAngle;
-      }
-
-      for(ushort i=1; i<_angles.Length; ++i)
-      {
-        angles[i] = -1 * _angles[i];
-      }
-      
-      return new HypersphericalAngleVector(in angles);
-    }
-
-    public void GetCartesianAxisViewsRatios(in Span<Number> cartesianDimensions)
-    {
-      cartesianDimensions.Length.AssertIsEqualTo(_angles.Length + 1);
+      cartesianCoordinate.Length.AssertIsEqualTo(_angles.Length + 1);
 
       Number replacement = 1;
       for(ushort anglePos = 0; anglePos < _angles.Length; ++anglePos)
       {
         Number angle = _angles[_angles.Length - 1 - anglePos];
-        cartesianDimensions[_angles.Length - anglePos] = replacement * NumberMath.Sin(angle);
-        replacement *= NumberMath.Cos(angle);
+        cartesianCoordinate[_angles.Length - anglePos] = replacement * NumberMath.Sin(in angle);
+        replacement *= NumberMath.Cos(in angle);
       }
-      cartesianDimensions[0] = replacement;
+      cartesianCoordinate[0] = replacement;
+    }
+    
+    //
+    // Factories
+    //
+    
+    public static HypersphericalAngleVector CreateOrthogonalDirection(
+      ushort anglePos, 
+      in Number value,
+      in Span<Number> buffer)
+    {
+      buffer.Length.AssertIsGreaterThan(anglePos);
+      
+      buffer.Clear();
+      buffer[anglePos] = value;
+      return new HypersphericalAngleVector(in buffer);
+    }
+
+    public static HypersphericalAngleVector GetIdentityVector(in Span<Number> buffer)
+    {
+      buffer.Length.AssertIsGreaterThan(0);
+      
+      buffer[0] = Angle.HalfRightAngle;
+      for (ushort anglePos = 1; anglePos < buffer.Length; ++anglePos)
+      {
+        buffer[anglePos] = Math.Atan(Math.Sin((double)buffer[anglePos - 1]));
+      }
+
+      return new HypersphericalAngleVector(in buffer);
+    }
+    
+    public HypersphericalAngleVector Clone(in Span<Number> buffer)
+    {
+      _angles.CopyTo(buffer);
+      if(buffer.Length > _angles.Length)
+      {
+        buffer[_angles.Length..].Clear();
+      }
+      return new HypersphericalAngleVector(in buffer);
+    }
+    
+    public HypersphericalAngleVector GetMirrorAngles(in Span<Number> buffer)
+    {
+      buffer.Length.AssertIsEqualTo(_angles.Length);
+
+      ref readonly Number firstAngle = ref _angles[0];
+      if (firstAngle > 0)
+      {
+        buffer[0] = -1 * Angle.HalfCycle + firstAngle;
+      }
+      else
+      {
+        buffer[0] = Angle.HalfCycle + firstAngle;
+      }
+
+      for(ushort i=1; i<_angles.Length; ++i)
+      {
+        buffer[i] = -1 * _angles[i];
+      }
+      
+      return new HypersphericalAngleVector(in buffer);
     }
 
     //
@@ -159,35 +163,6 @@ namespace Arnible.MathModeling.Geometry
     {
       _angles.MultiplySelf(in b);
       Normalize(in _angles);
-    }
-    
-    private HypersphericalAngleVector Clone()
-    {
-      // TODO: remove this
-      Span<Number> result = new Number[_angles.Length];
-      _angles.CopyTo(result);
-      return new HypersphericalAngleVector(in _angles);
-    }
-
-    public static HypersphericalAngleVector operator +(HypersphericalAngleVector a, HypersphericalAngleVector b)
-    {
-      var result = a.Clone();
-      result.AddSelf(in b);
-      return result;
-    }
-
-    public static HypersphericalAngleVector operator *(HypersphericalAngleVector a, in Number b)
-    {
-      var result = a.Clone();
-      result.ScaleSelf(in b);
-      return result;
-    }
-
-    public static HypersphericalAngleVector operator *(in Number a, HypersphericalAngleVector b)
-    {
-      var result = b.Clone();
-      result.ScaleSelf(in a);
-      return result;
     }
   }
 }

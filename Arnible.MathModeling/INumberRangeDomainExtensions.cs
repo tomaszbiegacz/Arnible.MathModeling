@@ -7,9 +7,26 @@ namespace Arnible.MathModeling
 {
   public static class INumberRangeDomainExtensions
   {
-    //
-    // IsValidTranslation
-    //
+    public static bool IsValid(
+      this INumberRangeDomain domain,
+      in ReadOnlySpan<Number> value)
+    {
+      foreach(ref readonly Number v in value)
+      {
+        if(!domain.IsValid(v))
+        {
+          return false;
+        }
+      }
+      return true;
+    }
+    
+    public static bool IsValid(
+      this INumberRangeDomain domain,
+      in Span<Number> value)
+    {
+      return IsValid(domain, (ReadOnlySpan<Number>)value);
+    }
 
     public static bool IsValidTranslation(
       this INumberRangeDomain domain, 

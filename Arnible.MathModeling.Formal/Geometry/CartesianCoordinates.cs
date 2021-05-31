@@ -19,11 +19,6 @@ namespace Arnible.MathModeling.Geometry
       return source.Composition(x, r * Cos(φ)).Composition(y, r * Sin(φ));
     }
 
-    public static HypersphericalCoordinate ToSpherical(this IReadOnlyList<Number> p)
-    {
-      throw new NotImplementedException("Roots are not yet supported");
-    }
-
     public static Number ToPolar(in this Number source, in RectangularCoordinate cartesianPoint, in PolarCoordinate polarPoint)
     {
       return ToPolar((Polynomial)source, in cartesianPoint, in polarPoint);
@@ -43,7 +38,7 @@ namespace Arnible.MathModeling.Geometry
       PolynomialDivision result = source;
 
       ReadOnlyArray<Number> cd = cartesianPoint.Reverse().ToArray();
-      ReadOnlyArray<Number> ad = hypersphericalPoint.Angles.ToArray().Reverse().ToArray();
+      ReadOnlyArray<Number> ad = hypersphericalPoint.Angles.Span.ToArray().Reverse().ToArray();
       for (ushort i = 0; i < ad.Length; ++i)
       {
         var cartesianDimension = (PolynomialTerm)cd[i];
@@ -62,11 +57,6 @@ namespace Arnible.MathModeling.Geometry
       in HypersphericalCoordinate hypersphericalPoint)
     {
       return ToSpherical((PolynomialDivision)source, cartesianPoint, in hypersphericalPoint);
-    }
-
-    public static HypersphericalCoordinateOnAxisView ToSphericalView(this IReadOnlyList<Number> p)
-    {
-      throw new NotImplementedException("Not yet supported");
     }
 
     public static PolynomialDivision Composition(

@@ -1,7 +1,6 @@
 ﻿using System;
 using Arnible.Assertions;
-using Arnible.Linq;
-using Arnible.Linq.Algebra;
+using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -21,7 +20,7 @@ namespace Arnible.MathModeling.Geometry
     public Number R { get; }
 
     public HypersphericalCoordinate(in Number r, in Span<Number> angles)
-    : this(in r, new HypersphericalAngleVector(angles))
+    : this(in r, new HypersphericalAngleVector(in angles))
     {
       // intentionally empty
     }
@@ -52,25 +51,44 @@ namespace Arnible.MathModeling.Geometry
     //
     // Operations
     //
-
-    public HypersphericalCoordinate AddDimension()
+    
+    public HypersphericalCoordinate Clone(in Span<Number> buffer)
     {
-      return new HypersphericalCoordinate(R, Angles.AddDimension());
+      return new HypersphericalCoordinate(R, Angles.Clone(in buffer));
     }
 
-    public HypersphericalCoordinateOnAxisView ToCartesianView() => new HypersphericalCoordinateOnAxisView(this);
-
-    public HypersphericalCoordinate Translate(ushort anglePos, in Number delta)
+    public void TranslateSelf(in HypersphericalAngleVector translation)
     {
-      var angleDelta = HypersphericalAngleVector.CreateOrthogonalDirection(Angles.Length, anglePos, in delta);
-      var angles = Angles + angleDelta;
-      return new HypersphericalCoordinate(R, in angles);
+      Angles.AddSelf(translation);
     }
     
-    public HypersphericalCoordinate Translate(in HypersphericalAngleVector translation)
+    public void DerivativeByR(in Span<Number> derivativeOnAxis)
     {
-      // TODO: remove array creation
-      return new HypersphericalCoordinate(R, translation + Angles);
+      Angles.GetCartesianAxisViewsRatios(in derivativeOnAxis);
+    }
+    
+    public void ToCartesian(in Span<Number> buffer)
+    {
+      Angles.GetCartesianAxisViewsRatios(in buffer);
+      buffer.MultiplySelf(R);
+    }
+    
+    public static HypersphericalAngleVector CartesianCoordinatesAngle(
+      ushort cartesianDimensionPos,
+      in Span<Number> buffer)
+    {
+      cartesianDimensionPos.AssertIsLessEqualThan(buffer.Length);
+      buffer.Clear();
+      if(cartesianDimensionPos == 0)
+      {
+        // on 'X' axis all angles are O
+        return new HypersphericalAngleVector(buffer);
+      }
+      else
+      {
+        buffer[cartesianDimensionPos - 1] = Angle.RightAngle;
+        return new HypersphericalAngleVector(buffer);
+      }
     }
   }
 }

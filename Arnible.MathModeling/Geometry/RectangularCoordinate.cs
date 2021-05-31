@@ -1,12 +1,6 @@
 ﻿namespace Arnible.MathModeling.Geometry
 {
-  interface IRectangularCoordinate
-  {
-    Number X { get; }
-    Number Y { get; }
-  }
-
-  public readonly struct RectangularCoordinate : IRectangularCoordinate
+  public readonly struct RectangularCoordinate
   {
     public Number X { get; }
 
@@ -16,11 +10,6 @@
     {
       X = x;
       Y = y;
-    }
-    
-    public Number[] ToCartesian()
-    {
-      return new Number[] { X, Y };
     }
   }
 }

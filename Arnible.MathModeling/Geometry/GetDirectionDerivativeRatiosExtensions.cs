@@ -1,4 +1,5 @@
 using System;
+using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -11,18 +12,14 @@ namespace Arnible.MathModeling.Geometry
       in this ReadOnlySpan<Number> direction,
       in Span<Number> result)
     {
-      Number[] d = direction.ToArray();
-      d.ToSpherical().Angles.GetCartesianAxisViewsRatios(in result);
-    }
-    
-    /// <summary>
-    /// Calculate derivative ratios by moving along the array vector
-    /// </summary>
-    public static void GetDirectionDerivativeRatios(
-      this Number[] direction,
-      in Span<Number> result)
-    {
-      GetDirectionDerivativeRatios((ReadOnlySpan<Number>)direction, in result);
+      direction.Length.AssertIsGreaterEqualThan(2);
+      direction.Length.AssertIsEqualTo(result.Length);
+      
+      Span<Number> buffer = stackalloc Number[result.Length - 1];
+      direction
+        .ToSpherical(in buffer)
+        .Angles
+        .GetCartesianAxisViewsRatios(in result);
     }
     
     /// <summary>

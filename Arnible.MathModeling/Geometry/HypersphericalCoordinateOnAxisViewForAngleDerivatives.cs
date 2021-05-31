@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Arnible.Assertions;
-using Arnible.MathModeling.Analysis;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -18,7 +17,7 @@ namespace Arnible.MathModeling.Geometry
       Number replacement = r;
       for(int currentAnglePos = angles.Length - 1; currentAnglePos >= 0; --currentAnglePos)
       {
-        ref readonly Number angle = ref angles[(ushort)currentAnglePos]; 
+        ref readonly Number angle = ref angles.Span[(ushort)currentAnglePos]; 
         if (currentAnglePos == pos)
         {
           // derivative by angle
@@ -52,10 +51,10 @@ namespace Arnible.MathModeling.Geometry
     }
 
     public HypersphericalCoordinateOnAxisViewForAngleDerivatives(
-      in HypersphericalCoordinateOnAxisView view,
+      in HypersphericalCoordinate view,
       in ushort anglePos)
     {
-      View = view;
+      Point = view;
       AnglePos = anglePos;
       CartesianAxisViewsRatiosDerivatives = GetCartesianAxisViewsRatiosDerivativesByAngle(view.R, view.Angles, pos: anglePos);
       CartesianAxisViewsRatiosDerivatives.Length.AssertIsEqualTo(view.Angles.Length + 1);
@@ -65,29 +64,10 @@ namespace Arnible.MathModeling.Geometry
     // Properties
     //
 
-    public HypersphericalCoordinateOnAxisView View { get; }
+    public HypersphericalCoordinate Point { get; }
 
     public ushort AnglePos { get; }
 
     public ReadOnlySpan<Number> CartesianAxisViewsRatiosDerivatives { get; }
-
-    //
-    // Operations
-    //
-
-    public HypersphericalCoordinateOnRectangularViewWithDerivative GetRectangularViewDerivativeByAngle(ushort axisA, ushort axisB)
-    {
-      return new HypersphericalCoordinateOnRectangularViewWithDerivative(
-        view: View.GetRectangularView(axisA: axisA, axisB: axisB),
-        xDerivative: new Derivative1Value
-        {
-          First = CartesianAxisViewsRatiosDerivatives[axisA] 
-        },
-        yDerivative: new Derivative1Value
-        {
-          First = CartesianAxisViewsRatiosDerivatives[axisB]
-        }
-        );
-    }
   }
 }

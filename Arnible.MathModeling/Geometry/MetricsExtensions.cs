@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using Arnible.Assertions;
 using Arnible.Linq;
 using Arnible.Linq.Algebra;
-using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling.Geometry
 {
@@ -17,7 +15,7 @@ namespace Arnible.MathModeling.Geometry
       src.Length.AssertIsEqualTo(dst.Length);
       for (ushort i = 0; i < src.Length; ++i)
       {
-        result[i] = Math.Abs((double) (dst[i] - src[i]));
+        result[i] = NumberMath.Abs(dst[i] - src[i]);
       }
     }
     
