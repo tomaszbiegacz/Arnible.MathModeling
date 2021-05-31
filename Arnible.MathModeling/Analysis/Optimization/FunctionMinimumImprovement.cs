@@ -3,11 +3,11 @@ using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Analysis.Optimization
 {
-  public readonly ref struct FunctionMinimisationImprovement
+  public readonly ref struct FunctionMinimumImprovement
   {
     private readonly Span<Number> _parameters;
       
-    public FunctionMinimisationImprovement(
+    public FunctionMinimumImprovement(
       IFunctionValueAnalysis function,
       in ReadOnlySpan<Number> sourceParameters,
       in Span<Number> solutionBuffer)
