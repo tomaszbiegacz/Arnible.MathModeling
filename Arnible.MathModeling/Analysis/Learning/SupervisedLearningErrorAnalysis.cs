@@ -1,17 +1,25 @@
 using System;
+using Arnible.Assertions;
 using Arnible.Linq;
+using Arnible.Linq.Algebra;
+using Arnible.MathModeling.Algebra;
 using Arnible.MathModeling.Analysis.Optimization;
 
 namespace Arnible.MathModeling.Analysis.Learning
 {
+  /// <summary>
+  /// Stateless error analysis 
+  /// </summary>
   public record SupervisedLearningErrorAnalysis : IFunctionValueAnalysis
   {
     public SupervisedLearningErrorAnalysis(
+      IDifferentiableFunction function,
       INumberRangeDomain parametersDomain,
       IErrorMeasureSupervisedLearning<Number> errorMeasure,
-      in ReadOnlyMemory<SupervisedLearningCase> learningCases,
-      IDifferentiableFunction function)
+      in ReadOnlyMemory<SupervisedLearningCase> learningCases)
     {
+      learningCases.Length.AssertIsGreaterThan(0);
+      
       ParametersDomain = parametersDomain;
       ErrorMeasure = errorMeasure;
       LearningCases = learningCases;
@@ -43,11 +51,6 @@ namespace Arnible.MathModeling.Analysis.Learning
       return result;
     }
     
-    public SupervisedLearningErrorAnalysisForParameters ForParameters(in ReadOnlySpan<Number> parameters)
-    {
-      return new SupervisedLearningErrorAnalysisForParameters(this, in parameters);
-    }
-    
     public ValueWithDerivative1 ErrorDerivativeByParametersWithValue(
       SupervisedLearningCase learningCase,
       in ReadOnlySpan<Number> parameters, 
@@ -55,12 +58,20 @@ namespace Arnible.MathModeling.Analysis.Learning
     {
       Span<Number> xDerivative = stackalloc Number[InputsCount];
       xDerivative.Clear();
-      
+      return ErrorDerivativeByParametersWithValue(learningCase, in parameters, in pRatio, xDerivative);
+    }
+
+    public ValueWithDerivative1 ErrorDerivativeByParametersWithValue(
+      SupervisedLearningCase learningCase,
+      in ReadOnlySpan<Number> parameters, 
+      in ReadOnlySpan<Number> pRatio,
+      in ReadOnlySpan<Number> xDerivative)
+    {
       ValueWithDerivative1 do_withValue = Function.DerivativeByParametersWithValue(
         parameters: in parameters,
         pRatio: in pRatio,
         inputs: learningCase.Input.Span,
-        inputsDerivative: xDerivative
+        inputsDerivative: in xDerivative
       );
 
       Number de_value = ErrorMeasure.ErrorValue(
@@ -83,6 +94,9 @@ namespace Arnible.MathModeling.Analysis.Learning
       in ReadOnlySpan<Number> parameters, 
       in ReadOnlySpan<Number> directionDerivativeRatios)
     {
+      Span<Number> xDerivative = stackalloc Number[InputsCount];
+      xDerivative.Clear();
+      
       Number resultValue = 0;
       Number resultFirst = 0;
       foreach(ref readonly var learningCase in LearningCases.Span)
@@ -90,7 +104,8 @@ namespace Arnible.MathModeling.Analysis.Learning
         var singleResult = ErrorDerivativeByParametersWithValue(
           learningCase,
           parameters: in parameters,
-          pRatio: in directionDerivativeRatios);
+          pRatio: in directionDerivativeRatios,
+          xDerivative: xDerivative);
         
         resultValue += singleResult.Value;
         resultFirst += singleResult.First;
@@ -100,6 +115,30 @@ namespace Arnible.MathModeling.Analysis.Learning
         Value = resultValue,
         First = resultFirst
       };
+    }
+
+    public void GradientByArguments(
+      in ReadOnlySpan<Number> parameters, 
+      in Span<Number> output)
+    {
+      Span<Number> itemGradient = stackalloc Number[output.Length];
+      
+      output.Clear();
+      foreach(ref readonly var learningCase in LearningCases.Span)
+      {
+        Function.GetParametersGradient(
+          parameters: in parameters,
+          inputs: learningCase.Input.Span,
+          in itemGradient);
+        
+        Derivative1Value errorDerivative = learningCase.ErrorMeasureDerivativeByOutput(
+          Function,
+          ErrorMeasure,
+          in parameters);
+        itemGradient.MultiplySelf(errorDerivative.First);
+        
+        output.AddSelf(in itemGradient);
+      }
     }
   }
 }

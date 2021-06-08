@@ -30,10 +30,27 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
           2*(A - x)*(-1)*dx + B*2*(y - x.ToPower(2))*(dy - 2*x*dx) 
       };
     }
-    
+
+    public void GradientByArguments(in ReadOnlySpan<Number> arguments, in Span<Number> result)
+    {
+      result.Length.AssertIsEqualTo(2);
+      Span<Number> direction = stackalloc Number[2];
+      
+      direction[0] = 1;
+      direction[1] = 0;
+      result[0] = GetValueWithDerivativeByArgumentsChangeDirection(in arguments, direction).First;
+      
+      direction[0] = 0;
+      direction[1] = 1;
+      result[1] = GetValueWithDerivativeByArgumentsChangeDirection(in arguments, direction).First;
+    }
+
     public Number GetValue(in ReadOnlySpan<Number> arguments)
     {
-      return GetValueWithDerivativeByArgumentsChangeDirection(in arguments, new Number[] { 1, 1 }).Value;
+      Span<Number> direction = stackalloc Number[2];
+      direction[0] = 1;
+      direction[1] = 1;
+      return GetValueWithDerivativeByArgumentsChangeDirection(in arguments, direction).Value;
     }
   }
 }

@@ -17,5 +17,12 @@ namespace Arnible.MathModeling.Analysis.Optimization
     ValueWithDerivative1 GetValueWithDerivativeByArgumentsChangeDirection(
       in ReadOnlySpan<Number> arguments,
       in ReadOnlySpan<Number> directionDerivativeRatios);
+    
+    /// <summary>
+    /// Calculate function's gradient in given position
+    /// </summary>
+    void GradientByArguments(
+      in ReadOnlySpan<Number> arguments,
+      in Span<Number> result);
   }
 }

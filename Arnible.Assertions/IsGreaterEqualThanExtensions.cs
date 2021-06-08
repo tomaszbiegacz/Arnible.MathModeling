@@ -11,5 +11,13 @@ namespace Arnible.Assertions
         throw new AssertException($"Expected greater or equal than {baseValue} got {currentValue}");
       }
     }
+    
+    public static void AssertIsGreaterEqualThan(this ushort currentValue, int baseValue)
+    {
+      if(baseValue > currentValue)
+      {
+        throw new AssertException($"Expected greater or equal than {baseValue} got {currentValue}");
+      }
+    }
   }
 }

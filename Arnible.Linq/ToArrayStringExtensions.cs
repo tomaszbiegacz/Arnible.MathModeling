@@ -20,5 +20,10 @@ namespace Arnible.Linq
       builder.Append("]");
       return builder.ToString();
     }
+    
+    public static string ToArrayString<T>(this in Span<T> src, string separator = ",")
+    {
+      return ToArrayString((ReadOnlySpan<T>)src, separator);
+    }
   }
 }

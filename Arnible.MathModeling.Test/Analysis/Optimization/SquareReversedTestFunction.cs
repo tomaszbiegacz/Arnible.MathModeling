@@ -23,9 +23,20 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       };
     }
     
+    public void GradientByArguments(in ReadOnlySpan<Number> arguments, in Span<Number> result)
+    {
+      result.Length.AssertIsEqualTo(1);
+      Span<Number> direction = stackalloc Number[1];
+      
+      direction[0] = 1;
+      result[0] = GetValueWithDerivativeByArgumentsChangeDirection(in arguments, direction).First;
+    }
+    
     public Number GetValue(in ReadOnlySpan<Number> arguments)
     {
-      return GetValueWithDerivativeByArgumentsChangeDirection(in arguments, new Number[] { 1 }).Value;
+      Span<Number> direction = stackalloc Number[1];
+      direction[0] = 1;
+      return GetValueWithDerivativeByArgumentsChangeDirection(in arguments, direction).Value;
     }
   }
 }

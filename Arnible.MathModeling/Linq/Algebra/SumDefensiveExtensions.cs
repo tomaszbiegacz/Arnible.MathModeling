@@ -112,7 +112,7 @@ namespace Arnible.Linq.Algebra
         throw new ArgumentException("Empty enumerator");
       }
     }
-    
+
     /// <summary>
     /// Calculate items sum or throw ArgumentException if passed enumerable is empty
     /// </summary>
