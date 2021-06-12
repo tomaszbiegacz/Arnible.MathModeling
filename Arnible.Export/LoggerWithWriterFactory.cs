@@ -28,8 +28,8 @@ namespace Arnible.Export
 
     public bool IsLoggerEnabled => _logger.IsLoggerEnabled;
     
-    public void Write(in ReadOnlySpan<char> message) => _logger.Write(in message);
-    public void Write(MemoryStream message) => _logger.Write(message);
+    public ISimpleLogger Write(in ReadOnlySpan<char> message) => _logger.Write(in message);
+    public ISimpleLogger Write(MemoryStream message) => _logger.Write(message);
 
     public IReferenceRecordFileWriter<TRecord> CreateTsvReferenceNotepad<TRecord>(string name) where TRecord : class
     {
@@ -38,7 +38,7 @@ namespace Arnible.Export
         _writerFactory.CreateTsvReferenceRecordWriter<TRecord>
       );
       
-      _logger.Log($"Notepad {name}: {writer.Destination}");
+      _logger.Write("Notepad ", name, ": ", writer.Destination.FullName).NewLine();
       return writer;
     }
 
@@ -49,7 +49,7 @@ namespace Arnible.Export
         _writerFactory.CreateTsvValueRecordWriter<TRecord>
       );
       
-      _logger.Log($"Notepad {name}: {writer.Destination}");
+      _logger.Write("Notepad ", name, ": ", writer.Destination.FullName).NewLine();
       return writer;
     }
     
@@ -60,7 +60,7 @@ namespace Arnible.Export
         _writerFactory.CreateTsvRecordWriter
       );
       
-      _logger.Log($"Notepad {name}: {writer.Destination}");
+      _logger.Write("Notepad ", name, ": ", writer.Destination.FullName).NewLine();
       return writer;
     }
   }

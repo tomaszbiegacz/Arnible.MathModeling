@@ -18,11 +18,11 @@ namespace Arnible
     /// If logger is enabled message will be buffered internally so that it can be persisted somewhere at some point.
     /// This is meant to be lightweight operation with O(n) complexity and minimal memory footprint.
     /// </summary>
-    void Write(in ReadOnlySpan<char> message);
+    ISimpleLogger Write(in ReadOnlySpan<char> message);
     
     /// <summary>
     /// If logger is enabled message will be buffered internally so that it can be persisted somewhere at some point.
     /// </summary>
-    void Write(MemoryStream message);
+    ISimpleLogger Write(MemoryStream message);
   }
 }

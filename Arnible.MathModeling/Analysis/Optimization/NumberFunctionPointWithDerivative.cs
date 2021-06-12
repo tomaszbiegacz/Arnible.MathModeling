@@ -17,12 +17,9 @@ namespace Arnible.MathModeling.Analysis.Optimization
 
     public void Write(ISimpleLogger logger)
     {
-      logger.Write("{");
-      X.Write(logger);
-      logger.Write(", ");
-      Y.Write(logger);
-      logger.Write(") ");
-      First.Write(logger);
+      logger.Write("{", X);
+      logger.Write(", ", Y);
+      logger.Write(") ", First);
     }
   }
 }

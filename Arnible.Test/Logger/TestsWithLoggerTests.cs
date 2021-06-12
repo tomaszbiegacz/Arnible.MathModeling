@@ -14,7 +14,7 @@ namespace Arnible.Logger.Test
     [Fact]
     public void InitialValues()
     {
-      Logger.Log("something to write");
+      Logger.Write("something to write");
       
       XunitLogger logger = (XunitLogger)Logger; 
       Assert.True(logger.IsLoggerEnabled);
@@ -25,7 +25,7 @@ namespace Arnible.Logger.Test
     public void TestDisableLogging()
     {
       DisableLogging();
-      Logger.Log("something to write");
+      Logger.Write("something to write");
       
       XunitLogger logger = (XunitLogger)Logger;
       Assert.False(logger.IsLoggerEnabled);
@@ -36,7 +36,7 @@ namespace Arnible.Logger.Test
     public void TestBackupLogsToFile()
     {
       BackupLogsToFile();
-      Logger.Log("something to write");
+      Logger.Write("something to write");
       
       XunitLogger logger = (XunitLogger)Logger;
       Assert.True(logger.IsLoggerEnabled);

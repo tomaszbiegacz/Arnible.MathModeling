@@ -9,14 +9,14 @@ namespace Arnible.Xunit
   {
     public bool IsLoggerEnabled => false;
     
-    public void Write(in ReadOnlySpan<char> message)
+    public ISimpleLogger Write(in ReadOnlySpan<char> message)
     {
-      // intentionally empty
+      return this;
     }
 
-    public void Write(MemoryStream message)
+    public ISimpleLogger Write(MemoryStream message)
     {
-      // intentionally empty
+      return this;
     }
     
     public void Dispose()

@@ -27,11 +27,11 @@ namespace Arnible.MathModeling.Analysis.Optimization
       Number x1 = point.End.X - Ratio * width;
       Number x2 = point.Start.X + Ratio * width;
       
-      _logger.Log("> x1");
+      _logger.Write("> x1").NewLine();
       MoveNext(ref point, functionToAnalyse.ValueWithDerivative(in x1));
       if (point.End.X > x2)
       {
-        _logger.Log("> x2");
+        _logger.Write("> x2").NewLine();
         MoveNext(ref point, functionToAnalyse.ValueWithDerivative(in x2));  
       }
     }

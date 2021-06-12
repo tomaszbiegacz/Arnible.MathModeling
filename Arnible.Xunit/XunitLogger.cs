@@ -21,21 +21,23 @@ namespace Arnible.Xunit
 
     public bool IsLoggerEnabled { get; set; }
     
-    public void Write(in ReadOnlySpan<char> message)
+    public ISimpleLogger Write(in ReadOnlySpan<char> message)
     {
       if(IsLoggerEnabled)
       {
         _stringBuffer.Append(message);
       }
+      return this;
     }
 
-    public void Write(MemoryStream message)
+    public ISimpleLogger Write(MemoryStream message)
     {
       if(IsLoggerEnabled)
       {
         StreamReader reader = new StreamReader(message);
         _stringBuffer.Append(reader.ReadToEnd());
       }
+      return this;
     }
 
     public bool SaveLogsToFile { get; set; }

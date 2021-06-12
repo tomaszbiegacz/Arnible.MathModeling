@@ -65,11 +65,11 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       NumberFunctionOptimizationSearchRange secantResult = searchRange;
       if(secantResult.GetSecantApplicability() == UnimodalSecantAnalysis.HasMinimum)
       {
-        _logger.Log("> Secant");
+        _logger.Write("> Secant").NewLine();
         _secant.TryMoveNext(in f, ref secantResult);  
       }
       
-      _logger.Log("> Golden section");
+      _logger.Write("> Golden section").NewLine();
       _goldenSection.MoveNext(in f, ref searchRange);
       
       if (secantResult.BorderSmaller.Y < searchRange.BorderSmaller.Y)
@@ -95,24 +95,24 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       bool p1Improved = false;
       if (p1.First > 0)
       {
-        _logger.Log("> p1 secant");
+        _logger.Write("> p1 secant").NewLine();
         ApplyUnimodalSecant(in f, in a, ref p1, ref p1Improved, ref result);
       }
       else
       {
-        _logger.Log("> p1 golden section");
+        _logger.Write("> p1 golden section").NewLine();
         ApplyGoldenSection(in f, in a, in p1, ref result);
       }
       
       bool p2Improved = false;
       if (p2.First > 0)
       {
-        _logger.Log("> p2 secant");
+        _logger.Write("> p2 secant").NewLine();
         ApplyUnimodalSecant(in f, in a, ref p2, ref p2Improved, ref result);
       }
       else
       {
-        _logger.Log("> p2 golden section");
+        _logger.Write("> p2 golden section").NewLine();
         ApplyGoldenSection(in f, in a, in p2, ref result);
       }
       
@@ -120,17 +120,17 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       {
         if (p2Improved)
         {
-          _logger.Log(" Narrowing range to [a, p2)");
+          _logger.Write(" Narrowing range to [a, p2)").NewLine();
           return MoveNext(in f, in a, p2.X);
         } 
         else if (p1Improved)
         {
-          _logger.Log(" Narrowing range to [a, p1)");
+          _logger.Write(" Narrowing range to [a, p1)").NewLine();
           return MoveNext(in f, in a, p1.X);
         }
         else
         {
-          _logger.Log(" Narrowing range to [p2, b)");
+          _logger.Write(" Narrowing range to [p2, b)").NewLine();
           return MoveNext(in f, in p2, in b);  
         }
       }

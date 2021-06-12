@@ -28,7 +28,7 @@ namespace Arnible.Logger
     
     public bool IsLoggerEnabled { get; set; }
 
-    public void Write(in ReadOnlySpan<char> message)
+    public ISimpleLogger Write(in ReadOnlySpan<char> message)
     {
       if (IsLoggerEnabled)
       {
@@ -40,14 +40,16 @@ namespace Arnible.Logger
         }
         _writer.Write(buffer[..bytesWritten]);
       }
+      return this;
     }
     
-    public void Write(MemoryStream message)
+    public ISimpleLogger Write(MemoryStream message)
     {
       if (IsLoggerEnabled)
       {
         message.WriteTo(_writer);
       }
+      return this;
     }
     
     public async Task Flush(Stream output, CancellationToken cancellationToken)

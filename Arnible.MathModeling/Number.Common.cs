@@ -7,8 +7,7 @@ namespace Arnible.MathModeling
   public readonly partial struct Number :
     IValueEquatable<Number>,
     IComparable<Number>,
-    IAlgebraUnitRing<Number>,
-    ILoggerWriteable
+    IAlgebraUnitRing<Number>
   {
     static readonly Number _one = 1;
     static readonly Number _zero = 0;

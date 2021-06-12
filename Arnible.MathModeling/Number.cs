@@ -46,13 +46,6 @@ namespace Arnible.MathModeling
         serializer.Write(string.Empty, record?._value);
       }
     }
-    
-    public void Write(ISimpleLogger logger)
-    {
-      Span<char> buffer = stackalloc char[SpanCharFormatter.BufferSize];
-      SpanCharFormatter.ToString(in _value, in buffer);
-      logger.Write(buffer);
-    }
 
     //
     // Comparision operators

@@ -37,8 +37,8 @@ namespace Arnible.Export
       set => _logsBuffer.IsLoggerEnabled = value;
     }
 
-    public void Write(in ReadOnlySpan<char> message) => _logsBuffer.Write(in message);
+    public ISimpleLogger Write(in ReadOnlySpan<char> message) => _logsBuffer.Write(in message);
     
-    public void Write(MemoryStream message) => _logsBuffer.Write(message);
+    public ISimpleLogger Write(MemoryStream message) => _logsBuffer.Write(message);
   }
 }
