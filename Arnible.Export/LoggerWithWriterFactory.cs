@@ -9,6 +9,8 @@ namespace Arnible.Export
     IReferenceRecordFileWriter<TRecord> CreateTsvReferenceNotepad<TRecord>(string name) where TRecord: class;
     
     IValueRecordFileWriter<TRecord> CreateTsvValueNotepad<TRecord>(string name) where TRecord: struct;
+    
+    IRecordFileWriter CreateTsvNotepad(string name);
   }
   
   class LoggerWithWriterFactory : ILoggerWithWriterFactory
@@ -45,6 +47,17 @@ namespace Arnible.Export
       IValueRecordFileWriter<TRecord> writer = new ValueRecordFileWriter<TRecord>(
         StreamExtensions.GetTempFile(TsvConst.FileExtension), 
         _writerFactory.CreateTsvValueRecordWriter<TRecord>
+      );
+      
+      _logger.Log($"Notepad {name}: {writer.Destination}");
+      return writer;
+    }
+    
+    public IRecordFileWriter CreateTsvNotepad(string name)
+    {
+      IRecordFileWriter writer = new RecordFileWriter(
+        StreamExtensions.GetTempFile(TsvConst.FileExtension), 
+        _writerFactory.CreateTsvRecordWriter
       );
       
       _logger.Log($"Notepad {name}: {writer.Destination}");

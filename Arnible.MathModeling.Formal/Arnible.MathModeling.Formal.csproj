@@ -51,6 +51,9 @@
     <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\PolynomialTermAnalysisExtensions.cs">
       <Link>Algebra\Polynomials\PolynomialTermAnalysisExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\ReadOnlyArray.cs">
+      <Link>Algebra\Polynomials\ReadOnlyArray.cs</Link>
+    </Compile>
     <Compile Include="..\Arnible.MathModeling\Algebra\Polynomials\Term.cs">
       <Link>Algebra\Polynomials\Term.cs</Link>
     </Compile>
