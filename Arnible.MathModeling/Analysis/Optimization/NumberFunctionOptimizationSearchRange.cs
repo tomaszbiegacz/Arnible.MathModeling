@@ -140,13 +140,12 @@ namespace Arnible.MathModeling.Analysis.Optimization
       string message,
       in NumberFunctionPointWithDerivative c)
     {
-      logger.Write("[");
-      _a.Write(logger);
-      logger.Write(", ");
-      _b.Write(logger);
-      logger.Write("] ", message, ", c:");
-      c.Write(logger);
-      logger.Write(Environment.NewLine);
+      logger
+        .Write("[", _a)
+        .Write(", ", _b)
+        .Write("] ", message)
+        .Write(" c:", in c)
+        .NewLine();
     }
   }
 }

@@ -9,11 +9,13 @@ namespace Arnible.Xunit
   {
     private readonly ITestOutputHelper _output;
     private readonly StringBuilder _stringBuffer;
+    private FileInfo? _logFile;
 
     public XunitLogger(ITestOutputHelper output)
     {
       _output = output;
       _stringBuffer = new StringBuilder();
+      _logFile = null;
 
       IsLoggerEnabled = true;
       SaveLogsToFile = false;
@@ -42,42 +44,39 @@ namespace Arnible.Xunit
 
     public bool SaveLogsToFile { get; set; }
 
-    //
-    // IDisposable
-    //
+    public void Flush()
+    {
+      string logs = _stringBuffer.ToString();
+      _stringBuffer.Clear();
+      
+      if (SaveLogsToFile && _logFile == null)
+      {
+        _logFile = new FileInfo(Path.GetTempFileName());
+        _output.WriteLine($"Log file: {_logFile.FullName}");
+      }
+      
+      const int maxLength = 9000;
+      if (logs.Length > maxLength)
+      {
+        _output.WriteLine(logs.Substring(0, maxLength));
+      }
+      else
+      {
+        _output.WriteLine(logs);  
+      }
+
+      if (_logFile != null)
+      {
+        File.WriteAllText(_logFile.FullName, logs);
+      } 
+    }
 
     /// <summary>
     /// Write logs to ITestOutputHelper and to file
     /// </summary>
     public void Dispose()
     {
-      if (IsLoggerEnabled)
-      {
-        string logs = _stringBuffer.ToString();
-        _stringBuffer.Clear();
-
-        FileInfo? logFile = null;
-        if (SaveLogsToFile)
-        {
-          logFile = new FileInfo(Path.GetTempFileName());
-          _output.WriteLine($"Log file: {logFile.FullName}");
-        }
-      
-        const int maxLength = 9000;
-        if (logs.Length > maxLength)
-        {
-          _output.WriteLine(logs.Substring(0, maxLength));
-        }
-        else
-        {
-          _output.WriteLine(logs);  
-        }
-
-        if (logFile != null)
-        {
-          File.WriteAllText(logFile.FullName, logs);
-        } 
-      }
+      Flush();
     }
   }
 }

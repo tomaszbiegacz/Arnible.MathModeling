@@ -2,7 +2,7 @@ using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
 {
-  public static class SingleStepOptimizationHelper
+  public static class ISingleStepOptimizationExtensions
   {
     public static ushort FindOptimal(
       this ISingleStepOptimization method,

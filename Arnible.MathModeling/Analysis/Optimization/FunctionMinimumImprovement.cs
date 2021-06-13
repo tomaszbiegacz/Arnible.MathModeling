@@ -33,9 +33,10 @@ namespace Arnible.MathModeling.Analysis.Optimization
     public Number GetRelativeImprovement() => (SourceValue - GetValue()) / SourceValue;
     
     public bool IsNewFound => !Parameters.SequenceEqual(SourceParameters);
-    
+
     public void SetSolution(in ReadOnlySpan<Number> solution)
     {
+      solution.Length.AssertIsEqualTo(_parameters.Length);
       solution.CopyTo(_parameters);
     }
     
@@ -45,7 +46,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
       Number value = Function.GetValue(in solution);
       if(value < currentValue)
       {
-        solution.CopyTo(_parameters);
+        SetSolution(in solution);
         return true;
       }
       else

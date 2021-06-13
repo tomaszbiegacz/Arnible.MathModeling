@@ -14,12 +14,5 @@ namespace Arnible.MathModeling.Analysis.Optimization
     public Number Y { get; }
     
     public Number First { get; }
-
-    public void Write(ISimpleLogger logger)
-    {
-      logger.Write("{", X);
-      logger.Write(", ", Y);
-      logger.Write(") ", First);
-    }
   }
 }

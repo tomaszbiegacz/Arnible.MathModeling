@@ -172,5 +172,47 @@ namespace Arnible.MathModeling.Geometry.Test
       
       radios.SumDefensive((in Number r) => r*r).AssertIsEqualTo(1);
     }
+    
+    [Fact]
+    public void GetDirectionDerivativeRatios_2D_positive()
+    {
+      Number r = 10;
+      Number cos30 = Math.Sqrt(3) / 2;
+      Number sin30 = 0.5;
+      
+      Span<Number> c = new Number[] { r*cos30, r*sin30 };
+      Span<Number> radios = stackalloc Number[2];
+      c.GetDirectionDerivativeRatios(in radios);
+      Assert.Equal(cos30, radios[0]);
+      Assert.Equal(sin30, radios[1]);
+    }
+    
+    [Fact]
+    public void GetDirectionDerivativeRatios_2D_xPositive_yNegative()
+    {
+      Number r = 10;
+      Number cosMinus30 = Math.Sqrt(3) / 2;
+      Number sinMinus30 = -0.5;
+      
+      Span<Number> c = new Number[] { r*cosMinus30, r*sinMinus30 };
+      Span<Number> radios = stackalloc Number[2];
+      c.GetDirectionDerivativeRatios(in radios);
+      Assert.Equal(cosMinus30, radios[0]);
+      Assert.Equal(sinMinus30, radios[1]);
+    }
+    
+    [Fact]
+    public void GetDirectionDerivativeRatios_2D_negative()
+    {
+      Number r = 10;
+      Number cosMinus120 = Math.Sqrt(3) / -2;
+      Number sinMinus120 = -0.5;
+      
+      Span<Number> c = new Number[] { r*cosMinus120, r*sinMinus120 };
+      Span<Number> radios = stackalloc Number[2];
+      c.GetDirectionDerivativeRatios(in radios);
+      Assert.Equal(cosMinus120, radios[0]);
+      Assert.Equal(sinMinus120, radios[1]);
+    }
   }
 }

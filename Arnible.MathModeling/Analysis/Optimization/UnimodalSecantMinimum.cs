@@ -26,6 +26,10 @@ namespace Arnible.MathModeling.Analysis.Optimization
       ref NumberFunctionOptimizationSearchRange point)
     {
       point.IsOptimal.AssertIsFalse();
+      _logger
+        .Write("start: ", point.Start)
+        .Write(", end: ", point.End)
+        .NewLine();
 
       NumberFunctionPointWithDerivative c = point.CalculateMinimumCandidate(in functionToAnalyse);
       if (c.First == 0)
