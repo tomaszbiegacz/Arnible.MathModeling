@@ -44,7 +44,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
     {
       Number currentValue = GetValue();
       Number value = Function.GetValue(in solution);
-      if(value < currentValue)
+      if(value.PreciselySmaller(in currentValue))
       {
         SetSolution(in solution);
         return true;

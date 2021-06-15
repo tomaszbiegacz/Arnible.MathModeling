@@ -6,6 +6,11 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
   /// <summary>
   /// Sin(x) + Cos(y)
   /// </summary>
+  /// <remarks>
+  /// gnuplot
+  /// set xlabel "X"; set ylabel "Y" 
+  /// splot [-6:6] [-6:6] sin(x) + cos(y) with pm3d
+  /// </remarks>
   public class SinCos2DTestFunction : IFunctionValueAnalysis
   {
     public ValueWithDerivative1 GetValueWithDerivativeByArgumentsChangeDirection(

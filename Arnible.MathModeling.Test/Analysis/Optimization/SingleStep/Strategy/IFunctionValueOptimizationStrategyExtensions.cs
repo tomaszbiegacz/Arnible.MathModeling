@@ -1,3 +1,4 @@
+using System;
 using Arnible.Assertions;
 using Arnible.Xunit;
 
@@ -17,12 +18,18 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       try
       {
         ushort pos = 0;
-        while(!solution.Function.IsOptimum(solution.Parameters))
+        Span<Number> currentParameters = stackalloc Number[solution.Parameters.Length];
+        bool isTheEnd = false;
+        while(!isTheEnd)
         {
+          solution.Parameters.CopyTo(currentParameters);
+          
           pos++;
           logger.NewLine().Write("Loop ", pos).NewLine();
           strategy.FindImprovedArguments(in solution);
-          solution.IsNewFound.AssertIsTrue();
+          
+          isTheEnd = solution.Parameters.SequenceEqual(currentParameters)
+                     || solution.Function.IsOptimum(solution.Parameters);
         }
         return pos;  
       }

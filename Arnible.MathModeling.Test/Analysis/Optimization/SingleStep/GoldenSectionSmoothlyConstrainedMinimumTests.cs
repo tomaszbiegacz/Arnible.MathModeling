@@ -121,7 +121,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       
       ushort iterationCount = _optimizer.FindOptimal(in fa, ref a, b.X);
       a.X.AssertIsEqualTo(opt.X);
-      iterationCount.AssertIsEqualTo(18);
+      iterationCount.AssertIsEqualTo(13);
     }
   }
 }

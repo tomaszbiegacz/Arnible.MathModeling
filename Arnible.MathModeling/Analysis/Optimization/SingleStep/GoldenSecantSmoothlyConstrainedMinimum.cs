@@ -92,11 +92,12 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       NumberFunctionPointWithDerivative p2 = f.ValueWithDerivative(a.X + Ratio * width);
       NumberFunctionPointWithDerivative result = a;
 
-      bool p1Improved = false;
+      // try to improve with p1
+      bool p1ImprovedSecant = false;
       if (p1.First > 0)
       {
         _logger.Write("> p1 secant").NewLine();
-        ApplyUnimodalSecant(in f, in a, ref p1, ref p1Improved, ref result);
+        ApplyUnimodalSecant(in f, in a, ref p1, ref p1ImprovedSecant, ref result);
       }
       else
       {
@@ -104,11 +105,12 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
         ApplyGoldenSection(in f, in a, in p1, ref result);
       }
       
-      bool p2Improved = false;
+      // try to improve with p2
+      bool p2ImprovedSecant = false;
       if (p2.First > 0)
       {
         _logger.Write("> p2 secant").NewLine();
-        ApplyUnimodalSecant(in f, in a, ref p2, ref p2Improved, ref result);
+        ApplyUnimodalSecant(in f, in a, ref p2, ref p2ImprovedSecant, ref result);
       }
       else
       {
@@ -116,27 +118,41 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
         ApplyGoldenSection(in f, in a, in p2, ref result);
       }
       
-      if (result.Y >= a.Y)
+      if (result.Y.PreciselySmaller(a.Y))
       {
-        if (p2Improved)
+        return result;
+      }
+      else
+      {
+        // a is still the smallest, try to narrow the range
+        if (p2ImprovedSecant)
         {
           _logger.Write(" Narrowing range to [a, p2)").NewLine();
           return MoveNext(in f, in a, p2.X);
         } 
-        else if (p1Improved)
+        else if (p1ImprovedSecant)
         {
           _logger.Write(" Narrowing range to [a, p1)").NewLine();
           return MoveNext(in f, in a, p1.X);
         }
-        else
+        else if(p1.First < 0)
+        {
+          _logger.Write(" Narrowing range to [p1, b)").NewLine();
+          return MoveNext(in f, in p1, in b);  
+        }
+        else if(p2.First < 0)
         {
           _logger.Write(" Narrowing range to [p2, b)").NewLine();
           return MoveNext(in f, in p2, in b);  
         }
-      }
-      else
-      {
-        return result;
+        else
+        {
+          // both are zero, let's just pick the winner
+          NumberFunctionPointWithDerivative smallerP = p1.Y < p2.Y ? p1 : p2;
+          if(a.Y < smallerP.Y)
+            smallerP = a;
+          return smallerP;
+        }
       }
     }
   }

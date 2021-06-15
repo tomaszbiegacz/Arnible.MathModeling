@@ -101,6 +101,16 @@ namespace Arnible.MathModeling
       }
     }
     
+    public bool PreciselySmaller(in Number other)
+    {
+      return _value < other._value;
+    }
+    
+    public bool PreciselyGreater(in Number other)
+    {
+      return _value > other._value;
+    }
+    
     //
     // IComparable<Number>
     //
