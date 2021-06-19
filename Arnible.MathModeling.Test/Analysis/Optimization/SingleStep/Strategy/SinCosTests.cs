@@ -39,7 +39,10 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         new Number[] { -4, -4 }, 
         in solutionBuffer);
       
-      GoldenSecantStrategy strategy = new(-6, 6, Logger);
+      GoldenSecantStrategy strategy = new(-6, 6, Logger)
+      {
+        WideSearch = true
+      };
       ushort iterations = strategy.FindOptimal(Logger, in solution);
       Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 8);
       Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 8);
@@ -56,7 +59,10 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         new Number[] { -3.456, -3.456 }, 
         in solutionBuffer);
       
-      GoldenSecantStrategy strategy = new(-6, 6, Logger);
+      GoldenSecantStrategy strategy = new(-6, 6, Logger)
+      {
+        WideSearch = true
+      };
       ushort iterations = strategy.FindOptimal(Logger, in solution);
       Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 8);
       Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 8);
