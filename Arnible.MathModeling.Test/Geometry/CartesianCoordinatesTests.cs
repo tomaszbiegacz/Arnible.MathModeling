@@ -188,6 +188,19 @@ namespace Arnible.MathModeling.Geometry.Test
     }
     
     [Fact]
+    public void HypersphericalCoordinateOnAxisViewForAngleDerivatives_2D_positive()
+    {
+      Number r = 10;
+      Number cos30 = Math.Sqrt(3) / 2;
+      Number sin30 = 0.5;
+      
+      Span<Number> c = new Number[] { r*cos30, r*sin30 };
+      Span<Number> angles = stackalloc Number[1];
+      HypersphericalCoordinateOnAxisViewForAngleDerivatives onAxis = new(c.ToSpherical(in angles), 0);
+      onAxis.DerivativesCartesianVector.AssertSequenceEqualsTo(new [] { -1 * r*sin30, r*cos30 });
+    }
+    
+    [Fact]
     public void GetDirectionDerivativeRatios_2D_xPositive_yNegative()
     {
       Number r = 10;
@@ -213,6 +226,16 @@ namespace Arnible.MathModeling.Geometry.Test
       c.GetDirectionDerivativeRatios(in radios);
       Assert.Equal(cosMinus120, radios[0]);
       Assert.Equal(sinMinus120, radios[1]);
+    }
+    
+    [Fact]
+    public void GetDirectionDerivativeRatios_2D_only1Dim()
+    {
+      Span<Number> c = new Number[] { -2251, 0 };
+      Span<Number> radios = stackalloc Number[2];
+      c.GetDirectionDerivativeRatios(in radios);
+      Assert.Equal(-1, (double)radios[0]);
+      Assert.Equal(0, (double)radios[1]);
     }
   }
 }

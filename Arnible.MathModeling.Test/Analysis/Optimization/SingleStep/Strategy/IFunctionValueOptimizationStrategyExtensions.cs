@@ -1,6 +1,5 @@
 using System;
-using Arnible.Assertions;
-using Arnible.Xunit;
+using Arnible.Export;
 
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
 {
@@ -8,13 +7,15 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
   {
     public static ushort FindOptimal(
       this IFunctionValueOptimizationStrategy strategy,
-      XunitLogger logger,
+      ILoggerWithWriterFactory logger,
       in FunctionMinimumImprovement solution)
     {
       logger
         .Write("Source parameters: ", solution.SourceParameters)
         .Write(" value: ", solution.SourceValue)
         .NewLine();
+      
+      IRecordFileWriter serializer = logger.CreateTsvNotepad("function");
       try
       {
         ushort pos = 0;
@@ -22,20 +23,30 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         bool isTheEnd = false;
         while(!isTheEnd)
         {
-          solution.Parameters.CopyTo(currentParameters);
-          
+          using(var writer = serializer.OpenRecord())
+            solution.SerializeCurrentState(pos, writer.FieldSerializer);
+        
           pos++;
+          solution.Parameters.CopyTo(currentParameters);
+
           logger.NewLine().Write("Loop ", pos).NewLine();
           strategy.FindImprovedArguments(in solution);
-          
-          isTheEnd = solution.Parameters.SequenceEqual(currentParameters)
-                     || solution.Function.IsOptimum(solution.Parameters);
+        
+          if(solution.Parameters.SequenceEqual(currentParameters))
+          {
+            logger.Write("I got stuck").NewLine();
+            isTheEnd = true;
+          } else if(solution.Function.IsOptimum(solution.Parameters))
+          {
+            logger.Write("I have found optimum").NewLine();
+            isTheEnd = true;
+          }
         }
         return pos;  
       }
       finally
       {
-        logger.Flush();
+        serializer.DisposeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
       }
     }
   }

@@ -66,9 +66,8 @@ namespace Arnible.MathModeling.Geometry
       cartesianPoint.Length.AssertIsGreaterEqualThan(2);
       cartesianPoint.Length.AssertIsEqualTo(buffer.Length + 1);
       
-      Number r2 = Sqr(in cartesianPoint[0]) + Sqr(in cartesianPoint[1]);
-      buffer[0] = GetFirstAngle(in cartesianPoint[0], in cartesianPoint[1]);
-      for (ushort i = 1; i < buffer.Length; i++)
+      Number r2 = Sqr(in cartesianPoint[0]);
+      for (ushort i = 0; i < buffer.Length; i++)
       {
         ref readonly Number coordinate = ref cartesianPoint[1 + i]; 
         r2 += Sqr(in coordinate);
@@ -79,6 +78,14 @@ namespace Arnible.MathModeling.Geometry
         else
         {
           buffer[i] = Asin(coordinate / NumberMath.Sqrt(r2));
+          
+          if(i == 0 && cartesianPoint[0] < 0)
+          {
+            if(buffer[0] >= 0)
+              buffer[0] = Math.PI - buffer[0];
+            else
+              buffer[0] = -1 * Math.PI - buffer[0];
+          }
         }
       }
       

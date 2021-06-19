@@ -30,7 +30,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       point.BorderSmaller.X.AssertIsEqualTo(1);
       point.BorderSmaller.Y.AssertIsEqualTo(3);
       
-      point.IsOptimal.AssertIsTrue();
+      point.IsEmptyRange.AssertIsTrue();
       try
       {
         _method.MoveNext(in f, ref point);

@@ -20,48 +20,13 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       _goldenSection = new(logger);
       _secant = new(logger);
     }
-    
-    private void ApplyUnimodalSecant(
-      in FunctionValueAnalysisForDirection f,
-      in NumberFunctionPointWithDerivative a,
-      ref NumberFunctionPointWithDerivative b,
-      ref bool bImproved,
-      ref NumberFunctionPointWithDerivative result)
-    {
-      NumberFunctionOptimizationSearchRange r = new(in a, in b);
-      if(_secant.TryMoveNext(in f, ref r))
-      {
-        if (r.BorderSmaller.Y < result.Y)
-        {
-          result = r.BorderSmaller;  
-        }
-        
-        if (r.BorderHighestDerivative.Y < b.Y)
-        {
-          b = r.BorderHighestDerivative;
-          bImproved = true;
-        }
-      }
-    }
-    
-    private void ApplyGoldenSection(
-      in FunctionValueAnalysisForDirection f,
-      in NumberFunctionPointWithDerivative a,
-      in NumberFunctionPointWithDerivative b,
-      ref NumberFunctionPointWithDerivative result)
-    {
-      NumberFunctionOptimizationSearchRange r = new(in a, in b);
-      _goldenSection.MoveNext(in f, ref r);
-      if(r.BorderSmaller.Y < result.Y)
-      {
-        result = r.BorderSmaller;
-      }
-    }
-    
+
     public void MoveNext(
       in FunctionValueAnalysisForDirection f,
       ref NumberFunctionOptimizationSearchRange searchRange)
     {
+      searchRange.Start.First.AssertIsLessThan(0);
+      
       NumberFunctionOptimizationSearchRange secantResult = searchRange;
       if(secantResult.GetSecantApplicability() == UnimodalSecantAnalysis.HasMinimum)
       {
@@ -77,82 +42,102 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
         searchRange = secantResult;
       }
     }
-
+    
     public NumberFunctionPointWithDerivative MoveNext(
       in FunctionValueAnalysisForDirection f,
       in NumberFunctionPointWithDerivative a,
       in Number b)
     {
-      a.First.AssertIsLessThan(0);
-      
-      Number width = b - a.X;
-      width.AssertIsGreaterThan(0);
-      
-      NumberFunctionPointWithDerivative p1 = f.ValueWithDerivative(b - Ratio * width);
-      NumberFunctionPointWithDerivative p2 = f.ValueWithDerivative(a.X + Ratio * width);
-      NumberFunctionPointWithDerivative result = a;
+      return MoveNext(0, in f, in a, in b);
+    }
 
-      // try to improve with p1
-      bool p1ImprovedSecant = false;
-      if (p1.First > 0)
-      {
-        _logger.Write("> p1 secant").NewLine();
-        ApplyUnimodalSecant(in f, in a, ref p1, ref p1ImprovedSecant, ref result);
-      }
-      else
-      {
-        _logger.Write("> p1 golden section").NewLine();
-        ApplyGoldenSection(in f, in a, in p1, ref result);
-      }
+    private NumberFunctionPointWithDerivative MoveNext(
+      uint iteration,
+      in FunctionValueAnalysisForDirection f,
+      in NumberFunctionPointWithDerivative a,
+      in Number b)
+    {
+      a.First.AssertIsLessThan(0);
+      b.AssertIsGreaterThan(a.X);
       
-      // try to improve with p2
-      bool p2ImprovedSecant = false;
-      if (p2.First > 0)
-      {
-        _logger.Write("> p2 secant").NewLine();
-        ApplyUnimodalSecant(in f, in a, ref p2, ref p2ImprovedSecant, ref result);
-      }
-      else
-      {
-        _logger.Write("> p2 golden section").NewLine();
-        ApplyGoldenSection(in f, in a, in p2, ref result);
-      }
+      _logger
+        .Write("[", iteration)
+        .Write("] MoveNext ", in a)
+        .Write(" to ", in b)
+        .NewLine();
+
+      NumberFunctionPointWithDerivative result = a;
+      Number width = b - a.X;
+      NumberFunctionPointWithDerivative p1 = f.ValueWithDerivative(b - Ratio * width);
+      Sign p1FirstSign = p1.First.GetSign();
       
-      if (result.Y.PreciselySmaller(a.Y))
+      _logger.Write("p: ", in p1).NewLine();
+      if(a.X == p1.X)
       {
-        return result;
+        _logger.Write("We are on the edge").NewLine();
+        if(p1.Y < a.Y)
+          return p1;
+        else
+          return a;
+      }
+      else if(p1FirstSign is Sign.Negative)
+      {
+        _logger.Write("p1First is negative").NewLine();
+        return MoveNext(iteration + 1, in f, in p1, in b);
       }
       else
       {
-        // a is still the smallest, try to narrow the range
-        if (p2ImprovedSecant)
+        if(p1FirstSign is Sign.Positive)
         {
-          _logger.Write(" Narrowing range to [a, p2)").NewLine();
-          return MoveNext(in f, in a, p2.X);
-        } 
-        else if (p1ImprovedSecant)
-        {
-          _logger.Write(" Narrowing range to [a, p1)").NewLine();
-          return MoveNext(in f, in a, p1.X);
+          _logger.Write("> p1 secant").NewLine();
+          ApplyUnimodalSecant(in f, in a, in p1, ref result);
         }
-        else if(p1.First < 0)
+        if(p1FirstSign is Sign.Positive or Sign.None)
         {
-          _logger.Write(" Narrowing range to [p1, b)").NewLine();
-          return MoveNext(in f, in p1, in b);  
+          _logger.Write("> p1 golden section").NewLine();
+          ApplyGoldenSection(in f, in a, in p1, ref result);
         }
-        else if(p2.First < 0)
+        
+        if(result.Y < a.Y)
         {
-          _logger.Write(" Narrowing range to [p2, b)").NewLine();
-          return MoveNext(in f, in p2, in b);  
+          // in this iteration, we are done
+          return result;
         }
         else
         {
-          // both are zero, let's just pick the winner
-          NumberFunctionPointWithDerivative smallerP = p1.Y < p2.Y ? p1 : p2;
-          if(a.Y < smallerP.Y)
-            smallerP = a;
-          return smallerP;
+          // a.First is < 0
+          return MoveNext(iteration + 1, in f, in a, p1.X);
         }
+      }
+    }
+    
+    private void ApplyUnimodalSecant(
+      in FunctionValueAnalysisForDirection f,
+      in NumberFunctionPointWithDerivative a,
+      in NumberFunctionPointWithDerivative b,
+      ref NumberFunctionPointWithDerivative result)
+    {
+      NumberFunctionOptimizationSearchRange r = new(in a, in b);
+      if(_secant.TryMoveNext(in f, ref r))
+      {
+        if (r.BorderSmaller.Y < result.Y)
+        {
+          result = r.BorderSmaller;  
+        }
+      }
+    }
+    
+    private void ApplyGoldenSection(
+      in FunctionValueAnalysisForDirection f,
+      in NumberFunctionPointWithDerivative a,
+      in NumberFunctionPointWithDerivative b,
+      ref NumberFunctionPointWithDerivative result)
+    {
+      NumberFunctionOptimizationSearchRange r = new(in a, in b);
+      _goldenSection.MoveNext(in f, ref r);
+      if(r.BorderSmaller.Y < result.Y)
+      {
+        result = r.BorderSmaller;
       }
     }
   }

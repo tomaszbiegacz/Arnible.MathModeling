@@ -37,7 +37,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
       Number x2 = a.X + Ratio * width;
       
       searchRange = new(in a, f.ValueWithDerivative(in x2));
-      if (!searchRange.IsOptimal)
+      if (!searchRange.IsEmptyRange)
       {
         _goldenSection.MoveNext(ref searchRange, f.ValueWithDerivative(in x1));  
       }

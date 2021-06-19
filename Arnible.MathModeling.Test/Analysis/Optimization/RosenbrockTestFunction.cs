@@ -6,6 +6,11 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
   /// <summary>
   /// https://en.wikipedia.org/wiki/Rosenbrock_function
   /// </summary>
+  /// <remarks>
+  /// gnuplot
+  /// set xlabel "X"; set ylabel "Y" 
+  /// splot [-3:3] [-3:3] (1-x)**2 + 100*(y - x**2)**2 with pm3d
+  /// </remarks> 
   public record RosenbrockTestFunction : IFunctionValueAnalysis
   {
     public Number A { get; init; } = 1;

@@ -1,20 +1,20 @@
 using System;
 using Arnible.Assertions;
 using Arnible.MathModeling.Analysis.Optimization.Test;
-using Arnible.Xunit;
+using Arnible.MathModeling.Test;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
 {
-  public class SinTests
+  public class SinTests : TestsWithWriterFactory
   {
-    private readonly IFunctionValueAnalysis _function = new SinCos2DTestFunction();
-    private readonly XunitLogger _logger;
-    
+    private readonly IFunctionValueAnalysis _function;
+
     public SinTests(ITestOutputHelper output)
+    : base(output)
     {
-      _logger = new XunitLogger(output);
+      _function = new SinCos2DTestFunction();
     }
     
     [Fact]
@@ -39,11 +39,11 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         new Number[] { -4, -4 }, 
         in solutionBuffer);
       
-      GoldenSecantStrategy strategy = new(-6, 6, _logger);
-      ushort iterations = strategy.FindOptimal(_logger, in solution);
+      GoldenSecantStrategy strategy = new(-6, 6, Logger);
+      ushort iterations = strategy.FindOptimal(Logger, in solution);
       Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 8);
       Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 8);
-      iterations.AssertIsEqualTo(6);
+      iterations.AssertIsEqualTo(8);
     }
     
     [Fact]
@@ -56,8 +56,8 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         new Number[] { -3.456, -3.456 }, 
         in solutionBuffer);
       
-      GoldenSecantStrategy strategy = new(-6, 6, _logger);
-      ushort iterations = strategy.FindOptimal(_logger, in solution);
+      GoldenSecantStrategy strategy = new(-6, 6, Logger);
+      ushort iterations = strategy.FindOptimal(Logger, in solution);
       Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 8);
       Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 8);
       iterations.AssertIsEqualTo(11);

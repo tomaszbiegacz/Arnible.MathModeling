@@ -31,7 +31,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       ref NumberFunctionOptimizationSearchRange point)
     {
       ushort i = 0;
-      while(!point.IsOptimal)
+      while(!point.IsEmptyRange)
       {
         Number width = point.Width;
         Number value = point.BorderSmaller.Y;
@@ -73,7 +73,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
           searchRange.Width.AssertIsLessThan(in width);
           searchRange.BorderSmaller.Y.AssertIsLessEqualThan(in value);
           
-          if (searchRange.IsOptimal)
+          if (searchRange.IsEmptyRange)
           {
             isTheEnd = true;
             solution = searchRange.BorderSmaller;
@@ -100,7 +100,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
           else
           {
             useSearchRange = true;
-            if (searchRange.IsOptimal)
+            if (searchRange.IsEmptyRange)
             {
               isTheEnd = true;
               solution = searchRange.BorderSmaller; 

@@ -1,4 +1,6 @@
 using System;
+using Arnible.Assertions;
+using Arnible.Linq;
 using Arnible.MathModeling.Algebra;
 using Arnible.MathModeling.Geometry;
 
@@ -10,7 +12,9 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
     private readonly INumberRangeDomain _argumentsDomain;
     private readonly ISingleStepOptimization _optimization;
     
-    public bool WideSearch { get; init; } = true;
+    public bool WideSearch { get; init; } = false;
+    public bool UniformSearchDirection { get; init; } = false;
+    public bool AnyMethod => WideSearch || UniformSearchDirection;
     
     public GoldenSecantStrategy(in Number minArgument, in Number maxArgument, ISimpleLogger logger)
     {
@@ -21,8 +25,12 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
 
     public void FindImprovedArguments(in FunctionMinimumImprovement solution)
     {
+      AnyMethod.AssertIsTrue();
+      
       IFunctionValueAnalysis valueAnalysis = solution.Function;
-      ReadOnlySpan<Number> parameters = solution.Parameters;
+      
+      Span<Number> parameters = stackalloc Number[solution.Parameters.Length];
+      solution.Parameters.CopyTo(parameters);
       _logger.Write("Parameters: ", parameters).NewLine();
       
       Span<Number> gradient = stackalloc Number[parameters.Length];
@@ -34,12 +42,27 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       
       if(WideSearch)
       {
-        _logger.NewLine().Write("> WideSearch").NewLine();
+        _logger.Write("---").NewLine().Write(">> WideSearch from ", parameters).NewLine();
         gradient.CopyTo(filteredGradient);
-        ImproveWithGradient(
-          valueAnalysis, in parameters, 
-          in filteredGradient, in optimalPoint);
+        ImproveWithGradient(valueAnalysis, parameters, in filteredGradient, in optimalPoint);
         solution.ConsiderSolution(optimalPoint);
+      }
+      
+      if(UniformSearchDirection)
+      {
+        if(gradient.CopyTo((in Number v) => v < 0, defaultValue: 0, in filteredGradient))
+        {
+          _logger.Write("---").NewLine().Write(">> NegativeDirectionSearch from ", parameters).NewLine();
+          ImproveWithGradient(valueAnalysis, parameters, filteredGradient, in optimalPoint);
+          solution.ConsiderSolution(optimalPoint);
+        }
+      
+        if(gradient.CopyTo((in Number v) => v > 0, defaultValue: 0, in filteredGradient))
+        {
+          _logger.Write("---").NewLine().Write(">> PositiveDirectionSearch from ", parameters).NewLine();
+          ImproveWithGradient(valueAnalysis, parameters, filteredGradient, in optimalPoint);
+          solution.ConsiderSolution(optimalPoint);
+        }  
       }
     }
     
@@ -54,7 +77,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
 
       Span<Number> directionDerivativeRatios = stackalloc Number[currentParameters.Length];
       gradient.GetDirectionDerivativeRatios(in directionDerivativeRatios);
-      _logger.Write("minimum direction: ", directionDerivativeRatios).NewLine();
+      _logger.Write("minimum search direction: ", directionDerivativeRatios).NewLine();
       
       Number? maxScalingFactor = _argumentsDomain.GetMaximumValidTranslationRatio(
         value: in currentParameters,
@@ -74,11 +97,11 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         in function, 
         startPoint: function.ValueWithDerivative(0), 
         borderX: maxScalingFactor.Value).X;
-      _logger.Write("Chosen scaling: ", x).NewLine();
+      _logger.Write("chosen scaling: ", x).NewLine();
       
       function.GetPosition(in x, in potentialSolution);
       _logger
-        .Write("potentialSolution: ", potentialSolution)
+        .Write("PotentialSolution: ", potentialSolution)
         .Write(", value: ", valueAnalysis.GetValue(potentialSolution))
         .NewLine();
     }

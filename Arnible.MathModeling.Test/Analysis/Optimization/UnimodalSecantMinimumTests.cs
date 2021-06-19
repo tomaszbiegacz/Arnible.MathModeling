@@ -30,7 +30,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       point.BorderSmaller.X.AssertIsEqualTo(1);
       point.BorderSmaller.Y.AssertIsEqualTo(3);
       
-      point.IsOptimal.AssertIsTrue();
+      point.IsEmptyRange.AssertIsTrue();
       try
       {
         _method.MoveNext(in f, ref point);
@@ -57,7 +57,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       point.BorderSmaller.X.AssertIsEqualTo(-1);
       point.BorderSmaller.Y.AssertIsEqualTo(-1);
 
-      point.IsOptimal.AssertIsFalse();
+      point.IsEmptyRange.AssertIsFalse();
       try
       {
         _method.MoveNext(in f, ref point);  
@@ -102,7 +102,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       point.BorderSmaller.Y.AssertIsEqualTo(b.Y);
       a.Y.AssertIsGreaterThan(b.Y);
 
-      point.IsOptimal.AssertIsFalse();
+      point.IsEmptyRange.AssertIsFalse();
       try
       {
         _method.MoveNext(in f, ref point);  
@@ -126,7 +126,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       point.BorderSmaller.Y.AssertIsEqualTo(a.Y);
       b.Y.AssertIsGreaterThan(a.Y);
 
-      point.IsOptimal.AssertIsFalse();
+      point.IsEmptyRange.AssertIsFalse();
       try
       {
         _method.MoveNext(in f, ref point);  
@@ -157,7 +157,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       point.BorderSmaller.X.AssertIsEqualTo(a.X);
       point.BorderSmaller.Y.AssertIsEqualTo(a.Y);
 
-      point.IsOptimal.AssertIsFalse();
+      point.IsEmptyRange.AssertIsFalse();
       try
       {
         _method.MoveNext(in f, ref point);  

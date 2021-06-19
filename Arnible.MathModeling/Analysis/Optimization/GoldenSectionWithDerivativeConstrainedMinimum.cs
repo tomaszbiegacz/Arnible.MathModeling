@@ -21,17 +21,19 @@ namespace Arnible.MathModeling.Analysis.Optimization
       in FunctionValueAnalysisForDirection functionToAnalyse,
       ref NumberFunctionOptimizationSearchRange point)
     {
-      point.IsOptimal.AssertIsFalse();
+      point.IsEmptyRange.AssertIsFalse();
       
       Number width = point.Width;
       Number x1 = point.End.X - Ratio * width;
       Number x2 = point.Start.X + Ratio * width;
       
-      _logger.Write("> x1").NewLine();
+      _logger.Write("* x1").NewLine();
       MoveNext(ref point, functionToAnalyse.ValueWithDerivative(in x1));
+      
       if (point.End.X > x2)
       {
-        _logger.Write("> x2").NewLine();
+        // if we still consider section [x2, point.End.X]
+        _logger.Write("* x2").NewLine();
         MoveNext(ref point, functionToAnalyse.ValueWithDerivative(in x2));  
       }
     }

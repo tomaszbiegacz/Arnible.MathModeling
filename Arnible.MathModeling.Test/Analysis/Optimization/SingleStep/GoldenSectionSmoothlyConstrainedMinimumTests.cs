@@ -75,7 +75,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       
       ushort iterationCount = _optimizer.FindOptimal(f, ref a, b.X);
       a.X.AssertIsEqualTo(-0.5 * Math.PI);
-      iterationCount.AssertIsEqualTo(18);
+      iterationCount.AssertIsEqualTo(19);
     }
     
     [Fact]
@@ -90,7 +90,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       
       ushort iterationCount = _optimizer.FindOptimal(f, ref a, b.X);
       Assert.Equal(-0.5 * Math.PI, (double)a.X, 8);
-      iterationCount.AssertIsEqualTo(15);
+      iterationCount.AssertIsEqualTo(18);
     }
     
     /*
@@ -121,7 +121,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       
       ushort iterationCount = _optimizer.FindOptimal(in fa, ref a, b.X);
       a.X.AssertIsEqualTo(opt.X);
-      iterationCount.AssertIsEqualTo(13);
+      iterationCount.AssertIsEqualTo(11);
     }
   }
 }

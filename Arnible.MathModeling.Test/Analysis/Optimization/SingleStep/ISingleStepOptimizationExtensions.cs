@@ -14,7 +14,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       NumberFunctionOptimizationSearchRange searchRange = default;
       
       ushort i = 0;
-      while(!useRange && a.First != 0 || useRange && !searchRange.IsOptimal)
+      while(!useRange && a.First != 0 || useRange && !searchRange.IsEmptyRange)
       {
         if (useRange)
         {

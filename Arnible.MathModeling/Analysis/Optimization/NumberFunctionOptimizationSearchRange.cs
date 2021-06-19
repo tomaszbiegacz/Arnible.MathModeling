@@ -43,7 +43,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
     public readonly NumberFunctionPointWithDerivative Start => _a;
     public readonly NumberFunctionPointWithDerivative End => _b;
     public readonly Number Width => _b.X - _a.X;
-    public readonly bool IsOptimal => _a.X == _b.X;
+    public readonly bool IsEmptyRange => _a.X == _b.X;
 
     //
     // Value comparison

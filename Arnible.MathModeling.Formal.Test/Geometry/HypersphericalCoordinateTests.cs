@@ -85,7 +85,7 @@ namespace Arnible.MathModeling.Geometry.Test
       for (ushort anglePos = 0; anglePos < sphericalPoint.Angles.Length; ++anglePos)
       {
         PolynomialTerm angleTerm = (PolynomialTerm)sphericalPoint.Angles.Span[anglePos];
-        var derivatives = new HypersphericalCoordinateOnAxisViewForAngleDerivatives(sphericalPoint, anglePos: anglePos).CartesianAxisViewsRatiosDerivatives.ToArray();
+        var derivatives = new HypersphericalCoordinateOnAxisViewForAngleDerivatives(sphericalPoint, anglePos: anglePos).DerivativesCartesianVector;
         derivatives.Length.AssertIsEqualTo(sphericalPoint.DimensionsCount);
         for (ushort coordinatePos = 0; coordinatePos < cartesianActual.Length; ++coordinatePos)
         {

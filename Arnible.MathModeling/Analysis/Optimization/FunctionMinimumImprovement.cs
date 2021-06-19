@@ -1,5 +1,6 @@
 ﻿using System;
 using Arnible.Assertions;
+using Arnible.Export;
 
 namespace Arnible.MathModeling.Analysis.Optimization
 {
@@ -53,6 +54,21 @@ namespace Arnible.MathModeling.Analysis.Optimization
       {
         return false;
       }
+    }
+    
+    //
+    // Serializers
+    //
+    
+    public void SerializeCurrentState(uint pos, IRecordFieldSerializer serializer)
+    {
+      Span<Number> gradient = stackalloc Number[Parameters.Length];
+      Function.GradientByArguments(Parameters, in gradient);
+      
+      serializer.Write("Pos", pos);
+      serializer.CollectionField<Number>().Write(nameof(Parameters), Parameters);
+      serializer.WriteValueField("Value", GetValue());
+      serializer.CollectionField<Number>().Write("Gradient", gradient);
     }
   }
 }
