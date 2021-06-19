@@ -3,6 +3,7 @@ using Arnible.Assertions;
 using Arnible.Linq;
 using Arnible.MathModeling.Algebra;
 using Arnible.MathModeling.Geometry;
+using Xunit;
 
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
 {
@@ -93,17 +94,26 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         startPosition: in currentParameters,
         directionDerivativeRatios: directionDerivativeRatios);
       
-      Number x = _optimization.MoveNext(
-        in function, 
-        startPoint: function.ValueWithDerivative(0), 
-        borderX: maxScalingFactor.Value).X;
-      _logger.Write("chosen scaling: ", x).NewLine();
+      NumberFunctionPointWithDerivative startPoint = function.ValueWithDerivative(0);
+      if(startPoint.First >= 0)
+      {
+        Assert.Equal((double)startPoint.First, 0, 3);
+        _logger.Write("XXX Warning: rounding error"); 
+      }
+      else
+      {
+        Number x = _optimization.MoveNext(
+          in function, 
+          startPoint: function.ValueWithDerivative(0), 
+          borderX: maxScalingFactor.Value).X;
+        _logger.Write("chosen scaling: ", x).NewLine();
       
-      function.GetPosition(in x, in potentialSolution);
-      _logger
-        .Write("PotentialSolution: ", potentialSolution)
-        .Write(", value: ", valueAnalysis.GetValue(potentialSolution))
-        .NewLine();
+        function.GetPosition(in x, in potentialSolution);
+        _logger
+          .Write("PotentialSolution: ", potentialSolution)
+          .Write(", value: ", valueAnalysis.GetValue(potentialSolution))
+          .NewLine();  
+      }
     }
   }
 }

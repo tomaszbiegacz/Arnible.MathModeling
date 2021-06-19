@@ -50,7 +50,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
     }
     
     [Fact]
-    public void Multimodal_GoldenSecant_2()
+    public void Multimodal_GoldenSecant_2_WideSearch()
     {
       // splot [-6:6] [-6:6] sin(x) + cos(y) with pm3d
       Span<Number> solutionBuffer = stackalloc Number[2];
@@ -62,6 +62,27 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       GoldenSecantStrategy strategy = new(-6, 6, Logger)
       {
         WideSearch = true
+      };
+      ushort iterations = strategy.FindOptimal(Logger, in solution);
+      Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 4);
+      Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 4);
+      iterations.AssertIsEqualTo(11);
+      // more computation, more rounding errors
+    }
+    
+    [Fact]
+    public void Multimodal_GoldenSecant_2_UniformDirection()
+    {
+      // splot [-6:6] [-6:6] sin(x) + cos(y) with pm3d
+      Span<Number> solutionBuffer = stackalloc Number[2];
+      FunctionMinimumImprovement solution = new(
+        _function, 
+        new Number[] { -3.456, -3.456 }, 
+        in solutionBuffer);
+      
+      GoldenSecantStrategy strategy = new(-6, 6, Logger)
+      {
+        UniformSearchDirection = true
       };
       ushort iterations = strategy.FindOptimal(Logger, in solution);
       Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 8);
