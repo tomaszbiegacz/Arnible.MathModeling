@@ -82,8 +82,16 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
       }
       else if(p1FirstSign is Sign.Negative)
       {
-        _logger.Write("p1First is negative").NewLine();
-        return MoveNext(iteration + 1, in f, in p1, in b);
+        if(p1.Y < a.Y)
+        {
+          _logger.Write("p1First is negative and value is lower; let's finish here").NewLine();
+          return p1;
+        }
+        else
+        {
+          _logger.Write("p1First is negative, but value is greater; let's focus on nearest minimum").NewLine();
+          return MoveNext(iteration + 1, in f, in a, p1.X);  
+        }
       }
       else
       {
@@ -100,7 +108,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
         
         if(result.Y < a.Y)
         {
-          // in this iteration, we are done
+          // we are done in this iteration
           return result;
         }
         else

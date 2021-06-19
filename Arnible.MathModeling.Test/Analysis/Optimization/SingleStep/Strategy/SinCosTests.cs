@@ -44,8 +44,8 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         WideSearch = true
       };
       ushort iterations = strategy.FindOptimal(Logger, in solution);
-      Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 8);
-      Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 8);
+      Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 4);
+      Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 4);
       iterations.AssertIsEqualTo(8);
     }
     
@@ -67,7 +67,6 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 4);
       Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 4);
       iterations.AssertIsEqualTo(11);
-      // more computation, more rounding errors
     }
     
     [Fact]
@@ -85,8 +84,8 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         UniformSearchDirection = true
       };
       ushort iterations = strategy.FindOptimal(Logger, in solution);
-      Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 8);
-      Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 8);
+      Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 3);
+      Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 3);
       iterations.AssertIsEqualTo(11);
     }
   }

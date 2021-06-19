@@ -144,7 +144,8 @@ namespace Arnible.MathModeling.Analysis.Optimization
         .Write("[", _a)
         .Write(", ", _b)
         .Write("] ", message)
-        .Write(" c:", in c)
+        .NewLine()
+        .Write("   c:", in c)
         .NewLine();
     }
   }

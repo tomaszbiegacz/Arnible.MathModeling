@@ -15,7 +15,8 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
     
     public bool WideSearch { get; init; } = false;
     public bool UniformSearchDirection { get; init; } = false;
-    public bool AnyMethod => WideSearch || UniformSearchDirection;
+    public bool ExtendedUniformSearchDirection { get; init; } = false;
+    public bool AnyMethod => WideSearch || UniformSearchDirection || ExtendedUniformSearchDirection;
     
     public GoldenSecantStrategy(in Number minArgument, in Number maxArgument, ISimpleLogger logger)
     {
@@ -36,8 +37,9 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       
       Span<Number> gradient = stackalloc Number[parameters.Length];
       solution.Function.GradientByArguments(solution.Parameters, in gradient);
+      gradient.IsZero().AssertIsFalse();
       _logger.Write("Gradient: ", gradient).NewLine();
-      
+
       Span<Number> optimalPoint = stackalloc Number[gradient.Length];
       Span<Number> filteredGradient = stackalloc Number[gradient.Length];
       
@@ -65,7 +67,113 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
           solution.ConsiderSolution(optimalPoint);
         }  
       }
+      
+      if(ExtendedUniformSearchDirection)
+      {
+        ushort maxDerivativeAt = gradient.WithMaximumAt();
+        if(gradient[maxDerivativeAt] > 0)
+        {
+          _logger.Write("---").NewLine().Write(">> Positive ExtendedUniformSearchDirection from ", parameters).NewLine();
+          GetExtendedUniformSearchDirection(valueAnalysis, parameters, maxDerivativeAt, gradient, in filteredGradient);
+          ImproveInSearchDirection(valueAnalysis, parameters, filteredGradient, in optimalPoint);
+          solution.ConsiderSolution(optimalPoint);  
+        }
+        
+        ushort minimumDerivativeAt = gradient.WithMinimumAt();
+        if(gradient[minimumDerivativeAt] < 0)
+        {
+          _logger.Write("---").NewLine().Write(">> Negative ExtendedUniformSearchDirection from ", parameters).NewLine();
+          GetExtendedUniformSearchDirection(valueAnalysis, parameters, minimumDerivativeAt, gradient, in filteredGradient);
+          ImproveInSearchDirection(valueAnalysis, parameters, filteredGradient, in optimalPoint);
+          solution.ConsiderSolution(optimalPoint);  
+        }
+      }
     }
+    
+    private void GetExtendedUniformSearchDirection(
+      IFunctionValueAnalysis valueAnalysis,
+      in ReadOnlySpan<Number> currentParameters,
+      ushort directionCorePos,
+      in Span<Number> gradient,
+      in Span<Number> result)
+    {
+      Sign descentDirection = gradient[directionCorePos] > 0 ? Sign.Negative : Sign.Positive;
+
+      Span<bool> searchDirection = stackalloc bool[result.Length];
+      searchDirection.Clear();
+      searchDirection[directionCorePos] = true;
+      
+      bool doSearch = true;
+      Span<Number> resultBuffer = stackalloc Number[result.Length];
+      while(doSearch && !searchDirection.All())
+      {
+        int minimumDerivativeAt = -1;
+        Number minimumDerivative = 0;
+        for(ushort pos = 0; pos < searchDirection.Length; ++pos)
+        {
+          if(!searchDirection[pos])
+          {
+            // let's check it out
+            searchDirection[pos] = true;
+            Number currentDerivative = GetDerivativeForUniformDirection(
+              valueAnalysis, in currentParameters,
+              searchDirection, descentDirection,
+              in resultBuffer);
+            searchDirection[pos] = false;
+            
+            if(currentDerivative < minimumDerivative)
+            {
+              minimumDerivativeAt = pos;
+              minimumDerivative = currentDerivative; 
+            }
+          }
+        }
+        
+        if(minimumDerivativeAt == -1)
+        {
+          // that's it
+          doSearch = false;
+        }
+        else
+        {
+          searchDirection[minimumDerivativeAt] = true;
+        }
+      }
+      
+      FillUniformDirection(searchDirection, descentDirection, in result);
+    }
+    
+    private static void FillUniformDirection(
+      in ReadOnlySpan<bool> directions,
+      Sign directionSign,
+      in Span<Number> result)
+    {
+      Number uniformRatio = CartesianCoordinate.GetIdentityVectorRatio(directions.Count((in bool v) => v));
+      if(directionSign == Sign.Negative)
+        uniformRatio = -1 * uniformRatio;
+      
+      for(ushort i=0; i<result.Length; ++i)
+      {
+        if(directions[i])
+          result[i] = uniformRatio;
+        else
+          result[i] = 0;
+      }
+    }
+    
+    private static Number GetDerivativeForUniformDirection(
+      IFunctionValueAnalysis valueAnalysis,
+      in ReadOnlySpan<Number> currentParameters,
+      in ReadOnlySpan<bool> directions,
+      Sign directionSign,
+      in Span<Number> directionDerivativeRatios)
+    {
+      FillUniformDirection(in directions, directionSign, in directionDerivativeRatios);
+      return valueAnalysis.GetValueWithDerivativeByArgumentsChangeDirection(
+        arguments: in currentParameters,
+        directionDerivativeRatios: directionDerivativeRatios).First;
+    }
+
     
     private void ImproveWithGradient(
       IFunctionValueAnalysis valueAnalysis,
@@ -78,6 +186,15 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
 
       Span<Number> directionDerivativeRatios = stackalloc Number[currentParameters.Length];
       gradient.GetDirectionDerivativeRatios(in directionDerivativeRatios);
+      ImproveInSearchDirection(valueAnalysis, in currentParameters, directionDerivativeRatios, in potentialSolution);
+    }
+    
+    private void ImproveInSearchDirection(
+      IFunctionValueAnalysis valueAnalysis,
+      in ReadOnlySpan<Number> currentParameters,
+      in ReadOnlySpan<Number> directionDerivativeRatios,
+      in Span<Number> potentialSolution)
+    {
       _logger.Write("minimum search direction: ", directionDerivativeRatios).NewLine();
       
       Number? maxScalingFactor = _argumentsDomain.GetMaximumValidTranslationRatio(

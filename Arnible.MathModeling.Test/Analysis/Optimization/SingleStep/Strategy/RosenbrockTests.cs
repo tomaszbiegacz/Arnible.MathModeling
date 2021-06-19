@@ -78,5 +78,65 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       // plot [-1:1] (1-1.361087917365479)**2 + 100*(1.85256031879829 + y - 1.361087917365479**2)**2
       // p1*p1 = p2
     }
+    
+    [Fact(Skip = "stack at border")]
+    public void Xp_Yp_UniformDirection()
+    {
+      Span<Number> solutionBuffer = stackalloc Number[2];
+      FunctionMinimumImprovement solution = new(
+        _function, 
+        new Number[] { 1.5, 1.5 }, 
+        in solutionBuffer);
+      
+      GoldenSecantStrategy strategy = new(-2, 2, Logger)
+      {
+        UniformSearchDirection = true
+      };
+      ushort iterations = strategy.FindOptimal(Logger, in solution);
+      Assert.Equal(1, (double)solution.Parameters[0], 5);
+      Assert.Equal(1, (double)solution.Parameters[1], 5);
+      iterations.AssertIsEqualTo(48);
+    }
+    
+    [Fact]
+    public void Xp_Yp_ExtendedUniformSearchDirection()
+    {
+      BackupLogsToFile();
+      Span<Number> solutionBuffer = stackalloc Number[2];
+      FunctionMinimumImprovement solution = new(
+        _function, 
+        new Number[] { 1.5, 1.5 }, 
+        in solutionBuffer);
+      
+      GoldenSecantStrategy strategy = new(-2, 2, Logger)
+      {
+        UniformSearchDirection = true,
+        ExtendedUniformSearchDirection = true
+      };
+      ushort iterations = strategy.FindOptimal(Logger, in solution);
+      Assert.Equal(1, (double)solution.Parameters[0], 5);
+      Assert.Equal(1, (double)solution.Parameters[1], 5);
+      iterations.AssertIsEqualTo(6099);
+    }
+    
+    [Fact]
+    public void Xp_Yn_ExtendedUniformSearchDirection()
+    {
+      Span<Number> solutionBuffer = stackalloc Number[2];
+      FunctionMinimumImprovement solution = new(
+        _function, 
+        new Number[] { 1.5, -1.5 }, 
+        in solutionBuffer);
+      
+      GoldenSecantStrategy strategy = new(-2, 2, Logger)
+      {
+        UniformSearchDirection = true,
+        ExtendedUniformSearchDirection = true
+      };
+      ushort iterations = strategy.FindOptimal(Logger, in solution);
+      Assert.Equal(1, (double)solution.Parameters[0], 5);
+      Assert.Equal(1, (double)solution.Parameters[1], 5);
+      iterations.AssertIsEqualTo(5849);
+    }
   }
 }
