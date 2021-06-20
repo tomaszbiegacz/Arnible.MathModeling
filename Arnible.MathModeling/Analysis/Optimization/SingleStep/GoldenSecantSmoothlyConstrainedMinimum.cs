@@ -46,25 +46,28 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
     public NumberFunctionPointWithDerivative MoveNext(
       in FunctionValueAnalysisForDirection f,
       in NumberFunctionPointWithDerivative a,
-      in Number b)
+      in Number b,
+      out uint complexity)
     {
-      return MoveNext(0, in f, in a, in b);
+      return MoveNext(1, in f, in a, in b, out complexity);
     }
 
     private NumberFunctionPointWithDerivative MoveNext(
       uint iteration,
       in FunctionValueAnalysisForDirection f,
       in NumberFunctionPointWithDerivative a,
-      in Number b)
+      in Number b,
+      out uint complexity)
     {
       a.First.AssertIsLessThan(0);
       b.AssertIsGreaterThan(a.X);
       
       _logger
-        .Write("[", iteration)
+        .Write("**[", iteration)
         .Write("] MoveNext ", in a)
         .Write(" to ", in b)
         .NewLine();
+      complexity = iteration;
 
       NumberFunctionPointWithDerivative result = a;
       Number width = b - a.X;
@@ -90,7 +93,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
         else
         {
           _logger.Write("p1First is negative, but value is greater; let's focus on nearest minimum").NewLine();
-          return MoveNext(iteration + 1, in f, in a, p1.X);  
+          return MoveNext(iteration + 1, in f, in a, p1.X, out complexity);  
         }
       }
       else
@@ -114,7 +117,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
         else
         {
           // a.First is < 0
-          return MoveNext(iteration + 1, in f, in a, p1.X);
+          return MoveNext(iteration + 1, in f, in a, p1.X, out complexity);
         }
       }
     }

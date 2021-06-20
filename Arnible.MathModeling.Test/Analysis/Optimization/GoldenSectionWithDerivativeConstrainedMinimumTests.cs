@@ -210,7 +210,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       FunctionValueAnalysisForDirection fa = new(
         f, 
         stackalloc Number[] { 0, 0 }, 
-        OptimizationHelper.DirectionDerivativeRatiosD2.Span);
+        OptimizationHelper.UniformDirectionRatiosD2.Span);
       
       var a = fa.ValueWithDerivative(0);
       var opt = fa.ValueWithDerivative(2 / Math.Sqrt(2));
@@ -241,7 +241,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       FunctionValueAnalysisForDirection fa = new(
         f, 
         stackalloc Number[] { 0, 0 }, 
-        OptimizationHelper.DirectionDerivativeRatiosD2.Span);
+        OptimizationHelper.UniformDirectionRatiosD2.Span);
       
       var a = fa.ValueWithDerivative(0.4);
       var opt = fa.ValueWithDerivative(2 / Math.Sqrt(2));
@@ -271,7 +271,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       FunctionValueAnalysisForDirection fa = new(
         f, 
         stackalloc Number[] { 0, 0 }, 
-        OptimizationHelper.DirectionDerivativeRatiosD2.Span);
+        OptimizationHelper.UniformDirectionRatiosD2.Span);
       
       var a = fa.ValueWithDerivative(0.8);
       var opt = fa.ValueWithDerivative(2 / Math.Sqrt(2));

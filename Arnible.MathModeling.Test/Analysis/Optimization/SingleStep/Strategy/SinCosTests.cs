@@ -25,7 +25,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         _function, 
         new Number[] { -0.5 * Math.PI, -1 * Math.PI }, 
         in solutionBuffer);
-      solution.SourceValue.AssertIsEqualTo(-2);
+      solution.Value.AssertIsEqualTo(-2);
       solution.Function.IsOptimum(solution.Parameters).AssertIsTrue();
     }
     
@@ -43,7 +43,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       {
         WideSearch = true
       };
-      ushort iterations = strategy.FindOptimal(Logger, in solution);
+      ushort iterations = strategy.FindOptimal(Logger, ref solution);
       Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 4);
       Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 4);
       iterations.AssertIsEqualTo(8);
@@ -63,7 +63,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       {
         WideSearch = true
       };
-      ushort iterations = strategy.FindOptimal(Logger, in solution);
+      ushort iterations = strategy.FindOptimal(Logger, ref solution);
       Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 4);
       Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 4);
       iterations.AssertIsEqualTo(11);
@@ -83,7 +83,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       {
         UniformSearchDirection = true
       };
-      ushort iterations = strategy.FindOptimal(Logger, in solution);
+      ushort iterations = strategy.FindOptimal(Logger, ref solution);
       Assert.Equal(-0.5 * Math.PI, (double)solution.Parameters[0], 3);
       Assert.Equal(-1 * Math.PI, (double)solution.Parameters[1], 3);
       iterations.AssertIsEqualTo(11);

@@ -5,13 +5,13 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
 {
   public static class OptimizationHelper
   {
-    public static readonly ReadOnlyMemory<Number> DirectionDerivativeRatiosD1;
-    public static readonly ReadOnlyMemory<Number> DirectionDerivativeRatiosD2;
+    public static readonly ReadOnlyMemory<Number> UniformDirectionRatiosD1;
+    public static readonly ReadOnlyMemory<Number> UniformDirectionRatiosD2;
 
     static OptimizationHelper()
     {
-      DirectionDerivativeRatiosD1 = new Number[] { 1 };
-      DirectionDerivativeRatiosD2 = new Number[] { Math.Sqrt(2) / 2, Math.Sqrt(2) / 2 };
+      UniformDirectionRatiosD1 = new Number[] { 1 };
+      UniformDirectionRatiosD2 = new Number[] { Math.Sqrt(2) / 2, Math.Sqrt(2) / 2 };
     }
     
     public static FunctionValueAnalysisForDirection FunctionValueAnalysisFor1D(
@@ -21,7 +21,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       FunctionValueAnalysisForDirection function = new(
         functionToAnalyse, 
         in startPoint, 
-        DirectionDerivativeRatiosD1.Span);
+        UniformDirectionRatiosD1.Span);
       return function;
     }
     

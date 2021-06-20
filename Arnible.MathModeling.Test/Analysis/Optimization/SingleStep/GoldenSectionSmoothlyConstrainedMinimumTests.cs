@@ -23,11 +23,12 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
     public void Unimodal_Square_Optimum()
     {
       var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
-      var a = f.ValueWithDerivative(-1);
+      var a = f.ValueWithDerivative(0);
       var b = f.ValueWithDerivative(3);
 
-      NumberFunctionPointWithDerivative actual = _optimizer.MoveNext(f, in a, b.X);
+      NumberFunctionPointWithDerivative actual = _optimizer.MoveNext(f, in a, b.X, out uint complexity);
       actual.X.AssertIsEqualTo(1);
+      complexity.AssertIsEqualTo(1u);
     }
 
     [Fact]
@@ -39,7 +40,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       
       try
       {
-        _optimizer.MoveNext(f, in a, b.X);
+        _optimizer.MoveNext(f, in a, b.X, out _);
         throw new Exception("I should never get here");
       }
       catch(AssertException)
@@ -57,7 +58,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       
       try
       {
-        _optimizer.MoveNext(f, in a, b.X);
+        _optimizer.MoveNext(f, in a, b.X, out _);
         throw new Exception("I should never get here");
       }
       catch(AssertException)
@@ -75,7 +76,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       
       ushort iterationCount = _optimizer.FindOptimal(f, ref a, b.X);
       a.X.AssertIsEqualTo(-0.5 * Math.PI);
-      iterationCount.AssertIsEqualTo(19);
+      iterationCount.AssertIsEqualTo(17);
     }
     
     [Fact]
@@ -104,7 +105,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       FunctionValueAnalysisForDirection fa = new(
         f, 
         stackalloc Number[] { 0, 0 }, 
-        OptimizationHelper.DirectionDerivativeRatiosD2.Span);
+        OptimizationHelper.UniformDirectionRatiosD2.Span);
       
       var a = fa.ValueWithDerivative(0);
       var opt = fa.ValueWithDerivative(2 / Math.Sqrt(2));
@@ -120,8 +121,9 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       b.First.AssertIsGreaterThan(0);
       
       ushort iterationCount = _optimizer.FindOptimal(in fa, ref a, b.X);
-      a.X.AssertIsEqualTo(opt.X);
-      iterationCount.AssertIsEqualTo(11);
+      Assert.Equal(0, (double)a.First, 8);
+      Assert.Equal(0.0144, (double)a.X, 4);
+      iterationCount.AssertIsEqualTo(23);
     }
   }
 }

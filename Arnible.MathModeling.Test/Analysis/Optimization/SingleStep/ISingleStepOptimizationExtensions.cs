@@ -27,7 +27,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
         }
         else
         {
-          NumberFunctionPointWithDerivative result = method.MoveNext(in functionToAnalyse, in a, in b);
+          NumberFunctionPointWithDerivative result = method.MoveNext(in functionToAnalyse, in a, in b, out _);
           result.X.AssertIsGreaterEqualThan(a.X);
           result.Y.AssertIsLessEqualThan(a.Y);
           

@@ -8,29 +8,36 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
     public static ushort FindOptimal(
       this IFunctionValueOptimizationStrategy strategy,
       ILoggerWithWriterFactory logger,
-      in FunctionMinimumImprovement solution)
+      ref FunctionMinimumImprovement solution)
     {
       logger
-        .Write("Source parameters: ", solution.SourceParameters)
-        .Write(" value: ", solution.SourceValue)
+        .Write("Source parameters: ", solution.Parameters)
+        .Write(" value: ", solution.Value)
         .NewLine();
       
       IRecordFileWriter serializer = logger.CreateTsvNotepad("function");
       try
       {
         ushort pos = 0;
-        Span<Number> currentParameters = stackalloc Number[solution.Parameters.Length];
+        using(var writer = serializer.OpenRecord())
+          solution.SerializeCurrentState(writer.FieldSerializer, 
+            pos: pos, totalComplexity: 0, withExtendedSearch: false);
+        
+        Span<Number> currentParameters = stackalloc Number[solution.ParametersCount];
         bool isTheEnd = false;
         while(!isTheEnd)
         {
-          using(var writer = serializer.OpenRecord())
-            solution.SerializeCurrentState(pos, writer.FieldSerializer);
-        
           pos++;
           solution.Parameters.CopyTo(currentParameters);
 
           logger.NewLine().Write("Loop ", pos).NewLine();
-          strategy.FindImprovedArguments(in solution);
+          var statistics = strategy.FindImprovedArguments(ref solution);
+          
+          using(var writer = serializer.OpenRecord())
+            solution.SerializeCurrentState(writer.FieldSerializer, 
+              pos: pos, 
+              totalComplexity: statistics.Complexity, 
+              withExtendedSearch: statistics.WithExtendedSearch);
         
           if(solution.Parameters.SequenceEqual(currentParameters))
           {
@@ -46,6 +53,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       }
       finally
       {
+        // for tests this is sufficient
         serializer.DisposeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
       }
     }

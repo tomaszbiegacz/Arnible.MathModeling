@@ -12,11 +12,26 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
     private readonly ISimpleLogger _logger;
     private readonly INumberRangeDomain _argumentsDomain;
     private readonly ISingleStepOptimization _optimization;
+    private readonly double? _extendedUniformSearchDisablingRatio = null;
     
     public bool WideSearch { get; init; } = false;
     public bool UniformSearchDirection { get; init; } = false;
-    public bool ExtendedUniformSearchDirection { get; init; } = false;
-    public bool AnyMethod => WideSearch || UniformSearchDirection || ExtendedUniformSearchDirection;
+
+    public double? ExtendedUniformSearchDirectionDisablingRatio
+    {
+      get => _extendedUniformSearchDisablingRatio;
+      init
+      {
+        if(value is not null)
+        {
+          value.Value.AssertIsBetween(0, 1);  
+          _extendedUniformSearchDisablingRatio = value;
+        }
+      }
+    }
+    public Number ExtendedUniformSearchDirectionMinimumGradientRatio { get; init; } = 0.3; 
+    
+    public bool AnyMethod => WideSearch || UniformSearchDirection || _extendedUniformSearchDisablingRatio.HasValue;
     
     public GoldenSecantStrategy(in Number minArgument, in Number maxArgument, ISimpleLogger logger)
     {
@@ -25,15 +40,16 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       _optimization = new GoldenSecantSmoothlyConstrainedMinimum(_logger);
     }
 
-    public void FindImprovedArguments(in FunctionMinimumImprovement solution)
+    public FunctionImprovementStatistics FindImprovedArguments(ref FunctionMinimumImprovement solution)
     {
       AnyMethod.AssertIsTrue();
       
       IFunctionValueAnalysis valueAnalysis = solution.Function;
+      Number currentValue = solution.Value;
       
-      Span<Number> parameters = stackalloc Number[solution.Parameters.Length];
+      Span<Number> parameters = stackalloc Number[solution.ParametersCount];
       solution.Parameters.CopyTo(parameters);
-      _logger.Write("Parameters: ", parameters).NewLine();
+      _logger.Write("Parameters: ", parameters).Write(" value: ", currentValue).NewLine();
       
       Span<Number> gradient = stackalloc Number[parameters.Length];
       solution.Function.GradientByArguments(solution.Parameters, in gradient);
@@ -42,52 +58,85 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
 
       Span<Number> optimalPoint = stackalloc Number[gradient.Length];
       Span<Number> filteredGradient = stackalloc Number[gradient.Length];
+      FunctionImprovementStatistics statistics = new();
       
       if(WideSearch)
       {
-        _logger.Write("---").NewLine().Write(">> WideSearch from ", parameters).NewLine();
+        _logger.Write("---").NewLine().Write(">> WideSearch from ", parameters).Write(" value: ", currentValue).NewLine();
         gradient.CopyTo(filteredGradient);
-        ImproveWithGradient(valueAnalysis, parameters, in filteredGradient, in optimalPoint);
-        solution.ConsiderSolution(optimalPoint);
+        ImproveWithGradient(
+          valueAnalysis, parameters, in filteredGradient, 
+          in optimalPoint, out Number value, out uint complexity);
+        statistics.Complexity += complexity;
+        if(solution.ConsiderSolution(in value, complexity, "WideSearch"))
+          optimalPoint.CopyTo(solution.Parameters);
       }
       
       if(UniformSearchDirection)
       {
         if(gradient.CopyTo((in Number v) => v < 0, defaultValue: 0, in filteredGradient))
         {
-          _logger.Write("---").NewLine().Write(">> NegativeDirectionSearch from ", parameters).NewLine();
-          ImproveWithGradient(valueAnalysis, parameters, filteredGradient, in optimalPoint);
-          solution.ConsiderSolution(optimalPoint);
+          _logger.Write("---").NewLine().Write(">> NegativeDirectionSearch from ", parameters).Write(" value: ", currentValue).NewLine();
+          ImproveWithGradient(
+            valueAnalysis, parameters, in filteredGradient, 
+            in optimalPoint, out Number value, out uint complexity);
+          statistics.Complexity += complexity;
+          if(solution.ConsiderSolution(in value, complexity, "NegativeDirectionSearch"))
+            optimalPoint.CopyTo(solution.Parameters);
         }
       
         if(gradient.CopyTo((in Number v) => v > 0, defaultValue: 0, in filteredGradient))
         {
-          _logger.Write("---").NewLine().Write(">> PositiveDirectionSearch from ", parameters).NewLine();
-          ImproveWithGradient(valueAnalysis, parameters, filteredGradient, in optimalPoint);
-          solution.ConsiderSolution(optimalPoint);
+          _logger.Write("---").NewLine().Write(">> PositiveDirectionSearch from ", parameters).Write(" value: ", currentValue).NewLine();
+          ImproveWithGradient(
+            valueAnalysis, parameters, in filteredGradient, 
+            in optimalPoint, out Number value, out uint complexity);
+          statistics.Complexity += complexity;
+          if(solution.ConsiderSolution(in value, complexity, "PositiveDirectionSearch"))
+            optimalPoint.CopyTo(solution.Parameters);
         }  
       }
       
-      if(ExtendedUniformSearchDirection)
+      if(_extendedUniformSearchDisablingRatio.HasValue)
       {
-        ushort maxDerivativeAt = gradient.WithMaximumAt();
-        if(gradient[maxDerivativeAt] > 0)
+        Number improvementRatio = currentValue == 0 ? solution.Value.Abs() : ((currentValue - solution.Value) / currentValue).Abs();
+        if(_extendedUniformSearchDisablingRatio > improvementRatio)
         {
-          _logger.Write("---").NewLine().Write(">> Positive ExtendedUniformSearchDirection from ", parameters).NewLine();
-          GetExtendedUniformSearchDirection(valueAnalysis, parameters, maxDerivativeAt, gradient, in filteredGradient);
-          ImproveInSearchDirection(valueAnalysis, parameters, filteredGradient, in optimalPoint);
-          solution.ConsiderSolution(optimalPoint);  
+          ushort maxDerivativeAt = gradient.WithMaximumAt();
+          if(gradient[maxDerivativeAt] > 0)
+          {
+            _logger.Write("---").NewLine().Write(">> Positive ExtendedUniformSearchDirection from ", parameters).Write(" value: ", currentValue).NewLine();
+            GetExtendedUniformSearchDirection(valueAnalysis, parameters, maxDerivativeAt, gradient, in filteredGradient);
+            ImproveInSearchDirection(
+              valueAnalysis, parameters, filteredGradient, 
+              in optimalPoint, out Number value, out uint complexity);
+            statistics.Complexity += complexity;
+            statistics.WithExtendedSearch = true;
+            if(solution.ConsiderSolution(in value, complexity, "PositiveExtendedUniformSearchDirection"))
+              optimalPoint.CopyTo(solution.Parameters);
+          }
+
+          ushort minimumDerivativeAt = gradient.WithMinimumAt();
+          if(gradient[minimumDerivativeAt] < 0)
+          {
+            _logger.Write("---").NewLine().Write(">> Negative ExtendedUniformSearchDirection from ", parameters).Write(" value: ", currentValue).NewLine();
+            GetExtendedUniformSearchDirection(valueAnalysis, parameters, minimumDerivativeAt, gradient, in filteredGradient);
+            ImproveInSearchDirection(
+              valueAnalysis, parameters, filteredGradient, 
+              in optimalPoint, out Number value, out uint complexity);
+            statistics.Complexity += complexity;
+            statistics.WithExtendedSearch = true;
+            if(solution.ConsiderSolution(in value, complexity, "NegativeExtendedUniformSearchDirection"))
+              optimalPoint.CopyTo(solution.Parameters);
+          }
         }
-        
-        ushort minimumDerivativeAt = gradient.WithMinimumAt();
-        if(gradient[minimumDerivativeAt] < 0)
+        else
         {
-          _logger.Write("---").NewLine().Write(">> Negative ExtendedUniformSearchDirection from ", parameters).NewLine();
-          GetExtendedUniformSearchDirection(valueAnalysis, parameters, minimumDerivativeAt, gradient, in filteredGradient);
-          ImproveInSearchDirection(valueAnalysis, parameters, filteredGradient, in optimalPoint);
-          solution.ConsiderSolution(optimalPoint);  
+          _logger.Write("Skipped ExtendedUniformSearchDirection because improvementRatio is ", improvementRatio);
         }
       }
+      
+      return statistics;
     }
     
     private void GetExtendedUniformSearchDirection(
@@ -103,12 +152,23 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       searchDirection.Clear();
       searchDirection[directionCorePos] = true;
       
-      bool doSearch = true;
       Span<Number> resultBuffer = stackalloc Number[result.Length];
+      Number minimumDerivativeStep = GetDerivativeForUniformDirection(
+        valueAnalysis, in currentParameters,
+        searchDirection, descentDirection,
+        in resultBuffer) * ExtendedUniformSearchDirectionMinimumGradientRatio;
+      
+      _logger
+        .Write("Finding uniform direction search starting from axis ", directionCorePos)
+        .Write(" , direction ", descentDirection == Sign.Positive ? "positive" : "negative")
+        .Write(" and minimum gradient: ", minimumDerivativeStep)
+        .NewLine();
+      
+      bool doSearch = true;
       while(doSearch && !searchDirection.All())
       {
         int minimumDerivativeAt = -1;
-        Number minimumDerivative = 0;
+        Number minimumDerivative = minimumDerivativeStep;
         for(ushort pos = 0; pos < searchDirection.Length; ++pos)
         {
           if(!searchDirection[pos])
@@ -121,6 +181,10 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
               in resultBuffer);
             searchDirection[pos] = false;
             
+            _logger
+              .Write("Checking direction ", pos)
+              .Write(" got derivative ", currentDerivative)
+              .NewLine();
             if(currentDerivative < minimumDerivative)
             {
               minimumDerivativeAt = pos;
@@ -131,16 +195,33 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         
         if(minimumDerivativeAt == -1)
         {
-          // that's it
+          _logger.Write("Uniform direction search is complete.");
+          WriteSearchDirection(searchDirection, descentDirection).NewLine();
           doSearch = false;
         }
         else
         {
           searchDirection[minimumDerivativeAt] = true;
+          
+          _logger.Write("Accepting change at axis ", minimumDerivativeAt);
+          WriteSearchDirection(searchDirection, descentDirection).NewLine();
         }
       }
       
       FillUniformDirection(searchDirection, descentDirection, in result);
+    }
+    
+    private ISimpleLogger WriteSearchDirection(in ReadOnlySpan<bool> searchDirection, Sign descentDirection)
+    {
+      _logger.Write(" got [");
+      ReadOnlySpan<char> sign = descentDirection == Sign.Positive ? "+" : "-";
+      ReadOnlySpan<char> separator = "";
+      for(ushort i=0; i<searchDirection.Length; ++i)
+      {
+        _logger.Write(separator, sign);
+        separator = ",";
+      }
+      return _logger.Write("]");
     }
     
     private static void FillUniformDirection(
@@ -173,27 +254,32 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         arguments: in currentParameters,
         directionDerivativeRatios: directionDerivativeRatios).First;
     }
-
     
     private void ImproveWithGradient(
       IFunctionValueAnalysis valueAnalysis,
       in ReadOnlySpan<Number> currentParameters,
       in Span<Number> gradient,
-      in Span<Number> potentialSolution)
+      in Span<Number> potentialSolution,
+      out Number value,
+      out uint complexity)
     {
       _logger.Write("gradient: ", gradient).NewLine();
       gradient.MultiplySelf(-1);
 
       Span<Number> directionDerivativeRatios = stackalloc Number[currentParameters.Length];
       gradient.GetDirectionDerivativeRatios(in directionDerivativeRatios);
-      ImproveInSearchDirection(valueAnalysis, in currentParameters, directionDerivativeRatios, in potentialSolution);
+      ImproveInSearchDirection(
+        valueAnalysis, in currentParameters, directionDerivativeRatios, 
+        in potentialSolution, out value, out complexity);
     }
     
     private void ImproveInSearchDirection(
       IFunctionValueAnalysis valueAnalysis,
       in ReadOnlySpan<Number> currentParameters,
       in ReadOnlySpan<Number> directionDerivativeRatios,
-      in Span<Number> potentialSolution)
+      in Span<Number> potentialSolution,
+      out Number value,
+      out uint complexity)
     {
       _logger.Write("minimum search direction: ", directionDerivativeRatios).NewLine();
       
@@ -215,20 +301,30 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       if(startPoint.First >= 0)
       {
         Assert.Equal((double)startPoint.First, 0, 3);
-        _logger.Write("XXX Warning: rounding error"); 
+        _logger.Write("XXX Warning: rounding error");
+        
+        currentParameters.CopyTo(potentialSolution);
+        value = startPoint.Y;
+        complexity = 0;
       }
       else
       {
         Number x = _optimization.MoveNext(
           in function, 
           startPoint: function.ValueWithDerivative(0), 
-          borderX: maxScalingFactor.Value).X;
-        _logger.Write("chosen scaling: ", x).NewLine();
+          borderX: maxScalingFactor.Value,
+          complexity: out complexity
+          ).X;
+        _logger
+          .Write("chosen scaling: ", x)
+          .Write(" with complexity: ", complexity)
+          .NewLine();
       
         function.GetPosition(in x, in potentialSolution);
+        value = valueAnalysis.GetValue(potentialSolution);
         _logger
           .Write("PotentialSolution: ", potentialSolution)
-          .Write(", value: ", valueAnalysis.GetValue(potentialSolution))
+          .Write(", value: ", value)
           .NewLine();  
       }
     }
