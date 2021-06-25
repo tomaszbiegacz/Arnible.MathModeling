@@ -1,6 +1,8 @@
 ﻿using System;
 using Arnible.Assertions;
 using Arnible.Export;
+using Arnible.Linq.Algebra;
+using Arnible.MathModeling.Geometry;
 
 namespace Arnible.MathModeling.Analysis.Optimization
 {
@@ -8,18 +10,25 @@ namespace Arnible.MathModeling.Analysis.Optimization
   {
     private readonly IFunctionValueAnalysis _function;
     private readonly Span<Number> _parameters;
+    private readonly ConjugateDirection _conjugateDirection;
     private Number _value;
-    private uint _complexity;
+    private ulong _complexity;
     private ReadOnlySpan<char> _notes;
-      
+
     public FunctionMinimumImprovement(
       IFunctionValueAnalysis function,
       in ReadOnlySpan<Number> sourceParameters,
-      in Span<Number> solutionBuffer)
+      in Span<Number> solutionBuffer,
+      in ConjugateDirection conjugateDirection)
     {
       solutionBuffer.Length.AssertIsEqualTo(sourceParameters.Length);
+      if(conjugateDirection.DirectionsMemorySize > 0)
+      {
+        conjugateDirection.DirectionsDimensionsCount.AssertIsEqualTo(sourceParameters.Length);
+      }
       
       _parameters = solutionBuffer;
+      _conjugateDirection = conjugateDirection;
       sourceParameters.CopyTo(_parameters);
       
       _function = function;
@@ -28,17 +37,26 @@ namespace Arnible.MathModeling.Analysis.Optimization
       _notes = "Start";
     }
     
-    public IFunctionValueAnalysis Function => _function;
-    public ushort ParametersCount => (ushort)_parameters.Length;
+    public FunctionMinimumImprovement(
+      IFunctionValueAnalysis function,
+      in ReadOnlySpan<Number> sourceParameters,
+      in Span<Number> solutionBuffer)
+      : this(function, in sourceParameters, in solutionBuffer, default)
+    {
+      // intentionally empty
+    }
     
-    public Span<Number> Parameters => _parameters;
-    public Number Value => _value;
-    public uint Complexity => _complexity;
-    public ReadOnlySpan<char> Notes => _notes;
+    public readonly IFunctionValueAnalysis Function => _function;
+    public readonly ushort ParametersCount => (ushort)_parameters.Length;
+    
+    public readonly Span<Number> Parameters => _parameters;
+    public readonly Number Value => _value;
+    public readonly ulong Complexity => _complexity;
+    public readonly ReadOnlySpan<char> Notes => _notes;
     
     public bool ConsiderSolution(
       in Number solutionValue,
-      uint complexity,
+      in ulong complexity,
       in ReadOnlySpan<char> notes)
     {
       if(solutionValue.PreciselySmaller(_value))
@@ -54,11 +72,28 @@ namespace Arnible.MathModeling.Analysis.Optimization
       }
     }
     
+    public readonly bool HasConjugateDirections => _conjugateDirection.HasConjugateDirections;
+    
+    public readonly void GetConjugateDirection(in Span<Number> direction) => _conjugateDirection.GetConjugateDirection(in direction);
+    
+    public readonly void FinaliseCurrentDirectionSearch(in ReadOnlySpan<Number> startingPoint)
+    {
+      if(_conjugateDirection.DirectionsMemorySize > 0)
+      {
+        Span<Number> direction = stackalloc Number[ParametersCount];
+        startingPoint.CopyTo(direction);
+        direction.MultiplySelfBy(-1);
+        direction.AddToSelf(_parameters);
+        
+        _conjugateDirection.AddDirection(direction);
+      }
+    }
+    
     //
     // Serializers
     //
     
-    public void SerializeCurrentState(
+    public readonly void SerializeCurrentState(
       IRecordFieldSerializer serializer, 
       uint pos,
       ulong totalComplexity,

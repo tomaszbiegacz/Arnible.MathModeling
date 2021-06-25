@@ -1,5 +1,6 @@
 ﻿using System;
 using Arnible.Assertions;
+using Arnible.Linq.Algebra;
 using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling
@@ -52,7 +53,7 @@ namespace Arnible.MathModeling
       in Span<Number> delta)
     {
       Number ratio = GetValidTranslationRatio(domain, in value, delta);
-      delta.MultiplySelf(ratio);
+      delta.MultiplySelfBy(ratio);
     }
   }
 }

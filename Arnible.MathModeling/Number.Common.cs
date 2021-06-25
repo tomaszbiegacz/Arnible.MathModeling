@@ -5,7 +5,6 @@ using Arnible.MathModeling.Algebra;
 namespace Arnible.MathModeling
 {
   public readonly partial struct Number :
-    IValueEquatable<Number>,
     IComparable<Number>,
     IAlgebraUnitRing<Number>
   {

@@ -1,5 +1,6 @@
 using System;
 using Arnible.Export;
+using Arnible.MathModeling.Geometry;
 
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
 {
@@ -14,7 +15,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         .Write("Source parameters: ", solution.Parameters)
         .Write(" value: ", solution.Value)
         .NewLine();
-      
+
       IRecordFileWriter serializer = logger.CreateTsvNotepad("function");
       try
       {

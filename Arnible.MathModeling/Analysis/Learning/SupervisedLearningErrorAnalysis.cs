@@ -135,9 +135,9 @@ namespace Arnible.MathModeling.Analysis.Learning
           Function,
           ErrorMeasure,
           in parameters);
-        itemGradient.MultiplySelf(errorDerivative.First);
+        itemGradient.MultiplySelfBy(errorDerivative.First);
         
-        output.AddSelf(in itemGradient);
+        output.AddToSelf(in itemGradient);
       }
     }
   }

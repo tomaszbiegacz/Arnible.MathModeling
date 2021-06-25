@@ -34,7 +34,7 @@ namespace Arnible.Linq.Algebra
       }
     }
     
-    public static void AddSelf<T>(
+    public static void AddToSelf<T>(
       in this Span<T> src, 
       in ReadOnlySpan<T> value) where T: IAlgebraGroup<T>
     {
@@ -46,11 +46,11 @@ namespace Arnible.Linq.Algebra
       }
     }
     
-    public static void AddSelf<T>(
+    public static void AddToSelf<T>(
       in this Span<T> src, 
       in Span<T> value) where T: IAlgebraGroup<T>
     {
-      AddSelf(in src, (ReadOnlySpan<T>)value);
+      AddToSelf(in src, (ReadOnlySpan<T>)value);
     }
   }
 }

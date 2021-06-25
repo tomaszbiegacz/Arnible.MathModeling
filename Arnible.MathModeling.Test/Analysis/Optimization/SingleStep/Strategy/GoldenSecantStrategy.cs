@@ -1,6 +1,7 @@
 using System;
 using Arnible.Assertions;
 using Arnible.Linq;
+using Arnible.Linq.Algebra;
 using Arnible.MathModeling.Algebra;
 using Arnible.MathModeling.Geometry;
 using Xunit;
@@ -16,6 +17,8 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
     
     public bool WideSearch { get; init; } = false;
     public bool UniformSearchDirection { get; init; } = false;
+    
+    public Number? MinimumValue { get; init; }
 
     public double? ExtendedUniformSearchDirectionDisablingRatio
     {
@@ -62,10 +65,12 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       
       if(WideSearch)
       {
-        _logger.Write("---").NewLine().Write(">> WideSearch from ", parameters).Write(" value: ", currentValue).NewLine();
         gradient.CopyTo(filteredGradient);
+        _logger
+          .Write("---").NewLine()
+          .Write(">> WideSearch from ", parameters).Write(" value: ", currentValue).NewLine();
         ImproveWithGradient(
-          valueAnalysis, parameters, in filteredGradient, 
+          valueAnalysis, parameters, in currentValue, in filteredGradient, 
           in optimalPoint, out Number value, out uint complexity);
         statistics.Complexity += complexity;
         if(solution.ConsiderSolution(in value, complexity, "WideSearch"))
@@ -76,9 +81,11 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       {
         if(gradient.CopyTo((in Number v) => v < 0, defaultValue: 0, in filteredGradient))
         {
-          _logger.Write("---").NewLine().Write(">> NegativeDirectionSearch from ", parameters).Write(" value: ", currentValue).NewLine();
+          _logger
+            .Write("---").NewLine()
+            .Write(">> NegativeDirectionSearch from ", parameters).Write(" value: ", currentValue).NewLine();
           ImproveWithGradient(
-            valueAnalysis, parameters, in filteredGradient, 
+            valueAnalysis, parameters, in currentValue, in filteredGradient, 
             in optimalPoint, out Number value, out uint complexity);
           statistics.Complexity += complexity;
           if(solution.ConsiderSolution(in value, complexity, "NegativeDirectionSearch"))
@@ -87,14 +94,30 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       
         if(gradient.CopyTo((in Number v) => v > 0, defaultValue: 0, in filteredGradient))
         {
-          _logger.Write("---").NewLine().Write(">> PositiveDirectionSearch from ", parameters).Write(" value: ", currentValue).NewLine();
+          _logger
+            .Write("---").NewLine()
+            .Write(">> PositiveDirectionSearch from ", parameters).Write(" value: ", currentValue).NewLine();
           ImproveWithGradient(
-            valueAnalysis, parameters, in filteredGradient, 
+            valueAnalysis, parameters, in currentValue, in filteredGradient, 
             in optimalPoint, out Number value, out uint complexity);
           statistics.Complexity += complexity;
           if(solution.ConsiderSolution(in value, complexity, "PositiveDirectionSearch"))
             optimalPoint.CopyTo(solution.Parameters);
         }  
+      }
+      
+      if(solution.HasConjugateDirections)
+      {
+        solution.GetConjugateDirection(in filteredGradient);
+        _logger
+          .Write("---").NewLine()
+          .Write(">> ConjugateDirection from ", parameters).Write(" value: ", currentValue).NewLine();
+        ImproveInSearchDirection(
+          valueAnalysis, parameters, filteredGradient, 
+          in optimalPoint, out Number value, out uint complexity);
+        statistics.Complexity += complexity;
+        if(solution.ConsiderSolution(in value, complexity, "ConjugateDirection"))
+          optimalPoint.CopyTo(solution.Parameters);
       }
       
       if(_extendedUniformSearchDisablingRatio.HasValue)
@@ -105,7 +128,9 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
           ushort maxDerivativeAt = gradient.WithMaximumAt();
           if(gradient[maxDerivativeAt] > 0)
           {
-            _logger.Write("---").NewLine().Write(">> Positive ExtendedUniformSearchDirection from ", parameters).Write(" value: ", currentValue).NewLine();
+            _logger
+              .Write("---").NewLine()
+              .Write(">> Positive ExtendedUniformSearchDirection from ", parameters).Write(" value: ", currentValue).NewLine();
             GetExtendedUniformSearchDirection(valueAnalysis, parameters, maxDerivativeAt, gradient, in filteredGradient);
             ImproveInSearchDirection(
               valueAnalysis, parameters, filteredGradient, 
@@ -119,7 +144,9 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
           ushort minimumDerivativeAt = gradient.WithMinimumAt();
           if(gradient[minimumDerivativeAt] < 0)
           {
-            _logger.Write("---").NewLine().Write(">> Negative ExtendedUniformSearchDirection from ", parameters).Write(" value: ", currentValue).NewLine();
+            _logger
+              .Write("---").NewLine()
+              .Write(">> Negative ExtendedUniformSearchDirection from ", parameters).Write(" value: ", currentValue).NewLine();
             GetExtendedUniformSearchDirection(valueAnalysis, parameters, minimumDerivativeAt, gradient, in filteredGradient);
             ImproveInSearchDirection(
               valueAnalysis, parameters, filteredGradient, 
@@ -135,6 +162,8 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
           _logger.Write("Skipped ExtendedUniformSearchDirection because improvementRatio is ", improvementRatio);
         }
       }
+      
+      solution.FinaliseCurrentDirectionSearch(parameters);
       
       return statistics;
     }
@@ -254,23 +283,56 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         arguments: in currentParameters,
         directionDerivativeRatios: directionDerivativeRatios).First;
     }
-    
+
     private void ImproveWithGradient(
       IFunctionValueAnalysis valueAnalysis,
       in ReadOnlySpan<Number> currentParameters,
+      in Number currentValue,
       in Span<Number> gradient,
       in Span<Number> potentialSolution,
       out Number value,
       out uint complexity)
     {
       _logger.Write("gradient: ", gradient).NewLine();
-      gradient.MultiplySelf(-1);
-
+      gradient.MultiplySelfBy(-1);
+      
       Span<Number> directionDerivativeRatios = stackalloc Number[currentParameters.Length];
       gradient.GetDirectionDerivativeRatios(in directionDerivativeRatios);
       ImproveInSearchDirection(
         valueAnalysis, in currentParameters, directionDerivativeRatios, 
         in potentialSolution, out value, out complexity);
+      
+      if(MinimumValue is not null)
+      {
+        _logger
+          .Write("**Minimum search for ", MinimumValue.Value).NewLine();
+        Number scalingFactor = currentValue - MinimumValue.Value;
+        
+        Span<Number> parameters = stackalloc Number[gradient.Length];
+        gradient.CopyTo(parameters);
+        parameters.MultiplySelfBy(scalingFactor);
+        parameters.AddToSelf(currentParameters);
+        
+        if(_argumentsDomain.IsValid(in parameters))
+        {
+          Number valueForTest = valueAnalysis.GetValue(parameters);
+          _logger
+            .Write("PotentialSolution: ", parameters)
+            .Write(", value: ", valueForTest)
+            .NewLine();
+        
+          complexity += 1;
+          if(valueForTest < value)
+          {
+            value = valueForTest;
+            parameters.CopyTo(potentialSolution);
+          }  
+        }
+        else
+        {
+          _logger.Write("point: ", parameters).Write(" outside of the domain.").NewLine();
+        }
+      }
     }
     
     private void ImproveInSearchDirection(
@@ -300,8 +362,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       NumberFunctionPointWithDerivative startPoint = function.ValueWithDerivative(0);
       if(startPoint.First >= 0)
       {
-        Assert.Equal((double)startPoint.First, 0, 3);
-        _logger.Write("XXX Warning: rounding error");
+        _logger.Write("Got not negative first derivative, ignoring: ", startPoint.First);
         
         currentParameters.CopyTo(potentialSolution);
         value = startPoint.Y;
