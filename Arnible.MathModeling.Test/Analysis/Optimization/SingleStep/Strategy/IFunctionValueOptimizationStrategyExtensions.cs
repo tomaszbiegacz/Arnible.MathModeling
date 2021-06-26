@@ -31,7 +31,10 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
           pos++;
           solution.Parameters.CopyTo(currentParameters);
 
-          logger.NewLine().Write("Loop ", pos).NewLine();
+          logger
+            .NewLine()
+            .Write("Loop ", pos).NewLine()
+            .Write("====").NewLine();
           var statistics = strategy.FindImprovedArguments(ref solution);
           
           using(var writer = serializer.OpenRecord())

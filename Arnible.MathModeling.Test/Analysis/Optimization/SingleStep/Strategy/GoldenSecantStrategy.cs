@@ -362,7 +362,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       NumberFunctionPointWithDerivative startPoint = function.ValueWithDerivative(0);
       if(startPoint.First >= 0)
       {
-        _logger.Write("Got not negative first derivative, ignoring: ", startPoint.First);
+        _logger.Write("Got not negative first derivative, ignoring: ", startPoint.First).NewLine();
         
         currentParameters.CopyTo(potentialSolution);
         value = startPoint.Y;

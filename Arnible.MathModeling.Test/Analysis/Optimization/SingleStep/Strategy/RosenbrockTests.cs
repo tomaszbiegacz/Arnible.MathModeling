@@ -1,6 +1,7 @@
 using System;
 using Arnible.Assertions;
 using Arnible.MathModeling.Analysis.Optimization.Test;
+using Arnible.MathModeling.Analysis.Optimization.Test.Functions;
 using Arnible.MathModeling.Geometry;
 using Arnible.MathModeling.Test;
 using Xunit;
@@ -8,6 +9,7 @@ using Xunit.Abstractions;
 
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
 {
+  [Collection(nameof(RosenbrockTests))]
   public class RosenbrockTests : TestsWithWriterFactory
   {
     private readonly IFunctionValueAnalysis _function;
@@ -38,7 +40,6 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
     [Fact]
     public void Xp_Yp_ExtendedUniformSearchDirection()
     {
-      BackupLogsToFile();
       Span<Number> solutionBuffer = stackalloc Number[2];
       FunctionMinimumImprovement solution = new(
         _function, 

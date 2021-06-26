@@ -1,4 +1,5 @@
 using Arnible.Assertions;
+using Arnible.MathModeling.Analysis.Optimization.Test.Functions;
 using Xunit;
 
 namespace Arnible.MathModeling.Analysis.Optimization.Test

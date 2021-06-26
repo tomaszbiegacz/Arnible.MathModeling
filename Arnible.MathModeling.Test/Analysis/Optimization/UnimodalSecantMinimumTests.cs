@@ -1,5 +1,6 @@
 using System;
 using Arnible.Assertions;
+using Arnible.MathModeling.Analysis.Optimization.Test.Functions;
 using Arnible.Xunit;
 using Xunit;
 using Xunit.Abstractions;
