@@ -19,7 +19,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       _function = new RosenbrockGeneralisationTestFunction();
     }
     
-    [Theory]
+    [Theory(Skip = "ci/cd")]
     [InlineData(2)]
     [InlineData(3)]
     [InlineData(4)]
@@ -38,7 +38,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       solution.Function.IsOptimum(solution.Parameters).AssertIsTrue();
     }
     
-    [Theory]
+    [Theory(Skip = "ci/cd")]
     [InlineData(2, 4, 2074, 5)]
     [InlineData(3, 4, 4150, 5)]
     [InlineData(3, 8, 4150, 5)]

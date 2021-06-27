@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       _function = new RosenbrockTestFunction();
     }
     
-    [Fact]
+    [Fact(Skip = "ci/cd")]
     public void Optimum()
     {
       Span<Number> solutionBuffer = stackalloc Number[2];
@@ -37,7 +37,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
     // splot [0.7:1.7] [0.7:1.7] (1-x)**2 + 100*(y - x**2)**2 with pm3d
     //
 
-    [Fact]
+    [Fact(Skip = "ci/cd")]
     public void Xp_Yp_ExtendedUniformSearchDirection()
     {
       Span<Number> solutionBuffer = stackalloc Number[2];
@@ -57,7 +57,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       iterations.AssertIsEqualTo(2074);
     }
     
-    [Fact]
+    [Fact(Skip = "ci/cd")]
     public void Xp_Yn_ExtendedUniformSearchDirection()
     {
       Span<Number> solutionBuffer = stackalloc Number[2];
@@ -77,7 +77,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       iterations.AssertIsEqualTo(2305);
     }
     
-    [Fact]
+    [Fact(Skip = "ci/cd")]
     public void Xp_Yp_ExtendedUniformSearchDirection_2()
     {
       Span<Number> solutionBuffer = stackalloc Number[2];
@@ -97,7 +97,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       iterations.AssertIsEqualTo(3897);
     }
     
-    [Fact]
+    [Fact(Skip = "ci/cd")]
     public void Xp_Yn_ExtendedUniformSearchDirection_2()
     {
       Span<Number> solutionBuffer = stackalloc Number[2];
@@ -117,7 +117,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       iterations.AssertIsEqualTo(2996);
     }
     
-    [Fact]
+    [Fact(Skip = "ci/cd")]
     public void Xp_Yp_ExtendedUniformSearchDirection_2_WithMinimum()
     {
       Span<Number> solutionBuffer = stackalloc Number[2];
@@ -139,7 +139,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       // no improvement
     }
     
-    [Fact]
+    [Fact(Skip = "ci/cd")]
     public void Xp_Yp_ExtendedUniformSearchDirection_2_ConjugateDirection3()
     {
       ConjugateDirection direction = new(
@@ -167,7 +167,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       iterations.AssertIsEqualTo(2894);
     }
     
-    [Fact]
+    [Fact(Skip = "ci/cd")]
     public void Xp_Yp_ExtendedUniformSearchDirection_2_ConjugateDirection4()
     {
       ConjugateDirection direction = new(
