@@ -5,9 +5,19 @@ using System.IO;
 namespace Arnible.Xunit
 {
   [ExcludeFromCodeCoverage]
-  public sealed class DeafLogger : ISimpleLogger, IDisposable
+  public sealed class DeafLogger : ISimpleLoggerForTests
   {
     public bool IsLoggerEnabled => false;
+    
+    public void EnableLogging(bool value)
+    {
+      // intentionally empty
+    }
+    
+    public void SaveLogsToFile(bool value)
+    {
+      // intentionally empty
+    }
     
     public ISimpleLogger Write(in ReadOnlySpan<char> message)
     {

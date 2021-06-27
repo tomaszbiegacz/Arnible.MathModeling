@@ -5,7 +5,7 @@ using Xunit.Abstractions;
 
 namespace Arnible.Xunit
 {
-  public sealed class XunitLogger : ISimpleLogger, IDisposable
+  public sealed class XunitLogger : ISimpleLoggerForTests
   {
     private readonly ITestOutputHelper _output;
     private readonly StringBuilder _stringBuffer;
@@ -18,10 +18,17 @@ namespace Arnible.Xunit
       _logFile = null;
 
       IsLoggerEnabled = true;
-      SaveLogsToFile = false;
+      IsSavingLogsToFileEnabled = false;
     }
 
-    public bool IsLoggerEnabled { get; set; }
+    public bool IsLoggerEnabled { get; private set; }
+    
+    public bool IsSavingLogsToFileEnabled { get; private set; }
+    
+    public void EnableLogging(bool value)
+    {
+      IsLoggerEnabled = value;
+    }
     
     public ISimpleLogger Write(in ReadOnlySpan<char> message)
     {
@@ -42,14 +49,17 @@ namespace Arnible.Xunit
       return this;
     }
 
-    public bool SaveLogsToFile { get; set; }
+    public void SaveLogsToFile(bool value)
+    {
+      IsSavingLogsToFileEnabled = value;
+    }
 
     public void Flush()
     {
       string logs = _stringBuffer.ToString();
       _stringBuffer.Clear();
       
-      if (SaveLogsToFile && _logFile == null)
+      if (IsSavingLogsToFileEnabled && _logFile == null)
       {
         _logFile = new FileInfo(Path.GetTempFileName());
         _output.WriteLine($"Log file: {_logFile.FullName}");

@@ -7,7 +7,7 @@ namespace Arnible.MathModeling.Test
 {
   public class TestsWithWriterFactory : IDisposable
   {
-    private readonly XunitLogger _logger;
+    private readonly ISimpleLoggerForTests _logger;
     static readonly IRecordWriterBuilder WriterFactory;
     
     static TestsWithWriterFactory()
@@ -18,18 +18,18 @@ namespace Arnible.MathModeling.Test
 
     public TestsWithWriterFactory(ITestOutputHelper output)
     {
-      _logger = new XunitLogger(output);
+      _logger = TestsWithLogger.LoggerForTestsFactory(output);
       Logger = _logger.WithWriterFactory(WriterFactory);
     }
     
     protected void DisableLogging()
     {
-      _logger.IsLoggerEnabled = false;
+      _logger.EnableLogging(false);
     }
 
     protected void BackupLogsToFile()
     {
-      _logger.SaveLogsToFile = true;
+      _logger.SaveLogsToFile(true);
     }
 
     protected ILoggerWithWriterFactory Logger { get; }
