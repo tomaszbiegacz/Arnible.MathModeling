@@ -7,6 +7,7 @@ using Xunit.Abstractions;
 
 namespace Arnible.MathModeling.Analysis.Optimization.Test
 {
+  [Collection(nameof(GoldenSecantMinimumTests))]
   public class GoldenSecantMinimumTests : TestsWithLogger
   {
     private readonly GoldenSecantMinimum _method;

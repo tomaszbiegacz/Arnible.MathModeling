@@ -7,6 +7,7 @@ using Xunit.Abstractions;
 
 namespace Arnible.MathModeling.Analysis.Optimization.Test
 {
+  [Collection(nameof(UnimodalSecantMinimumTests))]
   public class UnimodalSecantMinimumTests : TestsWithLogger
   {
     private readonly UnimodalSecantMinimum _method;
@@ -16,7 +17,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       _method = new UnimodalSecantMinimum(Logger);
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Square_Optimum()
     {
       var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
@@ -47,7 +48,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
      * Unimodal square reversed
      */
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_SquareReversed()
     {
       var f = new SquareReversedTestFunction().FunctionValueAnalysisFor1D();
@@ -74,7 +75,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
      * Unimodal sin
      */
 
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Sin_Optimum()
     {
       var f = new SinTestFunction().FunctionValueAnalysisFor1D();
@@ -91,7 +92,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       i.AssertIsEqualTo(6);
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Sin_CornerDecreasing()
     {
       var f = new SinTestFunction().FunctionValueAnalysisFor1D();
@@ -115,7 +116,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       }
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Sin_CornerIncreasing()
     {
       var f = new SinTestFunction().FunctionValueAnalysisFor1D();
@@ -143,7 +144,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
      * Multimodal sin
      */
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Multimodal_Sin()
     {
       var f = new SinTestFunction().FunctionValueAnalysisFor1D();
@@ -174,7 +175,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
      * Rosenbrock
      */
 
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Multimodal_Rosenbrock_LocalMinimum()
     {
       var f = new RosenbrockTestFunction();
@@ -205,7 +206,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       i.AssertIsEqualTo(7);
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Multimodal_Rosenbrock_Minimum()
     {
       var f = new RosenbrockTestFunction();
