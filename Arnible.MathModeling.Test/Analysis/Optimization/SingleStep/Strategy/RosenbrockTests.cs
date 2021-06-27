@@ -37,7 +37,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
     // splot [0.7:1.7] [0.7:1.7] (1-x)**2 + 100*(y - x**2)**2 with pm3d
     //
 
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Xp_Yp_ExtendedUniformSearchDirection()
     {
       Span<Number> solutionBuffer = stackalloc Number[2];
