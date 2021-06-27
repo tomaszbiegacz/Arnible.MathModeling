@@ -8,6 +8,7 @@ using Xunit.Abstractions;
 
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
 {
+  [Collection(nameof(GoldenSectionSmoothlyConstrainedMinimumTests))]
   public class GoldenSectionSmoothlyConstrainedMinimumTests : TestsWithLogger
   {
     private readonly GoldenSecantSmoothlyConstrainedMinimum _optimizer;
@@ -20,7 +21,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
     /// <summary>
     /// Use secant to find optimum in one step
     /// </summary>
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Square_Optimum()
     {
       var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
@@ -32,7 +33,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       complexity.AssertIsEqualTo(1u);
     }
 
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_SquareReversed_Maximum()
     {
       var f = new SquareReversedTestFunction().FunctionValueAnalysisFor1D();
@@ -50,7 +51,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       }
     }
 
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Square_AtOptimum()
     {
       var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
@@ -68,7 +69,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       }
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Sin_Optimum()
     {
       var f = new SinTestFunction().FunctionValueAnalysisFor1D();
@@ -80,7 +81,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       iterationCount.AssertIsEqualTo(17);
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Multimodal_Sin()
     {
       var f = new SinTestFunction().FunctionValueAnalysisFor1D();
@@ -99,7 +100,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
      * Rosenbrock
      */
 
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Multimodal_Rosenbrock_LocalMinimum()
     {
       var f = new RosenbrockTestFunction();

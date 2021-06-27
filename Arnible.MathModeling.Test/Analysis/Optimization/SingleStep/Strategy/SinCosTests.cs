@@ -8,6 +8,7 @@ using Xunit.Abstractions;
 
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
 {
+  [Collection(nameof(SinTests))]
   public class SinTests : TestsWithWriterFactory
   {
     private readonly IFunctionValueAnalysis _function;
@@ -18,7 +19,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       _function = new SinCos2DTestFunction();
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Optimum()
     {
       Span<Number> solutionBuffer = stackalloc Number[2];
@@ -30,7 +31,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       solution.Function.IsOptimum(solution.Parameters).AssertIsTrue();
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Multimodal_GoldenSecant_1()
     {
       // splot [-6:6] [-6:6] sin(x) + cos(y) with pm3d
@@ -50,7 +51,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       iterations.AssertIsEqualTo(8);
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Multimodal_GoldenSecant_2_WideSearch()
     {
       // splot [-6:6] [-6:6] sin(x) + cos(y) with pm3d
@@ -70,7 +71,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       iterations.AssertIsEqualTo(11);
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Multimodal_GoldenSecant_2_UniformDirection()
     {
       // splot [-6:6] [-6:6] sin(x) + cos(y) with pm3d
