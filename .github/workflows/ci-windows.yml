@@ -21,7 +21,7 @@ jobs:
       - name: build debug
         run: dotnet build -c Debug  
       - name: unit tests
-        run: 'dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=..\TestResults\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
+        run: dotnet test --filter 'FullyQualifiedName!~PerformanceTest' --test-adapter-path:. --logger:"junit;LogFilePath=..\TestResults\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"
       - name: publish tests results
         uses: EnricoMi/publish-unit-test-result-action/composite@v1
         if: always()
