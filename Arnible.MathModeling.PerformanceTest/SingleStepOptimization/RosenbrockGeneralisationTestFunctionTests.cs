@@ -1,12 +1,14 @@
 using System;
 using Arnible.Assertions;
+using Arnible.MathModeling.Analysis.Optimization;
+using Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy;
 using Arnible.MathModeling.Analysis.Optimization.Test.Functions;
 using Arnible.MathModeling.Geometry;
 using Arnible.MathModeling.Test;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
+namespace Arnible.MathModeling.PerformanceTest.SingleStepOptimization
 {
   [Collection(nameof(RosenbrockGeneralisationTestFunctionTests))]
   public class RosenbrockGeneralisationTestFunctionTests : TestsWithWriterFactory
@@ -38,7 +40,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       solution.Function.IsOptimum(solution.Parameters).AssertIsTrue();
     }
     
-    [Theory(Skip = "ci/cd")]
+    [Theory]
     [InlineData(2, 4, 2074, 5)]
     [InlineData(3, 4, 4150, 5)]
     [InlineData(3, 8, 4150, 5)]
