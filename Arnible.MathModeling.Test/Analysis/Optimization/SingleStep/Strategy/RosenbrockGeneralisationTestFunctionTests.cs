@@ -19,7 +19,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       _function = new RosenbrockGeneralisationTestFunction();
     }
     
-    [Theory(Skip = "ci/cd")]
+    [Theory]
     [InlineData(2)]
     [InlineData(3)]
     [InlineData(4)]

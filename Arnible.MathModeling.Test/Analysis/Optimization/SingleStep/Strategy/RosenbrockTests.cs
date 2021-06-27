@@ -20,7 +20,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       _function = new RosenbrockTestFunction();
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Optimum()
     {
       Span<Number> solutionBuffer = stackalloc Number[2];
