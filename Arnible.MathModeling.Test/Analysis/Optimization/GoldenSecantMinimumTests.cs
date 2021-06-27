@@ -16,7 +16,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       _method = new GoldenSecantMinimum(Logger);
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Square_Optimum()
     {
       var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
@@ -43,7 +43,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       }
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Square_PositiveDerivative()
     {
       var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
@@ -59,7 +59,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       i.AssertIsEqualTo(21);
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Square_PositiveDerivative_Optimum()
     {
       var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
@@ -75,7 +75,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       i.AssertIsEqualTo(22);
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Square_NegativeDerivative()
     {
       var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
@@ -91,7 +91,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       i.AssertIsEqualTo(24);
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Square_NegativeDerivative_Optimum()
     {
       var f = new SquareTestFunction().FunctionValueAnalysisFor1D();
@@ -111,7 +111,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
      * Unimodal square reversed
      */
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_SquareReversed()
     {
       var f = new SquareReversedTestFunction().FunctionValueAnalysisFor1D();
@@ -132,7 +132,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
      * Unimodal sin
      */
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Sin_Optimum()
     {
       var f = new SinTestFunction().FunctionValueAnalysisFor1D();
@@ -149,7 +149,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       i.AssertIsEqualTo(6);
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Sin_CornerDecreasing()
     {
       var f = new SinTestFunction().FunctionValueAnalysisFor1D();
@@ -167,7 +167,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       i.AssertIsEqualTo(22);
     }
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Unimodal_Sin_CornerIncreasing()
     {
       var f = new SinTestFunction().FunctionValueAnalysisFor1D();
@@ -189,7 +189,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
      * Multimodal sin
      */
     
-    [Fact(Skip = "ci/cd")]
+    [Fact]
     public void Multimodal_Sin()
     {
       var f = new SinTestFunction().FunctionValueAnalysisFor1D();
