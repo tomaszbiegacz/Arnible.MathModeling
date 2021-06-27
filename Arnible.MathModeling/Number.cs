@@ -101,12 +101,12 @@ namespace Arnible.MathModeling
       }
     }
     
-    public bool PreciselySmaller(in Number other)
+    public bool IsPreciselySmaller(in Number other)
     {
       return _value < other._value;
     }
     
-    public bool PreciselyGreater(in Number other)
+    public bool IsPreciselyGreater(in Number other)
     {
       return _value > other._value;
     }

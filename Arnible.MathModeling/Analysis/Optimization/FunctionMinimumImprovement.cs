@@ -59,7 +59,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
       in ulong complexity,
       in ReadOnlySpan<char> notes)
     {
-      if(solutionValue.PreciselySmaller(_value))
+      if(solutionValue.IsPreciselySmaller(_value))
       {
         _value = solutionValue;
         _complexity = complexity;

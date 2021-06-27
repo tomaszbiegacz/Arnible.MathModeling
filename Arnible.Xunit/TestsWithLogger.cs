@@ -5,11 +5,12 @@ namespace Arnible.Xunit
 {
   public abstract class TestsWithLogger : IDisposable
   {
+    internal static Func<bool> SkipLoggerSetup { get; set; } = () => Environment.GetEnvironmentVariable("arnible_skip_output")?.Trim()?.ToLowerInvariant() == "yes";
     private readonly ISimpleLoggerForTests _logger;
     
     public static ISimpleLoggerForTests LoggerForTestsFactory(ITestOutputHelper output)
     {
-      if(Environment.GetEnvironmentVariable("arnible_skip_output")?.Trim()?.ToLowerInvariant() != "yes")
+      if(!SkipLoggerSetup())
         return new XunitLogger(output);
       else
       {
@@ -24,17 +25,17 @@ namespace Arnible.Xunit
       Logger = _logger;
     }
 
-    protected void DisableLogging()
+    public void DisableLogging()
     {
       _logger.EnableLogging(false);
     }
 
-    protected void BackupLogsToFile()
+    public void BackupLogsToFile()
     {
       _logger.SaveLogsToFile(true);
     }
 
-    protected ISimpleLogger Logger { get; }
+    public ISimpleLogger Logger { get; }
 
     public void Dispose()
     {

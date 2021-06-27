@@ -1,4 +1,5 @@
-﻿using Arnible.Assertions;
+﻿using System;
+using Arnible.Assertions;
 using Xunit;
 
 namespace Arnible.MathModeling.Test
@@ -14,6 +15,34 @@ namespace Arnible.MathModeling.Test
 
       (2 == 0).AssertIsFalse();
       (0 == -2).AssertIsFalse();
+    }
+    
+    [Fact]
+    public void InvalidNumber()
+    {
+      try
+      {
+        Number v = double.PositiveInfinity;
+        throw new Exception(v.ToString()); 
+      }
+      catch(ArgumentException)
+      {
+        // all is fine
+      }
+    }
+    
+    [Theory]
+    [InlineData(0, 8.65956056235496E-17)]
+    [InlineData(0, 1.2246467991473532E-16)]
+    public void PreciselyGreaterTests(double first, double second)
+    {
+      Number f = first;
+      Number s = second;
+      f.IsPreciselyGreater(s).AssertIsFalse();
+      f.IsPreciselySmaller(s).AssertIsTrue();
+      
+      s.IsPreciselyGreater(f).AssertIsTrue();
+      s.IsPreciselySmaller(f).AssertIsFalse();
     }
 
     [Theory]
