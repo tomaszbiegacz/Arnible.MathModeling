@@ -23,17 +23,19 @@ jobs:
         run: dotnet test --filter 'FullyQualifiedName!~PerformanceTest' --test-adapter-path:. --logger:'junit;LogFilePath=..\TestResults\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose' /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith='../TestResults/coverage.json' /p:CoverletOutputFormat=\"lcov,json\" -m:1
       - name: release build
         run: dotnet build -c Release -o build
-      - name: performance tests
-        run: dotnet test build/Arnible.MathModeling.PerformanceTest.dll --test-adapter-path:. --logger:"junit;LogFilePath=TestResults/{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"
-        env:
-          arnible_skip_output: 'yes'
-      - name: publish results
+#        
+#      - name: performance tests
+#        run: dotnet test build/Arnible.MathModeling.PerformanceTest.dll --test-adapter-path:. --logger:"junit;LogFilePath=TestResults/{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"
+#        env:
+#          arnible_skip_output: 'yes'
+#
+      - name: publish tests results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
           check_name: 'Unit Tests Results for Linux'
           files: ./TestResults/*test-result.xml
-      - name: Publish coverage report
+      - name: publish unit tests coverage report
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
