@@ -41,21 +41,34 @@ namespace Arnible.MathModeling.PerformanceTest.SingleStepOptimization
     }
     
     [Theory]
-    [InlineData(2, 4, 2074, 5)]
-    [InlineData(3, 4, 4150, 5)]
-    [InlineData(3, 8, 4150, 5)]
-    [InlineData(4, 4, 6821, 5)]
-    [InlineData(4, 8, 6821, 5)]
-    [InlineData(5, 4, 9013, 5)]
-    [InlineData(6, 4, 13439, 4)]
-    [InlineData(7, 4, 13252, 4)]
-    [InlineData(8, 4, 11457, 4)]
+    [InlineData(2, 4, 0.2, 0.3, 2074, 5, false)]
+    [InlineData(2, 4, 0.5, 0.3, 2074, 5, false)]
+    [InlineData(3, 4, 0.2, 0.2, 6217, 5, false)]
+    [InlineData(3, 4, 0.2, 0.3, 4150, 5, false)]
+    [InlineData(3, 4, 0.2, 0.5, 4547, 5, false)]
+    [InlineData(3, 8, 0.2, 0.3, 4150, 5, false)]
+    [InlineData(4, 4, 0.3, 0.3, 6821, 5, false)]
+    [InlineData(4, 8, 0.3, 0.3, 6821, 5, false)]
+    [InlineData(5, 4, 0.2, 0.3, 9013, 5, false)]
+    [InlineData(5, 4, 0.5, 0.3, 9013, 5, false)]
+    [InlineData(6, 4, 0.5, 0.3, 13439, 4, false)]
+    [InlineData(7, 4, 0.2, 0.3, 13252, 4, false)]
+    [InlineData(8, 4, 0.2, 0.3, 11457, 4, false)]
+    [InlineData(8, 4, 0.5, 0.3, 11457, 4, false)]
+    [InlineData(8, 4, 0.8, 0.3, 11457, 4, false)]
     public void Xp_Yp_ExtendedUniformSearchDirection(
       ushort dimensionsCount,
       ushort conjugateDirectionBuffer,
+      double extendedUniformSearchDirectionDisablingRatio,
+      double extendedUniformSearchDirectionMinimumGradientRatio,
       ushort iterationsCount,
-      ushort precision)
+      ushort precision,
+      bool saveLogsToFile)
     {
+      if(saveLogsToFile)
+      {
+        BackupLogsToFile();
+      }
       Span<Number> parameters = stackalloc Number[dimensionsCount];
       parameters.Fill(1.5);
       
@@ -75,7 +88,8 @@ namespace Arnible.MathModeling.PerformanceTest.SingleStepOptimization
       GoldenSecantStrategy strategy = new(-2, 2, Logger)
       {
         UniformSearchDirection = true,
-        ExtendedUniformSearchDirectionDisablingRatio = 0.5
+        ExtendedUniformSearchDirectionDisablingRatio = extendedUniformSearchDirectionDisablingRatio,
+        ExtendedUniformSearchDirectionMinimumGradientRatio = extendedUniformSearchDirectionMinimumGradientRatio
       };
       ushort iterations = strategy.FindOptimal(Logger, ref solution);
       
