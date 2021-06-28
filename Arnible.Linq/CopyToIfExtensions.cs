@@ -4,7 +4,7 @@ namespace Arnible.Linq
 {
   public static class CopyToExtensions
   {
-    public static bool CopyTo<T>(
+    public static bool CopyToIf<T>(
       in this ReadOnlySpan<T> source, 
       FuncIn<T, bool> predicate,
       in T defaultValue,
@@ -31,13 +31,13 @@ namespace Arnible.Linq
       return result;
     }
     
-    public static bool CopyTo<T>(
+    public static bool CopyToIf<T>(
       in this Span<T> source, 
       FuncIn<T, bool> predicate,
       in T defaultValue,
       in Span<T> output)
     {
-      return CopyTo((ReadOnlySpan<T>)source, predicate, in defaultValue, in output);
+      return CopyToIf((ReadOnlySpan<T>)source, predicate, in defaultValue, in output);
     }
   }
 }

@@ -45,20 +45,23 @@ namespace Arnible.MathModeling.Geometry
     
     public ReadOnlySpan<Number> GetConjugateDirection(in Span<Number> buffer)
     {
+      DirectionsMemorySize.AssertIsGreaterThan(0);
       ushort directionsCount = _allBufferUsed ? DirectionsMemorySize : _directionToWriteCursor;
       directionsCount.AssertIsGreaterThan(0);
+      
+      Span<Number> tailoredBuffer = buffer[0..DirectionsDimensionsCount];
       for(ushort i=0; i<directionsCount; ++i)
       {
         if(i == 0)
         {
-          _directions.Row(i).CopyTo(buffer);
+          _directions.Row(i).CopyTo(tailoredBuffer);
         }
         else
         {
-          buffer.AddToSelf(_directions.Row(i));
+          tailoredBuffer.AddToSelf(_directions.Row(i));
         }
       }
-      return buffer[0..DirectionsDimensionsCount];
+      return tailoredBuffer;
     }
   }
 }

@@ -74,7 +74,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
     
     public readonly bool HasConjugateDirections => _conjugateDirection.HasConjugateDirections;
     
-    public readonly void GetConjugateDirection(in Span<Number> direction) => _conjugateDirection.GetConjugateDirection(in direction);
+    public readonly ReadOnlySpan<Number> GetConjugateDirection(in Span<Number> direction) => _conjugateDirection.GetConjugateDirection(in direction);
     
     public readonly void FinaliseCurrentDirectionSearch(in ReadOnlySpan<Number> startingPoint)
     {

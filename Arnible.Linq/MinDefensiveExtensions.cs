@@ -37,7 +37,7 @@ namespace Arnible.Linq
       }
       else
       {
-        throw new ArgumentException("Empty enumerator");
+        throw new AssertException("Empty enumerator");
       }
     }
     

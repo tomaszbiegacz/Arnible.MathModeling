@@ -79,7 +79,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       
       if(UniformSearchDirection)
       {
-        if(gradient.CopyTo((in Number v) => v < 0, defaultValue: 0, in filteredGradient))
+        if(gradient.CopyToIf((in Number v) => v < 0, defaultValue: 0, in filteredGradient))
         {
           _logger
             .Write("---").NewLine()
@@ -92,7 +92,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
             optimalPoint.CopyTo(solution.Parameters);
         }
       
-        if(gradient.CopyTo((in Number v) => v > 0, defaultValue: 0, in filteredGradient))
+        if(gradient.CopyToIf((in Number v) => v > 0, defaultValue: 0, in filteredGradient))
         {
           _logger
             .Write("---").NewLine()

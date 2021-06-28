@@ -17,6 +17,13 @@ namespace Arnible.Assertions.Test
         }
         
         [Fact]
+        public void ushort_int_Ok()
+        {
+            ushort v = 5;
+            v.AssertIsGreaterEqualThan(4);
+        }
+        
+        [Fact]
         public void ushort_int_Error()
         {
             ushort v = 3;

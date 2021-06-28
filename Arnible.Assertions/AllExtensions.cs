@@ -6,21 +6,6 @@ namespace Arnible.Assertions
 {
   public static class AllExtensions
   {
-    public static void AssertAll<T>(this IEnumerable<T> src, Func<T, bool> predicate)
-    {
-      ushort i=0;
-      foreach(T item in src)
-      {
-        if(!predicate(item))
-        {
-          throw new AssertException(
-            $"At position {i} item [{item}] doesn't meet the condition."
-          );
-        }
-        i++;
-      }
-    }
-    
     public static void AssertAll<T>(in this ReadOnlySpan<T> src, FuncIn<T, bool> predicate)
     {
       for(ushort i=0; i<src.Length; ++i)

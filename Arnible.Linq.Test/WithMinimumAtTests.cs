@@ -1,27 +1,37 @@
+using System;
 using Xunit;
 
 namespace Arnible.Linq.Test
 {
   public class WithMinimumAtTests
   {
-    readonly struct Value
+    [Fact]
+    public void WithMinimumAt_OfThree_ReadOnlySpan()
     {
-      public Value(double v)
-      {
-        V = v;
-      }
-
-      public double V { get; }
+      ReadOnlySpan<double> v = new double[] { 4, 6, 3 };
+      Assert.Equal(2, v.WithMinimumAt());
     }
     
     [Fact]
-    public void WithMinimumAt_OfThree()
+    public void WithMinimumAt_OfThree_Span()
     {
-      uint r = (new[]
+      Span<double> v = new double[] { 4, 6, 3 };
+      Assert.Equal(2, v.WithMinimumAt());
+    }
+    
+    [Fact]
+    public void WithMinimumAt_OfThree_ReadOnlySpan_Error()
+    {
+      ReadOnlySpan<double> src = new double[0];
+      try
       {
-        new Value(4), new Value(6), new Value(3)
-      }).WithMinimumAt(v => v.V);
-      Assert.Equal(2u, r);
+        src.WithMinimumAt();
+        throw new Exception("Something went wrong");
+      }
+      catch(ArgumentException)
+      {
+        // all is ok
+      }
     }
   }
 }
