@@ -46,13 +46,6 @@ namespace Arnible.MathModeling
         serializer.Write(string.Empty, record?._value);
       }
     }
-    
-    public void Write(ISimpleLogger logger)
-    {
-      Span<char> buffer = stackalloc char[SpanCharFormatter.BufferSize];
-      SpanCharFormatter.ToString(in _value, in buffer);
-      logger.Write(buffer);
-    }
 
     //
     // Comparision operators
@@ -106,6 +99,16 @@ namespace Arnible.MathModeling
       {
         return a._value > b._value;
       }
+    }
+    
+    public bool IsPreciselySmaller(in Number other)
+    {
+      return _value < other._value;
+    }
+    
+    public bool IsPreciselyGreater(in Number other)
+    {
+      return _value > other._value;
     }
     
     //

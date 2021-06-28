@@ -1,11 +1,13 @@
 using System;
 using Arnible.Assertions;
+using Arnible.MathModeling.Analysis.Optimization.Test.Functions;
 using Arnible.Xunit;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Arnible.MathModeling.Analysis.Optimization.Test
 {
+  [Collection(nameof(GoldenSectionWithDerivativeSmoothlyConstrainedMinimumTests))]
   public class GoldenSectionWithDerivativeSmoothlyConstrainedMinimumTests : TestsWithLogger
   {
     private readonly GoldenSectionWithDerivativeSmoothlyConstrainedMinimum _method;

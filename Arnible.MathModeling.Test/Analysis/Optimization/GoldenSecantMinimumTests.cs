@@ -1,11 +1,13 @@
 using System;
 using Arnible.Assertions;
+using Arnible.MathModeling.Analysis.Optimization.Test.Functions;
 using Arnible.Xunit;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Arnible.MathModeling.Analysis.Optimization.Test
 {
+  [Collection(nameof(GoldenSecantMinimumTests))]
   public class GoldenSecantMinimumTests : TestsWithLogger
   {
     private readonly GoldenSecantMinimum _method;
@@ -30,7 +32,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       point.BorderSmaller.X.AssertIsEqualTo(1);
       point.BorderSmaller.Y.AssertIsEqualTo(3);
       
-      point.IsOptimal.AssertIsTrue();
+      point.IsEmptyRange.AssertIsTrue();
       try
       {
         _method.MoveNext(in f, ref point);

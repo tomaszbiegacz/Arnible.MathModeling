@@ -1,14 +1,14 @@
 using System;
 using Arnible.Assertions;
 
-namespace Arnible.MathModeling.Analysis.Optimization.Test
+namespace Arnible.MathModeling.Analysis.Optimization.Test.Functions
 {
   /// <summary>
-  /// 3 - (x-1)^2
+  /// (x-1)^2 + 3
   /// </summary>
-  public record SquareReversedTestFunction : IFunctionValueAnalysis
+  public record SquareTestFunction : OptimizationTestFunction
   {
-    public ValueWithDerivative1 ValueWithDerivativeByArgumentsChangeDirection(
+    public override ValueWithDerivative1 GetValueWithDerivativeByArgumentsChangeDirection(
       in ReadOnlySpan<Number> arguments,
       in ReadOnlySpan<Number> directionDerivativeRatios)
     {
@@ -18,8 +18,8 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       Number x = arguments[0];
       return new ValueWithDerivative1
       {
-        Value = 3 - (x - 1).ToPower(2),
-        First = -2*(x-1) * directionDerivativeRatios[0] 
+        Value = (x - 1).ToPower(2) + 3,
+        First = 2*(x-1) * directionDerivativeRatios[0] 
       };
     }
   }

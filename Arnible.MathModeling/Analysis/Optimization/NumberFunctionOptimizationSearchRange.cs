@@ -43,7 +43,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
     public readonly NumberFunctionPointWithDerivative Start => _a;
     public readonly NumberFunctionPointWithDerivative End => _b;
     public readonly Number Width => _b.X - _a.X;
-    public readonly bool IsOptimal => _a.X == _b.X;
+    public readonly bool IsEmptyRange => _a.X == _b.X;
 
     //
     // Value comparison
@@ -140,13 +140,13 @@ namespace Arnible.MathModeling.Analysis.Optimization
       string message,
       in NumberFunctionPointWithDerivative c)
     {
-      logger.Write("[");
-      _a.Write(logger);
-      logger.Write(", ");
-      _b.Write(logger);
-      logger.Write("] ", message, ", c:");
-      c.Write(logger);
-      logger.Write(Environment.NewLine);
+      logger
+        .Write("[", _a)
+        .Write(", ", _b)
+        .Write("] ", message)
+        .NewLine()
+        .Write("   c:", in c)
+        .NewLine();
     }
   }
 }

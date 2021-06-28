@@ -4,8 +4,8 @@ using Arnible.Linq;
 
 namespace Arnible.MathModeling.Algebra.Polynomials
 {
-  public readonly struct IndeterminateExpression : 
-    IValueEquatable<IndeterminateExpression>, 
+  public readonly struct IndeterminateExpression :
+    IEquatable<IndeterminateExpression>,
     IComparable<IndeterminateExpression>, 
     IPolynomialOperation
   {

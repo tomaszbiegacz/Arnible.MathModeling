@@ -1,6 +1,6 @@
 ﻿namespace Arnible.MathModeling.Analysis
 {
-  public readonly struct Derivative1Value : IValueEquatable<Derivative1Value>
+  public readonly struct Derivative1Value
   {
     //
     // Properties

@@ -2,6 +2,7 @@ using System;
 using Arnible.Assertions;
 using Arnible.MathModeling.Analysis.Learning;
 using Arnible.MathModeling.Analysis.Learning.Error;
+using Arnible.MathModeling.Analysis.Optimization;
 using Xunit;
 
 namespace Arnible.MathModeling.Analysis.Test.Learning
@@ -73,20 +74,19 @@ namespace Arnible.MathModeling.Analysis.Test.Learning
     [Fact]
     public void ErrorValue()
     {
-      SupervisedLearningErrorAnalysisForParameters analysis = GetErrorAnalysis()
-        .ForParameters(new Number[] { 1, 2 });
-      
-      analysis.ErrorValue.AssertIsEqualTo(9);
+      ReadOnlySpan<Number> parameters = new Number[] { 1, 2 }; 
+      IFunctionValueAnalysis analysis = GetErrorAnalysis();
+      analysis.GetValue(in parameters).AssertIsEqualTo(9);
     }
     
     [Fact]
     public void ErrorGradientByParameters()
     {
-      SupervisedLearningErrorAnalysisForParameters analysis = GetErrorAnalysis()
-        .ForParameters(new Number[] { 1, 2 });
+      ReadOnlySpan<Number> parameters = new Number[] { 1, 2 }; 
+      IFunctionValueAnalysis analysis = GetErrorAnalysis();
       
       Span<Number> gradient = stackalloc Number[2];
-      analysis.ErrorGradientByParameters(gradient);
+      analysis.GradientByArguments(in parameters, in gradient);
       
       gradient.AssertSequenceEqualsTo(new Number[] { 6, 12 });
     }
@@ -94,10 +94,10 @@ namespace Arnible.MathModeling.Analysis.Test.Learning
     [Fact]
     public void ErrorDerivativeByParameters()
     {
-      SupervisedLearningErrorAnalysisForParameters analysis = GetErrorAnalysis()
-        .ForParameters(new Number[] { 1, 2 });
+      ReadOnlySpan<Number> parameters = new Number[] { 1, 2 }; 
+      IFunctionValueAnalysis analysis = GetErrorAnalysis();
       
-      analysis.ErrorDerivativeByParameters(new Number[] { 5, 6 }).AssertIsEqualTo(102);
+      analysis.GetValueWithDerivativeByArgumentsChangeDirection(in parameters, new Number[] { 5, 6 }).First.AssertIsEqualTo(102);
     }
   }
 }

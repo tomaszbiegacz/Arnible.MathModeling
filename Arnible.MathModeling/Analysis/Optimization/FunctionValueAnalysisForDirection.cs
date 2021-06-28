@@ -34,7 +34,7 @@ namespace Arnible.MathModeling.Analysis.Optimization
       {
         Span<Number> parameters = stackalloc Number[_startPosition.Length];
         GetPosition(in x, in parameters);
-        ValueWithDerivative1 derivativeWithValue = _functionToAnalyse.ValueWithDerivativeByArgumentsChangeDirection(
+        ValueWithDerivative1 derivativeWithValue = _functionToAnalyse.GetValueWithDerivativeByArgumentsChangeDirection(
           arguments: parameters, 
           directionDerivativeRatios: _directionDerivativeRatios);
 

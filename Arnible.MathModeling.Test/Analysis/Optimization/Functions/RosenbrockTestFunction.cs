@@ -1,17 +1,22 @@
 using System;
 using Arnible.Assertions;
 
-namespace Arnible.MathModeling.Analysis.Optimization.Test
+namespace Arnible.MathModeling.Analysis.Optimization.Test.Functions
 {
   /// <summary>
   /// https://en.wikipedia.org/wiki/Rosenbrock_function
   /// </summary>
-  public record RosenbrockTestFunction : IFunctionValueAnalysis
+  /// <remarks>
+  /// gnuplot
+  /// set xlabel "X"; set ylabel "Y" 
+  /// splot [-3:3] [-3:3] (1-x)**2 + 100*(y - x**2)**2 with pm3d
+  /// </remarks> 
+  public record RosenbrockTestFunction : OptimizationTestFunction
   {
     public Number A { get; init; } = 1;
     public Number B { get; init; } = 100;
     
-    public ValueWithDerivative1 ValueWithDerivativeByArgumentsChangeDirection(
+    public override ValueWithDerivative1 GetValueWithDerivativeByArgumentsChangeDirection(
       in ReadOnlySpan<Number> arguments,
       in ReadOnlySpan<Number> directionDerivativeRatios)
     {

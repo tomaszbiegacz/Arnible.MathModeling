@@ -433,7 +433,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials
      * IEnumerable operators
      */
 
-    public static ReadOnlyArray<PolynomialTerm> Simplify(IEnumerable<PolynomialTerm> variables)
+    public static PolynomialTerm[] Simplify(IEnumerable<PolynomialTerm> variables)
     {
       var grouped = variables.AggregateBy(v => v._indeterminatesSignature, g => Add(g)).Values;
       return grouped

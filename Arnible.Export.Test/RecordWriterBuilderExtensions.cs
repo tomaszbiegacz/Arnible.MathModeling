@@ -5,7 +5,6 @@ namespace Arnible.Export.Test
     public static RecordWriterBuilder RegisterTestSerializers(this RecordWriterBuilder src)
     {
       return src
-        .RegisterCoreSerializers()
         .RegisterMathModellingSerializers()
         
         .RegisterReferenceSerializer<NullableSubRecord, NullableSubRecord.Serializer>()
@@ -14,6 +13,7 @@ namespace Arnible.Export.Test
         .RegisterReferenceSerializer<TestArraysReferenceRecord, TestArraysReferenceRecord.Serializer>()
         .RegisterGenericReferenceSerializer(typeof(ReadOnlyArrayWrapper<>), typeof(ReadOnlyArrayWrapperSerializer<>))
         
+        .RegisterGenericValueSerializer(typeof(ReadOnlyArray<>), typeof(ReadOnlyArraySerializer<>))
         .RegisterValueSerializer<TestValueRecord, TestValueRecord.Serializer>()
         .RegisterValueSerializer<TestReferenceRecordArray, TestReferenceRecordArray.Serializer>()
         .RegisterValueSerializer<TestSubValueRecord, TestSubValueRecord.Serializer>()

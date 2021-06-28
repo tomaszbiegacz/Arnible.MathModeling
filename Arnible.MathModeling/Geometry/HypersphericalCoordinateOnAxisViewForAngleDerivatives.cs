@@ -56,8 +56,8 @@ namespace Arnible.MathModeling.Geometry
     {
       Point = view;
       AnglePos = anglePos;
-      CartesianAxisViewsRatiosDerivatives = GetCartesianAxisViewsRatiosDerivativesByAngle(view.R, view.Angles, pos: anglePos);
-      CartesianAxisViewsRatiosDerivatives.Length.AssertIsEqualTo(view.Angles.Length + 1);
+      DerivativesCartesianVector = GetCartesianAxisViewsRatiosDerivativesByAngle(view.R, view.Angles, pos: anglePos);
+      DerivativesCartesianVector.Length.AssertIsEqualTo(view.Angles.Length + 1);
     }    
 
     //
@@ -68,6 +68,6 @@ namespace Arnible.MathModeling.Geometry
 
     public ushort AnglePos { get; }
 
-    public ReadOnlySpan<Number> CartesianAxisViewsRatiosDerivatives { get; }
+    public ReadOnlySpan<Number> DerivativesCartesianVector { get; }
   }
 }

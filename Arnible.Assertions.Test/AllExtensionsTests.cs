@@ -7,21 +7,7 @@ namespace Arnible.Assertions.Test
     public class AllExtensionsTests
     {
         [Fact]
-        public void IEnumerable_All_Error()
-        {
-            IEnumerable<int> toCheck = new int[] {1, 2};
-            Assert.Throws<AssertException>(() => toCheck.AssertAll(i => i != 2));
-        }
-        
-        [Fact]
-        public void IEnumerable_All()
-        {
-            IEnumerable<int> toCheck = new int[] {1, 2};
-            toCheck.AssertAll(i => i > 0);
-        }
-        
-        [Fact]
-        public void Span_All_Error()
+        public void Span_All_int_Error()
         {
             Span<int> toCheck = new int[] {1, 2};
             try
@@ -36,10 +22,32 @@ namespace Arnible.Assertions.Test
         }
         
         [Fact]
-        public void Span_All()
+        public void Span_int_All()
         {
             Span<int> toCheck = new int[] {1, 2};
             toCheck.AssertAll((in int i) => i > 0);
+        }
+        
+        [Fact]
+        public void Span_bool_All()
+        {
+            Span<bool> toCheck = new bool[] {true, true};
+            toCheck.AssertAll();
+        }
+        
+        [Fact]
+        public void ReadOnlySpan_bool_Error()
+        {
+            ReadOnlySpan<bool> toCheck = new bool[] {true, false};
+            try
+            {
+                toCheck.AssertAll();
+                throw new Exception("Something is wrong");
+            }
+            catch(AssertException)
+            {
+                // all is OK
+            }
         }
     }
 }

@@ -8,7 +8,8 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep
     NumberFunctionPointWithDerivative MoveNext(
       in FunctionValueAnalysisForDirection functionToAnalyse,
       in NumberFunctionPointWithDerivative startPoint,
-      in Number borderX);
+      in Number borderX,
+      out uint complexity);
     
     void MoveNext(
       in FunctionValueAnalysisForDirection f,

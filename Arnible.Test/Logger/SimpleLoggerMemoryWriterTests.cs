@@ -18,14 +18,14 @@ namespace Arnible.Logger.Test
       await using(Stream stream = File.OpenWrite(tempFilePath))
       using(SimpleLoggerMemoryWriter writer = new())
       {
-        writer.Log("First-line");
-        writer.Log("Second-line");
+        writer.Write("First-line").NewLine();
+        writer.Write("Second-line");
         
         await writer.Flush(stream, default);
       }
       
       string content = await File.ReadAllTextAsync(tempFilePath, default);
-      Assert.Equal($"First-line{Environment.NewLine}Second-line{Environment.NewLine}", content);
+      Assert.Equal($"First-line{Environment.NewLine}Second-line", content);
     }
     
     [Fact]
@@ -35,14 +35,14 @@ namespace Arnible.Logger.Test
       {
         using(SimpleLoggerMemoryWriter writer = new())
         {
-          writer.Log("First-line");
-          writer.Log("Second-line");
+          writer.Write("First-line").NewLine();
+          writer.Write("Second-line");
         
           await writer.Flush(stream, default);
         }
         
         string content = Encoding.UTF8.GetString(stream.ToArray());
-        Assert.Equal($"First-line{Environment.NewLine}Second-line{Environment.NewLine}", content);
+        Assert.Equal($"First-line{Environment.NewLine}Second-line", content);
       }
     }
     
@@ -53,14 +53,14 @@ namespace Arnible.Logger.Test
       {
         using(SimpleLoggerMemoryWriter writer = new())
         {
-          writer.Log("First-line");
-          writer.Log("Second-line");
+          writer.Write("First-line").NewLine();
+          writer.Write("Second-line");
         
           writer.Flush(other);
         }
 
         other.Flush(out string content);
-        Assert.Equal($"First-line{Environment.NewLine}Second-line{Environment.NewLine}", content);  
+        Assert.Equal($"First-line{Environment.NewLine}Second-line", content);  
       }
     }
   }

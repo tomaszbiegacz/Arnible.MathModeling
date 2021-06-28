@@ -20,10 +20,9 @@ namespace Arnible.MathModeling.Analysis.Test
         Second = 2
       };
       
-      ((Derivative1Value)v1).AssertIsEqualTo(new Derivative1Value
-      {
+      (v1 == new Derivative1Value {
         First = 1
-      });
+      }).AssertIsTrue();
 
       v1.ToString().AssertIsEqualTo(v2.ToString());
     }

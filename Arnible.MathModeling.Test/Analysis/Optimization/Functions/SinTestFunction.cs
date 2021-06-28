@@ -1,14 +1,14 @@
 using System;
 using Arnible.Assertions;
 
-namespace Arnible.MathModeling.Analysis.Optimization.Test
+namespace Arnible.MathModeling.Analysis.Optimization.Test.Functions
 {
   /// <summary>
   /// Sin(x) + 3
   /// </summary>
-  public record SinTestFunction : IFunctionValueAnalysis
+  public record SinTestFunction : OptimizationTestFunction
   {
-    public ValueWithDerivative1 ValueWithDerivativeByArgumentsChangeDirection(
+    public override ValueWithDerivative1 GetValueWithDerivativeByArgumentsChangeDirection(
       in ReadOnlySpan<Number> arguments,
       in ReadOnlySpan<Number> directionDerivativeRatios)
     {

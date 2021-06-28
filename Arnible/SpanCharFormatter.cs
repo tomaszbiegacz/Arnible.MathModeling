@@ -7,7 +7,7 @@ namespace Arnible
   {
     public const ushort BufferSize = 35;
     
-    public static Span<char> ToString(int value, in Span<char> buffer)
+    public static ReadOnlySpan<char> ToString(int value, in Span<char> buffer)
     {
       if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
@@ -16,7 +16,7 @@ namespace Arnible
       return buffer[..charsWritten];
     }
     
-    public static Span<char> ToString(uint value, in Span<char> buffer)
+    public static ReadOnlySpan<char> ToString(uint value, in Span<char> buffer)
     {
       if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
@@ -25,7 +25,7 @@ namespace Arnible
       return buffer[..charsWritten];
     }
     
-    public static Span<char> ToString(in long value, in Span<char> buffer)
+    public static ReadOnlySpan<char> ToString(in long value, in Span<char> buffer)
     {
       if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
@@ -34,7 +34,7 @@ namespace Arnible
       return buffer[..charsWritten];
     }
     
-    public static Span<char> ToString(in ulong value, in Span<char> buffer)
+    public static ReadOnlySpan<char> ToString(in ulong value, in Span<char> buffer)
     {
       if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
@@ -43,7 +43,7 @@ namespace Arnible
       return buffer[..charsWritten];
     }
     
-    public static Span<char> ToString(float value, in Span<char> buffer)
+    public static ReadOnlySpan<char> ToString(float value, in Span<char> buffer)
     {
       if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
@@ -52,7 +52,7 @@ namespace Arnible
       return buffer[..charsWritten];
     }
     
-    public static Span<char> ToString(in double value, in Span<char> buffer)
+    public static ReadOnlySpan<char> ToString(in double value, in Span<char> buffer)
     {
       if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {
@@ -61,7 +61,7 @@ namespace Arnible
       return buffer[..charsWritten];
     }
     
-    public static Span<char> ToString(in decimal value, in Span<char> buffer)
+    public static ReadOnlySpan<char> ToString(in decimal value, in Span<char> buffer)
     {
       if(!value.TryFormat(buffer, out int charsWritten, provider: NumberFormatInfo.InvariantInfo))
       {

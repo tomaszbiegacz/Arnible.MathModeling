@@ -1,4 +1,5 @@
 using Arnible.Assertions;
+using Arnible.MathModeling.Analysis.Optimization.Test.Functions;
 using Xunit;
 
 namespace Arnible.MathModeling.Analysis.Optimization.Test
@@ -17,7 +18,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       range.Start.X.AssertIsEqualTo(a.X);
       range.End.X.AssertIsEqualTo(b.X);
       range.Width.AssertIsEqualTo(3);
-      range.IsOptimal.AssertIsFalse();
+      range.IsEmptyRange.AssertIsFalse();
       
       range.BorderSmaller.X.AssertIsEqualTo(a.X);
       range.BorderGreater.X.AssertIsEqualTo(b.X);
@@ -36,7 +37,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       range.Start.X.AssertIsEqualTo(a.X);
       range.End.X.AssertIsEqualTo(b.X);
       range.Width.AssertIsEqualTo(1.5);
-      range.IsOptimal.AssertIsFalse();
+      range.IsEmptyRange.AssertIsFalse();
       
       range.BorderSmaller.X.AssertIsEqualTo(b.X);
       range.BorderGreater.X.AssertIsEqualTo(a.X);
@@ -54,7 +55,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       range.Start.X.AssertIsEqualTo(a.X);
       range.End.X.AssertIsEqualTo(a.X);
       range.Width.AssertIsEqualTo(0);
-      range.IsOptimal.AssertIsTrue();
+      range.IsEmptyRange.AssertIsTrue();
       
       range.BorderSmaller.X.AssertIsEqualTo(a.X);
       range.BorderGreater.X.AssertIsEqualTo(a.X);

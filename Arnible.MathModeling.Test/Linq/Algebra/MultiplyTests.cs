@@ -27,7 +27,7 @@ namespace Arnible.Linq.Algebra.Tests
     public void Multiply_Span()
     {
       Span<Number> output = new Number[] { 1, 2 };
-      output.MultiplySelf(2);
+      output.MultiplySelfBy(2);
       output.AssertSequenceEqualsTo(new Number[] {2, 4});
     }
   }

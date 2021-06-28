@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Arnible.Assertions;
+using Arnible.MathModeling.Algebra;
 
-namespace Arnible.MathModeling.Algebra
+namespace Arnible.Linq.Algebra
 {
   public static class MultiplyExtensions
   {
@@ -31,7 +32,7 @@ namespace Arnible.MathModeling.Algebra
       }
     }
     
-    public static void MultiplySelf<T>(
+    public static void MultiplySelfBy<T>(
       in this Span<T> arg, 
       in T value) where T: IAlgebraRing<T>
     {

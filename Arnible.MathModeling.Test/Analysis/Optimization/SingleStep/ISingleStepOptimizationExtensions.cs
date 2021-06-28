@@ -2,7 +2,7 @@ using Arnible.Assertions;
 
 namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
 {
-  public static class SingleStepOptimizationHelper
+  public static class ISingleStepOptimizationExtensions
   {
     public static ushort FindOptimal(
       this ISingleStepOptimization method,
@@ -14,7 +14,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
       NumberFunctionOptimizationSearchRange searchRange = default;
       
       ushort i = 0;
-      while(!useRange && a.First != 0 || useRange && !searchRange.IsOptimal)
+      while(!useRange && a.First != 0 || useRange && !searchRange.IsEmptyRange)
       {
         if (useRange)
         {
@@ -27,7 +27,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test
         }
         else
         {
-          NumberFunctionPointWithDerivative result = method.MoveNext(in functionToAnalyse, in a, in b);
+          NumberFunctionPointWithDerivative result = method.MoveNext(in functionToAnalyse, in a, in b, out _);
           result.X.AssertIsGreaterEqualThan(a.X);
           result.Y.AssertIsLessEqualThan(a.Y);
           

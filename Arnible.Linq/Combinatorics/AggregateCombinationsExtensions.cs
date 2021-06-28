@@ -40,26 +40,18 @@ namespace Arnible.Linq.Combinatorics
     /// </summary>
     public static IEnumerable<TOutput> AggregateCombinations<TInput, TOutput>(
       this IEnumerable<TInput> items,
-      in uint groupSize,
-      in Func<IEnumerable<TInput>, TOutput> aggregator)
+      uint groupSize,
+      Func<IEnumerable<TInput>, TOutput> aggregator)
     {
       if (groupSize < 1)
       {
         throw new ArgumentException(nameof(groupSize));
       }
-
-      if (items == null)
-      {
-        throw new ArgumentException(nameof(items));
-      }
+      
       IReadOnlyList<TInput> x = items.ToArray();
       if (x.Count < groupSize)
       {
         throw new ArgumentException($"x.Length: {x.Count} where groupCount: {groupSize}");
-      }
-      if (aggregator == null)
-      {
-        throw new ArgumentException(nameof(aggregator));
       }
 
       var combination = new Stack<TInput>();
@@ -73,10 +65,6 @@ namespace Arnible.Linq.Combinatorics
       this IEnumerable<T> items,
       Func<IEnumerable<T>, T> aggregator)
     {
-      if (items == null)
-      {
-        throw new ArgumentException(nameof(items));
-      }
       IReadOnlyList<T> x = items.ToArray();
       if (aggregator == null)
       {

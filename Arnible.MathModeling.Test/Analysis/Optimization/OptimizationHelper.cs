@@ -5,13 +5,13 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
 {
   public static class OptimizationHelper
   {
-    public static readonly ReadOnlyMemory<Number> DirectionDerivativeRatiosD1;
-    public static readonly ReadOnlyMemory<Number> DirectionDerivativeRatiosD2;
+    public static readonly ReadOnlyMemory<Number> UniformDirectionRatiosD1;
+    public static readonly ReadOnlyMemory<Number> UniformDirectionRatiosD2;
 
     static OptimizationHelper()
     {
-      DirectionDerivativeRatiosD1 = new Number[] { 1 };
-      DirectionDerivativeRatiosD2 = new Number[] { Math.Sqrt(2) / 2, Math.Sqrt(2) / 2 };
+      UniformDirectionRatiosD1 = new Number[] { 1 };
+      UniformDirectionRatiosD2 = new Number[] { Math.Sqrt(2) / 2, Math.Sqrt(2) / 2 };
     }
     
     public static FunctionValueAnalysisForDirection FunctionValueAnalysisFor1D(
@@ -21,7 +21,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       FunctionValueAnalysisForDirection function = new(
         functionToAnalyse, 
         in startPoint, 
-        DirectionDerivativeRatiosD1.Span);
+        UniformDirectionRatiosD1.Span);
       return function;
     }
     
@@ -31,7 +31,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
       ref NumberFunctionOptimizationSearchRange point)
     {
       ushort i = 0;
-      while(!point.IsOptimal)
+      while(!point.IsEmptyRange)
       {
         Number width = point.Width;
         Number value = point.BorderSmaller.Y;
@@ -73,7 +73,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
           searchRange.Width.AssertIsLessThan(in width);
           searchRange.BorderSmaller.Y.AssertIsLessEqualThan(in value);
           
-          if (searchRange.IsOptimal)
+          if (searchRange.IsEmptyRange)
           {
             isTheEnd = true;
             solution = searchRange.BorderSmaller;
@@ -100,7 +100,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.Test
           else
           {
             useSearchRange = true;
-            if (searchRange.IsOptimal)
+            if (searchRange.IsEmptyRange)
             {
               isTheEnd = true;
               solution = searchRange.BorderSmaller; 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Arnible.Assertions;
+using Arnible.Linq.Algebra;
 using Arnible.MathModeling.Algebra;
 
 namespace Arnible.MathModeling.Geometry
@@ -70,7 +71,7 @@ namespace Arnible.MathModeling.Geometry
     public void ToCartesian(in Span<Number> buffer)
     {
       Angles.GetCartesianAxisViewsRatios(in buffer);
-      buffer.MultiplySelf(R);
+      buffer.MultiplySelfBy(R);
     }
     
     public static HypersphericalAngleVector CartesianCoordinatesAngle(

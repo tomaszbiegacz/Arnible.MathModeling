@@ -18,11 +18,11 @@ jobs:
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '5.0.x'
-      - name: build
-        run: dotnet build  
-      - name: test
-        run: 'dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=..\TestResults\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
-      - name: publish results
+      - name: build debug
+        run: dotnet build -c Debug  
+      - name: unit tests
+        run: dotnet test --filter 'FullyQualifiedName!~PerformanceTest' --test-adapter-path:. --logger:"junit;LogFilePath=..\TestResults\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"
+      - name: publish tests results
         uses: EnricoMi/publish-unit-test-result-action/composite@v1
         if: always()
         with:

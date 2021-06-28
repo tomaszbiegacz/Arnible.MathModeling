@@ -44,7 +44,7 @@ namespace Arnible.MathModeling.Geometry
     
     public bool Equals(in HypersphericalAngleVector b)
     {
-      return _angles.SequenceEqual(in b._angles);
+      return _angles.SequenceEqual(b._angles);
     }
     
     public bool IsZero() => _angles.IsZero();
@@ -155,13 +155,13 @@ namespace Arnible.MathModeling.Geometry
 
     public void AddSelf(in HypersphericalAngleVector b)
     {
-      _angles.AddSelf(in b._angles);
+      _angles.AddToSelf(in b._angles);
       Normalize(in _angles);
     }
 
     public void ScaleSelf(in Number b)
     {
-      _angles.MultiplySelf(in b);
+      _angles.MultiplySelfBy(in b);
       Normalize(in _angles);
     }
   }

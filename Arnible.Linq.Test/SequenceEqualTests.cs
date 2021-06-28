@@ -10,7 +10,7 @@ namespace Arnible.Linq.Test
     {
       ReadOnlySpan<int> actual = stackalloc int[] { 1, 2 };
       ReadOnlySpan<int> expected = stackalloc int[] { 1, 2, 3 };
-      Assert.False(actual.SequenceEqual(in expected));
+      Assert.False(actual.SequenceEqual(expected));
     }
     
     [Fact]
@@ -18,7 +18,7 @@ namespace Arnible.Linq.Test
     {
       ReadOnlySpan<int> actual = stackalloc int[] { 1, 2 };
       ReadOnlySpan<int> expected = stackalloc int[] { 1, 3 };
-      Assert.False(actual.SequenceEqual(in expected));
+      Assert.False(actual.SequenceEqual(expected));
     }
     
     [Fact]
@@ -26,7 +26,7 @@ namespace Arnible.Linq.Test
     {
       ReadOnlySpan<int> actual = stackalloc int[] { 1, 3 };
       ReadOnlySpan<int> expected = stackalloc int[] { 1, 3 };
-      Assert.True(actual.SequenceEqual(in expected));
+      Assert.True(actual.SequenceEqual(expected));
     }
   }
 }

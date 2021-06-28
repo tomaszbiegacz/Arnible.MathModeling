@@ -55,53 +55,5 @@ namespace Arnible.Test
             _writer.Flush(out string result);
             Assert.Equal("s1s2s3s4s5s6s7", result);
         }
-        
-        [Fact]
-        public void Log_2()
-        {
-            _writer.Log("s1", "s2");
-            _writer.Flush(out string result);
-            Assert.Equal("s1s2" + Environment.NewLine, result);
-        }
-        
-        [Fact]
-        public void Log_3()
-        {
-            _writer.Log("s1", "s2", "s3");
-            _writer.Flush(out string result);
-            Assert.Equal("s1s2s3" + Environment.NewLine, result);
-        }
-        
-        [Fact]
-        public void Log_4()
-        {
-            _writer.Log("s1", "s2", "s3", "s4");
-            _writer.Flush(out string result);
-            Assert.Equal("s1s2s3s4" + Environment.NewLine, result);
-        }
-        
-        [Fact]
-        public void Log_5()
-        {
-            _writer.Log("s1", "s2", "s3", "s4", "s5");
-            _writer.Flush(out string result);
-            Assert.Equal("s1s2s3s4s5" + Environment.NewLine, result);
-        }
-        
-        [Fact]
-        public void Log_6()
-        {
-            _writer.Log("s1", "s2", "s3", "s4", "s5", "s6");
-            _writer.Flush(out string result);
-            Assert.Equal("s1s2s3s4s5s6" + Environment.NewLine, result);
-        }
-        
-        [Fact]
-        public void Log_7()
-        {
-            _writer.Log("s1", "s2", "s3", "s4", "s5", "s6", "s7");
-            _writer.Flush(out string result);
-            Assert.Equal("s1s2s3s4s5s6s7" + Environment.NewLine, result);
-        }
     }
 }

@@ -5,77 +5,88 @@ using Xunit.Abstractions;
 
 namespace Arnible.Xunit
 {
-  public sealed class XunitLogger : ISimpleLogger, IDisposable
+  public sealed class XunitLogger : ISimpleLoggerForTests
   {
     private readonly ITestOutputHelper _output;
     private readonly StringBuilder _stringBuffer;
+    private FileInfo? _logFile;
 
     public XunitLogger(ITestOutputHelper output)
     {
       _output = output;
       _stringBuffer = new StringBuilder();
+      _logFile = null;
 
       IsLoggerEnabled = true;
-      SaveLogsToFile = false;
+      IsSavingLogsToFileEnabled = false;
     }
 
-    public bool IsLoggerEnabled { get; set; }
+    public bool IsLoggerEnabled { get; private set; }
     
-    public void Write(in ReadOnlySpan<char> message)
+    public bool IsSavingLogsToFileEnabled { get; private set; }
+    
+    public void EnableLogging(bool value)
+    {
+      IsLoggerEnabled = value;
+    }
+    
+    public ISimpleLogger Write(in ReadOnlySpan<char> message)
     {
       if(IsLoggerEnabled)
       {
         _stringBuffer.Append(message);
       }
+      return this;
     }
 
-    public void Write(MemoryStream message)
+    public ISimpleLogger Write(MemoryStream message)
     {
       if(IsLoggerEnabled)
       {
         StreamReader reader = new StreamReader(message);
         _stringBuffer.Append(reader.ReadToEnd());
       }
+      return this;
     }
 
-    public bool SaveLogsToFile { get; set; }
+    public void SaveLogsToFile(bool value)
+    {
+      IsSavingLogsToFileEnabled = value;
+    }
 
-    //
-    // IDisposable
-    //
+    public void Flush()
+    {
+      string logs = _stringBuffer.ToString();
+      _stringBuffer.Clear();
+      
+      if (IsSavingLogsToFileEnabled && _logFile == null)
+      {
+        _logFile = new FileInfo(Path.GetTempFileName());
+        _output.WriteLine($"Log file: {_logFile.FullName}");
+      }
+      
+      const int maxLength = 9000;
+      if (logs.Length > maxLength)
+      {
+        _output.WriteLine(logs.Substring(0, maxLength));
+      }
+      else
+      {
+        _output.WriteLine(logs);  
+      }
+
+      if (_logFile != null)
+      {
+        File.WriteAllText(_logFile.FullName, logs);
+      } 
+    }
 
     /// <summary>
     /// Write logs to ITestOutputHelper and to file
     /// </summary>
     public void Dispose()
     {
-      if (IsLoggerEnabled)
-      {
-        string logs = _stringBuffer.ToString();
-        _stringBuffer.Clear();
-
-        FileInfo? logFile = null;
-        if (SaveLogsToFile)
-        {
-          logFile = new FileInfo(Path.GetTempFileName());
-          _output.WriteLine($"Log file: {logFile.FullName}");
-        }
-      
-        const int maxLength = 9000;
-        if (logs.Length > maxLength)
-        {
-          _output.WriteLine(logs.Substring(0, maxLength));
-        }
-        else
-        {
-          _output.WriteLine(logs);  
-        }
-
-        if (logFile != null)
-        {
-          File.WriteAllText(logFile.FullName, logs);
-        } 
-      }
+      Flush();
     }
   }
 }

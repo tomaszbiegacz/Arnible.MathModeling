@@ -127,7 +127,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
     {
       PolynomialTerm v1 = 2 * Term.a * Term.c.ToPower(3);
       PolynomialTerm v2 = -2 * Term.a * Term.c.ToPower(3);
-      PolynomialTerm.Simplify(new[] { v1, v2 }).AsList().AssertIsEmpty();
+      PolynomialTerm.Simplify(new[] { v1, v2 }).AssertIsEmpty();
     }
 
     [Fact]
@@ -139,7 +139,7 @@ namespace Arnible.MathModeling.Algebra.Polynomials.Tests
 
       var expected = new PolynomialTerm[] { a * b * c, a * a, b * b, a * b, a, 2 * b, 3 };
       var before   = new PolynomialTerm[] { 1, b, 2, b, a, a * b, a * b * c, a * a, b * b };
-      PolynomialTerm.Simplify(before).AssertIsEqualTo(expected);
+      PolynomialTerm.Simplify(before).AssertSequenceEqualsTo(expected);
     }
 
     [Fact]
