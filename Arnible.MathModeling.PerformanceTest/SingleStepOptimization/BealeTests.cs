@@ -1,12 +1,14 @@
 using System;
 using Arnible.Assertions;
+using Arnible.MathModeling.Analysis.Optimization;
+using Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy;
 using Arnible.MathModeling.Analysis.Optimization.Test.Functions;
 using Arnible.MathModeling.Geometry;
 using Arnible.MathModeling.Test;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
+namespace Arnible.MathModeling.PerformanceTest.SingleStepOptimization
 {
   [Collection(nameof(BealeTests))]
   public class BealeTests : TestsWithWriterFactory
