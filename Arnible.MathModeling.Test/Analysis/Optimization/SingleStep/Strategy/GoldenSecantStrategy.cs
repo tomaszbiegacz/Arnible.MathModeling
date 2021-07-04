@@ -20,6 +20,9 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
     
     public Number? MinimumValue { get; init; }
 
+    /// <summary>
+    /// The smaller it is, the smaller is computation complexity per one loop
+    /// </summary>
     public double? ExtendedUniformSearchDirectionDisablingRatio
     {
       get => _extendedUniformSearchDisablingRatio;
@@ -32,8 +35,12 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         }
       }
     }
-    public Number ExtendedUniformSearchDirectionMinimumGradientRatio { get; init; } = 0.3; 
     
+    /// <summary>
+    /// The bigger the number the smaller amount of axis will be used in extended search
+    /// </summary>
+    public Number ExtendedUniformSearchDirectionMinimumGradientRatio { get; init; } = 0.3; 
+
     public bool AnyMethod => WideSearch || UniformSearchDirection || _extendedUniformSearchDisablingRatio.HasValue;
     
     public GoldenSecantStrategy(in Number minArgument, in Number maxArgument, ISimpleLogger logger)
@@ -130,7 +137,10 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
           {
             _logger
               .Write("---").NewLine()
-              .Write(">> Positive ExtendedUniformSearchDirection from ", parameters).Write(" value: ", currentValue).NewLine();
+              .Write(">> Positive ExtendedUniformSearchDirection from ", parameters)
+              .Write(", value: ", currentValue)
+              .Write(", gradient: ", gradient)
+              .NewLine();
             GetExtendedUniformSearchDirection(valueAnalysis, parameters, maxDerivativeAt, gradient, in filteredGradient);
             ImproveInSearchDirection(
               valueAnalysis, parameters, filteredGradient, 
@@ -146,7 +156,10 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
           {
             _logger
               .Write("---").NewLine()
-              .Write(">> Negative ExtendedUniformSearchDirection from ", parameters).Write(" value: ", currentValue).NewLine();
+              .Write(">> Negative ExtendedUniformSearchDirection from ", parameters)
+              .Write(", value: ", currentValue)
+              .Write(", gradient: ", gradient)
+              .NewLine();
             GetExtendedUniformSearchDirection(valueAnalysis, parameters, minimumDerivativeAt, gradient, in filteredGradient);
             ImproveInSearchDirection(
               valueAnalysis, parameters, filteredGradient, 
@@ -159,7 +172,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
         }
         else
         {
-          _logger.Write("Skipped ExtendedUniformSearchDirection because improvementRatio is ", improvementRatio);
+          _logger.Write("Skipped ExtendedUniformSearchDirection because improvementRatio is ", improvementRatio).NewLine();
         }
       }
       
@@ -189,7 +202,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       
       _logger
         .Write("Finding uniform direction search starting from axis ", directionCorePos)
-        .Write(" , direction ", descentDirection == Sign.Positive ? "positive" : "negative")
+        .Write(", direction ", descentDirection == Sign.Positive ? "positive" : "negative")
         .Write(" and minimum gradient: ", minimumDerivativeStep)
         .NewLine();
       
@@ -211,7 +224,7 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
             searchDirection[pos] = false;
             
             _logger
-              .Write("Checking direction ", pos)
+              .Write("- Checking direction ", pos)
               .Write(" got derivative ", currentDerivative)
               .NewLine();
             if(currentDerivative < minimumDerivative)
@@ -247,7 +260,10 @@ namespace Arnible.MathModeling.Analysis.Optimization.SingleStep.Test.Strategy
       ReadOnlySpan<char> separator = "";
       for(ushort i=0; i<searchDirection.Length; ++i)
       {
-        _logger.Write(separator, sign);
+        if(searchDirection[i])
+          _logger.Write(separator, sign);
+        else
+          _logger.Write(separator, "0");
         separator = ",";
       }
       return _logger.Write("]");
