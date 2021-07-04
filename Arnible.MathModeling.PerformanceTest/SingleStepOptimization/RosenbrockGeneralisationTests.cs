@@ -10,12 +10,12 @@ using Xunit.Abstractions;
 
 namespace Arnible.MathModeling.PerformanceTest.SingleStepOptimization
 {
-  [Collection(nameof(RosenbrockGeneralisationTestFunctionTests))]
-  public class RosenbrockGeneralisationTestFunctionTests : TestsWithWriterFactory
+  [Collection(nameof(RosenbrockGeneralisationTests))]
+  public class RosenbrockGeneralisationTests : TestsWithWriterFactory
   {
     private readonly IFunctionValueAnalysis _function;
 
-    public RosenbrockGeneralisationTestFunctionTests(ITestOutputHelper output)
+    public RosenbrockGeneralisationTests(ITestOutputHelper output)
       : base(output)
     {
       _function = new RosenbrockGeneralisationTestFunction();

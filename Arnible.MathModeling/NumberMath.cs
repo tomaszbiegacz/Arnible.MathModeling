@@ -1,4 +1,5 @@
 ﻿using System;
+using Arnible.Assertions;
 
 namespace Arnible.MathModeling
 {
@@ -22,7 +23,23 @@ namespace Arnible.MathModeling
     
     public static Number Sqrt(in Number x)
     {
-      return Math.Sqrt((double)x);
+      if(x == 0)
+        return 0;
+      else
+      {
+        x.AssertIsGreaterThan(0);
+        return Math.Sqrt((double)x);
+      }
+    }
+    
+    public static Number Exp(in Number x)
+    {
+      if(x == 0)
+        return 1;
+      else
+      {
+        return Math.Exp((double)x);
+      }
     }
     
     public static Number Sin(in Number a) => RoundedSin((double)a);
